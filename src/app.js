@@ -1,32 +1,42 @@
-// ------Módulos carregados-----
+// ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
 const handlebars = require('express-handlebars')
 const bodyParser = require("body-parser")
 const path = require("path")
 const app = express()
 
-// -----Banco de dados------
-const mongoose = require("mongoose")
 
 //Middleware
 
 
-// -----Colections-----
-
-
-
-// -----Body Parser-----
+// ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
 
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+
 // Handlebars
 app.engine('handlebars', handlebars({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
 
-// -----Mongoose-----
+
+
+// ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
+
+const mongoose = require("mongoose")
+
+
+// ----- Mongoose --------------------------------------------------------------------------------------------------------------------------------
+
+    //url de destino para conexão com o mongoDB no Atlas, servidor Online:
+        //- mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+        // Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
+    //url de destino para a base de dados localhost:
+        //- mongodb://localhost/delzap
+
+
 
 mongoose.Promise = global.Promise;
-mongoose.connect("mongodb://localhost/delzap", {
+mongoose.connect("mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
     useNewUrlParser: true,
     useUnifiedTopology: true
 }).then(() => {
@@ -34,20 +44,35 @@ mongoose.connect("mongodb://localhost/delzap", {
 }).catch((err) => {
     console.log("Erro ao se conectar: "+err)
 })
-// -----Public-----
+
+
+
+// ----- Public ----------------------------------------------------------------------------------------------------------------------------------
 
 app.use(express.static(path.join(__dirname,"public")))
 
-// -----Rotas-----
+
+
+// ----- Colections ------------------------------------------------------------------------------------------------------------------------------
+
+
+
+
+// ----- Rotas -------------------------------------------------------------------------------------------------------------------------------------
+
 app.get('/', (req, res) => {
     res.render('index')
 })
 
-// ----Rotas "routes"----
 
 
-// ----Port-----
+// ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
+
+
+
+// ---- Port -----------------------------------------------------------------------------------------------------------------------------------
+
 const PORT = 3000
 app.listen(PORT,() => {
-console.log("Servidor rodando! ")
+    console.log("Servidor rodando! ")
 })

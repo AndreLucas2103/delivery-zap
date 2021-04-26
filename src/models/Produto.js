@@ -33,9 +33,17 @@ const Produto = new Schema({
 
     promocao: Boolean,
     valorPromocao: Boolean,
-
-    statusAtivo: Boolean
     
+    idCategoriaProduto: {
+        type: Schema.Types.ObjectId,
+        ref: "categoriaProdutos",
+    },
+
+    statusAtivo: {
+        type: Boolean,
+        default: true
+    }
+
 },{ timestamps: true})
 
 mongoose.model("produtos", Produto)
