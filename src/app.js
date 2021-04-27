@@ -14,10 +14,7 @@ const app = express()
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-// 
-
-
-app.set('views', 'src/path/')
+// Handlebars
 
 app.engine('handlebars', handlebars({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
@@ -68,6 +65,7 @@ app.use(express.static(path.join(__dirname,"public")))
 app.get('/', (req, res) => {
     res.render('index')
 })
+
 app.get('/login', (req, res) => {
     res.render('usuarios/login')
 })

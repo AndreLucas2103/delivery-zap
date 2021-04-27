@@ -51,17 +51,26 @@ const Pedido = new Schema({
             ref: "categoriaProdutos",
         },
 
+        quantidade: Number,
         observacao: String,
         valorProduto: Number
     }],
 
     retirarLocal: Boolean,
-    delivery: Boolean,
+    entrega: Boolean,
 
-    entrega: {
+    infoEntrega: {
         idEntregador: {
             type: Schema.Types.ObjectId,
             ref: "entregadores",
+        },
+        endereco: {
+            rua: String,
+            bairro: String,
+            cidade: String,
+            cep: String,
+            numero: String,
+            
         },
 
         taxaEntrega: Number,
@@ -71,7 +80,7 @@ const Pedido = new Schema({
 
     uuid4Client: String,
 
-    idUsuario: {
+    idEstabelecimento: {
         type: Schema.Types.ObjectId,
         ref: "usuarios",
     },

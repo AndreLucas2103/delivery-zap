@@ -7,16 +7,35 @@ const Schema = mongoose.Schema;
 
 const Carrinho = new Schema({
     produtos: [{
-        idProduto: {
+        idProduto: ObjectId,
+        nome: String,
+        valor: Number,
+        promocao: Boolean,
+
+        opcoes: [{
+            nome: String,
+            valor: Number
+        }],
+
+        adicionais: [{
+            idAdicional: ObjectId,
+            nome: String,
+            valor: Number
+        }],
+
+        idCategoriaProduto: {
             type: Schema.Types.ObjectId,
-            ref: "produtos",
+            ref: "categoriaProdutos",
         },
-        quantidade: Number
+
+        quantidade: Number,
+        observacao: String,
+        valorProduto: Number,
     }],
 
     uuid4Client: String,
 
-    idUsuario: {
+    idEstabelecimento: {
         type: Schema.Types.ObjectId,
         ref: "usuarios",
     }
