@@ -67,7 +67,7 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-    res.render('usuarios/login')
+    res.render('/usuarios/login')
 })
 
 
