@@ -6,10 +6,20 @@ const Schema = mongoose.Schema;
 */
 
 const Carrinho = new Schema({
-    idProduto: {
+    produtos: [{
+        idProduto: {
+            type: Schema.Types.ObjectId,
+            ref: "produtos",
+        },
+        quantidade: Number
+    }],
+
+    uuid4Client: String,
+
+    idUsuario: {
         type: Schema.Types.ObjectId,
-        ref: "categoriaProdutos",
-    },
+        ref: "usuarios",
+    }
 
 },{ timestamps: true})
 
