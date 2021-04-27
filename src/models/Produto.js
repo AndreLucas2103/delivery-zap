@@ -39,6 +39,11 @@ const Produto = new Schema({
         ref: "categoriaProdutos",
     },
 
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
+    },
+
     statusAtivo: {
         type: Boolean,
         default: true

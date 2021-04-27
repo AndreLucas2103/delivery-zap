@@ -37,7 +37,7 @@ const Carrinho = new Schema({
 
     idEstabelecimento: {
         type: Schema.Types.ObjectId,
-        ref: "usuarios",
+        ref: "estabelecimentos",
     }
 
 },{ timestamps: true})
