@@ -14,9 +14,14 @@ const app = express()
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 
-// Handlebars
+// 
+
+
+app.set('views', 'src/path/')
+
 app.engine('handlebars', handlebars({defaultLayout: 'main'}))
 app.set('view engine', 'handlebars')
+app.set('views', 'src/views/')
 
 
 
@@ -68,6 +73,12 @@ app.get('/', (req, res) => {
 
 // ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
 
+
+// ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
+
+app.get('/teste', async (req, res) => {
+    res.render('teste')
+})
 
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
