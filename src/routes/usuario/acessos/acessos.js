@@ -69,4 +69,24 @@ router.post("/registro", (req, res) => {
     }
 })
 
+
+router.post("/login", (req, res, next) => {
+
+    passport.authenticate("local", {
+        successRedirect: "/dashboard",
+        failureRedirect: "/login",
+        failureFlash: req.flash("error_msg", "E-mail ou senha inválido.")
+    })(req, res, next)
+
+})
+
+
+router.get("/logout", (req, res) => {
+
+    req.logout()
+    req.flash("success_msg", "Deslogado com sucesso!")
+    res.redirect("/")
+
+})
+
 module.exports = router ;
