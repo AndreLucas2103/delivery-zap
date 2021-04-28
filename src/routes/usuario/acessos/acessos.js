@@ -6,6 +6,7 @@ const Usuario = mongoose.model("usuarios")
 const bcryptjs = require("bcryptjs")
 const passport = require("passport")
 
+
 router.post("/registro", (req, res) => {
 
     var error = []
@@ -32,7 +33,7 @@ router.post("/registro", (req, res) => {
             } else {
 
                 const novoUsuario = new Usuario({
-                    nome: req.body.nome,
+                    primeiroNome: req.body.nome,
                     nomecompleto: req.body.nomecompleto,
                     email: req.body.email,
                     senha: req.body.senha,
