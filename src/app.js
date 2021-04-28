@@ -55,9 +55,14 @@ app.set('view engine', 'handlebars')
 app.set('views', 'src/views/')
 
 
-var paginate = require('handlebars-paginate');
-
+const paginate = require('handlebars-paginate');
 Handlebars.registerHelper('paginate', paginate);
+
+// register new function
+Handlebars.registerHelper('increasePrice', function(price) {
+    price+=10;
+    return price;
+})
 
 
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
