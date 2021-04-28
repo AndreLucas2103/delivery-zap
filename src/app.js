@@ -61,7 +61,7 @@ Handlebars.registerHelper('paginate', paginate);
 
 // register new function
 Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, format) {
-    return moment(data).zone(userTimeZone).format(format);
+    return moment(data).utcOffset(userTimeZone).format(format);
 })
 
 
