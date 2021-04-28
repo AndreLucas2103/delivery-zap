@@ -1,0 +1,162 @@
+<nav id="sidebarMenu" class="sidebar d-md-block bg-primary text-white collapse" data-simplebar>
+    <div class="sidebar-inner px-3 pt-4">
+        <!-- menu para mobile -->
+        <div
+            class="user-card d-flex d-md-none align-items-center justify-content-between justify-content-md-center pb-4">
+            <div class="d-flex align-items-center">
+                <div class="d-block">
+                    <h2 class="h6">Hi, Jane</h2>
+                    <a href="/usuario/pages/examples/sign-in.html" class="btn btn-secondary text-dark btn-xs"><span
+                            class="mr-2"><span class="fas fa-sign-out-alt"></span></span>Sair</a>
+                </div>
+            </div>
+            <div class="collapse-close d-md-none">
+                <a href="#sidebarMenu" class="fas fa-times" data-toggle="collapse" data-target="#sidebarMenu"
+                    aria-controls="sidebarMenu" aria-expanded="true" aria-label="Toggle navigation"></a>
+            </div>
+        </div>
+
+        <ul class="nav flex-column">
+            <li class="nav-item  active ">
+                <a href="/usuario/pages/dashboard/dashboard.html" class="nav-link">
+                    <span class="sidebar-icon"><span class="fas fa-chart-pie"></span></span>
+                    <span>Dashboard</span>
+                </a>
+            </li>
+            <li class="nav-item ">
+                <a href="/usuario/pages/transactions.html" class="nav-link">
+                    <span class="sidebar-icon"><span class="fas fa-hand-holding-usd"></span></span>
+                    <span>Pedidos</span>
+                </a>
+            </li>
+            
+            <li class="nav-item">
+                <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                    data-toggle="collapse" data-target="#submenu-app">
+                    <span>
+                        <span class="sidebar-icon"><span class="fas fa-table"></span></span>
+                        Pedido
+                    </span>
+                    <span class="link-arrow"><span class="fas fa-chevron-right"></span></span>
+                </span>
+                <div class="multi-level collapse " role="list" id="submenu-app" aria-expanded="false">
+                    <ul class="flex-column nav">
+                        <li class="nav-item "><a class="nav-link" href="/usuario/pages/tables/bootstrap-tables.html"><span>Pedidos</span></a></li>
+                    </ul>
+                </div>
+            </li>
+            <li class="nav-item">
+                <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                    data-toggle="collapse" data-target="#submenu-pages">
+                    <span>
+                        <span class="sidebar-icon"><span class="far fa-file-alt"></span></span>
+                        Produtos
+                    </span>
+                    <span class="link-arrow"><span class="fas fa-chevron-right"></span></span>
+                </span>
+                <div class="multi-level collapse " role="list" id="submenu-pages" aria-expanded="false">
+                    <ul class="flex-column nav">
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Produto</span></a></li>
+
+                        <li role="separator" class="dropdown-divider  border-black"></li>
+
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Adicionais</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Ingredientes</span></a></li>
+
+                        <li role="separator" class="dropdown-divider  border-black"></li>
+
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Categoria Produtos</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Categoria Adicionais</span></a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li class="nav-item">
+                <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                    data-toggle="collapse" data-target="#submenu-components">
+                    <span>
+                        <span class="sidebar-icon"><span class="fas fa-box-open"></span></span>
+                        Componentes
+                    </span>
+                    <span class="link-arrow"><span class="fas fa-chevron-right"></span></span>
+                </span>
+                <div class="multi-level collapse " role="list" id="submenu-components" aria-expanded="false">
+                    <ul class="flex-column nav">
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Usuarios</span></a></li>
+                        <li class="nav-item"><a class="nav-link" href="/usuario/pages/examples/sign-in.html"><span>Entregadores</span></a></li>
+                    </ul>
+                </div>
+            </li>
+
+            <li role="separator" class="dropdown-divider mt-4 mb-3 border-black"></li>
+
+            <li class="nav-item ">
+                <a href="/usuario/pages/settings.html" class="nav-link">
+                    <span class="sidebar-icon"><span class="fas fa-cog"></span></span>
+                    <span>Configurações</span>
+                </a>
+            </li>
+            
+        </ul>
+    </div>
+</nav>
+
+<nav class="navbar navbar-top navbar-expand navbar-dashboard navbar-dark pl-0 pr-2 pb-0">
+    <div class="container-fluid px-0">
+        <div class="d-flex justify-content-between w-100" id="navbarSupportedContent">
+            <div class="d-flex">
+                
+            </div>
+            <!-- Navbar links -->
+            <ul class="navbar-nav align-items-center">
+                <!-- Funcao de notificacoes 
+                <li class="nav-item dropdown">
+                    <a class="nav-link text-dark mr-lg-3 icon-notifications"
+                        data-unread-notifications="true" href="#" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="icon icon-sm">
+                            <span class="fas fa-bell bell-shake"></span>
+                            <span class="icon-badge rounded-circle unread-notifications"></span>
+                        </span>
+                    </a>
+                    <div
+                        class="dropdown-menu dashboard-dropdown dropdown-menu-lg dropdown-menu-center mt-2 py-0">
+                        <div class="list-group list-group-flush">
+                            <a href="#"
+                                class="text-center text-primary font-weight-bold border-bottom border-light py-3">Notifications</a>
+                            
+                            <a href="#"
+                                class="dropdown-item text-center text-primary font-weight-bold py-3">View
+                                all</a>
+                        </div>
+                    </div>
+                </li> --> 
+                
+                <li class="nav-item dropdown">
+                    <a class="nav-link pt-1 px-0" href="#" role="button" data-toggle="dropdown"
+                        aria-haspopup="true" aria-expanded="false">
+                        <div class="media d-flex align-items-center">
+                            <div
+                                class="media-body text-dark align-items-center d-none d-lg-block">
+                                <span class="mb-0 font-small font-weight-bold text-dark">Bonnie Green</span>
+                            </div>
+                        </div>
+                    </a>
+                    <div class="dropdown-menu dashboard-dropdown dropdown-menu-right mt-2">
+                        <a class="dropdown-item font-weight-bold" href="#"><span
+                                class="far fa-user-circle"></span>My Profile</a>
+                        <a class="dropdown-item font-weight-bold" href="#"><span
+                                class="fas fa-cog"></span>Settings</a>
+                        <a class="dropdown-item font-weight-bold" href="#"><span
+                                class="fas fa-envelope-open-text"></span>Messages</a>
+                        <a class="dropdown-item font-weight-bold" href="#"><span
+                                class="fas fa-user-shield"></span>Support</a>
+                        <div role="separator" class="dropdown-divider"></div>
+                        <a class="dropdown-item font-weight-bold" href="#"><span
+                                class="fas fa-sign-out-alt text-danger"></span>Logout</a>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>

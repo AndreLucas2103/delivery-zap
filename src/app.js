@@ -72,6 +72,11 @@ app.get('/login', (req, res) => {
 
 
 // ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
+    
+    // Rotas para USUARIOS
+    const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
+
+        app.use('/dashboard', usuarioDashboard)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
