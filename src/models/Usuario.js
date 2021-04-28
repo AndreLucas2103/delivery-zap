@@ -23,6 +23,9 @@ const Usuario = new Schema({
         default: false
     },
 
+    timeZone: String,
+
+    estabelecimentoSelecionado: String,
     estabelecimentos: [{
         idEstabelecimento: ObjectId
     }],

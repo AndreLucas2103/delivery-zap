@@ -9,6 +9,7 @@ const flash = require("connect-flash")
 const passport = require("passport")
 require("./config/auth")(passport)
 const Handlebars = require('handlebars');
+const moment = require('moment')
 
 
 
@@ -59,9 +60,12 @@ const paginate = require('handlebars-paginate');
 Handlebars.registerHelper('paginate', paginate);
 
 // register new function
-Handlebars.registerHelper('increasePrice', function(price) {
-    price+=10;
-    return price;
+Handlebars.registerHelper('dataFormatTimeZone', function(req, data) {
+    if(!req.user){
+        return null
+    }else{
+        return moment(data).zone(req.user.timeZone);
+    }
 })
 
 
