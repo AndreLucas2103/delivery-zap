@@ -1,0 +1,79 @@
+{{#if error}}
+            <div class="alert alert-danger">{{error}}</div>
+{{else}}
+{{/if}}
+
+<style>
+    .font-title-notificacao {
+        color: white;
+        font-family: monospace;
+    }
+</style>
+
+{{#if success_msg}}
+    <script>
+        $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: '{{success_msg}}',
+                position: 'bottom-right',
+                background: "#20853b",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
+    </script>
+{{/if}}
+
+{{#if error_msg}}
+    <script>
+        $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: '{{error_msg}}',
+                position: 'bottom-right',
+                background: "#8a0000",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
+    </script>
+{{/if}}
+
+
+{{#if warning_msg}}
+    <script>
+        $(document).ready(()=>{    
+            Swal.fire({
+                icon: 'warning',
+                title: 'Oops...',
+                text: '{{warning_msg}}',
+            })
+        })
+    </script>
+{{/if}}
+
+
+{{#if info_msg}}
+    <script>
+        $(document).ready(()=>{    
+            $(document).ready(()=>{    
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Informação: ',
+                    text: '{{info_msg}}',
+                })
+            })
+        })
+    </script>
+{{/if}}
