@@ -61,8 +61,11 @@ Handlebars.registerHelper('paginate', paginate);
 
 // register new function
 Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, format) {
-    return moment(data).utcOffset(userTimeZone).format(format);
-})
+    userTimeZone ? timeZone = userTimeZone : timeZone = "-03:00";
+    format ? formtMoment = format : formtMoment = "";
+
+    return moment(new Date(data)).utcOffset(timeZone).format(formtMoment);
+});
 
 
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
