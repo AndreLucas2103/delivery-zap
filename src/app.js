@@ -6,8 +6,6 @@ const path = require("path")
 const app = express()
 
 
-//Middleware
-
 
 // ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
 
@@ -19,6 +17,27 @@ app.use(bodyParser.json())
 app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
 app.set('view engine', 'handlebars')
 app.set('views', 'src/views/')
+
+
+
+// ----- Middleware -----------------------------------------------------------------------------------------------------------------------
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash("success_msg")
+    res.locals.error_msg = req.flash("error_msg")
+    res.locals.warning_msg = req.flash("warning_msg")
+    res.locals.info_msg = req.flash("info_msg")
+    res.locals.error = req.flash("error")
+    res.locals.user = req.user || null;
+    next();
+})
+
+app.use(function (req, res, next) {
+    if (req.user) {
+        res.locals.usuarioLogado = req.user.toObject();
+    }
+    next();
+});
 
 
 
