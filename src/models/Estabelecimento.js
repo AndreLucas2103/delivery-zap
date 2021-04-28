@@ -18,6 +18,7 @@ const Estabelecimento = new Schema({
         estado: String
     },
     cnpj: String,
+    telefone: String,
 
     horarioFuncionamento: [{
         dia: String,

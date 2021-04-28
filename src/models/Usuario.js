@@ -15,6 +15,7 @@ const Usuario = new Schema({
     email: String,
     senha: String,
     cpf: String,
+    perfilAvatar: String,
 
     eTipo: Number,
     usuarioMaster: {
