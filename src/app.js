@@ -8,6 +8,7 @@ const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport")
 require("./config/auth")(passport)
+const Handlebars = require('handlebars');
 
 
 
@@ -54,6 +55,14 @@ app.set('view engine', 'handlebars')
 app.set('views', 'src/views/')
 
 
+const paginate = require('handlebars-paginate');
+Handlebars.registerHelper('paginate', paginate);
+
+// register new function
+Handlebars.registerHelper('increasePrice', function(price) {
+    price+=10;
+    return price;
+})
 
 
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
@@ -64,10 +73,10 @@ const mongoose = require("mongoose")
 // ----- Mongoose --------------------------------------------------------------------------------------------------------------------------------
 
 //url de destino para conexão com o mongoDB no Atlas, servidor Online:
-//- mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
-// Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
+    //- mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority
+    // Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
 //url de destino para a base de dados localhost:
-//- mongodb://localhost/delzap
+    //- mongodb://localhost/delzap
 
 
 mongoose.Promise = global.Promise;
