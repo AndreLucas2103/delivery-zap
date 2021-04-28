@@ -8,7 +8,13 @@ const app = express()
 
 //Middleware
 
-
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash("success_msg")
+    res.locals.error_msg = req.flash("error_msg")
+    res.locals.error = req.flash("error")
+    res.locals.user = req.user || null;
+    next();
+})
 // ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -56,7 +62,8 @@ app.use(express.static(path.join(__dirname, "public")))
 
 
 // ----- Colections ------------------------------------------------------------------------------------------------------------------------------
-
+require("../src/models/Usuario")
+const Usuario = mongoose.model("usuarios")
 
 
 
