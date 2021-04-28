@@ -4,9 +4,42 @@ const handlebars = require('express-handlebars')
 const bodyParser = require("body-parser")
 const path = require("path")
 const app = express()
+const session = require("express-session")
+const flash = require("connect-flash")
+const passport = require("passport")
 
 
-//Middleware
+
+
+// ----- Middleware -----------------------------------------------------------------------------------------------------------------------
+app.use(session({
+    secret: "cursodenode",
+    resave: true,
+    saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(flash())
+
+app.use((req, res, next) => {
+    res.locals.success_msg = req.flash("success_msg")
+    res.locals.error_msg = req.flash("error_msg")
+    res.locals.warning_msg = req.flash("warning_msg")
+    res.locals.info_msg = req.flash("info_msg")
+    res.locals.error = req.flash("error")
+    res.locals.user = req.user || null;
+    next();
+})
+
+app.use(function (req, res, next) {
+    if (req.user) {
+        res.locals.usuarioLogado = req.user.toObject();
+    }
+    next();
+});
+
 
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg")
@@ -28,6 +61,7 @@ app.set('views', 'src/views/')
 
 
 
+
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
 
 const mongoose = require("mongoose")
@@ -40,7 +74,6 @@ const mongoose = require("mongoose")
 // Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
 //url de destino para a base de dados localhost:
 //- mongodb://localhost/delzap
-
 
 
 mongoose.Promise = global.Promise;
