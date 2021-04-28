@@ -8,6 +8,7 @@ const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport")
 require("./config/auth")(passport)
+const Handlebars = require('handlebars');
 
 
 
@@ -54,6 +55,9 @@ app.set('view engine', 'handlebars')
 app.set('views', 'src/views/')
 
 
+var paginate = require('handlebars-paginate');
+
+Handlebars.registerHelper('paginate', paginate);
 
 
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
