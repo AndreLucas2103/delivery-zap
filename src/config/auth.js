@@ -12,7 +12,7 @@ module.exports = function(passport){
     passport.use(new localStrategy({usernameField: "email", passwordField: "senha"}, (email, senha, done) => {
         Usuario.findOne({email: email}).lean().then((usuario) => {
             if(!usuario){
-                return done(null, false, {message: "Está conta não existe"})
+                return done(null, false)
             }
 
             bcrypt.compare(senha, usuario.senha, (erro, batem) => {
@@ -21,8 +21,7 @@ module.exports = function(passport){
                     return done(null, usuario)
                     
                 }else{
-                    console.log('senhaerrada')
-                    return done(null, false, {message: "Senha incorreta"})
+                    return done(null, false)
                 }
 
             })
@@ -31,13 +30,11 @@ module.exports = function(passport){
 
     }))
 
-
     passport.serializeUser((usuario, done) => {
         done(null, usuario._id)
     
     })
 
-    
 
     passport.deserializeUser((id, done) => {
         Usuario.findById(id, (err, usuario) => {

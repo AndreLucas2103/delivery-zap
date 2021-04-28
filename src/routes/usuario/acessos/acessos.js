@@ -70,13 +70,12 @@ router.post("/registro", (req, res) => {
     }
 })
 
-
 router.post("/login", (req, res, next) => {
 
     passport.authenticate("local", {
         successRedirect: "/dashboard",
         failureRedirect: "/login",
-        failureFlash: req.flash("error_msg", "E-mail ou senha inválido.")
+        failureFlash: true      
     })(req, res, next)
 
 })
