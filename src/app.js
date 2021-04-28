@@ -41,13 +41,6 @@ app.use(function (req, res, next) {
 });
 
 
-app.use((req, res, next) => {
-    res.locals.success_msg = req.flash("success_msg")
-    res.locals.error_msg = req.flash("error_msg")
-    res.locals.error = req.flash("error")
-    res.locals.user = req.user || null;
-    next();
-})
 // ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
 
 app.use(bodyParser.urlencoded({ extended: true }))
@@ -118,10 +111,10 @@ app.get('/registro', (req, res) => {
 // ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
 
 // Rotas para USUARIOS
-const usuarios = require("./routes/usuario/acessos/registro")
+const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
 
-app.use('/usuarios', usuarios)
+app.use('/acessos', acessoUsuario)
 app.use('/dashboard', usuarioDashboard)
 
 

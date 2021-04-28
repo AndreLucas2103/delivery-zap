@@ -1,9 +1,11 @@
 <link rel="stylesheet" href="site/css/main.css" />
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
 
+{{>_msg}}
+
 <section style="background-color: #D8F3DC;" class="pricing-table section">
     <div class="container">
-        <form action="usuario/registro" method="POST">
+        <form action="acessos/registro" method="POST">
             <div class="title">
                 <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
                     <a href="/"><img src="site/images/logo/logo.png"></a>
@@ -50,14 +52,14 @@
                                 <div class="row g-2">
                                     <div class="col-md">
                                         <div class="form-floating">
-                                            <input type="email" class="form-control" id="senha" name="senha"
+                                            <input type="password" class="form-control" id="senha" name="senha"
                                                 placeholder="0" required>
                                             <label for="celcomercial">Senha*</label>
                                         </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-floating">
-                                            <input type="text" class="form-control" id="senha2" name="senha2"
+                                            <input type="password" class="form-control" id="senha2" name="senha2"
                                                 placeholder="0" required>
                                             <label for="telcomercial">Confirmar senha*</label>
                                         </div>
@@ -65,13 +67,10 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="button">
-                            <button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Cadastrar</button>
-                        </div>
-                    </div>
+                    <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Cadastrar</button>
+              </div>
         </form>
 </section>
-
 
 
 {{>_preloader}}
