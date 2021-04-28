@@ -4,23 +4,24 @@ const handlebars = require('express-handlebars')
 const bodyParser = require("body-parser")
 const path = require("path")
 const app = express()
+const session = require("express-session")
+const flash = require("connect-flash")
+const passport = require("passport")
 
-
-
-// ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
-
-app.use(bodyParser.urlencoded({ extended: true }))
-app.use(bodyParser.json())
-
-// Handlebars
-
-app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
-app.set('view engine', 'handlebars')
-app.set('views', 'src/views/')
 
 
 
 // ----- Middleware -----------------------------------------------------------------------------------------------------------------------
+app.use(session({
+    secret: "cursodenode",
+    resave: true,
+    saveUninitialized: true
+}))
+
+app.use(passport.initialize())
+app.use(passport.session())
+
+app.use(flash())
 
 app.use((req, res, next) => {
     res.locals.success_msg = req.flash("success_msg")
@@ -41,6 +42,20 @@ app.use(function (req, res, next) {
 
 
 
+// ----- Body Parser -----------------------------------------------------------------------------------------------------------------------
+
+app.use(bodyParser.urlencoded({ extended: true }))
+app.use(bodyParser.json())
+
+// Handlebars
+
+app.engine('handlebars', handlebars({ defaultLayout: 'main' }))
+app.set('view engine', 'handlebars')
+app.set('views', 'src/views/')
+
+
+
+
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
 
 const mongoose = require("mongoose")
@@ -53,7 +68,6 @@ const mongoose = require("mongoose")
 // Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
 //url de destino para a base de dados localhost:
 //- mongodb://localhost/delzap
-
 
 
 mongoose.Promise = global.Promise;
