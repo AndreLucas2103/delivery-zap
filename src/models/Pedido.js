@@ -70,8 +70,11 @@ const Pedido = new Schema({
             cidade: String,
             cep: String,
             numero: String,
-            
+            estado: String
         },
+
+        telefoneWhatsApp: String,
+        telefone: String,
 
         taxaEntrega: Number,
     },
@@ -82,7 +85,7 @@ const Pedido = new Schema({
 
     idEstabelecimento: {
         type: Schema.Types.ObjectId,
-        ref: "usuarios",
+        ref: "estabelecimentos",
     },
 
     cancelado: Boolean,
