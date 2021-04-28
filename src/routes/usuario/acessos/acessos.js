@@ -8,33 +8,27 @@ const passport = require("passport")
 
 router.post("/registro", (req, res) => {
 
-    var erros = []
-
-    if (req.body.validacpf == "Inválido") {
-        erros.push({ texto: "CPF Inválido." })
-    }
+    var error = []
 
     if (!req.body.senha || typeof req.body.senha == undefined || req.body.senha == null) {
-        erros.push({ texto: "Senha inválida." })
+        req.flash("error_msg", "Senha inválida.")
+        res.redirect("/registro")
     }
 
     if (req.body.senha.length < 4) {
-        erros.push({ texto: "Senha muito curta." })
+        req.flash("error_msg", "Senha muito curta.")
+        res.redirect("/registro")
     }
 
     if (req.body.senha != req.body.senha2) {
-        erros.push({ texto: "As senhas digitadas estão divergentes." })
-    }
-
-    if (erros.length > 0) {
-
-        res.render("usuarios/registro", { erros: erros })
+        req.flash("error_msg", "Senhas divergentes.")
+        res.redirect("/registro")
 
     } else {
         Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
             if (usuario) {
                 req.flash("error_msg", "E-mail já cadastrado.")
-                res.redirect("/usuarios/registro")
+                res.redirect("/registro")
             } else {
 
                 const novoUsuario = new Usuario({
@@ -56,12 +50,12 @@ router.post("/registro", (req, res) => {
                         novoUsuario.senha = hash
 
                         novoUsuario.save().then(() => {
-                            res.redirect("/login")
                             req.flash("success_msg", "Cadastro criado com sucesso.")
+                            res.redirect("/login")                          
                         }).catch((err) => {
                             console.log(err)
                             req.flash("error_msg", "Ocorreu um erro interno.")
-                            res.redirect("/usuarios/registro")
+                            res.redirect("/registro")
                         })
                     })
                 })
@@ -69,10 +63,30 @@ router.post("/registro", (req, res) => {
 
         }).catch((err) => {
             req.flash("error_msg", "Houve um erro interno")
-            res.redirect("usuarios/registro")
+            res.redirect("/registro")
         })
 
     }
+})
+
+
+router.post("/login", (req, res, next) => {
+
+    passport.authenticate("local", {
+        successRedirect: "/dashboard",
+        failureRedirect: "/login",
+        failureFlash: req.flash("error_msg", "E-mail ou senha inválido.")
+    })(req, res, next)
+
+})
+
+
+router.get("/logout", (req, res) => {
+
+    req.logout()
+    req.flash("success_msg", "Deslogado com sucesso!")
+    res.redirect("/")
+
 })
 
 module.exports = router ;

@@ -1,8 +1,8 @@
-{{#if error}}
+<!--{{#if error}}
             <div class="alert alert-danger">{{error}}</div>
 {{else}}
 {{/if}}
-
+-->
 <style>
     .font-title-notificacao {
         color: white;
@@ -15,8 +15,8 @@
         $(document).ready(()=>{    
             Swal.fire({
                 toast: true,
-                title: '123123123',
-                position: 'bottom-right',
+                title: '{{success_msg}}',
+                position: 'top-right',
                 background: "#20853b",
                 showConfirmButton: false,
                 showCloseButton: true,
@@ -36,7 +36,7 @@
             Swal.fire({
                 toast: true,
                 title: '{{error_msg}}',
-                position: 'bottom-right',
+                position: 'top-right',
                 background: "#8a0000",
                 showConfirmButton: false,
                 showCloseButton: true,
@@ -70,7 +70,7 @@
             $(document).ready(()=>{    
                 Swal.fire({
                     icon: 'info',
-                    title: 'Informação ',
+                    title: 'Informação: ',
                     text: '{{info_msg}}',
                 })
             })
