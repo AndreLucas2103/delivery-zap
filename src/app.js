@@ -60,12 +60,8 @@ const paginate = require('handlebars-paginate');
 Handlebars.registerHelper('paginate', paginate);
 
 // register new function
-Handlebars.registerHelper('dataFormatTimeZone', function(req, data) {
-    if(!req.user){
-        return null
-    }else{
-        return moment(data).zone(req.user.timeZone);
-    }
+Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data) {
+    return moment(data).zone(userTimeZone);
 })
 
 
