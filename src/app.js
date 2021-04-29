@@ -64,6 +64,7 @@ Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, for
     userTimeZone ? timeZone = userTimeZone : timeZone = "-03:00";
     format ? formtMoment = format : formtMoment = "";
 
+    //{{dataFormatTimeZone usuarioLogado.timeZone data ""}}
     return moment(new Date(data)).utcOffset(timeZone).format(formtMoment);
 });
 
