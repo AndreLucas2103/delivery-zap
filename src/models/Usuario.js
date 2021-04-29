@@ -23,7 +23,10 @@ const Usuario = new Schema({
         default: false
     },
 
-    timeZone: String,
+    timeZone: {
+        type: String,
+        default: "-03:00"
+    },
 
     estabelecimentoSelecionado: String,
     estabelecimentos: [{
