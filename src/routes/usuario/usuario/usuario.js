@@ -27,5 +27,18 @@ router.get('/perfil', async (req, res) => {
     }
 })
 
+router.post('/alterar-avatar', (req, res) => {
+    Usuario.updateOne(
+        {'_id': req.user._id},
+        {
+            $set: {"perfilAvatar": req.body.perfilAvatar}
+        }
+    ).then(e=>{
+        req.flash('success_msg', 'Avatar editado')
+        res.redirect('back')
+    }).catch(err=>{
+        console.log(err)
+    })
+})
 
 module.exports = router ;
