@@ -36,102 +36,6 @@
     </div>
     
     <div class="row">
-        <div class="col-12 col-xl-8">
-            <div class="card card-body bg-white border-light shadow-sm mb-4">
-                <h2 class="h5 mb-4">Informações Gerais</h2>
-                <form action="/usuario/edit-perfil-infos-gerais" method="POST">
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="primeiroNome">Primeiro Nome</label>
-                                <input class="form-control" id="primeiroNome" name="primeiroNome" type="text" value="{{usuario.primeiroNome}}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="nomeCompleto">Nome Completo</label>
-                                <input class="form-control" id="nomeCompleto" name="nomeCompleto" type="text" value="{{usuario.nomeCompleto}}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="email">E-mail</label>
-                                <input class="form-control" id="email" name="email" type="email" value="{{usuario.email}}" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="cpf">CPF</label>
-                                <input class="form-control" id="cpf" name="cpf" type="text" value="{{usuario.cpf}}" required>
-                            </div>
-                        </div>
-                        <script>
-                            $('#cpf').mask('000.000.000-00')
-                        </script>
-                    </div>
-
-                    <hr>
-
-                    <div class="row align-items-center">
-                        <div class="col-md-6 mb-3">
-                            <label for="timeZone">Fuso horário</label>
-                            <select class="form-select mb-0" id="timeZone" name="timeZone">
-                                <option value="-05:00">(UTC-05:00) Rio Branco</option>
-                                <option value="-04:00">(UTC-04:00) Cuiabá</option>
-                                <option value="-03:00">(UTC-03:00) Brasília</option>
-                                <option value="-02:00">(UTC-02:00) Fernando de Noronha</option>
-                            </select>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
-                            <select class="form-select mb-0" id="estabelecimentoSelecionado" name="estabelecimentoSelecionado">
-                                <option value="">Todos</option>
-                                {{#each usuario.estabelecimentos}}
-                                    <option value="">Todos</option>
-                                {{/each}}
-                            </select>
-                        </div>
-                        <script>
-                            $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
-                        </script>
-                    </div>
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Salvar</button>
-                    </div>
-                </form>
-            </div>
-
-            <div class="card card-body bg-white border-light shadow-sm mb-4">
-                <h2 class="h5 mb-4">Senha</h2>
-                <form>
-                    <div class="row">
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="senhaAtual">Senha Atual</label>
-                                <input class="form-control" id="senhaAtual" name="senhaAtual" type="password" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="novaSenha">Nova Senha</label>
-                                <input class="form-control" id="novaSenha" name="novaSenha" type="password" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="confirmarSenha">Confirmar Senha</label>
-                                <input class="form-control" id="confirmarSenha" name="confirmarSenha" type="password" required>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="mt-3">
-                        <button type="submit" class="btn btn-primary">Alterar Senha</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-
         <div class="col-12 col-xl-4">
             <div class="row">
                 <div class="col-12 mb-4">
@@ -142,7 +46,11 @@
                             <h4 class="h3">{{usuario.primeiroNome}}</h4>
                             <button class="btn btn-sm btn-secondary"  data-bs-toggle="modal" data-bs-target="#alterar-avatar">Alterar Avatar</button>
                         </div>
-                        <div class="h5">Estabelecimentos Vinculados:</div>
+                        
+                    </div>
+
+                    <div class="card border-light text-center p-0 mt-4">
+                        <div class="h5 mt-4">Estabelecimentos Vinculados:</div>
                         {{#each usuario.primeiroNome}}
                         <div></div>
                         {{/each}}
@@ -371,6 +279,103 @@
                 </div>
             </div>
         </div>
+        <div class="col-12 col-xl-8">
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <h2 class="h5 mb-4">Informações Gerais</h2>
+                <form action="/usuario/edit-perfil-infos-gerais" method="POST">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="primeiroNome">Primeiro Nome</label>
+                                <input class="form-control" id="primeiroNome" name="primeiroNome" type="text" value="{{usuario.primeiroNome}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="nomeCompleto">Nome Completo</label>
+                                <input class="form-control" id="nomeCompleto" name="nomeCompleto" type="text" value="{{usuario.nomeCompleto}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="email">E-mail</label>
+                                <input class="form-control" id="email" name="email" type="email" value="{{usuario.email}}" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="cpf">CPF</label>
+                                <input class="form-control" id="cpf" name="cpf" type="text" value="{{usuario.cpf}}" required>
+                            </div>
+                        </div>
+                        <script>
+                            $('#cpf').mask('000.000.000-00')
+                        </script>
+                    </div>
+
+                    <hr>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3">
+                            <label for="timeZone">Fuso horário</label>
+                            <select class="form-select mb-0" id="timeZone" name="timeZone">
+                                <option value="-05:00">(UTC-05:00) Rio Branco</option>
+                                <option value="-04:00">(UTC-04:00) Cuiabá</option>
+                                <option value="-03:00">(UTC-03:00) Brasília</option>
+                                <option value="-02:00">(UTC-02:00) Fernando de Noronha</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
+                            <select class="form-select mb-0" id="estabelecimentoSelecionado" name="estabelecimentoSelecionado">
+                                <option value="">Todos</option>
+                                {{#each usuario.estabelecimentos}}
+                                    <option value="">Todos</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                        <script>
+                            $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
+                        </script>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <h2 class="h5 mb-4">Senha</h2>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="senhaAtual">Senha Atual</label>
+                                <input class="form-control" id="senhaAtual" name="senhaAtual" type="password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="novaSenha">Nova Senha</label>
+                                <input class="form-control" id="novaSenha" name="novaSenha" type="password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="confirmarSenha">Confirmar Senha</label>
+                                <input class="form-control" id="confirmarSenha" name="confirmarSenha" type="password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        
     </div>
 
 </main>
