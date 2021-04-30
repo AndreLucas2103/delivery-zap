@@ -43,7 +43,7 @@ router.post("/registro", (req, res) => {
 
                 const novoUsuario = new Usuario({
                     primeiroNome: req.body.nome,
-                    nomecompleto: req.body.nomecompleto,
+                    nomeCompleto: req.body.nomecompleto,
                     email: req.body.email,
                     senha: req.body.senha,
                     eTipo:1,
