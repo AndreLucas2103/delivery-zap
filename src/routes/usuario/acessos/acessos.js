@@ -8,13 +8,6 @@ require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 
 
-router.get('/perfil', async (req, res) => {
-    try {
-        
-    } catch (err) {
-        
-    }
-})
 
 router.post("/registro", (req, res) => {
 

@@ -128,9 +128,11 @@ app.get('/registro', (req, res) => {
 // Rotas para USUARIOS
 const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
+const usuarioUsuario = require("./routes/usuario/usuario/usuario")
 
 app.use('/acessos', acessoUsuario)
 app.use('/dashboard', usuarioDashboard)
+app.use('/usuario', usuarioUsuario)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
