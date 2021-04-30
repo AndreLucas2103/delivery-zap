@@ -44,11 +44,13 @@
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="0"
-                                            required>
-                                        <label for="telcomercial">CPF*</label>
+                                        <input type="text" class="form-control" id="cpf" name="cpf"
+                                            onkeyup="cpfCheck(this)" maxlength="18"
+                                            onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
+                                            placeholder="0" required>
+                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse" name="cpfResponse"></span></label>
                                     </div>
-                                     <span class="d-inline" id="cpfResponse" name="cpfResponse"></span>
+                                    
                                 </div>
                                 <div class="row g-2">
                                     <div class="col-md">
@@ -68,77 +70,77 @@
                                 </div>
                             </div>
                         </div>
-                    <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Cadastrar</button>
-              </div>
+                        <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Cadastrar</button>
+                    </div>
         </form>
 </section>
- <script>
-     function is_cpf(c) {
+<script>
+    function is_cpf(c) {
 
-    if ((c = c.replace(/[^\d]/g, "")).length != 11)
-        return false
+        if ((c = c.replace(/[^\d]/g, "")).length != 11)
+            return false
 
-    if (c == "00000000000" || c == "11111111111" || c == "22222222222" || c == "33333333333" || c == "44444444444" || c == "55555555555" || c == "66666666666" || c == "77777777777" || c == "88888888888" || c == "99999999999")
-        return false;
+        if (c == "00000000000" || c == "11111111111" || c == "22222222222" || c == "33333333333" || c == "44444444444" || c == "55555555555" || c == "66666666666" || c == "77777777777" || c == "88888888888" || c == "99999999999")
+            return false;
 
-    var r;
-    var s = 0;
+        var r;
+        var s = 0;
 
-    for (i = 1; i <= 9; i++)
-        s = s + parseInt(c[i - 1]) * (11 - i);
+        for (i = 1; i <= 9; i++)
+            s = s + parseInt(c[i - 1]) * (11 - i);
 
-    r = (s * 10) % 11;
+        r = (s * 10) % 11;
 
-    if ((r == 10) || (r == 11))
-        r = 0;
+        if ((r == 10) || (r == 11))
+            r = 0;
 
-    if (r != parseInt(c[9]))
-        return false;
+        if (r != parseInt(c[9]))
+            return false;
 
-    s = 0;
+        s = 0;
 
-    for (i = 1; i <= 10; i++)
-        s = s + parseInt(c[i - 1]) * (12 - i);
+        for (i = 1; i <= 10; i++)
+            s = s + parseInt(c[i - 1]) * (12 - i);
 
-    r = (s * 10) % 11;
+        r = (s * 10) % 11;
 
-    if ((r == 10) || (r == 11))
-        r = 0;
+        if ((r == 10) || (r == 11))
+            r = 0;
 
-    if (r != parseInt(c[10]))
-        return false;
+        if (r != parseInt(c[10]))
+            return false;
 
-    return true;
-}
-
-
-function fMasc(objeto, mascara) {
-    obj = objeto
-    masc = mascara
-    setTimeout("fMascEx()", 1)
-}
-
-function fMascEx() {
-    obj.value = masc(obj.value)
-}
-
-function mCPF(cpf) {
-    cpf = cpf.replace(/\D/g, "")
-    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
-    cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
-    cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
-    return cpf
-}
-
-cpfCheck = function (el) {
-
-    document.getElementById('cpfResponse').innerHTML = is_cpf(el.value) ? '<i style="color: green" class="fas fa-check">Valido</i>' : '<i style="color: red" class="fas fa-times">Inválido</i>';
-
-  
-}
-$("#cpf").mask("000.000.000-00");
+        return true;
+    }
 
 
- </script>
+    function fMasc(objeto, mascara) {
+        obj = objeto
+        masc = mascara
+        setTimeout("fMascEx()", 1)
+    }
+
+    function fMascEx() {
+        obj.value = masc(obj.value)
+    }
+
+    function mCPF(cpf) {
+        cpf = cpf.replace(/\D/g, "")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        return cpf
+    }
+
+    cpfCheck = function (el) {
+
+        document.getElementById('cpfResponse').innerHTML = is_cpf(el.value) ? '<i style="color: green" class="fas fa-check">Valido</i>' : '<i style="color: red" class="fas fa-times">Inválido</i>';
+
+
+    }
+    $("#cpf").mask("000.000.000-00");
+
+
+</script>
 
 {{>_preloader}}

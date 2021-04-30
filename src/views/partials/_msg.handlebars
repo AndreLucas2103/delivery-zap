@@ -1,8 +1,24 @@
-<!--{{#if error}}
-            <div class="alert alert-danger">{{error}}</div>
+{{#if error}}
+    <script>
+        $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: '{{error}}',
+                position: 'top-right',
+                background: "#8a0000",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
+    </script>
 {{else}}
 {{/if}}
--->
+
 <style>
     .font-title-notificacao {
         color: white;
