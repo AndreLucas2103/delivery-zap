@@ -7,8 +7,6 @@ const passport = require("passport")
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 
-
-
 router.post("/registro", (req, res) => {
 
     var error = []

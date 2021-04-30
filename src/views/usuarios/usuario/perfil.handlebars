@@ -346,24 +346,18 @@
 
             <div class="card card-body bg-white border-light shadow-sm mb-4">
                 <h2 class="h5 mb-4">Senha</h2>
-                <form>
+                <form action="/usuario/trocar-senha" method="POST">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div>
-                                <label for="senhaAtual">Senha Atual</label>
-                                <input class="form-control" id="senhaAtual" name="senhaAtual" type="password" required>
-                            </div>
-                        </div>
-                        <div class="col-md-6 mb-3">
-                            <div>
-                                <label for="novaSenha">Nova Senha</label>
+                                <label for="senhaAtual">Senha nova</label>
                                 <input class="form-control" id="novaSenha" name="novaSenha" type="password" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
-                                <label for="confirmarSenha">Confirmar Senha</label>
-                                <input class="form-control" id="confirmarSenha" name="confirmarSenha" type="password" required>
+                                <label for="novaSenha">Confirmar senha</label>
+                                <input class="form-control" id="confirmaSenha" name="confirmaSenha" type="password" required>
                             </div>
                         </div>
                     </div>
