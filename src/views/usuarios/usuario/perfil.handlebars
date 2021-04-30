@@ -1,5 +1,23 @@
 {{>usuario/_top-css}}
 
+<style>
+    input[type="radio"] {
+        position:absolute;
+        visibility:hidden;
+    }
+        
+    .label-avatar {
+        display: block;
+        border: 3px solid rgb(255, 255, 255);
+        float: left;
+    }
+
+    input[type="radio"]:checked+.label-avatar {
+        border-color: rgb(155, 155, 250);
+    }
+    
+</style>
+
 <div class="container-fluid bg-soft">
 <div class="row">
 <div class="col-12">
@@ -18,108 +36,339 @@
     </div>
     
     <div class="row">
-                            <div class="col-12 col-xl-8">
-                                <div class="card card-body bg-white border-light shadow-sm mb-4">
-                                    <h2 class="h5 mb-4">General information</h2>
-                                    <form>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <div>
-                                                    <label for="first_name">First Name</label>
-                                                    <input class="form-control" id="first_name" type="text" placeholder="Enter your first name" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <div>
-                                                    <label for="last_name">Last Name</label>
-                                                    <input class="form-control" id="last_name" type="text" placeholder="Also your last name" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row align-items-center">
-                                            <div class="col-md-6 mb-3">
-                                                <label for="birthday">Birthday</label>
-                                                <div class="input-group">
-                                                    <span class="input-group-text"><span class="far fa-calendar-alt"></span></span>
-                                                    <input data-datepicker="" class="form-control" id="birthday" type="text" placeholder="dd/mm/yyyy" required>                                               
-                                                 </div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <label for="gender">Gender</label>
-                                                <select class="form-select mb-0" id="gender" aria-label="Gender select example">
-                                                    <option selected>Gender</option>
-                                                    <option value="1">Female</option>
-                                                    <option value="2">Male</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-group">
-                                                    <label for="email">Email</label>
-                                                    <input class="form-control" id="email" type="email" placeholder="name@company.com" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6 mb-3">
-                                                <div class="form-group">
-                                                    <label for="phone">Phone</label>
-                                                    <input class="form-control" id="phone" type="number" placeholder="+12-345 678 910" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <h2 class="h5 my-4">Adress</h2>
-                                        <div class="row">
-                                            <div class="col-sm-9 mb-3">
-                                                <div class="form-group">
-                                                    <label for="address">Address</label>
-                                                    <input class="form-control" id="address" type="text" placeholder="Enter your home address" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-3 mb-3">
-                                                <div class="form-group">
-                                                    <label for="number">Number</label>
-                                                    <input class="form-control" id="number" type="number" placeholder="No." required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-sm-4 mb-3">
-                                                <div class="form-group">
-                                                    <label for="city">City</label>
-                                                    <input class="form-control" id="city" type="text" placeholder="City" required>
-                                                </div>
-                                            </div>
-                                            <div class="col-sm-4">
-                                                <div class="form-group">
-                                                    <label for="zip">ZIP</label>
-                                                    <input class="form-control" id="zip" type="tel" placeholder="ZIP" required>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="mt-3">
-                                            <button type="submit" class="btn btn-primary">Save All</button>
-                                        </div>
-                                    </form>
-                                </div>
-                            </div>
-                            <div class="col-12 col-xl-4">
-                                <div class="row">
-                                    <div class="col-12 mb-4">
-                                        <div class="card border-light text-center p-0">
-                                            <div class="profile-cover rounded-top" data-background="../assets/img/profile-cover.jpg"></div>
-                                            <div class="card-body pb-5">
-                                                <img src="../assets/img/team/profile-picture-1.jpg" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
-                                                <h4 class="h3">Neil Sims</h4>
-                                                <h5 class="font-weight-normal">Senior Software Engineer</h5>
-                                                <p class="text-gray mb-4">New York, USA</p>
-                                                <a class="btn btn-sm btn-primary mr-2" href="#"><span class="fas fa-user-plus mr-1"></span> Connect</a>
-                                                <a class="btn btn-sm btn-secondary" href="#">Send Message</a>
-                                            </div>
-                                         </div>
-                                    </div>
-                                </div>
+        <div class="col-12 col-xl-8">
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <h2 class="h5 mb-4">Informações Gerais</h2>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="primeiroNome">Primeiro Nome</label>
+                                <input class="form-control" id="primeiroNome" name="primeiroNome" type="text" required>
                             </div>
                         </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="nomeCompleto">Nome Completo</label>
+                                <input class="form-control" id="nomeCompleto" name="nomeCompleto" type="text" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="email">E-mail</label>
+                                <input class="form-control" id="email" name="email" type="email" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="cpf">CPF</label>
+                                <input class="form-control" id="cpf" name="cpf" type="text" required>
+                            </div>
+                        </div>
+                        <script>
+                            $('#cpf').mask('000.000.000-00')
+                        </script>
+                    </div>
+
+                    <hr>
+
+                    <div class="row align-items-center">
+                        <div class="col-md-6 mb-3">
+                            <label for="timeZone">Fuso horário</label>
+                            <select class="form-select mb-0" id="timeZone" name="timeZone">
+                                <option value="-05:00">(UTC-05:00) Rio Branco</option>
+                                <option value="-04:00">(UTC-04:00) Cuiabá</option>
+                                <option value="-03:00">(UTC-03:00) Brasília</option>
+                                <option value="-02:00">(UTC-02:00) Fernando de Noronha</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="timeZone">Estabelecimento selecionado</label>
+                            <select class="form-select mb-0" id="timeZone" name="timeZone">
+                                <option value="">Todos</option>
+                                {{#each usuario.estabelecimentos}}
+                                    <option value="">Todos</option>
+                                {{/each}}
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Salvar</button>
+                    </div>
+                </form>
+            </div>
+
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <h2 class="h5 mb-4">Senha</h2>
+                <form>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="senhaAtual">Senha Atual</label>
+                                <input class="form-control" id="senhaAtual" name="senhaAtual" type="password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="novaSenha">Nova Senha</label>
+                                <input class="form-control" id="novaSenha" name="novaSenha" type="password" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <div>
+                                <label for="confirmarSenha">Confirmar Senha</label>
+                                <input class="form-control" id="confirmarSenha" name="confirmarSenha" type="password" required>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mt-3">
+                        <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card border-light text-center p-0">
+                        <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
+                        <div class="card-body pb-5">
+                            <img src="/img/perfil-avatar/svg/{{usuario.perfilAvatar}}.svg" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4" alt="Neil Portrait">
+                            <h4 class="h3">{{usuario.primeiroNome}}</h4>
+                            <button class="btn btn-sm btn-secondary"  data-bs-toggle="modal" data-bs-target="#alterar-avatar">Alterar Avatar</button>
+                        </div>
+                        <div class="h5">Estabelecimentos Vinculados:</div>
+                        {{#each usuario.primeiroNome}}
+                        <div></div>
+                        {{/each}}
+                    </div>
+                    
+
+                    <!-- Modal alterar avatar START -->
+                    <div class="modal fade" id="alterar-avatar" tabindex="-1" aria-labelledby="alterar-avatarLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="alterar-avatarLabel">Alterar Avatar</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/usuario/alterar-avatar" method="post">
+                                    <span style="max-width: 10px;"> 
+                                        <input type="radio" name="perfilAvatar" id="assistant" value="assistant">
+                                        <label for="assistant" class="label-avatar"><img src="/img/perfil-avatar/svg/assistant.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="astronaut" value="astronaut">
+                                        <label for="astronaut" class="label-avatar"><img src="/img/perfil-avatar/svg/astronaut.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="businessman" value="businessman">
+                                        <label for="businessman" class="label-avatar"><img src="/img/perfil-avatar/svg/businessman.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="captain" value="captain">
+                                        <label for="captain" class="label-avatar"><img src="/img/perfil-avatar/svg/captain.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="cashier" value="cashier">
+                                        <label for="cashier" class="label-avatar"><img src="/img/perfil-avatar/svg/cashier.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="chef" value="chef">
+                                        <label for="chef" class="label-avatar"><img src="/img/perfil-avatar/svg/chef.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="concierge" value="concierge">
+                                        <label for="concierge" class="label-avatar"><img src="/img/perfil-avatar/svg/concierge.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="cooker" value="cooker">
+                                        <label for="cooker" class="label-avatar"><img src="/img/perfil-avatar/svg/cooker.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>  
+                                        <input type="radio" name="perfilAvatar" id="courier" value="courier">
+                                        <label for="courier" class="label-avatar"><img src="/img/perfil-avatar/svg/courier.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="croupier" value="croupier">
+                                        <label for="croupier" class="label-avatar"><img src="/img/perfil-avatar/svg/croupier.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="croupier-1" value="croupier-1">
+                                        <label for="croupier-1" class="label-avatar"><img src="/img/perfil-avatar/svg/croupier-1.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="detective" value="detective">
+                                        <label for="detective" class="label-avatar"><img src="/img/perfil-avatar/svg/detective.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="disc-jockey" value="disc-jockey">
+                                        <label for="disc-jockey" class="label-avatar"><img src="/img/perfil-avatar/svg/disc-jockey.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="diver" value="diver">
+                                        <label for="diver" class="label-avatar"><img src="/img/perfil-avatar/svg/diver.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="doctor" value="doctor">
+                                        <label for="doctor" class="label-avatar"><img src="/img/perfil-avatar/svg/doctor.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="doctor-1" value="doctor-1">
+                                        <label for="doctor-1" class="label-avatar"><img src="/img/perfil-avatar/svg/doctor-1.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="engineer" value="engineer">
+                                        <label for="engineer" class="label-avatar"><img src="/img/perfil-avatar/svg/engineer.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="farmer" value="farmer">
+                                        <label for="farmer" class="label-avatar"><img src="/img/perfil-avatar/svg/farmer.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="firefighter" value="firefighter">
+                                        <label for="firefighter" class="label-avatar"><img src="/img/perfil-avatar/svg/firefighter.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="firefighter-1" value="astronaut">
+                                        <label for="firefighter-1" class="label-avatar"><img src="/img/perfil-avatar/svg/firefighter-1.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="gentleman" value="gentleman">
+                                        <label for="gentleman" class="label-avatar"><img src="/img/perfil-avatar/svg/gentleman.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="journalist" value="journalist">
+                                        <label for="journalist" class="label-avatar"><img src="/img/perfil-avatar/svg/journalist.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="judge" value="judge">
+                                        <label for="judge" class="label-avatar"><img src="/img/perfil-avatar/svg/judge.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="loader" value="loader">
+                                        <label for="loader" class="label-avatar"><img src="/img/perfil-avatar/svg/loader.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="maid" value="astrmaidonaut">
+                                        <label for="maid" class="label-avatar"><img src="/img/perfil-avatar/svg/maid.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="manager" value="manager">
+                                        <label for="manager" class="label-avatar"><img src="/img/perfil-avatar/svg/manager.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="miner" value="miner">
+                                        <label for="miner" class="label-avatar"><img src="/img/perfil-avatar/svg/miner.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="motorcyclist" value="motorcyclist">
+                                        <label for="motorcyclist" class="label-avatar"><img src="/img/perfil-avatar/svg/motorcyclist.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="nun" value="nun">
+                                        <label for="nun" class="label-avatar"><img src="/img/perfil-avatar/svg/nun.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="nurse" value="nurse">
+                                        <label for="nurse" class="label-avatar"><img src="/img/perfil-avatar/svg/nurse.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="pilot" value="pilot">
+                                        <label for="pilot" class="label-avatar"><img src="/img/perfil-avatar/svg/pilot.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="policeman" value="policeman">
+                                        <label for="policeman" class="label-avatar"><img src="/img/perfil-avatar/svg/policeman.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="postman" value="postman">
+                                        <label for="postman" class="label-avatar"><img src="/img/perfil-avatar/svg/postman.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="priest" value="priest">
+                                        <label for="priest" class="label-avatar"><img src="/img/perfil-avatar/svg/priest.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="scientist" value="scientist">
+                                        <label for="scientist" class="label-avatar"><img src="/img/perfil-avatar/svg/scientist.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="sheriff" value="sheriff">
+                                        <label for="sheriff" class="label-avatar"><img src="/img/perfil-avatar/svg/sheriff.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="showman" value="showman">
+                                        <label for="showman" class="label-avatar"><img src="/img/perfil-avatar/svg/showman.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="soldier" value="soldier">
+                                        <label for="soldier" class="label-avatar"><img src="/img/perfil-avatar/svg/soldier.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="soldier-1" value="soldier-1">
+                                        <label for="soldier-1" class="label-avatar"><img src="/img/perfil-avatar/svg/soldier-1.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="stewardess" value="stewardess">
+                                        <label for="stewardess" class="label-avatar"><img src="/img/perfil-avatar/svg/stewardess.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="surgeon" value="surgeon">
+                                        <label for="surgeon" class="label-avatar"><img src="/img/perfil-avatar/svg/surgeon.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="swat" value="swat">
+                                        <label for="swat" class="label-avatar"><img src="/img/perfil-avatar/svg/swat.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="taxi-driver" value="taxi-driver">
+                                        <label for="taxi-driver" class="label-avatar"><img src="/img/perfil-avatar/svg/taxi-driver.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="teacher" value="teacher">
+                                        <label for="teacher" class="label-avatar"><img src="/img/perfil-avatar/svg/teacher.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="thief" value="thief">
+                                        <label for="thief" class="label-avatar"><img src="/img/perfil-avatar/svg/thief.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="waiter" value="waiter">
+                                        <label for="waiter" class="label-avatar"><img src="/img/perfil-avatar/svg/waiter.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="welder" value="welder">
+                                        <label for="welder" class="label-avatar"><img src="/img/perfil-avatar/svg/welder.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="worker" value="worker">
+                                        <label for="worker" class="label-avatar"><img src="/img/perfil-avatar/svg/worker.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="worker-1" value="worker-1">
+                                        <label for="worker-1" class="label-avatar"><img src="/img/perfil-avatar/svg/worker-1.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+                                    <span>
+                                        <input type="radio" name="perfilAvatar" id="writer" value="writer">
+                                        <label for="writer" class="label-avatar"><img src="/img/perfil-avatar/svg/writer.svg" class="user-avatar rounded-circle mx-auto "></label>
+                                    </span>
+
+                                    <button type="submit" class="btn btn-primary btn-sm mt-4">Alterar Avatar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal alterar avatar START -->
+
+                </div>
+            </div>
+        </div>
+    </div>
 
 </main>
 
