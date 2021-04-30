@@ -39,30 +39,30 @@
         <div class="col-12 col-xl-8">
             <div class="card card-body bg-white border-light shadow-sm mb-4">
                 <h2 class="h5 mb-4">Informações Gerais</h2>
-                <form>
+                <form action="/usuario/edit-perfil-infos-gerais" method="POST">
                     <div class="row">
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="primeiroNome">Primeiro Nome</label>
-                                <input class="form-control" id="primeiroNome" name="primeiroNome" type="text" required>
+                                <input class="form-control" id="primeiroNome" name="primeiroNome" type="text" value="{{usuario.primeiroNome}}" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="nomeCompleto">Nome Completo</label>
-                                <input class="form-control" id="nomeCompleto" name="nomeCompleto" type="text" required>
+                                <input class="form-control" id="nomeCompleto" name="nomeCompleto" type="text" value="{{usuario.nomeCompleto}}" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="email">E-mail</label>
-                                <input class="form-control" id="email" name="email" type="email" required>
+                                <input class="form-control" id="email" name="email" type="email" value="{{usuario.email}}" required>
                             </div>
                         </div>
                         <div class="col-md-6 mb-3">
                             <div>
                                 <label for="cpf">CPF</label>
-                                <input class="form-control" id="cpf" name="cpf" type="text" required>
+                                <input class="form-control" id="cpf" name="cpf" type="text" value="{{usuario.cpf}}" required>
                             </div>
                         </div>
                         <script>
@@ -83,14 +83,17 @@
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="timeZone">Estabelecimento selecionado</label>
-                            <select class="form-select mb-0" id="timeZone" name="timeZone">
+                            <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
+                            <select class="form-select mb-0" id="estabelecimentoSelecionado" name="estabelecimentoSelecionado">
                                 <option value="">Todos</option>
                                 {{#each usuario.estabelecimentos}}
                                     <option value="">Todos</option>
                                 {{/each}}
                             </select>
                         </div>
+                        <script>
+                            $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
+                        </script>
                     </div>
                     <div class="mt-3">
                         <button type="submit" class="btn btn-primary">Salvar</button>

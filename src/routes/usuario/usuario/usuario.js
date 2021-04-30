@@ -41,4 +41,25 @@ router.post('/alterar-avatar', (req, res) => {
     })
 })
 
+router.post('/edit-perfil-infos-gerais', (req, res) => {
+    
+    Usuario.updateOne(
+        {'_id': req.user._id},
+        {
+            $set: {
+                "primeiroNome": req.body.primeiroNome,
+                "nomeCompleto": req.body.nomeCompleto,
+                "email": req.body.email, 
+                "cpf": req.body.cpf, 
+                "timeZone": req.body.timeZone
+            }
+        }
+    ).then(e=>{
+        req.flash('success_msg', 'Perfil editado')
+        res.redirect('back')
+    }).catch(err=>{
+        console.log(err)
+    })
+})
+
 module.exports = router ;
