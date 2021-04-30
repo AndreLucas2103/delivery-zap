@@ -39,6 +39,7 @@ app.use((req, res, next) => {
 app.use(function (req, res, next) {
     if (req.user) {
         res.locals.usuarioLogado = req.user.toObject();
+        app.locals.userL = req.user.toObject();
     }
     next();
 });
