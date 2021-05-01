@@ -48,6 +48,7 @@
                                             placeholder="0" required>
                                         <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
                                                 name="cpfResponse"></span></label>
+                                                  <input type="hidden" id="validacpf" name="validacpf">
                                     </div>
 
                                 </div>
@@ -153,20 +154,22 @@
 let el1 = document.getElementById('nome')
 let el2 = document.getElementById('nomecompleto')        
 let el3 = document.getElementById('email')
-let el4 = document.getElementById('cpfResponse')
+let el4 = document.getElementById('validacpf')
 let el5 = document.getElementById('senha')
 let el6 = document.getElementById('senha2')
-if (el1.value == "" || el2.value == "" || el3.value == "" || el5.value == "" || el6.value == "") {
+let el7 = document.getElementById('cpf')
+if (el1.value == "" || el2.value == "" || el3.value == "" || el5.value == "" || el6.value == "" || el7.value == "") {
       exibirMensagem('Preencha todos os campos para continuar.')
-        
+      return false;
+}
 if (el5.value != el6.value) {
        exibirMensagem('Senhas divergentes.')
-        }
-
-        if ($("#cpfResponse") == "Inválido" ) {
+        return false;
+}
+if (el4.value == "false") {
        exibirMensagem('CPF inválido.')
-        }
-
+        return false;
+      
         }else{
         $('#minhaDiv').hide()
         $('#minhaDiv2').show()
@@ -262,7 +265,7 @@ function exibirMensagem(msg){
     cpfCheck = function (el) {
 
         document.getElementById('cpfResponse').innerHTML = is_cpf(el.value) ? '<i style="color: green" class="fas fa-check">Valido</i>' : '<i style="color: red" class="fas fa-times">Inválido</i>';
-
+         document.getElementById('validacpf').value = is_cpf(el.value)
 
     }
     $("#cpf").mask("000.000.000-00");
