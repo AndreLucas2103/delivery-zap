@@ -6,6 +6,9 @@ const passport = require("passport")
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
+require("../../../models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
+
 
 router.post("/registro", (req, res) => {
 
@@ -33,8 +36,8 @@ router.post("/registro", (req, res) => {
             } else {
 
                 const novoUsuario = new Usuario({
-                    primeiroNome: req.body.nome,
-                    nomeCompleto: req.body.nomecompleto,
+                    primeiroNome: req.body.primeiroNome,
+                    nomeCompleto: req.body.nomeCompleto,
                     email: req.body.email,
                     senha: req.body.senha,
                     eTipo:1,
@@ -50,9 +53,48 @@ router.post("/registro", (req, res) => {
 
                         novoUsuario.senha = hash
 
-                        novoUsuario.save().then(() => {
-                            req.flash("success_msg", "Cadastro criado com sucesso.")
-                            res.redirect("/login")                          
+                        novoUsuario.save().then((usuarioEdit) => {
+
+                            addEstabelecimento = {
+                                nome: req.body.nome,
+                                url: req.body.url,
+                                endereco: {
+                                    logradouro: req.body.logradouro,
+                                    bairro: req.body.bairro,
+                                    cidade: req.body.cidade,
+                                    cep: req.body.cep,
+                                    numero: req.body.numero,
+                                    uf: req.body.uf
+                                },
+                                cnpj: req.body.cnpj,
+                                telefone: req.body.telefone,
+                                idUsuarioMaster: usuarioEdit._id
+                            }
+                            new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
+                                editUsuario = {
+                                    idEstabelecimento: estabelecimento._id,
+                                    cnpj: estabelecimento.cnpj,
+                                    nome: estabelecimento.nome,
+                                    url: estabelecimento.url
+                                }
+                                Usuario.updateOne(
+                                    { '_id': usuarioEdit._id },
+                                    {
+                                        $push: { "estabelecimentosVinculados":  editUsuario},
+                                        $set: {"idUsuarioMaster": usuarioEdit._id}
+                                    }
+                                ).then(e => {
+                                    console.log('Usuario Criado')
+                                    req.flash('success_msg', 'Cadastro realizado')
+                                    res.redirect('/login')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                                
+                            }).catch(err => {
+                                req.flash('error_msg', 'Ocorreu um erro')
+                                res.redirect('back')
+                            })
                         }).catch((err) => {
                             console.log(err)
                             req.flash("error_msg", "Ocorreu um erro interno.")

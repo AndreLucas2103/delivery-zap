@@ -20,16 +20,16 @@
                         <div class="row g-2">
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
+                                    <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" placeholder="0"
                                         required>
-                                    <label for="telcomercial">Nome*</label>
+                                    <label for="primeiroNome">Primeiro Nome*</label>
                                 </div>
                             </div>
                             <div class="col-md">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nomecompleto" name="nomecompleto"
+                                    <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto"
                                         placeholder="0" required>
-                                    <label for="celcomercial">Nome completo*</label>
+                                    <label for="nomeCompleto">Nome Completo*</label>
                                 </div>
                             </div>
                             <div class="row g-2">
@@ -94,9 +94,9 @@
                             <center>
                             <div class="col-md-8">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="linkEstabelecimento" name="linkEstabelecimento" placeholder="0"
+                                    <input type="text" class="form-control" id="url" name="url" placeholder="0"
                                         required>
-                                    <label for="telcomercial">delivery-zap.com/estabelecimento/</label>
+                                    <label for="url">delivery-zap.com/estabelecimento/</label>
                                 </div>
                             </div>   
                             </center>         
@@ -104,9 +104,9 @@
                                 <h5 style="color: white;">Dados do estabelecimento</h5>          
                                 <div class="col-md">
                                     <div class="form-floating">
-                                        <input type="text" class="form-control" id="nomeEmpresa" name="nomeEmpresa" placeholder="0"
+                                        <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
                                             required>
-                                        <label for="celcomercial">Nome da empresa*</label>
+                                        <label for="nome">Nome da empresa*</label>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -204,8 +204,8 @@
     $('#minhaDiv2').hide()
 
     function Mudarestado() {
-let el1 = document.getElementById('nome')
-let el2 = document.getElementById('nomecompleto')        
+let el1 = document.getElementById('primeiroNome')
+let el2 = document.getElementById('nomeCompleto')        
 let el3 = document.getElementById('email')
 let el4 = document.getElementById('validacpf')
 let el5 = document.getElementById('senha')
