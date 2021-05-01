@@ -26,7 +26,12 @@ const Estabelecimento = new Schema({
         fim: String
     }],
     
+    useMercadoPago: {
+        type: Boolean,
+        default: false
+    },
     mercadoPago: {
+        ativo: Boolean,
         publickey: String,
         acessToken: String
     },

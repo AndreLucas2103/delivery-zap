@@ -22,7 +22,6 @@ router.get('/estabelecimento/:idEstabelecimento', async (req, res) => { // Entra
                     }
             }
         ])
-        console.log(estabelecimento)
 
         res.render('usuarios/configuracao/estabelecimento', {estabelecimento: estabelecimento[0]})
     } catch (err) {
@@ -54,21 +53,49 @@ router.post('/add-horario-estabelecimento', async (req, res) => {
     }
 })
 
+router.post('/delete-horarioFuncionamento', async (req, res) => {
+    try {
+        Estabelecimento.updateOne(
+            {'_id': req.body.idEstabelecimento},
+            { $pull: {
+                'horarioFuncionamento': {_id: ObjectId(req.body.idHorario)},
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Horário removido')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabelecimentos
     try {
-        let estabelecimentos = await Estabelecimento.aggregate([
-            {$match: {idUsuarioMaster: req.user._id }},
+        let estabelecimentos = await Usuario.aggregate([
+            {$match: {_id: req.user._id }},
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentosVinculados.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentosVinculados"
+                    }
+            },
+            {$unwind: '$estabelecimentosVinculados'}, 
             {
                 $lookup:
                     {
                         from: "usuarios",
-                        localField: "_id",
+                        localField: "estabelecimentosVinculados._id",
                         foreignField: "estabelecimentosVinculados.idEstabelecimento",
-                        as: "usuarios"
+                        as: "usuariosVinculados"
                     }
-            }
+            },
+            
         ])
-        console.log(estabelecimentos)
 
         res.render('usuarios/configuracao/estabelecimentos', {estabelecimentos: estabelecimentos})
     } catch (err) {
@@ -79,6 +106,9 @@ router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabel
 router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelecimento
     try {
         Estabelecimento.findById({_id: req.body.idEstabelecimento}).then(estabelecimento => {
+            req.body.useMercadoPago == "true" ? useMercadoPagoBoolean = true : useMercadoPagoBoolean = false
+            estabelecimento.mercadoPago.ativo == true ? integracaoMercadoPagoAtiva = true : integracaoMercadoPagoAtiva = false
+
             if(estabelecimento){
                 estabelecimento.nome = req.body.nome,
                 estabelecimento.url = req.body.url,
@@ -92,6 +122,13 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                 },
                 estabelecimento.cnpj = req.body.cnpj,
                 estabelecimento.telefone = req.body.telefone
+
+                estabelecimento.useMercadoPago = useMercadoPagoBoolean
+                estabelecimento.mercadoPago = {
+                    ativo: integracaoMercadoPagoAtiva,
+                    publickey: req.body.publickey,
+                    acessToken: req.body.acessToken
+                },
 
                 estabelecimento.save().then(() => {
                     req.flash('success_msg', 'Estabelecimento editado')

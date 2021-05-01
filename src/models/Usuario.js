@@ -4,8 +4,8 @@ const Schema = mongoose.Schema;
 
 /*
     eTipo: {
-        1: administrador
-        2: funcionario
+        5: administrador
+        6: funcionario
     }
 */
 
@@ -18,6 +18,7 @@ const Usuario = new Schema({
     perfilAvatar: String,
 
     eTipo: Number,
+    eTipoAdmin: Boolean,
     usuarioMaster: {
         type: Boolean,
         default: false
