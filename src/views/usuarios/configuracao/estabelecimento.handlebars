@@ -113,8 +113,40 @@
                         </div>
                     </div>
 
+                    <hr>
+
+                    <h5 class="mt-4">Integração Mercado Pago</h5>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input" type="checkbox" id="useMercadoPago" name="useMercadoPago" value="true">
+                        <label class="form-check-label" for="useMercadoPago">Utilizar Mercado Pago</label>
+                    </div>
+                    {{#if estabelecimento.mercadoPago.ativo}}
+                    <div class="row">
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="publickey" name="publickey" placeholder="-" value="{{estabelecimento.mercadoPago.publickey}}" readonly>
+                            <label for="publickey" class="ml-2">Public Key</label>
+                        </div>
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="acessToken" name="acessToken" placeholder="-" value="{{estabelecimento.mercadoPago.acessToken}}" readonly>
+                            <label for="acessToken" class="ml-2">Acess Token</label>
+                        </div>
+                    </div>
+                    {{else}}
+                    <div class="row">
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="publickey" name="publickey" placeholder="-" value="{{estabelecimento.mercadoPago.publickey}}">
+                            <label for="publickey" class="ml-2">Public Key</label>
+                        </div>
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="acessToken" name="acessToken" placeholder="-" value="{{estabelecimento.mercadoPago.acessToken}}">
+                            <label for="acessToken" class="ml-2">Acess Token</label>
+                        </div>
+                    </div>
+                    {{/if}}
+
                     <script>
                         $('#estado option[value="{{estabelecimento.endereco.estado}}"').prop('selected', 'selected').change();
+                        $('#useMercadoPago').prop('checked', {{estabelecimento.useMercadoPago}})
                     </script>
 
                     <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
@@ -147,7 +179,7 @@
     <br><br><br>
     
     <div class="row ">
-        <div class="col-12 col-lg-4 mb-4 ">
+        <div class="col-12 col-lg-6 mb-4 ">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">Usuarios</h2>
@@ -178,7 +210,7 @@
             </div>
         </div>
 
-        <div class="col-12 col-lg-8 mb-4">
+        <div class="col-12 col-lg-6 mb-4">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">Horários Funcionamento</h2>
@@ -196,14 +228,17 @@
                                 </tr>
                             </thead>
                             <tbody>
+                                <form action="/configuracao/delete-horarioFuncionamento" method="post">
+                                <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
                                 {{#each estabelecimento.horarioFuncionamento}}
                                 <tr>
                                     <th scope="row">{{dia}}</th>
                                     <td>{{inicio}}</td>
                                     <td>{{fim}}</td>
-                                    <td>@mdo</td>
+                                    <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idHorario" value="{{_id}}" style="font-size: small;">X</button></td>
                                 </tr>
                                 {{/each}}
+                                </form>
                             </tbody>
                         </table>
                     </ul>
@@ -235,16 +270,16 @@
                         </div>
                         <div class="row mt-2">
                             <div class="form-floating  col-6">
-                                <input type="text" class="form-control mask-hora" id="inicio" name="inicio" placeholder="-" >
+                                <input type="text" class="form-control mask-hora" id="inicio" name="inicio" placeholder="-" required>
                                 <label for="inicio" class="ml-2">Inicio</label>
                             </div>
                             <div class="form-floating  col-6">
-                                <input type="text" class="form-control mask-hora" id="fim" name="fim" placeholder="-">
+                                <input type="text" class="form-control mask-hora" id="fim" name="fim" placeholder="-" required>
                                 <label for="fim" class="ml-2">Fim</label>
                             </div>
                         </div>
                         
-                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}">
+                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
                         <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
 
                         <script>

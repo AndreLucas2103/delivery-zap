@@ -145,12 +145,12 @@
         <div class="col-12 col-lg-4 mb-4">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">{{nome}}</h2>
-                    <a href="/configuracao/estabelecimento/{{_id}}" class="btn btn-sm btn-secondary">Ver</a>
+                    <h2 class="h5 mb-0">{{estabelecimentosVinculados.nome}}</h2>
+                    <a href="/configuracao/estabelecimento/{{estabelecimentosVinculados._id}}" class="btn btn-sm btn-secondary">Ver</a>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush list my--3">
-                        {{#each usuarios}}
+                        {{#each usuariosVinculados}}
                         <li class="list-group-item px-0">
                             <div class="row align-items-center">
                             <div class="col-auto">
