@@ -3,9 +3,10 @@
 
 {{>_msg}}
 
-<section style="background-color: #D8F3DC;" class="pricing-table section">
-    <div class="container">
-        <form action="acessos/registro" method="POST">
+
+<form action="acessos/registro" method="POST">
+    <section id="minhaDiv" style="background-color: #D8F3DC;" class="pricing-table section">
+        <div class="container">
             <div class="title">
                 <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
                     <a href="/"><img src="site/images/logo/logo.png"></a>
@@ -22,16 +23,16 @@
                         <div class="row g-2">
                             <div class="col-md-4">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
-                                        required>
-                                    <label for="telcomercial">Nome*</label>
+                                    <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
+                                        placeholder="0" required>
+                                    <label for="primeiroNome">Primeiro Nome*</label>
                                 </div>
                             </div>
                             <div class="col-md">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nomecompleto" name="nomecompleto"
+                                    <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto"
                                         placeholder="0" required>
-                                    <label for="celcomercial">Nome completo*</label>
+                                    <label for="nomeCompleto">Nome Completo*</label>
                                 </div>
                             </div>
                             <div class="row g-2">
@@ -48,9 +49,11 @@
                                             onkeyup="cpfCheck(this)" maxlength="18"
                                             onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
                                             placeholder="0" required>
-                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse" name="cpfResponse"></span></label>
+                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
+                                                name="cpfResponse"></span></label>
+                                        <input type="hidden" id="validacpf" name="validacpf">
                                     </div>
-                                    
+
                                 </div>
                                 <div class="row g-2">
                                     <div class="col-md">
@@ -70,10 +73,202 @@
                                 </div>
                             </div>
                         </div>
-                        <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Cadastrar</button>
+                        <br><button type="button" onclick="Mudarestado()"
+                            class="btn btn-primary btn-lg">Próximo -></button>
                     </div>
-        </form>
-</section>
+    </section>
+    <section id="minhaDiv2" style="background-color: #D8F3DC;" class="pricing-table section">
+        <div class="container">
+            <div class="title">
+                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
+                    <a href="/"><img src="site/images/logo/logo.png"></a>
+                </h3>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
+                    <div class="single-table wow fadeInUp">
+                        <h5 style="color: white;">Painel de vendas</h5>
+                        <div class="row g-2">
+                            <center>
+                                <div class="col-md-8">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="url" name="url" placeholder="0"
+                                            required>
+                                        <label for="url">delivery-zap.com/estabelecimento/</label>
+                                    </div>
+                                </div>
+                            </center>
+                            <div class="row g-2">
+                                <h7 style="color: white;">Dados do estabelecimento</h7>
+                                <div class="col-md">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
+                                            required>
+                                        <label for="nome">Nome da empresa*</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="telefone" name="telefone"
+                                            placeholder="0" required>
+                                        <label for="telefone">Whatsapp*</label>
+                                    </div>
+
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="cep" name="cep" placeholder="0"
+                                                required>
+                                            <label for="celcomercial">CEP*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="logradouro" name="logradouro"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">Endereço*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="numero" name="numero"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">N°-Apt-Lote*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="bairro" name="bairro"
+                                                placeholder="0" required>
+                                            <label for="celcomercial">Bairro*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="cidade" name="cidade"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">Cidade*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="uf" name="uf" placeholder="0"
+                                                required>
+                                            <label for="telcomercial">UF*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br><button type="button" onclick="Mudarestado2()"
+                            class="btn btn-primary btn-lg"> <- Voltar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                    </div>
+    </section>
+</form>
+<script>
+    const cep = document.querySelector("#cep")
+
+    const showData = (result) => {
+        for (const campo in result) {
+            if (document.querySelector("#" + campo)) {
+                document.querySelector("#" + campo).value = result[campo]
+            }
+        }
+    }
+
+    cep.addEventListener("blur", (e) => {
+        let search = cep.value.replace("-", "")
+        const options = {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'default'
+        }
+
+        fetch(`https://viacep.com.br/ws/${search}/json/`, options)
+            .then(response => {
+                response.json()
+                    .then(data => showData(data))
+            })
+            .catch(e => console.log('Deu Erro: ' + e, message))
+    })
+
+</script>
+
+<script>
+    $('#minhaDiv2').hide()
+
+    function Mudarestado() {
+        let el1 = document.getElementById('primeiroNome')
+        let el2 = document.getElementById('nomeCompleto')
+        let el3 = document.getElementById('email')
+        let el4 = document.getElementById('validacpf')
+        let el5 = document.getElementById('senha')
+        let el6 = document.getElementById('senha2')
+        let el7 = document.getElementById('cpf')
+
+        if (el1.value == "" || el2.value == "" || el3.value == "" || el5.value == "" || el6.value == "" || el7.value == "") {
+            exibirMensagem('Preencha todos os campos para continuar.')
+            return false;
+        }
+        if (el5.value != el6.value) {
+            exibirMensagem('Senhas divergentes.')
+            return false;
+        }
+        if (el3.value.indexOf('@') == -1) {
+            exibirMensagem('E-mail inválido.')
+            return false;
+        }
+        if (el5.value.length < 4) {
+            exibirMensagem('Senha muito curta.')
+            return false;
+        }
+        if (el4.value == "false") {
+            exibirMensagem('CPF inválido.')
+            return false;
+
+        } else {
+            $('#minhaDiv').hide()
+            $('#minhaDiv2').show()
+        }
+    }
+
+    function Mudarestado2() {
+        $('#minhaDiv').show()
+        $('#minhaDiv2').hide()
+    }
+</script>
+
+<script>
+    function exibirMensagem(msg) {
+        $(document).ready(() => {
+            Swal.fire({
+                toast: true,
+                title: msg,
+                position: 'top-right',
+                background: "#8a0000",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',
+                }
+            })
+        })
+
+    }
+
+</script>
+
 <script>
     function is_cpf(c) {
 
@@ -135,12 +330,22 @@
     cpfCheck = function (el) {
 
         document.getElementById('cpfResponse').innerHTML = is_cpf(el.value) ? '<i style="color: green" class="fas fa-check">Valido</i>' : '<i style="color: red" class="fas fa-times">Inválido</i>';
-
+        document.getElementById('validacpf').value = is_cpf(el.value)
 
     }
     $("#cpf").mask("000.000.000-00");
+    $("#cep").mask("00000-000");
 
+    var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+        spOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
+            }
+        };
 
+    $('#telefone').mask(SPMaskBehavior, spOptions);
 </script>
 
 {{>_preloader}}

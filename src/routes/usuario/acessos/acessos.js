@@ -39,6 +39,7 @@ router.post("/registro", (req, res) => {
                     primeiroNome: req.body.primeiroNome,
                     nomeCompleto: req.body.nomeCompleto,
                     email: req.body.email,
+                    cpf: req.body.cpf,
                     senha: req.body.senha,
                     eTipo:1,
                     usuarioMaster: true,
