@@ -11,7 +11,7 @@ const Usuario = mongoose.model("usuarios")
 router.get('/perfil', async (req, res) => {
     try {
         let usuario = await Usuario.aggregate([
-            { $match: { _id: ObjectId("6089dd9ac10c142f7c22fa23") } },
+            { $match: { _id: req.user._id } },
         ])
 
         res.render('usuarios/usuario/perfil', { usuario: usuario[0] })

@@ -22,7 +22,7 @@ router.get('/estabelecimento/:idEstabelecimento', async (req, res) => { // Entra
                     }
             }
         ])
-        console.log()
+        console.log(estabelecimento)
 
         res.render('usuarios/configuracao/estabelecimento', {estabelecimento: estabelecimento[0]})
     } catch (err) {
@@ -30,6 +30,29 @@ router.get('/estabelecimento/:idEstabelecimento', async (req, res) => { // Entra
     }
 })
 
+router.post('/add-horario-estabelecimento', async (req, res) => {
+    try {
+        let addHorario = {
+            dia: req.body.dia,
+            inicio: req.body.inicio,
+            fim: req.body.fim
+        }
+        Estabelecimento.updateOne(
+            {'_id': req.body.idEstabelecimento},
+            { $push: {
+                'horarioFuncionamento': addHorario,
+                $sort: { dia: -1 }
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Horário adicionado')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabelecimentos
     try {
@@ -53,7 +76,7 @@ router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabel
     }
 })
 
-router.post('/edit-estabelecimento', async (req, res) => {
+router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelecimento
     try {
         Estabelecimento.findById({_id: req.body.idEstabelecimento}).then(estabelecimento => {
             if(estabelecimento){
@@ -68,13 +91,21 @@ router.post('/edit-estabelecimento', async (req, res) => {
                     estado: req.body.estado
                 },
                 estabelecimento.cnpj = req.body.cnpj,
-                estabelecimento.telefone = req.body.telefone,
-                estabelecimento.idUsuarioMaster = user._id
+                estabelecimento.telefone = req.body.telefone
+
+                estabelecimento.save().then(() => {
+                    req.flash('success_msg', 'Estabelecimento editado')
+                    res.redirect('back')
+                }).catch(err => {
+                    req.flash('error_msg', 'Ocorreu um erro')
+                    res.redirect('back')
+                })
             }else{
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             }
         }).catch(err => {
+            console.log(err)
             req.flash('error_msg', 'Ocorreu um erro')
             res.redirect('back')
         })
