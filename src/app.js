@@ -39,7 +39,6 @@ app.use((req, res, next) => {
 app.use(function (req, res, next) {
     if (req.user) {
         res.locals.usuarioLogado = req.user.toObject();
-        app.locals.userL = req.user.toObject();
     }
     next();
 });
@@ -130,9 +129,15 @@ const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
 const usuarioUsuario = require("./routes/usuario/usuario/usuario")
 
+    // Configuracoes do usuario
+    const usuarioEstabelecimento = require("./routes/usuario/configuracao/estabelecimento")
+
 app.use('/acessos', acessoUsuario)
 app.use('/dashboard', usuarioDashboard)
 app.use('/usuario', usuarioUsuario)
+
+    // Configuracoes do usuario
+    app.use('/configuracao', usuarioEstabelecimento)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------

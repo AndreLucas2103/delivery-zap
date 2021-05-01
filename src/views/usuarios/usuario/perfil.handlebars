@@ -51,8 +51,8 @@
 
                     <div class="card border-light text-center p-0 mt-4">
                         <div class="h5 mt-4">Estabelecimentos Vinculados:</div>
-                        {{#each usuario.primeiroNome}}
-                        <div></div>
+                        {{#each usuario.estabelecimentosVinculados}}
+                        <div>{{nome}} - {{cnpj}}</div>
                         {{/each}}
                     </div>
                     
@@ -330,13 +330,14 @@
                             <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
                             <select class="form-select mb-0" id="estabelecimentoSelecionado" name="estabelecimentoSelecionado">
                                 <option value="">Todos</option>
-                                {{#each usuario.estabelecimentos}}
-                                    <option value="">Todos</option>
+                                {{#each usuario.estabelecimentosVinculados}}
+                                    <option value="{{idEstabelecimento}}">{{nome}} - {{cnpj}}</option>
                                 {{/each}}
                             </select>
                         </div>
                         <script>
                             $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
+                            $('#estabelecimentoSelecionado option[value="{{usuario.estabelecimentoSelecionado}}"').prop('selected', 'selected').change();
                         </script>
                     </div>
                     <div class="mt-3">

@@ -1,0 +1,185 @@
+{{>usuario/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<main class="content">
+    
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Configuração</a></li>
+                <li class="breadcrumb-item"><a>Estabelecimentos</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-adicionar-estabelecimento">+ Adicionar</button>
+
+    <!-- Modal add estabelecimento -->
+    <div class="modal fade" id="modal-adicionar-estabelecimento" tabindex="-1" aria-labelledby="modal-adicionar-estabelecimentoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-adicionar-estabelecimentoLabel">Adicionar Estabelecimento</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/configuracao/add-estabelecimento" method="post">
+                    <div class="row">
+                        <div class="form-floating  col-6">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-">
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                        <div class="form-floating  col-6">
+                            <input type="text" class="form-control" id="url" name="url" placeholder="-">
+                            <label for="url" class="ml-2">URL do site</label>
+                            <span style="font-size: smaller;">* Deve ser escrito tudo junto, exemplo "deliveryzapentregas"</span>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mt-4">Endereço</h5>
+                    <div class="row">
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="rua" name="rua" placeholder="-">
+                            <label for="rua" class="ml-2">Rua</label>
+                        </div>
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="bairro" name="bairro" placeholder="-">
+                            <label for="bairro" class="ml-2">Bairro</label>
+                        </div>
+                        <div class="form-floating mb-3 col-4">
+                            <input type="text" class="form-control" id="cidade" name="cidade" placeholder="-">
+                            <label for="cidade" class="ml-2">Cidade</label>
+                        </div>
+                        <div class="form-floating mb-3 col-3">
+                            <input type="text" class="form-control" id="cep" name="cep" placeholder="-">
+                            <label for="cep" class="ml-2">CEP</label>
+                        </div>
+                        <div class="form-floating mb-3 col-2">
+                            <input type="text" class="form-control" id="numero" name="numero" placeholder="-">
+                            <label for="numero" class="ml-2">Número</label>
+                        </div>
+                        <div class="col-3 form-floating">
+                            <select class="form-select" name="estado" id="estado">
+                                <option value="AC">Acre</option>
+                                <option value="AL">Alagoas</option>
+                                <option value="AP">Amapá</option>
+                                <option value="AM">Amazonas</option>
+                                <option value="BA">Bahia</option>
+                                <option value="CE">Ceará</option>
+                                <option value="DF">Distrito Federal</option>
+                                <option value="ES">Espírito Santo</option>
+                                <option value="GO">Goiás</option>
+                                <option value="MA">Maranhão</option>
+                                <option value="MT">Mato Grosso</option>
+                                <option value="MS">Mato Grosso do Sul</option>
+                                <option value="MG">Minas Gerais</option>
+                                <option value="PA">Pará</option>
+                                <option value="PB">Paraíba</option>
+                                <option value="PR">Paraná</option>
+                                <option value="PE">Pernambuco</option>
+                                <option value="PI">Piauí</option>
+                                <option value="RJ">Rio de Janeiro</option>
+                                <option value="RN">Rio Grande do Norte</option>
+                                <option value="RS">Rio Grande do Sul</option>
+                                <option value="RO">Rondônia</option>
+                                <option value="RR">Roraima</option>
+                                <option value="SC">Santa Catarina</option>
+                                <option value="SP">São Paulo</option>
+                                <option value="SE">Sergipe</option>
+                                <option value="TO">Tocantins</option>
+                            </select>
+                            <label for="estado" class="ml-2">Estado</label>
+                        </div>
+                    </div>
+
+                    <hr>
+
+                    <h5 class="mt-4">Estabelecimento</h5>
+                    <div class="row">
+                        <div class="form-floating mb-3 col-4">
+                            <input type="text" class="form-control" id="cnpj" name="cnpj" placeholder="-">
+                            <label for="cnpj" class="ml-2">CNPJ</label>
+                        </div>
+                        <div class="form-floating mb-3 col-4">
+                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-">
+                            <label for="telefone" class="ml-2">Telefone</label>
+                        </div>
+                        <div class="col-4">
+                            Você poderá adicionar os horarios de funcionamento após adicionar o estabelecimento!
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm">Adicionar</button>
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm">Cancelar</button>
+                    
+                    <script>
+                        $('#cep').mask('00000-000')
+                        $('#cnpj').mask('00.000.000/0000-00')
+
+                        var SPMaskBehavior = function (val) {
+                        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+                        },
+                        spOptions = {
+                        onKeyPress: function(val, e, field, options) {
+                            field.mask(SPMaskBehavior.apply({}, arguments), options);
+                            }
+                        };
+
+                        $('#telefone').mask(SPMaskBehavior, spOptions);
+                    </script>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="row">
+        {{#each estabelecimentos}}
+        <div class="col-12 col-lg-4 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">{{nome}}</h2>
+                    <a href="/configuracao/estabelecimento/{{_id}}" class="btn btn-sm btn-secondary">Ver</a>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush list my--3">
+                        {{#each usuarios}}
+                        <li class="list-group-item px-0">
+                            <div class="row align-items-center">
+                            <div class="col-auto">
+                                <!-- Avatar -->
+                                <a href="#" class="user-avatar">
+                                    <img class="rounded-circle" src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
+                                </a>
+                            </div>
+                            <div class="col-auto ml--2">
+                                <h4 class="h6 mb-0">
+                                    <a href="#">{{primeiroNome}}</a>
+                                </h4>
+                            </div>
+                            </div>
+                        </li>
+                        {{/each}}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}
