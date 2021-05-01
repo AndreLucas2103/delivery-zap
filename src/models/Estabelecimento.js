@@ -10,12 +10,12 @@ const Estabelecimento = new Schema({
     nome: String,
     url: String,
     endereco: {
-        rua: String,
+        logradouro: String,
         bairro: String,
         cidade: String,
         cep: String,
         numero: String,
-        estado: String
+        uf: String
     },
     cnpj: String,
     telefone: String,
