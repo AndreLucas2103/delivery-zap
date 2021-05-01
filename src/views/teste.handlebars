@@ -88,67 +88,120 @@
             </div>
             <div class="row">
                 <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
-                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                    <div class="single-table wow fadeInUp">
+                        <h5 style="color: white;">Painel de vendas</h5>
                         <div class="row g-2">
-                            <div class="col-md-4">
+                            <center>
+                            <div class="col-md-8">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
+                                    <input type="text" class="form-control" id="linkEstabelecimento" name="linkEstabelecimento" placeholder="0"
                                         required>
-                                    <label for="telcomercial">Nome*</label>
+                                    <label for="telcomercial">delivery-zap.com/estabelecimento/</label>
                                 </div>
-                            </div>
-                            <div class="col-md">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="nomecompleto" name="nomecompleto"
-                                        placeholder="0" required>
-                                    <label for="celcomercial">Nome completo*</label>
-                                </div>
-                            </div>
+                            </div>   
+                            </center>         
                             <div class="row g-2">
+                                <h5 style="color: white;">Dados do estabelecimento</h5>          
                                 <div class="col-md">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="0"
+                                        <input type="text" class="form-control" id="nomeEmpresa" name="nomeEmpresa" placeholder="0"
                                             required>
-                                        <label for="celcomercial">E-mail*</label>
+                                        <label for="celcomercial">Nome da empresa*</label>
                                     </div>
                                 </div>
                                 <div class="col-md-4">
                                     <div class="form-floating">
                                         <input type="text" class="form-control" id="cpf" name="cpf"
-                                            onkeyup="cpfCheck(this)" maxlength="18"
-                                            onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
                                             placeholder="0" required>
-                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
-                                                name="cpfResponse"></span></label>
+                                        <label for="cpf">Whatsapp*</label>
                                     </div>
 
                                 </div>
                                 <div class="row g-2">
-                                    <div class="col-md">
+                                    <div class="col-md-3">
                                         <div class="form-floating">
-                                            <input type="password" class="form-control" id="senha" name="senha"
+                                            <input type="text" class="form-control" id="cep" name="cep"
                                                 placeholder="0" required>
-                                            <label for="celcomercial">Senha*</label>
+                                            <label for="celcomercial">CEP*</label>
                                         </div>
                                     </div>
                                     <div class="col-md">
                                         <div class="form-floating">
-                                            <input type="password" class="form-control" id="senha2" name="senha2"
+                                            <input type="text" class="form-control" id="logradouro" name="logradouro"
                                                 placeholder="0" required>
-                                            <label for="telcomercial">Confirmar senha*</label>
+                                            <label for="telcomercial">Endereço*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="numero" name="numero"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">N°-Apt-Lote*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                 <div class="row g-2">
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="bairro" name="bairro"
+                                                placeholder="0" required>
+                                            <label for="celcomercial">Bairro*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="cidade" name="cidade"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">Cidade*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="uf" name="uf"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">UF*</label>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                         <br><button type="button" onclick="Mudarestado2()"
-                            class="btn btn-primary btn-lg">Voltar</button>
+                            class="btn btn-primary btn-lg">Voltar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                         <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
                     </div>
     </section>
 </form>
 <script>
-    $('#minhaDiv2').hide()
+    const cep = document.querySelector("#cep")
+
+    const showData = (result) => {
+        for (const campo in result) {
+            if (document.querySelector("#" + campo)) {
+                document.querySelector("#" + campo).value = result[campo]
+            }
+        }
+    }
+
+    cep.addEventListener("blur", (e) => {
+        let search = cep.value.replace("-", "")
+        const options = {
+            method: 'GET',
+            mode: 'cors',
+            cache: 'default'
+        }
+
+        fetch(`https://viacep.com.br/ws/${search}/json/`, options)
+            .then(response => {
+                response.json()
+                    .then(data => showData(data))
+            })
+            .catch(e => console.log('Deu Erro: ' + e, message))
+    })
+
+</script>
+
+<script>
+    $('#minhaDiv').hide()
 
     function Mudarestado() {
 let el1 = document.getElementById('nome')
@@ -158,12 +211,21 @@ let el4 = document.getElementById('validacpf')
 let el5 = document.getElementById('senha')
 let el6 = document.getElementById('senha2')
 let el7 = document.getElementById('cpf')
+
 if (el1.value == "" || el2.value == "" || el3.value == "" || el5.value == "" || el6.value == "" || el7.value == "") {
       exibirMensagem('Preencha todos os campos para continuar.')
       return false;
 }
 if (el5.value != el6.value) {
        exibirMensagem('Senhas divergentes.')
+        return false;
+}
+if (el3.value.indexOf('@') == -1) {
+       exibirMensagem('E-mail inválido.')
+        return false;
+}
+if (el5.value.length < 4) {
+       exibirMensagem('Senha muito curta.')
         return false;
 }
 if (el4.value == "false") {
