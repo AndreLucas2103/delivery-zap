@@ -28,9 +28,12 @@ const Usuario = new Schema({
         default: "-03:00"
     },
 
-    estabelecimentoSelecionado: String,
-    estabelecimentos: [{
-        idEstabelecimento: ObjectId
+    estabelecimentoSelecionado: ObjectId,
+    estabelecimentosVinculados: [{
+        idEstabelecimento: ObjectId,
+        cnpj: String,
+        nome: String,
+        url: String
     }],
 
     observacao: String,

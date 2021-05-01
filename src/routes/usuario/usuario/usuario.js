@@ -11,15 +11,7 @@ const Usuario = mongoose.model("usuarios")
 router.get('/perfil', async (req, res) => {
     try {
         let usuario = await Usuario.aggregate([
-            { $match: { _id: req.user._id } },
-            {
-                $lookup: {
-                    from: "estabelecimentos",
-                    localField: "_id",
-                    foreignField: "idEstabelecimento",
-                    as: "teste"
-                }
-            }
+            { $match: { _id: ObjectId("6089dd9ac10c142f7c22fa23") } },
         ])
 
         res.render('usuarios/usuario/perfil', { usuario: usuario[0] })
@@ -43,7 +35,7 @@ router.post('/alterar-avatar', (req, res) => {
 })
 
 router.post('/edit-perfil-infos-gerais', (req, res) => {
-
+    req.body.estabelecimentoSelecionado ? estabelecimentoSelecionado = req.body.estabelecimentoSelecionado : estabelecimentoSelecionado = null
     Usuario.updateOne(
         { '_id': req.user._id },
         {
@@ -52,7 +44,8 @@ router.post('/edit-perfil-infos-gerais', (req, res) => {
                 "nomeCompleto": req.body.nomeCompleto,
                 "email": req.body.email,
                 "cpf": req.body.cpf,
-                "timeZone": req.body.timeZone
+                "timeZone": req.body.timeZone,
+                "estabelecimentoSelecionado": estabelecimentoSelecionado
             }
         }
     ).then(e => {
