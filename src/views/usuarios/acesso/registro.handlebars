@@ -18,9 +18,10 @@
                 </div>
             </div>
             <div class="row">
-                <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
-                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                <div class="col-lg-6 col-md-6 col-10" style="margin:auto;">  
+                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">                       
                         <div class="row g-2">
+                            <h5 style="color: white;">Informações pessoais</h5>
                             <div class="col-md-4">
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
@@ -74,7 +75,7 @@
                             </div>
                         </div>
                         <br><button type="button" onclick="Mudarestado()"
-                            class="btn btn-primary btn-lg">Próximo -></button>
+                            class="btn btn-primary btn-lg">Próximo »</button>
                     </div>
     </section>
     <section id="minhaDiv2" style="background-color: #D8F3DC;" class="pricing-table section">
@@ -84,7 +85,6 @@
                     <a href="/"><img src="site/images/logo/logo.png"></a>
                 </h3>
             </div>
-            <br>
             <div class="row">
                 <div class="col-12">
                 </div>
@@ -169,7 +169,7 @@
                             </div>
                         </div>
                         <br><button type="button" onclick="Mudarestado2()"
-                            class="btn btn-primary btn-lg"> <- Voltar</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                            class="btn btn-primary btn-lg">« Voltar</button>
                         <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
                     </div>
     </section>
@@ -204,7 +204,7 @@
 </script>
 
 <script>
-    $('#minhaDiv2').hide()
+    $('#minhaDiv').hide()
 
     function Mudarestado() {
         let el1 = document.getElementById('primeiroNome')
