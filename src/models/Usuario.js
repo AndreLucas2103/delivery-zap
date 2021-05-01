@@ -28,6 +28,11 @@ const Usuario = new Schema({
         default: "-03:00"
     },
 
+    idUsuarioMaster: {
+        type: Schema.Types.ObjectId,
+        ref: "usuarios",
+    },
+
     estabelecimentoSelecionado: ObjectId,
     estabelecimentosVinculados: [{
         idEstabelecimento: ObjectId,

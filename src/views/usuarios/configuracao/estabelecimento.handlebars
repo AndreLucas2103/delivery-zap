@@ -17,11 +17,9 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-secondary btn-sm mb-4 float-end" data-bs-toggle="modal" data-bs-target="#modal-edit-estabelecimento">Editar Informações</button>
+    <button type="button" class="btn btn-secondary btn-sm mb-4 float-end " data-bs-toggle="modal" data-bs-target="#modal-edit-estabelecimento">Editar Informações</button>
 
-
-
-    <!-- Modal add estabelecimento -->
+    <!-- Modal edit estabelecimento START -->
     <div class="modal fade" id="modal-edit-estabelecimento" tabindex="-1" aria-labelledby="modal-edit-estabelecimentoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -119,7 +117,7 @@
                         $('#estado option[value="{{estabelecimento.endereco.estado}}"').prop('selected', 'selected').change();
                     </script>
 
-                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}">
+                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
 
                     <button type="submit" class="btn btn-primary btn-sm">Salvar</button>
                     <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm">Cancelar</button>
@@ -144,18 +142,20 @@
             </div>
         </div>
     </div>
+    <!-- Modal edit estabelecimento END -->
+
+    <br><br><br>
     
-    <div class="row">
-        {{#each estabelecimentos}}
-        <div class="col-12 col-lg-4 mb-4">
+    <div class="row ">
+        <div class="col-12 col-lg-4 mb-4 ">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">{{nome}}</h2>
-                    <a href="/configuracao/estabelecimento/{{_id}}" class="btn btn-sm btn-secondary">Ver</a>
+                    <h2 class="h5 mb-0">Usuarios</h2>
+                    <a href="/configuracao/estabelecimento/{{_id}}" class="btn btn-sm btn-secondary">Adicionar</a>
                 </div>
                 <div class="card-body">
                     <ul class="list-group list-group-flush list my--3">
-                        {{#each usuarios}}
+                        {{#each estabelecimento.usuarios}}
                         <li class="list-group-item px-0">
                             <div class="row align-items-center">
                             <div class="col-auto">
@@ -174,9 +174,89 @@
                         {{/each}}
                     </ul>
                 </div>
+                
             </div>
         </div>
-        {{/each}}
+
+        <div class="col-12 col-lg-8 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">Horários Funcionamento</h2>
+                    <a  class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-add-horario">Adicionar</a>
+                </div>
+                <div class="card-body">
+                    <ul class="list-group list-group-flush list my--3">
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                <th scope="col">Dia</th>
+                                <th scope="col">Inicio</th>
+                                <th scope="col">Fim</th>
+                                <th scope="col"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each estabelecimento.horarioFuncionamento}}
+                                <tr>
+                                    <th scope="row">{{dia}}</th>
+                                    <td>{{inicio}}</td>
+                                    <td>{{fim}}</td>
+                                    <td>@mdo</td>
+                                </tr>
+                                {{/each}}
+                            </tbody>
+                        </table>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modal add horarios START-->
+        <div class="modal fade" id="modal-add-horario" tabindex="-1" aria-labelledby="modal-add-horarioLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modal-add-horarioLabel">Modal title</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form action="/configuracao/add-horario-estabelecimento" method="post">
+                        <div class="form-floating">
+                            <select class="form-select" name="dia" id="dia">
+                                <option value="Domingo">Domingo</option>
+                                <option value="Segunda-feira">Segunda-feira</option>
+                                <option value="Terça-feira">Terça-feira</option>
+                                <option value="Quarta-feira">Quarta-feira</option>
+                                <option value="Quinta-feira">Quinta-feira</option>
+                                <option value="Sexta-feira">Sexta-feira</option>
+                                <option value="Sabado">Sabado</option>
+                            </select>
+                            <label for="dia" class="ml-2">Dia Semana</label>
+                        </div>
+                        <div class="row mt-2">
+                            <div class="form-floating  col-6">
+                                <input type="text" class="form-control mask-hora" id="inicio" name="inicio" placeholder="-" >
+                                <label for="inicio" class="ml-2">Inicio</label>
+                            </div>
+                            <div class="form-floating  col-6">
+                                <input type="text" class="form-control mask-hora" id="fim" name="fim" placeholder="-">
+                                <label for="fim" class="ml-2">Fim</label>
+                            </div>
+                        </div>
+                        
+                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}">
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+
+                        <script>
+                            $(".mask-hora").mask('00:00')
+                        </script>
+                    </form>
+                </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal add horarios END-->
+
     </div>
 
 </main>
