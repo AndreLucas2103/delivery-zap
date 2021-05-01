@@ -1,32 +1,271 @@
+<link rel="stylesheet" href="site/css/main.css" />
+<link rel="stylesheet" href="site/css/bootstrap.min.css">
+
+<form action="acessos/registro" method="POST">
+    <section id="minhaDiv" style="background-color: #D8F3DC;" class="pricing-table section">
+        <div class="container">
+            <div class="title">
+                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
+                    <a href="/"><img src="site/images/logo/logo.png"></a>
+                </h3>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
+                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
+                                        required>
+                                    <label for="telcomercial">Nome*</label>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nomecompleto" name="nomecompleto"
+                                        placeholder="0" required>
+                                    <label for="celcomercial">Nome completo*</label>
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="0"
+                                            required>
+                                        <label for="celcomercial">E-mail*</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="cpf" name="cpf"
+                                            onkeyup="cpfCheck(this)" maxlength="18"
+                                            onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
+                                            placeholder="0" required>
+                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
+                                                name="cpfResponse"></span></label>
+                                    </div>
+
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="senha" name="senha"
+                                                placeholder="0" required>
+                                            <label for="celcomercial">Senha*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="senha2" name="senha2"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">Confirmar senha*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br><button type="button" onclick="Mudarestado()"
+                            class="btn btn-primary btn-lg">Proximo</button>
+                    </div>
+    </section>
+    <section id="minhaDiv2" style="background-color: #D8F3DC;" class="pricing-table section">
+        <div class="container">
+            <div class="title">
+                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
+                    <a href="/"><img src="site/images/logo/logo.png"></a>
+                </h3>
+            </div>
+            <br>
+            <div class="row">
+                <div class="col-12">
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
+                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
+                                        required>
+                                    <label for="telcomercial">Nome*</label>
+                                </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="nomecompleto" name="nomecompleto"
+                                        placeholder="0" required>
+                                    <label for="celcomercial">Nome completo*</label>
+                                </div>
+                            </div>
+                            <div class="row g-2">
+                                <div class="col-md">
+                                    <div class="form-floating">
+                                        <input type="email" class="form-control" id="email" name="email" placeholder="0"
+                                            required>
+                                        <label for="celcomercial">E-mail*</label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="cpf" name="cpf"
+                                            onkeyup="cpfCheck(this)" maxlength="18"
+                                            onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
+                                            placeholder="0" required>
+                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
+                                                name="cpfResponse"></span></label>
+                                    </div>
+
+                                </div>
+                                <div class="row g-2">
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="senha" name="senha"
+                                                placeholder="0" required>
+                                            <label for="celcomercial">Senha*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="password" class="form-control" id="senha2" name="senha2"
+                                                placeholder="0" required>
+                                            <label for="telcomercial">Confirmar senha*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br><button type="button" onclick="Mudarestado2()"
+                            class="btn btn-primary btn-lg">Voltar</button>
+                        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                    </div>
+    </section>
+</form>
 <script>
+    $('#minhaDiv2').hide()
 
-    if (localStorage.hasOwnProperty("uuid4Client")) {
-        $('#uuid4Client').val(localStorage.getItem("uuid4Client"))
+    function Mudarestado() {
+let el1 = document.getElementById('nome')
+let el2 = document.getElementById('nomecompleto')        
+let el3 = document.getElementById('email')
+let el4 = document.getElementById('cpfResponse')
+let el5 = document.getElementById('senha')
+let el6 = document.getElementById('senha2')
+if (el1.value == "" || el2.value == "" || el3.value == "" || el5.value == "" || el6.value == "") {
+      exibirMensagem('Preencha todos os campos para continuar.')
         
-    } else {
-        localStorage.setItem("uuid4Client", uuid4())
-        $('#uuid4Client').val(localStorage.uuid4Client)
+if (el5.value != el6.value) {
+       exibirMensagem('Senhas divergentes.')
+        }
+
+        if ($("#cpfResponse") == "Inválido" ) {
+       exibirMensagem('CPF inválido.')
+        }
+
+        }else{
+        $('#minhaDiv').hide()
+        $('#minhaDiv2').show()
+    }
     }
 
-    function uuid4() { // Function para gerar um uuid4, id único do usuário
-        let array = new Uint8Array(16)
-        crypto.getRandomValues(array)
-
-        // Manipulate the 9th byte
-        array[8] &= 0b00111111 // Clear the first two bits
-        array[8] |= 0b10000000 // Set the first two bits to 10
-
-        // Manipulate the 7th byte
-        array[6] &= 0b00001111 // Clear the first four bits
-        array[6] |= 0b01000000 // Set the first four bits to 0100
-
-        const pattern = "XXXXXXXX-XXXX-XXXX-XXXX-XXXXXXXXXXXX"
-        let idx = 0
-
-        return pattern.replace(
-            /XX/g,
-            () => array[idx++].toString(16).padStart(2, "0"), // padStart ensures a leading zero, if needed
-        )
+    function Mudarestado2() {
+        $('#minhaDiv').show()
+        $('#minhaDiv2').hide()
     }
-    
+</script>
+
+<script>
+function exibirMensagem(msg){
+ $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: msg,
+                position: 'top-right',
+                background: "#8a0000",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
+
+}
+
+</script>
+
+<script>
+    function is_cpf(c) {
+
+        if ((c = c.replace(/[^\d]/g, "")).length != 11)
+            return false
+
+        if (c == "00000000000" || c == "11111111111" || c == "22222222222" || c == "33333333333" || c == "44444444444" || c == "55555555555" || c == "66666666666" || c == "77777777777" || c == "88888888888" || c == "99999999999")
+            return false;
+
+        var r;
+        var s = 0;
+
+        for (i = 1; i <= 9; i++)
+            s = s + parseInt(c[i - 1]) * (11 - i);
+
+        r = (s * 10) % 11;
+
+        if ((r == 10) || (r == 11))
+            r = 0;
+
+        if (r != parseInt(c[9]))
+            return false;
+
+        s = 0;
+
+        for (i = 1; i <= 10; i++)
+            s = s + parseInt(c[i - 1]) * (12 - i);
+
+        r = (s * 10) % 11;
+
+        if ((r == 10) || (r == 11))
+            r = 0;
+
+        if (r != parseInt(c[10]))
+            return false;
+
+        return true;
+    }
+
+
+    function fMasc(objeto, mascara) {
+        obj = objeto
+        masc = mascara
+        setTimeout("fMascEx()", 1)
+    }
+
+    function fMascEx() {
+        obj.value = masc(obj.value)
+    }
+
+    function mCPF(cpf) {
+        cpf = cpf.replace(/\D/g, "")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d)/, "$1.$2")
+        cpf = cpf.replace(/(\d{3})(\d{1,2})$/, "$1-$2")
+        return cpf
+    }
+
+    cpfCheck = function (el) {
+
+        document.getElementById('cpfResponse').innerHTML = is_cpf(el.value) ? '<i style="color: green" class="fas fa-check">Valido</i>' : '<i style="color: red" class="fas fa-times">Inválido</i>';
+
+
+    }
+    $("#cpf").mask("000.000.000-00");
+
+
 </script>
