@@ -46,8 +46,8 @@
                     <h5 class="mt-4">Endereço</h5>
                     <div class="row">
                         <div class="form-floating mb-3 col-6">
-                            <input type="text" class="form-control" id="rua" name="rua" placeholder="-" value="{{estabelecimento.endereco.rua}}">
-                            <label for="rua" class="ml-2">Rua</label>
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="-" value="{{estabelecimento.endereco.logradouro}}">
+                            <label for="logradouro" class="ml-2">Logradouro</label>
                         </div>
                         <div class="form-floating mb-3 col-6">
                             <input type="text" class="form-control" id="bairro" name="bairro" placeholder="-" value="{{estabelecimento.endereco.bairro}}">
@@ -66,7 +66,7 @@
                             <label for="numero" class="ml-2">Número</label>
                         </div>
                         <div class="col-3 form-floating">
-                            <select class="form-select" name="estado" id="estado">
+                            <select class="form-select" name="uf" id="uf">
                                 <option value="AC">Acre</option>
                                 <option value="AL">Alagoas</option>
                                 <option value="AP">Amapá</option>
@@ -95,7 +95,7 @@
                                 <option value="SE">Sergipe</option>
                                 <option value="TO">Tocantins</option>
                             </select>
-                            <label for="estado" class="ml-2">Estado</label>
+                            <label for="uf" class="ml-2">Estado</label>
                         </div>
                     </div>
 
@@ -145,7 +145,7 @@
                     {{/if}}
 
                     <script>
-                        $('#estado option[value="{{estabelecimento.endereco.estado}}"').prop('selected', 'selected').change();
+                        $('#uf option[value="{{estabelecimento.endereco.uf}}"').prop('selected', 'selected').change();
                         $('#useMercadoPago').prop('checked', {{estabelecimento.useMercadoPago}})
                     </script>
 

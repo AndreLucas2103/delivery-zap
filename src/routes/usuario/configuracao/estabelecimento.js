@@ -113,12 +113,12 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                 estabelecimento.nome = req.body.nome,
                 estabelecimento.url = req.body.url,
                 estabelecimento.endereco = {
-                    rua: req.body.rua,
+                    logradouro: req.body.logradouro,
                     bairro: req.body.bairro,
                     cidade: req.body.cidade,
                     cep: req.body.cep,
                     numero: req.body.numero,
-                    estado: req.body.estado
+                    uf: req.body.uf
                 },
                 estabelecimento.cnpj = req.body.cnpj,
                 estabelecimento.telefone = req.body.telefone
@@ -160,12 +160,12 @@ router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
                 nome: req.body.nome,
                 url: req.body.url,
                 endereco: {
-                    rua: req.body.rua,
+                    logradouro: req.body.logradouro,
                     bairro: req.body.bairro,
                     cidade: req.body.cidade,
                     cep: req.body.cep,
                     numero: req.body.numero,
-                    estado: req.body.estado
+                    uf: req.body.uf
                 },
                 cnpj: req.body.cnpj,
                 telefone: req.body.telefone,
