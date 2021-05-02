@@ -43,7 +43,8 @@ router.post("/registro", (req, res) => {
                     senha: req.body.senha,
                     eTipo:1,
                     usuarioMaster: true,
-                    statusAtivo: true
+                    statusAtivo: true,
+                    perfilAvatar: 'businessman'
 
                 })
                 bcryptjs.genSalt(10, (erro, salt) => {
@@ -65,7 +66,8 @@ router.post("/registro", (req, res) => {
                                     localidade: req.body.localidade,
                                     cep: req.body.cep,
                                     numero: req.body.numero,
-                                    uf: req.body.uf
+                                    uf: req.body.uf,
+                                    
                                 },
                                 cnpj: req.body.cnpj,
                                 telefone: req.body.telefone,
