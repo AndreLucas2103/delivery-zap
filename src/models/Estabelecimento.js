@@ -12,7 +12,7 @@ const Estabelecimento = new Schema({
     endereco: {
         logradouro: String,
         bairro: String,
-        cidade: String,
+        localidade: String,
         cep: String,
         numero: String,
         uf: String
