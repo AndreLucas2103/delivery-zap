@@ -1,22 +1,24 @@
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop">
-  Launch static backdrop modal
-</button>
+<style>
+    .hm div {display:none;position:relative}
+.hm:hover div {display:block;position:absolute;top:0;margin-left:40px}
 
-<!-- Modal -->
-<div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        ...
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-primary">Understood</button>
-      </div>
-    </div>
-  </div>
-</div>
+/* daqui pra baixo é só estética para demonstração */
+.hm {
+  width:1.5em;height:1.5em;
+  text-align:center;
+  font:20px/1.5em "segoe ui",arial,helvetica,sans-serif;
+  border:1px solid #999;
+  border-radius:50%;
+  color:#999;
+}
+
+.hm div {
+  width:8em;
+  color:#fff;
+  background:#999;
+  border-radius:5px;
+  padding:5px;
+}
+</style>
+
+<div class="hm">?<div>Batatinha quando nasce esparrama pelo chão.</div></div>
