@@ -62,7 +62,7 @@ router.post("/registro", (req, res) => {
                                 endereco: {
                                     logradouro: req.body.logradouro,
                                     bairro: req.body.bairro,
-                                    cidade: req.body.cidade,
+                                    localidade: req.body.localidade,
                                     cep: req.body.cep,
                                     numero: req.body.numero,
                                     uf: req.body.uf
