@@ -1,10 +1,8 @@
 <link rel="stylesheet" href="site/css/main.css" />
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
-
 {{>_msg}}
-
-
 <form action="acessos/registro" method="POST">
+
     <section id="minhaDiv" style="background-color: #D8F3DC;" class="pricing-table section">
         <div class="container">
             <div class="title">
@@ -13,72 +11,68 @@
                 </h3>
             </div>
             <br>
-            <div class="row">
-                <div class="col-12">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-6 col-10" style="margin:auto;">  
-                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">                       
-                        <div class="row g-2">
-                            <h5 style="color: white;">Informações pessoais</h5>
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
-                                        placeholder="0" required>
-                                    <label for="primeiroNome">Primeiro Nome*</label>
-                                </div>
+            <div class="col-lg-6 col-md-6 col-10" style="margin:auto;">
+                <div class="single-table wow fadeInUp" data-wow-delay=".4s">
+                    <div class="row g-2">
+                        <h5 style="color: white;">Informações pessoais</h5>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
+                                    placeholder="0" required>
+                                <label for="primeiroNome">Primeiro Nome*</label>
                             </div>
+                        </div>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto"
+                                    placeholder="0" required>
+                                <label for="nomeCompleto">Nome Completo*</label>
+                            </div>
+                        </div>
+                        <div class="row g-2">
                             <div class="col-md">
                                 <div class="form-floating">
-                                    <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto"
-                                        placeholder="0" required>
-                                    <label for="nomeCompleto">Nome Completo*</label>
+                                    <input type="email" class="form-control" id="email" name="email" placeholder="0"
+                                        required>
+                                    <label for="celcomercial">E-mail*</label>
                                 </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="cpf" name="cpf" onkeyup="cpfCheck(this)"
+                                        maxlength="18" onkeydown="javascript: fMasc( this, mCPF );"
+                                        onblur="cpfvalid(this)" placeholder="0" required>
+                                    <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
+                                            name="cpfResponse"></span></label>
+                                    <input type="hidden" id="validacpf" name="validacpf">
+                                </div>
+
                             </div>
                             <div class="row g-2">
                                 <div class="col-md">
                                     <div class="form-floating">
-                                        <input type="email" class="form-control" id="email" name="email" placeholder="0"
-                                            required>
-                                        <label for="celcomercial">E-mail*</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="cpf" name="cpf"
-                                            onkeyup="cpfCheck(this)" maxlength="18"
-                                            onkeydown="javascript: fMasc( this, mCPF );" onblur="cpfvalid(this)"
+                                        <input type="password" class="form-control" id="senha" name="senha"
                                             placeholder="0" required>
-                                        <label for="cpf">CPF*&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
-                                                name="cpfResponse"></span></label>
-                                        <input type="hidden" id="validacpf" name="validacpf">
+                                        <label for="celcomercial">Senha* (4 digitos)</label> 
                                     </div>
-
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-md">
-                                        <div class="form-floating">
-                                            <input type="password" class="form-control" id="senha" name="senha"
-                                                placeholder="0" required>
-                                            <label for="celcomercial">Senha*</label>
-                                            <span style="font-size: smaller;color:white">"4 caracteres no mínimo."</span>
-                                        </div>
-                                    </div>
-                                    <div class="col-md">
-                                        <div class="form-floating">
-                                            <input type="password" class="form-control" id="senha2" name="senha2"
-                                                placeholder="0" required>
-                                            <label for="telcomercial">Confirmar senha*</label>
-                                        </div>
+                                <div class="col-md">
+                                    <div class="form-floating">
+                                        <input type="password" class="form-control" id="senha2" name="senha2"
+                                            placeholder="0" required>
+                                        <label for="telcomercial">Confirmar senha*</label>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                        <br><button type="button" onclick="Mudarestado()"
-                            class="btn btn-primary btn-lg">Próximo »</button>
                     </div>
+                    <br><button type="button" onclick="Mudarestado()" class="btn btn-primary btn-lg">Próximo
+                        »</button>
+                </div>
+            </div>
+        </div>
     </section>
+
     <section id="minhaDiv2" style="background-color: #D8F3DC;" class="pricing-table section">
         <div class="container">
             <div class="title">
@@ -86,93 +80,88 @@
                     <a href="/"><img src="site/images/logo/logo.png"></a>
                 </h3>
             </div>
-            <div class="row">
-                <div class="col-12">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
-                    <div class="single-table wow fadeInUp">
-                        <h5 style="color: white;">Painel de vendas</h5>
-                        <div class="row g-2">
-                            <center>
-                                <div class="col-md-8">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="url" name="url" placeholder="0"
-                                            required>
-                                        <label for="url">delivery-zap.com/estabelecimento/</label>
-                                    </div>
+            <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
+                <div class="single-table wow fadeInUp">
+                   <h5 style="color: white;" onclick="alertQuestion()">Painel de Vendas <img src="site/images/icones/question.png"></h5> 
+                    <div class="row g-2">
+                        <center>
+                            <div class="col-md-8">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="url" name="url" placeholder="0"
+                                        required>
+                                    <label for="url">delivery-zap.com/estabelecimento/</label>
                                 </div>
-                            </center>
-                            <div class="row g-2">
-                                <h7 style="color: white;">Dados do estabelecimento</h7>
-                                <div class="col-md">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="nome" name="nome" placeholder="0"
-                                            required>
-                                        <label for="nome">Nome da empresa*</label>
-                                    </div>
-                                </div>
-                                <div class="col-md-4">
-                                    <div class="form-floating">
-                                        <input type="text" class="form-control" id="telefone" name="telefone"
-                                            placeholder="0" required>
-                                        <label for="telefone">Whatsapp*</label>
-                                    </div>
+                            </div>
+                        </center>
+                    </div>
+                    <div class="row g-2">
+                        <h7 style="color: white;">Dados do estabelecimento</h7>
+                        <div class="col-md">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="nome" name="nome" placeholder="0" required>
+                                <label for="nome">Nome da empresa*</label>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0"
+                                    required>
+                                <label for="telefone">Whatsapp*</label>
+                            </div>
 
+                        </div>
+                        <div class="row g-2">
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="cep" name="cep" placeholder="0"
+                                        required>
+                                    <label for="celcomercial">CEP*</label>
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-md-3">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="cep" name="cep" placeholder="0"
-                                                required>
-                                            <label for="celcomercial">CEP*</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="logradouro" name="logradouro"
-                                                placeholder="0" required>
-                                            <label for="telcomercial">Endereço*</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-3">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="numero" name="numero"
-                                                placeholder="0" required>
-                                            <label for="telcomercial">N°-Apt-Lote*</label>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="logradouro" name="logradouro"
+                                        placeholder="0" required>
+                                    <label for="telcomercial">Endereço*</label>
                                 </div>
-                                <div class="row g-2">
-                                    <div class="col-md-4">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="bairro" name="bairro"
-                                                placeholder="0" required>
-                                            <label for="celcomercial">Bairro*</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="localidade" name="localidade"
-                                                placeholder="0" required>
-                                            <label for="localidade">Cidade*</label>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-2">
-                                        <div class="form-floating">
-                                            <input type="text" class="form-control" id="uf" name="uf" placeholder="0"
-                                                required>
-                                            <label for="telcomercial">UF*</label>
-                                        </div>
-                                    </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="numero" name="numero" placeholder="0"
+                                        required>
+                                    <label for="telcomercial">N°-Apt-Lote*</label>
                                 </div>
                             </div>
                         </div>
-                        <br><button type="button" onclick="Mudarestado2()"
-                            class="btn btn-primary btn-lg">« Voltar</button>
-                        <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                        <div class="row g-2">
+                            <div class="col-md-4">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="bairro" name="bairro" placeholder="0"
+                                        required>
+                                    <label for="celcomercial">Bairro*</label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="localidade" name="localidade"
+                                        placeholder="0" required>
+                                    <label for="localidade">Cidade*</label>
+                                </div>
+                            </div>
+                            <div class="col-md-2">
+                                <div class="form-floating">
+                                    <input type="text" class="form-control" id="uf" name="uf" placeholder="0" required>
+                                    <label for="telcomercial">UF*</label>
+                                </div>
+                            </div>
+                        </div>
                     </div>
+                    <br><button type="button" onclick="Mudarestado2()" class="btn btn-primary btn-lg">«
+                        Voltar</button>
+                    <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                </div>
+            </div>
+        </div>
     </section>
 </form>
 <script>
@@ -237,14 +226,14 @@
             return false;
 
         } else {
-            $('#minhaDiv').hide()
-            $('#minhaDiv2').show()
+            $('#minhaDiv').hide(500)
+            $('#minhaDiv2').show(600)
         }
     }
 
     function Mudarestado2() {
-        $('#minhaDiv').show()
-        $('#minhaDiv2').hide()
+        $('#minhaDiv').show(600)
+        $('#minhaDiv2').hide(500)
     }
 </script>
 
@@ -269,6 +258,17 @@
     }
 
 </script>
+     <script>
+      function alertQuestion(){
+            $(document).ready(()=>{    
+                Swal.fire({
+                    icon: 'info',
+                    title: 'Oque é o Painel de vendas?',
+                    text: "É o link que você irá compartilhar para os seus clientes realizarem os pedidos dos produtos de seu estabelecimento.",
+                })
+            })
+        }
+    </script>
 
 <script>
     function is_cpf(c) {
@@ -336,6 +336,7 @@
     }
     $("#cpf").mask("000.000.000-00");
     $("#cep").mask("00000-000");
+    $('#url').mask('AAAAAAAAAAAAAAAAAAAAAAAA');
 
     var SPMaskBehavior = function (val) {
         return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
