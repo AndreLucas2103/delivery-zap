@@ -3,6 +3,7 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const bcryptjs = require("bcryptjs")
 const passport = require("passport")
+const { v4: uuidv4 } = require('uuid');
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -44,8 +45,8 @@ router.post("/registro", (req, res) => {
                     eTipo:1,
                     usuarioMaster: true,
                     statusAtivo: true,
-                    perfilAvatar: 'businessman'
-
+                    perfilAvatar: 'businessman',
+                    identificaouuidv4: uuidv4()
                 })
                 bcryptjs.genSalt(10, (erro, salt) => {
                     bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {

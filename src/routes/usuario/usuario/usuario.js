@@ -8,6 +8,14 @@ require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 
 
+router.get('/usuarios', async (req, res) => {
+    try {
+        
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.get('/perfil', async (req, res) => {
     try {
         let usuario = await Usuario.aggregate([
@@ -101,6 +109,7 @@ router.post('/trocar-senha', async (req, res) => {
         }
     })
 })
+
 
 module.exports = router;
 

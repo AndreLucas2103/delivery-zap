@@ -33,6 +33,7 @@ const Usuario = new Schema({
         type: Schema.Types.ObjectId,
         ref: "usuarios",
     },
+    identificaouuidv4: String,
 
     estabelecimentoSelecionado: ObjectId,
     estabelecimentosVinculados: [{

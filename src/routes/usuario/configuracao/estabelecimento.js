@@ -29,7 +29,7 @@ router.get('/estabelecimento/:idEstabelecimento', async (req, res) => { // Entra
     }
 })
 
-router.post('/add-horario-estabelecimento', async (req, res) => {
+router.post('/add-horario-estabelecimento', async (req, res) => { // adicionar os horarios no estabelecimento
     try {
         let addHorario = {
             dia: req.body.dia,
@@ -53,9 +53,9 @@ router.post('/add-horario-estabelecimento', async (req, res) => {
     }
 })
 
-router.post('/delete-horarioFuncionamento', async (req, res) => {
+router.post('/delete-horarioFuncionamento', async (req, res) => { // deletar os horários no estabelecimento
     try {
-        Estabelecimento.updateOne(
+        Estabelecimento.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
             {'_id': req.body.idEstabelecimento},
             { $pull: {
                 'horarioFuncionamento': {_id: ObjectId(req.body.idHorario)},
@@ -77,12 +77,13 @@ router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabel
             {$match: {_id: req.user._id }},
             {
                 $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentosVinculados.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentosVinculados"
-                    }
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosVinculados.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosVinculados"
+                }
+                
             },
             {$unwind: '$estabelecimentosVinculados'}, 
             {
