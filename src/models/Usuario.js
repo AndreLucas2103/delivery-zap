@@ -37,9 +37,6 @@ const Usuario = new Schema({
     estabelecimentoSelecionado: ObjectId,
     estabelecimentosVinculados: [{
         idEstabelecimento: ObjectId,
-        cnpj: String,
-        nome: String,
-        url: String
     }],
 
     observacao: String,

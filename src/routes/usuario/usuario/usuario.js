@@ -12,6 +12,15 @@ router.get('/perfil', async (req, res) => {
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id } },
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentosVinculados.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentosVinculados"
+                    }
+            },
         ])
 
         res.render('usuarios/usuario/perfil', { usuario: usuario[0] })
