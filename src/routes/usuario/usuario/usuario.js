@@ -10,6 +10,13 @@ const Usuario = mongoose.model("usuarios")
 
 router.get('/usuarios', async (req, res) => {
     try {
+        let usuarios = await Usuario.find({
+            $and: [
+                {estabelecimentosVinculados: req.user.estabelecimentosVinculados.idEstabelecimento}
+            ]
+        })
+        
+        res.render('usuarios/usuario/usuarios')
         
     } catch (err) {
         console.log(err)
