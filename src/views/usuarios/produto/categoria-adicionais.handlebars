@@ -6,13 +6,12 @@
 {{>usuario/_menu}}
 
 <main class="content">
-    
     <div class="">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                 <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
                 <li class="breadcrumb-item"><a>Produto</a></li>
-                <li class="breadcrumb-item"><a href="/produto/categoria-produtos">Categoria Produtos</a></li>
+                <li class="breadcrumb-item"><a href="/produto/categoria-adicionais">Categoria Adicionais</a></li>
             </ol>
         </nav>
     </div>
@@ -61,7 +60,7 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/edit-categoria-produtos" method="POST">
+                <form action="/produto/edit-categoria-adicionais" method="POST">
                     <div class="form-floating ">
                         <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-">
                         <label for="edit-nome" class="ml-2">Nome</label>
@@ -77,12 +76,11 @@
                         {{/each}}
                     </div>
 
-                    <input type="text" name="idCategoriaProduto" id="edit-idCategoriaProduto" hidden readonly>
+                    <input type="text" name="idCategoriaAdicional" id="edit-idCategoriaAdicional" hidden readonly>
 
                     <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
-                    <button type="submit" class="btn btn-white btn-sm mt-4">Cancelar</button>
+                    <button type="buttton" class="btn btn-white btn-sm mt-4"  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                 </form>
-                
             </div>
             </div>
         </div>
@@ -95,12 +93,12 @@
             var recipient = button.getAttribute('data-bs-whatever')
             jQuery.ajax({
                 type: "POST",
-                url: '/produto/ajax-get-categoria-produtos',
-                data: {idCategoriaProduto: recipient},
+                url: '/produto/ajax-get-categoria-adicionais',
+                data: {idCategoriaAdicional: recipient},
                 success: function(response) {
                     console.log(response)
                     $('#edit-nome').val(response.nome)
-                    $('#edit-idCategoriaProduto').val(response._id)
+                    $('#edit-idCategoriaAdicional').val(response._id)
                     response.estabelecimentos.forEach(element => {
                         $(`#edit-categoria${element.idEstabelecimento}`).prop('checked', true)
                     })
@@ -114,11 +112,11 @@
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-adicionar-categoriaLabel">Adicionar Categoria Produtos</h5>
+                <h5 class="modal-title" id="modal-adicionar-categoriaLabel">Adicionar Categoria Adicionais</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/add-categoria-produtos" method="post">
+                <form action="/produto/add-categoria-adicionais" method="post">
                     <div class="form-floating ">
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="-">
                         <label for="nome" class="ml-2">Nome</label>
