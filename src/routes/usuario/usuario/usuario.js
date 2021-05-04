@@ -38,6 +38,8 @@ router.get('/perfil', async (req, res) => {
             },
         ])
 
+        console.log(usuario[0])
+
         res.render('usuarios/usuario/perfil', { usuario: usuario[0] })
     } catch (err) {
         console.log(err)
@@ -60,6 +62,7 @@ router.post('/alterar-avatar', (req, res) => {
 
 router.post('/edit-perfil-infos-gerais', (req, res) => {
     req.body.estabelecimentoSelecionado ? estabelecimentoSelecionado = req.body.estabelecimentoSelecionado : estabelecimentoSelecionado = null
+    console.log(req.body.estabelecimentoSelecionado)
     Usuario.updateOne(
         { '_id': req.user._id },
         {

@@ -19,13 +19,37 @@ const Estabelecimento = new Schema({
     },
     cnpj: String,
     telefone: String,
+    
 
     horarioFuncionamento: [{
         dia: String,
         inicio: String,
         fim: String
     }],
+
+    cores: {
+        fundo: {
+            name: String,
+            rgb: String,
+            hex: String,
+        }
+    },
     
+    img: {
+        capa: {
+            name: String,
+            size: Number,
+            key: String,
+            url: String
+        },
+        fundo: {
+            name: String,
+            size: Number,
+            key: String,
+            url: String
+        }
+    },
+
     useMercadoPago: {
         type: Boolean,
         default: false
