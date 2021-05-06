@@ -1,9 +1,31 @@
 {{>usuario/_top-css}}
 
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
 <div class="container-fluid bg-soft">
 <div class="row">
 <div class="col-12">
 {{>usuario/_menu}}
+
+<style>
+    .tagify--outside{
+        border: 0;
+    }
+
+    .tagify--outside .tagify__input{
+        order: 1;
+        flex: 100%;
+        border: 1px solid var(--tags-border-color);
+        transition: .1s;
+    }
+
+    .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+    .tagify--outside.tagify--focus .tagify__input{
+        transition:0s;
+        border-color: var(--tags-focus-border-color);
+    }
+</style>
 
 <main class="content">
     <div class="">
@@ -11,7 +33,7 @@
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                 <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
                 <li class="breadcrumb-item"><a>Produto</a></li>
-                <li class="breadcrumb-item"><a href="/produto/categoria-adicionais">Categoria Adicionais</a></li>
+                <li class="breadcrumb-item"><a href="/produto/adicionais">Adicionais</a></li>
             </ol>
         </nav>
     </div>
@@ -116,6 +138,8 @@
         })
     </script>
 
+    
+
     <!-- Modal add categoria -->
     <div class="modal fade" id="modal-adicionar-categoria" tabindex="-1" aria-labelledby="modal-adicionar-categoriaLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -125,11 +149,24 @@
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/add-categoria-adicionais" method="post">
-                    <div class="form-floating ">
-                        <input type="text" class="form-control" id="nome" name="nome" placeholder="-">
-                        <label for="nome" class="ml-2">Nome</label>
+                <form action="/produto/add-adicionais" method="post">
+                    <div class="row">
+                        <div class="form-floating col-6">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                        <div class="form-floating col-6">
+                            <input type="number" class="form-control" id="valor" step=".01" name="valor" placeholder="-" required>
+                            <label for="valor" class="ml-2">Valor (R$)</label>
+                        </div>
                     </div>
+
+                    <hr>
+                    <div class="row mt-4 mx-2">
+                        <h5>Categorias</h5>
+                        <input name='categoriasAdicionais' id="teste" class='tagify--outside' placeholder='Selecione as categorias' >
+                    </div>
+                    <hr>
 
                     <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
@@ -149,6 +186,31 @@
             </div>
         </div>
     </div>
+
+    <script> // script para adicionar categorias
+        var tagAdicionais = document.querySelector('input[id=teste]')
+
+            // init Tagify script on the above inputs
+            // init Tagify script on the above inputs
+            var tagify = new Tagify(tagAdicionais, {
+                whitelist: [ {{#each categoriaAdicionais}} {'idCategoriaAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                editTags: false,
+                dropdown: {
+                    position: "input",
+                    maxItems: Infinity,
+                    closeOnSelect : false,
+                    enabled : 0 // always opens dropdown when input gets focus
+                },
+                enforceWhitelist: true
+            })
+
+            tagAdicionais.addEventListener('change', onChange)
+
+            function onChange(e){
+            // outputs a String
+            console.log(JSON.parse(e.target.value))
+            }
+    </script>
 
 </main>
 

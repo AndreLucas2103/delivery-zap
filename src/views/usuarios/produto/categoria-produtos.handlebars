@@ -79,8 +79,16 @@
 
                     <input type="text" name="idCategoriaProduto" id="edit-idCategoriaProduto" hidden readonly>
 
-                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
-                    <button type="submit" class="btn btn-white btn-sm mt-4">Cancelar</button>
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
+                        <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        
+                        <div class="form-check form-switch float-end " style="font-size: small;">
+                            <input class="form-check-input" type="checkbox" name="statusAtivo" id="edit-statusAtivo" value="true">
+                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                        </div>
+                    </div>
+
                 </form>
                 
             </div>
@@ -101,6 +109,7 @@
                     console.log(response)
                     $('#edit-nome').val(response.nome)
                     $('#edit-idCategoriaProduto').val(response._id)
+                    $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
                     response.estabelecimentos.forEach(element => {
                         $(`#edit-categoria${element.idEstabelecimento}`).prop('checked', true)
                     })

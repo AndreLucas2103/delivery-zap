@@ -1,24 +1,51 @@
-<style>
-    .hm div {display:none;position:relative}
-.hm:hover div {display:block;position:absolute;top:0;margin-left:40px}
 
-/* daqui pra baixo é só estética para demonstração */
-.hm {
-  width:1.5em;height:1.5em;
-  text-align:center;
-  font:20px/1.5em "segoe ui",arial,helvetica,sans-serif;
-  border:1px solid #999;
-  border-radius:50%;
-  color:#999;
-}
 
-.hm div {
-  width:8em;
-  color:#fff;
-  background:#999;
-  border-radius:5px;
-  padding:5px;
-}
-</style>
 
-<div class="hm">?<div>Batatinha quando nasce esparrama pelo chão.</div></div>
+<form action="" method="get">
+  <input name='tags' placeholder='write some tags' value='1'>
+  <button type="submit">as</button>
+</form>
+
+<script>
+
+  var whitelist = [{ "id": 1, "value": 1, "name": "foo bar" }, { "id": 2, "value": 2, "name": "foo bar" }]
+
+  var input = document.querySelector('input[name=tags]');
+
+  // init Tagify script on the above inputs
+  var tagify = new Tagify(input, {
+    whitelist: whitelist,
+    dropdown: {
+      position: "manual",
+      maxItems: Infinity,
+      enabled: 0,
+      classname: "customSuggestionsList"
+    },
+    enforceWhitelist: true
+  })
+
+  tagify.on("dropdown:show", onSuggestionsListUpdate)
+    .on("dropdown:hide", onSuggestionsListHide)
+    .on('dropdown:scroll', onDropdownScroll)
+
+  renderSuggestionsList()
+
+  // ES2015 argument destructuring
+  function onSuggestionsListUpdate({ detail: suggestionsElm }) {
+    console.log(suggestionsElm)
+  }
+
+  function onSuggestionsListHide() {
+    console.log("hide dropdown")
+  }
+
+  function onDropdownScroll(e) {
+    console.log(e.detail)
+  }
+
+  // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
+  function renderSuggestionsList() {
+    tagify.dropdown.show.call(tagify) // load the list
+    tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
+  }
+</script>
