@@ -117,53 +117,6 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 })
 
 
-router.post("/cad-usuario", (req, res) => {//Rota para cadastrar novo usuário.
-
-        req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
-      
-
-                const novoUsuario = new Usuario({
-                    primeiroNome: req.body.primeiroNome,
-                    nomeCompleto: req.body.nomeCompleto,
-                    email: req.body.email,
-                    cpf: req.body.cpf,
-                    senha: req.body.senha,
-                    usuarioMaster: false,
-                    statusAtivo: true,
-                    perfilAvatar: 'cashier',
-                    idUsuarioMaster:req.user._id,
-                    estabelecimentosVinculados: [{
-                        idEstabelecimento: req.body.estabelecimento,
-                    }],
-                    identificaouuidv4: uuidv4()
-
-                })
-                bcryptjs.genSalt(10, (erro, salt) => {
-                    bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
-                        if (erro) {
-                            res.json(402)
-                        }
-
-                        novoUsuario.senha = hash
-
-                        novoUsuario.save().then(() => {
-                            req.flash("success_msg", "Usuario criado com sucesso!")
-                            res.redirect("/configuracao/estabelecimento/"+req.body.estabelecimento)
-                        }).catch((err) => {
-                            console.log(err)
-                            req.flash("error_msg", "Houve um erro ao criar o usuário")
-                            res.redirect("/configuracao/estabelecimento/"+req.body.estabelecimento)
-
-                        })
-                    })
-                })       
-
-        })
-    
-
-
-
-
 router.post("/login", (req, res, next) => {
 
     passport.authenticate("local", {

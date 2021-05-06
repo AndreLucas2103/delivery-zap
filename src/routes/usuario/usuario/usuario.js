@@ -10,17 +10,88 @@ const Usuario = mongoose.model("usuarios")
 
 router.get('/usuarios', async (req, res) => {
     try {
-        let usuarios = await Usuario.find({
-            $and: [
-                {estabelecimentosVinculados: req.user.estabelecimentosVinculados.idEstabelecimento}
-            ]
-        })
-        
-        res.render('usuarios/usuario/usuarios')
-        
+        let usuarios = await Usuario.aggregate([
+            { $match: { _id: req.user._id } },
+            {
+                $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosVinculados.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosVinculados"
+                }
+            },
+            {
+                $lookup:
+                {
+                    from: "usuarios",
+                    localField: "estabelecimentosVinculados._id",
+                    foreignField: "estabelecimentosVinculados.idEstabelecimento",
+                    as: "usuariosVinculados"
+                }
+            },
+        ])
+        res.render('usuarios/usuario/usuarios', { usuarios: usuarios[0] })
+
     } catch (err) {
         console.log(err)
     }
+})
+
+router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
+
+    req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
+
+
+    const novoUsuario = new Usuario({
+        primeiroNome: req.body.primeiroNome,
+        nomeCompleto: req.body.nomeCompleto,
+        email: req.body.email,
+        cpf: req.body.cpf,
+        senha: req.body.senha,
+        usuarioMaster: true,
+        statusAtivo: true,
+        perfilAvatar: 'cashier',
+        idUsuarioMaster: req.user._id,
+        identificaouuidv4: req.user.identificaouuidv4
+
+    })
+    bcryptjs.genSalt(10, (erro, salt) => {
+
+        bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
+            if (erro) {
+                res.json(402)
+            }
+
+            novoUsuario.senha = hash
+            novoUsuario.save().then((usuario) => {
+                let arrayEstabelecimentos = req.body.estabelecimentos
+                arrayEstabelecimentos.forEach(element => {
+                    Usuario.updateOne(
+                        { _id: usuario._id },
+                        {
+                            $push: {
+                                'estabelecimentosVinculados': { 'idEstabelecimento': ObjectId(element) },
+                            }
+                        }
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                req.flash("success_msg", "Usuario criado com sucesso!")
+                res.redirect("/usuario/usuarios")
+            }).catch((err) => {
+                console.log(err)
+                req.flash("error_msg", "Houve um erro ao criar o usuário")
+                res.redirect("/usuario/usuarios")
+
+            })
+        })
+    })
+
 })
 
 router.get('/perfil', async (req, res) => {
@@ -29,12 +100,12 @@ router.get('/perfil', async (req, res) => {
             { $match: { _id: req.user._id } },
             {
                 $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentosVinculados.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentosVinculados"
-                    }
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosVinculados.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosVinculados"
+                }
             },
         ])
 
@@ -83,7 +154,7 @@ router.post('/edit-perfil-infos-gerais', (req, res) => {
     })
 })
 
-router.post('/trocar-senha', async (req, res) => { 
+router.post('/trocar-senha', async (req, res) => {
 
     Usuario.findById({ _id: req.user._id }).then(usuario => {
         if (req.body.novaSenha != req.body.confirmaSenha) {
@@ -94,7 +165,7 @@ router.post('/trocar-senha', async (req, res) => {
             req.flash('error_msg', 'Senha muito curta.')
             res.redirect('/usuario/perfil')
 
-        }else {
+        } else {
             usuario.senha = req.body.novaSenha
             bcryptjs.genSalt(10, (erro, salt) => {
                 bcryptjs.hash(usuario.senha, salt, (erro, hash) => {
