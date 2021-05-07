@@ -104,11 +104,13 @@
                                 </div>
                             </div>
                           </div>
+                          <hr>
                            <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
+
                         {{#each usuarios.estabelecimentosVinculados}}
                             <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
+                                <br><input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
                                 <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                             </div>
                         {{/each}}
