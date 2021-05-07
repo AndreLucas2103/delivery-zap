@@ -94,7 +94,51 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
 
 })
 
-router.get('/perfil', async (req, res) => {
+router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
+
+    let statusAtivo
+    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+    let arrayEstabelecimentos = req.body.estabelecimentos
+
+    if(!arrayEstabelecimentos){
+        req.flash('warning_msg', 'Ao editar um usuário ela deve possuir pelo menos UM estabelecimento')
+        res.redirect('back')
+    }else{
+        Usuario.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
+            {_id: req.body.idUsuario},
+            { $set: 
+                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'statusAtivo': statusAtivo}
+            }
+        ).then(() => {
+            arrayEstabelecimentos.forEach(element => {
+                Usuario.updateOne(
+                    {_id: req.body.idUsuario},
+                    { $push: 
+                        {'estabelecimentosVinculados': {'idEstabelecimento': ObjectId(element)}}
+                    }
+                ).then(() => {
+                    
+                }).catch(err => {
+                    console.log(err)
+                })
+            })
+            setTimeout(() => {
+                req.flash('success_msg', 'Categoria adicionada')
+                res.redirect('back')
+            }, 1000)
+        }).catch(err => {
+            console.log(err)
+        })
+    }
+})
+
+router.post('/ajax-get-usuarios', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
+    Usuario.findById({_id: req.body.idUsuario}).lean().then(usuario => {
+        res.json(usuario)
+    })
+})
+
+router.get('/perfil', async (req, res) => {//Acessar perfil do usuário
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id } },
