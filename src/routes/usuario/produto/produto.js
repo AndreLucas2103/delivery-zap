@@ -11,6 +11,191 @@ require("../../../models/CategoriaAdicional")
 const CategoriaAdicional = mongoose.model("categoriaAdicionais")
 require("../../../models/Adicional")
 const Adicional = mongoose.model("adicionais")
+require("../../../models/Ingrediente")
+const Ingrediente = mongoose.model("ingredientes")
+
+
+
+
+// -----------  INGREDIENTES ------------------------------------------------------------------------------------------
+router.get('/ingredientes', async (req, res) => { // listo todas as categorias
+    try {
+        let usuario = await Usuario.aggregate([
+            { $match: { _id: req.user._id} },
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentosVinculados.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentosVinculados"
+                    }
+            }
+        ])
+
+        let userEstabelecimentos = []
+        usuario[0].estabelecimentosVinculados.forEach(element => { // alterar para usuario logado
+            userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
+        })
+
+        let ingredientes = await Ingrediente.aggregate([
+            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentos.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentos"
+                    }
+            },
+            {
+                $lookup:
+                    {
+                        from: "categoriaprodutos",
+                        localField: "categoriasProdutos.idCategoriaProduto",
+                        foreignField: "_id",
+                        as: "categoriasProdutos"
+                    }
+            },
+            {$sort: {createdAt: -1}}
+        ])
+
+        let categoriasProdutos = await CategoriaProduto.find({$and: [{statusAtivo: true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
+
+        res.render('usuarios/produto/ingredientes', {usuario: usuario[0], ingredientes: ingredientes, categoriasProdutos: categoriasProdutos})
+
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/add-ingredientes', (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    if(req.body.estabelecimentos){
+        if(req.body.categoriasProdutos){
+            new Ingrediente({nome: req.body.nome}).save().then((categoria) => {
+                let arrayEstabelecimentos = req.body.estabelecimentos
+                let arrayCategoriaProduto = JSON.parse(req.body.categoriasProdutos)
+        
+                arrayEstabelecimentos.forEach(element => {
+                    Ingrediente.updateOne(
+                        {_id: categoria._id},
+                        { $push: {
+                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                arrayCategoriaProduto.forEach(element => {
+                    Ingrediente.updateOne(
+                        {_id: categoria._id},
+                        { $push: {
+                            'categoriasProdutos': {'idCategoriaProduto': ObjectId(element.idCategoriaProduto)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+        
+                req.flash('success_msg', 'Categoria adicionada')
+                res.redirect('back')
+            })
+        }else{
+            req.flash('warning_msg', 'O adicional deve possuir pelo menos uma categoria')
+            res.redirect('back')
+        }
+    }else{
+        req.flash('warning_msg', 'O adicional deve possuir pelo menos um estabelecimento')
+        res.redirect('back')
+    }
+    
+})
+
+router.post('/edit-ingredientes', (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    let statusAtivo
+    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+
+    if(req.body.estabelecimentos){
+        if(req.body.categoriasProdutos){
+            Ingrediente.updateOne(
+                {_id: ObjectId(req.body.idIngrediente)},
+                {$set: {
+                    'nome': req.body.nome, categoriasProdutos: [], estabelecimentos: [], statusAtivo: statusAtivo
+                }}
+            ).then(() => {
+
+                let arrayEstabelecimentos = req.body.estabelecimentos
+                let arrayCategoriaProduto = JSON.parse(req.body.categoriasProdutos)
+        
+                arrayEstabelecimentos.forEach(element => {
+                    Ingrediente.updateOne(
+                        {_id: ObjectId(req.body.idIngrediente)},
+                        { $push: {
+                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                arrayCategoriaProduto.forEach(element => {
+                    Ingrediente.updateOne(
+                        {_id: ObjectId(req.body.idIngrediente)},
+                        { $push: {
+                            'categoriasProdutos': {'idCategoriaProduto': ObjectId(element.idCategoriaProduto)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                setTimeout(() => {
+                    req.flash('success_msg', 'Ingrediente editado')
+                    res.redirect('back')
+                }, 1000)
+            }).catch(err => {
+                console.log(err)
+            })
+
+        }else{
+            req.flash('warning_msg', 'O ingrediente deve possuir pelo menos uma categoria')
+            res.redirect('back')
+        }
+    }else{
+        req.flash('warning_msg', 'O ingrediente deve possuir pelo menos um estabelecimento')
+        res.redirect('back')
+    }
+})
+
+router.post('/ajax-get-ingredientes', (req, res) => { // consulto pela rota  "/produto/adicionais" para poder pegar as informações e editar seus valores
+    Ingrediente.aggregate([
+        {$match: {_id: ObjectId(req.body.idIngrediente)}},
+        {
+            $lookup:
+                {
+                    from: "categoriaprodutos",
+                    localField: "categoriasProdutos.idCategoriaProduto",
+                    foreignField: "_id",
+                    as: "categoriasProdutos"
+                }
+        }
+    ]).then(ingrediente => {
+        res.json(ingrediente[0])
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 
 
@@ -18,7 +203,7 @@ const Adicional = mongoose.model("adicionais")
 router.get('/adicionais', async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
-            { $match: { _id: ObjectId('608ecabd96fd742de4f1431d')} },
+            { $match: { _id: req.user._id} },
             {
                 $lookup:
                     {
@@ -45,10 +230,20 @@ router.get('/adicionais', async (req, res) => { // listo todas as categorias
                         foreignField: "_id",
                         as: "estabelecimentos"
                     }
-            }
+            },
+            {
+                $lookup:
+                    {
+                        from: "categoriaadicionais",
+                        localField: "categoriasAdicionais.idCategoriaAdicional",
+                        foreignField: "_id",
+                        as: "categoriasAdicionais"
+                    }
+            },
+            {$sort: {createdAt: -1}}
         ])
 
-        let categoriaAdicionais = await CategoriaAdicional.find({statusAtivo: true}).lean()
+        let categoriaAdicionais = await CategoriaAdicional.find({$and: [{statusAtivo: true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
 
         res.render('usuarios/produto/adicionais', {usuario: usuario[0], adiconais: adiconais, categoriaAdicionais: categoriaAdicionais})
 
@@ -58,9 +253,9 @@ router.get('/adicionais', async (req, res) => { // listo todas as categorias
 })
 
 router.post('/add-adicionais', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    if(req.body.categoriasAdicionais){
+    if(req.body.estabelecimentos){
         if(req.body.categoriasAdicionais){
-            new Adicional({nome: req.body.nome}).save().then((categoria) => {
+            new Adicional({nome: req.body.nome, valor: req.body.valor}).save().then((categoria) => {
                 let arrayEstabelecimentos = req.body.estabelecimentos
                 let arrayCategoriaAdicional = JSON.parse(req.body.categoriasAdicionais)
         
@@ -78,7 +273,6 @@ router.post('/add-adicionais', (req, res) => { // adiciono a categoria com todos
                 })
 
                 arrayCategoriaAdicional.forEach(element => {
-                    console.log(element.idCategoriaAdicional);
                     Adicional.updateOne(
                         {_id: categoria._id},
                         { $push: {
@@ -91,8 +285,7 @@ router.post('/add-adicionais', (req, res) => { // adiciono a categoria com todos
                     })
                 })
 
-        
-                req.flash('success_msg', 'Categoria adicionada')
+                req.flash('success_msg', 'Adicional editado')
                 res.redirect('back')
             })
         }else{
@@ -105,6 +298,86 @@ router.post('/add-adicionais', (req, res) => { // adiciono a categoria com todos
     }
     
 })
+
+router.post('/edit-adicionais', (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    let statusAtivo
+    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+
+    if(req.body.estabelecimentos){
+        if(req.body.categoriasAdicionais){
+            Adicional.updateOne(
+                {_id: ObjectId(req.body.idAdicional)},
+                {$set: {
+                    'nome': req.body.nome, 'valor': req.body.valor, categoriasAdicionais: [], estabelecimentos: [], statusAtivo: statusAtivo
+                }}
+            ).then(() => {
+
+                let arrayEstabelecimentos = req.body.estabelecimentos
+                let arrayCategoriaAdicional = JSON.parse(req.body.categoriasAdicionais)
+        
+                arrayEstabelecimentos.forEach(element => {
+                    Adicional.updateOne(
+                        {_id: ObjectId(req.body.idAdicional)},
+                        { $push: {
+                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                arrayCategoriaAdicional.forEach(element => {
+                    Adicional.updateOne(
+                        {_id: ObjectId(req.body.idAdicional)},
+                        { $push: {
+                            'categoriasAdicionais': {'idCategoriaAdicional': ObjectId(element.idCategoriaAdicional)},
+                        }}
+                    ).then(() => {
+                        
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                })
+
+                setTimeout(() => {
+                    req.flash('success_msg', 'Categoria adicionada')
+                    res.redirect('back')
+                }, 1000)
+            }).catch(err => {
+                console.log(err)
+            })
+
+        }else{
+            req.flash('warning_msg', 'O adicional deve possuir pelo menos uma categoria')
+            res.redirect('back')
+        }
+    }else{
+        req.flash('warning_msg', 'O adicional deve possuir pelo menos um estabelecimento')
+        res.redirect('back')
+    }
+})
+
+router.post('/ajax-get-adicionais', (req, res) => { // consulto pela rota  "/produto/adicionais" para poder pegar as informações e editar seus valores
+    Adicional.aggregate([
+        {$match: {_id: ObjectId(req.body.idAdicional)}},
+        {
+            $lookup:
+                {
+                    from: "categoriaadicionais",
+                    localField: "categoriasAdicionais.idCategoriaAdicional",
+                    foreignField: "_id",
+                    as: "categoriasAdicionais"
+                }
+        }
+    ]).then(adicional => {
+        res.json(adicional[0])
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
 
 
 // ----------- CATEGORIA ADICIONAIS ------------------------------------------------------------------------------------------
@@ -218,6 +491,8 @@ router.post('/ajax-get-categoria-adicionais', (req, res) => { // consulto pela r
         res.json(categoria)
     })
 })
+
+
 
 // ----------- CATEGORIA PRODUTOS ------------------------------------------------------------------------------------------
 

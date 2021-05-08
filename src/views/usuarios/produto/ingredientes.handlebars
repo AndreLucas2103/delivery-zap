@@ -38,20 +38,20 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-adicional">+ Adicionar</button>
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
 
     <div class="row">
-        {{#each adiconais}}
+        {{#each ingredientes}}
         <div class="col-12 col-lg-4 mb-4">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">{{nome}} <span class="valorFormatar">{{valor}}</span></h2>
-                    <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-adicional" data-bs-whatever="{{_id}}">Editar</a>
+                    <h2 class="h5 mb-0">{{nome}}</h2>
+                    <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-ingredientes" data-bs-whatever="{{_id}}">Editar</a>
                 </div>
                 <div class="card-body">
                     <div style="font-size: small;">
                         <span>Categorias:</span>
-                        {{#each categoriasAdicionais}}
+                        {{#each categoriasProdutos}}
                             <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{nome}}</div>
                         {{/each}}
                     </div>
@@ -69,30 +69,27 @@
         {{/each}}
     </div>
 
-    <div class="modal fade" id="modal-edit-adicional" tabindex="-1" aria-labelledby="modal-edit-adicionalLabel" aria-hidden="true">
+    <!-- Modal edit ingredientes START -->
+    <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-edit-adicionalLabel">Editar Categoria</h5>
+                <h5 class="modal-title" id="modal-edit-ingredientesLabel">Editar Categoria</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/edit-adicionais" method="post">
+                <form action="/produto/edit-ingredientes" method="post">
                     <div class="row">
-                        <div class="form-floating col-6">
+                        <div class="form-floating col">
                             <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" required>
                             <label for="nome" class="ml-2">Nome</label>
-                        </div>
-                        <div class="form-floating col-6">
-                            <input type="number" class="form-control" id="edit-valor" step=".01" name="valor" placeholder="-" required>
-                            <label for="valor" class="ml-2">Valor (R$)</label>
                         </div>
                     </div>
 
                     <hr>
                     <div class="row mt-4 mx-2">
                         <h5>Categorias</h5>
-                        <input name='categoriasAdicionais' id="edit-categoriasAdicionais" class='tagify--outside' placeholder='Selecione as categorias' >
+                        <input name='categoriasProdutos' id="edit-categoriasProdutos" class='tagify--outside' placeholder='Selecione as categorias' >
                     </div>
                     <hr>
 
@@ -106,7 +103,7 @@
                         {{/each}}
                     </div>
 
-                    <input type="text" name="idAdicional" id="edit-idAdicional" hidden  readonly>
+                    <input type="text" name="idIngrediente" id="edit-idIngrediente" hidden  readonly>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
@@ -123,36 +120,29 @@
             </div>
         </div>
     </div>
+    <!-- Modal edit ingredientes END -->
 
-    <script>
-        
-    </script>
-
-    <!-- Modal add adicionais -->
-    <div class="modal fade" id="modal-add-adicional" tabindex="-1" aria-labelledby="modal-add-adicionalLabel" aria-hidden="true">
+    <!-- Modal add ingredientes START -->
+    <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-adicionalLabel">Adicionar Categoria Adicionais</h5>
+                <h5 class="modal-title" id="modal-add-ingredientesLabel">Adicionar Ingredientes</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/add-adicionais" method="post">
+                <form action="/produto/add-ingredientes" method="post">
                     <div class="row">
-                        <div class="form-floating col-6">
+                        <div class="form-floating col">
                             <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
                             <label for="nome" class="ml-2">Nome</label>
-                        </div>
-                        <div class="form-floating col-6">
-                            <input type="number" class="form-control" id="valor" step=".01" name="valor" placeholder="-" required>
-                            <label for="valor" class="ml-2">Valor (R$)</label>
                         </div>
                     </div>
 
                     <hr>
                     <div class="row mt-4 mx-2">
                         <h5>Categorias</h5>
-                        <input name='categoriasAdicionais' id="add-categoriasAdicionais" class='tagify--outside' placeholder='Selecione as categorias' >
+                        <input name='categoriasProdutos' id="add-categoriasProdutos" class='tagify--outside' placeholder='Selecione as categorias' >
                     </div>
                     <hr>
 
@@ -174,11 +164,12 @@
             </div>
         </div>
     </div>
+    <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
-        var tagAdicionais = document.querySelector('input[id=add-categoriasAdicionais]')
+        var tagAdicionais = document.querySelector('input[id=add-categoriasProdutos]')
         var tagifyAdd = new Tagify(tagAdicionais, {
-            whitelist: [ {{#each categoriaAdicionais}} {'idCategoriaAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+            whitelist: [ {{#each categoriasProdutos}} {'idCategoriaProduto': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
             editTags: false,
             dropdown: {
                 position: "input",
@@ -189,9 +180,9 @@
             enforceWhitelist: true
         })
 
-        var tagEditAdicionais = document.querySelector('input[id=edit-categoriasAdicionais]')
+        var tagEditAdicionais = document.querySelector('input[id=edit-categoriasProdutos]')
         var tagifyEdit = new Tagify(tagEditAdicionais, {
-            whitelist: [ {{#each categoriaAdicionais}} {'idCategoriaAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+            whitelist: [ {{#each categoriasProdutos}} {'idCategoriaProduto': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
             editTags: false,
             dropdown: {
                 position: "input",
@@ -202,7 +193,7 @@
             enforceWhitelist: true
         })      
 
-        var modalEditCategoria = document.getElementById('modal-edit-adicional')
+        var modalEditCategoria = document.getElementById('modal-edit-ingredientes')
         modalEditCategoria.addEventListener('show.bs.modal', function (event) {
             $('.form-check-input').prop('checked', false) // desmarcar todos os check - ainda analisar como irá reagir
             tagifyEdit.removeAllTags()
@@ -210,18 +201,16 @@
             var recipient = button.getAttribute('data-bs-whatever')
             jQuery.ajax({
                 type: "POST",
-                url: '/produto/ajax-get-adicionais',
-                data: {idAdicional: recipient},
+                url: '/produto/ajax-get-ingredientes',
+                data: {idIngrediente: recipient},
                 success: function(response) {
                     $('#edit-nome').val(response.nome)
-                    $('#edit-valor').val(response.valor)
-                    
-                    $(`#edit-idAdicional`).val(response._id)
+                    $(`#edit-idIngrediente`).val(response._id)
                     $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
                     response.estabelecimentos.forEach(element => {
                         $(`#edit-adicional${element.idEstabelecimento}`).prop('checked', true)
                     })
-                    response.categoriasAdicionais.forEach(element => {
+                    response.categoriasProdutos.forEach(element => {
                         tagifyEdit.addTags(element.nome)
                     })
                 }
