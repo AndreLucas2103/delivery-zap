@@ -1,238 +1,264 @@
 {{>usuario/_top-css}}
-
 <div class="container-fluid bg-soft">
-<div class="row">
-<div class="col-12">
-{{>usuario/_menu}}
+    <div class="row">
+        <div class="col-12">
+            {{>usuario/_menu}}
 
-<main class="content">
-    
-    <div class="">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
-                <li class="breadcrumb-item"><a>Componentes</a></li>
-                <li class="breadcrumb-item"><a href="/configuracao/estabelecimentos">Usuarios</a></li>
-            </ol>
-        </nav>
-    </div>
- <div class="row">
-        <div class="col-12 col-lg-8 mb-4">
-            <div class="card border-light shadow-sm">
-                <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">Usuários</h2>
-                       <a data-bs-toggle="modal" data-bs-target="#modal-cadastrar-usuario" class="btn btn-sm btn-secondary">Adicionar</a>
+            <main class="content">
+
+                <div class="">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                            <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                            <li class="breadcrumb-item"><a>Componentes</a></li>
+                            <li class="breadcrumb-item"><a href="/configuracao/estabelecimentos">Usuarios</a></li>
+                        </ol>
+                    </nav>
                 </div>
-                <div class="card-body">
-                    
-                    <ul class="list-group list-group-flush list my--3">
-                         {{#each usuarios.usuariosVinculados}}
-                        <li class="list-group-item px-0">
-                            <div class="row align-items-center">
-                            <div class="col-auto">
-                                <!-- Avatar -->
-                                <a href="#" class="user-avatar">
-                                    <img class="rounded-circle" data-bs-toggle="modal" data-bs-target="#modal-editar-usuario" data-bs-whatever="{{_id}}" src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
-                                </a>
+                <div class="row">
+                    <div class="col-12 col-lg-8 mb-4">
+                        <div class="card border-light shadow-sm">
+                            <div class="card-header border-bottom border-light d-flex justify-content-between">
+                                <h2 class="h5 mb-0">Usuários</h2>
+                                <a data-bs-toggle="modal" data-bs-target="#modal-cadastrar-usuario"
+                                    class="btn btn-sm btn-secondary">Adicionar</a>
                             </div>
-                            <div class="col-auto ml--2">
-                                <h4 class="h6 mb-0">
-                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario" data-bs-whatever="{{_id}}">{{primeiroNome}} </a>
-                                </h4>
-                            </div>
-                            </div>
-                        </li>
-                         {{/each}}
-                    </ul>
+                            <div class="card-body">
 
+                                <ul class="list-group list-group-flush list my--3">
+
+                                    {{#each usuarios.usuariosVinculados}}
+                                    <li class="list-group-item px-0">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <!-- Avatar -->
+                                                <a href="#" class="user-avatar">
+                                                    <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
+                                                    <img class="rounded-circle" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-editar-usuario"
+                                                        data-bs-whatever="{{_id}}"
+                                                        src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
+                                                </a>
+                                            </div>
+                                            <div class="col-auto ml--2">
+                                                <h4 class="h6 mb-0">
+                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
+                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
+                                                    <img src="/usuario/assets/img/favicon/star.png"
+                                                        id="show-useradiministrador">
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {{/each}}
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
-    </div>
-  <!-- Modal add usuários START -->
-           <div class="modal fade" id="modal-cadastrar-usuario" tabindex="-1" aria-labelledby="modal-cadastrar-usuarioLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Cadastrar usuário</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/usuario/add-usuario" method="POST">
-                <div class="row g-2">
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="primeiroNome" name="primeiroNome" placeholder="0"
-                                        required>
-                                    <label for="primeiroNome">Primeiro Nome*</label>
-                                </div>
+                <!-- Modal add usuários START -->
+                <div class="modal fade" id="modal-cadastrar-usuario" tabindex="-1"
+                    aria-labelledby="modal-cadastrar-usuarioLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Cadastrar usuário</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
-                            <div class="col-md-8">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto"
-                                        placeholder="0" required>
-                                    <label for="nomeCompleto">Nome Completo*</label>
-                                </div>
+                            <div class="modal-body">
+                                <form action="/usuario/add-usuario" method="POST">
+                                    <div class="row g-2">
+                                        <div class="col-md-4">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="primeiroNome"
+                                                    name="primeiroNome" placeholder="0" required>
+                                                <label for="primeiroNome">Primeiro Nome*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="nomeCompleto"
+                                                    name="nomeCompleto" placeholder="0" required>
+                                                <label for="nomeCompleto">Nome Completo*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row g-2">
+                                        <div class="col-md-9">
+                                            <div class="form-floating">
+                                                <input type="email" class="form-control" id="email" name="email"
+                                                    placeholder="0" required>
+                                                <label for="email">E-mail*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="cpf" name="cpf"
+                                                    placeholder="0" required>
+                                                <label for="cpf">CPF*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h5>Acesso</h5><br>
+                                    <div class="row g-2">
+                                        <div class="col-md-6">
+                                            <div class="form-floating">
+                                                <input type="password" class="form-control" id="senha" name="senha"
+                                                    placeholder="0" required>
+                                                <label for="senha">Senha(4 dígitos)*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            &nbsp;&nbsp;&nbsp;
+                                            <div class="form-check form-switch col-9">
+                                                <input class="form-check-input" type="checkbox" id="usuarioMaster"
+                                                    name="usuarioMaster" value="true">
+                                                <label class="form-check-label"
+                                                    for="usuarioMaster">Administrador</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
+                                        value="{{estabelecimento._id}}">
+                                    <h5>Estabelecimentos</h5>
+                                    <div class="row mt-4 ml-2">
+                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        <div class="form-check form-switch col-6">
+                                            <br><input class="form-check-input" type="checkbox"
+                                                name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
+                                            <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                                        </div>
+                                        {{/each}}
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
+                                    <button type="buttton" class="btn btn-white btn-sm mt-4" data-bs-dismiss="modal"
+                                        aria-label="Close">Cancelar</button>
+                                </form>
                             </div>
                         </div>
-                        <br>
-                         <div class="row g-2">
-                            <div class="col-md-9">
-                                <div class="form-floating">
-                                    <input type="email" class="form-control" id="email" name="email" placeholder="0"
-                                        required>
-                                    <label for="email">E-mail*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="cpf" name="cpf"
-                                        placeholder="0" required>
-                                    <label for="cpf">CPF*</label>
-                                </div>
-                            </div>
-                        </div>
-                         <hr>
-                          <div class="row g-2">
-                            <label>Senha de acesso:</label>
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="0"
-                                        required>
-                                    <label for="senha">****</label>
-                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]" value="{{estabelecimento._id}}">
-                                </div>
-                            </div>
-                          </div>
-                          <hr>
-                           <div class="row mt-4 ml-2">
-                        <h5>Estabelecimentos</h5>
-
-                        {{#each usuarios.estabelecimentosVinculados}}
-                            <div class="form-check form-switch col-6">
-                                <br><input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
-                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
-                            </div>
-                        {{/each}}
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
-                    <button type="buttton" class="btn btn-white btn-sm mt-4"  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                </form>
-            </div>
-            </div>
-        </div>
-    </div>
-        <!-- Modal add usuários END -->
+                </div>
+                <!-- Modal add usuários END -->
 
 
-       <div class="modal fade" id="modal-editar-usuario" tabindex="-1" aria-labelledby="modal-editar-usuario" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Editar Usuário</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/usuario/edit-usuario" method="POST">
-                <div class="row g-2">
-                            <div class="col-md-4">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="edit-primeiroNome" name="primeiroNome" placeholder="0"
-                                        required>
-                                    <label for="edit-primeiroNome">Primeiro Nome*</label>
-                                </div>
+                <div class="modal fade" id="modal-editar-usuario" tabindex="-1" aria-labelledby="modal-editar-usuario"
+                    aria-hidden="true">
+                    <div class="modal-dialog modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Editar Usuário</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"
+                                    aria-label="Close"></button>
                             </div>
-                            <div class="col-md-8">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="edit-nomeCompleto" name="nomeCompleto"
-                                        placeholder="0" required>
-                                    <label for="nomeCompleto">Nome Completo*</label>
-                                </div>
+                            <div class="modal-body">
+                                <form action="/usuario/edit-usuario" method="POST">
+                                    <div class="row g-2">
+                                        <div class="col-md-4">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="edit-primeiroNome"
+                                                    name="primeiroNome" placeholder="0" required>
+                                                <label for="edit-primeiroNome">Primeiro Nome*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-8">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="edit-nomeCompleto"
+                                                    name="nomeCompleto" placeholder="0" required>
+                                                <label for="nomeCompleto">Nome Completo*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <div class="row g-2">
+                                        <div class="col-md-9">
+                                            <div class="form-floating">
+                                                <input type="email" class="form-control" id="edit-email" name="email"
+                                                    placeholder="0" required>
+                                                <label for="email">E-mail*</label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-3">
+                                            <div class="form-floating">
+                                                <input type="text" class="form-control" id="edit-cpf" name="cpf"
+                                                    placeholder="0" required>
+                                                <label for="cpf">CPF*</label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <h5>Acesso</h5>
+                                    <div class="col-md-4">
+                                        <div class="form-check form-switch col-9">
+                                            <input class="form-check-input" type="checkbox" id="edit-usuarioMaster"
+                                                name="usuarioMaster" value="true">
+                                            <label class="form-check-label"
+                                                for="edit-usuarioMaster">Administrador</label>
+                                        </div>
+                                    </div>
+                                    <hr>
+                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
+                                        value="{{estabelecimento._id}}">
+                                    <h5>Estabelecimentos</h5>
+                                    <div class="row mt-4 ml-2">
+                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        <div class="form-check form-switch col-6">
+                                            <br><input class="form-check-input" type="checkbox"
+                                                name="estabelecimentos[]" id="edit-usuario{{_id}}" value="{{_id}}">
+                                            <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                                        </div>
+                                        {{/each}}
+
+                                        <input type="text" name="idUsuario" id="edit-idUsuario" hidden readonly>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
+                                    <button type="buttton" class="btn btn-white btn-sm mt-4" data-bs-dismiss="modal"
+                                        aria-label="Close">Cancelar</button>
+                                </form>
                             </div>
                         </div>
-                        <br>
-                         <div class="row g-2">
-                            <div class="col-md-9">
-                                <div class="form-floating">
-                                    <input type="email" class="form-control" id="edit-email" name="email" placeholder="0"
-                                        required>
-                                    <label for="email">E-mail*</label>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="edit-cpf" name="cpf"
-                                        placeholder="0" required>
-                                    <label for="cpf">CPF*</label>
-                                </div>
-                            </div>
-                        </div>
-                         <hr>
-                          <div class="row g-2">
-                            <label>Senha de acesso:</label>
-                            <div class="col-md-5">
-                                <div class="form-floating">
-                                    <input type="password" class="form-control" id="senha" name="senha" placeholder="0"
-                                        required>
-                                    <label for="senha">****</label>
-                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]" value="{{estabelecimento._id}}">
-                                </div>
-                            </div>
-                          </div>
-                          <hr>
-                           <div class="row mt-4 ml-2">
-                        <h5>Estabelecimentos</h5>
-
-                        {{#each usuarios.estabelecimentosVinculados}}
-                            <div class="form-check form-switch col-6">
-                                <br><input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-usuario{{_id}}" value="{{_id}}">
-                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
-                            </div>
-                        {{/each}}
-
-                         <input type="text" name="idUsuario" id="edit-idUsuario" hidden readonly>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
-                    <button type="buttton" class="btn btn-white btn-sm mt-4"  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                </form>
-            </div>
-            </div>
-        </div>
-    </div>
+                </div>
 
-     <script>
-        var modalEditusuario = document.getElementById('modal-editar-usuario')
-        modalEditusuario.addEventListener('show.bs.modal', function (event) {
-            var button = event.relatedTarget
-            var recipient = button.getAttribute('data-bs-whatever')
-            jQuery.ajax({
-                type: "POST",
-                url: '/usuario/ajax-get-usuarios',
-                data: {idUsuario: recipient},
-                success: function(response) {
-                    console.log(response)
-                    $('#edit-primeiroNome').val(response.primeiroNome)
-                    $('#edit-nomeCompleto').val(response.nomeCompleto)
-                    $('#edit-email').val(response.email)
-                    $('#edit-cpf').val(response.cpf)
-                    $('#edit-idUsuario').val(response._id)
-                    $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
-                    response.estabelecimentosVinculados.forEach(element => {
-                        $(`#edit-usuario${element.idEstabelecimento}`).prop('checked', true)
+                <script>
+
+                    var modalEditusuario = document.getElementById('modal-editar-usuario')
+                    modalEditusuario.addEventListener('show.bs.modal', function (event) {
+                        $('.form-check-input').prop('checked', false)
+                        var button = event.relatedTarget
+                        var recipient = button.getAttribute('data-bs-whatever')
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '/usuario/ajax-get-usuarios',
+                            data: { idUsuario: recipient },
+                            success: function (response) {
+                                console.log(response)
+                                $('#edit-primeiroNome').val(response.primeiroNome)
+                                $('#edit-nomeCompleto').val(response.nomeCompleto)
+                                $('#edit-email').val(response.email)
+                                $('#edit-cpf').val(response.cpf)
+                                $('#edit-idUsuario').val(response._id)
+                                $('#edit-usuarioMaster').prop('checked', response.usuarioMaster)
+                                $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
+
+                                response.estabelecimentosVinculados.forEach(element => {
+                                    $(`#edit-usuario${element.idEstabelecimento}`).prop('checked', true)
+                                })
+                            }
+                        });
                     })
-                }
-            });
-        })
-    </script>
+                </script>
+                
+                <script>
+                    $("#cpf").mask("000.000.000-00");
+                </script>
+            </main>
 
-      
-
-
-
-</main>
-
-</div>
-</div>
+        </div>
+    </div>
 </div>
 
 {{>usuario/_rodape}}

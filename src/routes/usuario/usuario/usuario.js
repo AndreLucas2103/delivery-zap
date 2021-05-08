@@ -39,7 +39,8 @@ router.get('/usuarios', async (req, res) => {
 })
 
 router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
-
+    let usuarioMaster
+    req.body.usuarioMaster == "true" ? usuarioMaster = true : usuarioMaster = false
     req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
 
 
@@ -49,7 +50,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
         email: req.body.email,
         cpf: req.body.cpf,
         senha: req.body.senha,
-        usuarioMaster: true,
+        usuarioMaster: usuarioMaster,
         statusAtivo: true,
         perfilAvatar: 'cashier',
         idUsuarioMaster: req.user._id,
@@ -95,7 +96,8 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
 })
 
 router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
-
+    let usuarioMaster
+    req.body.usuarioMaster == "true" ? usuarioMaster = true : usuarioMaster = false
     let statusAtivo
     req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
     let arrayEstabelecimentos = req.body.estabelecimentos
@@ -107,7 +109,7 @@ router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
         Usuario.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
             {_id: req.body.idUsuario},
             { $set: 
-                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'statusAtivo': statusAtivo}
+                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'statusAtivo': statusAtivo, 'usuarioMaster': usuarioMaster}
             }
         ).then(() => {
             arrayEstabelecimentos.forEach(element => {
