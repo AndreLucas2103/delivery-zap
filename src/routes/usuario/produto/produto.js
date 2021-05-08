@@ -21,7 +21,7 @@ const Ingrediente = mongoose.model("ingredientes")
 router.get('/ingredientes', async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
-            { $match: { _id: ObjectId('608ecabd96fd742de4f1431d')} },
+            { $match: { _id: req.user._id} },
             {
                 $lookup:
                     {
