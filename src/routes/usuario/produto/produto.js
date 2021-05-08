@@ -21,7 +21,7 @@ const Ingrediente = mongoose.model("ingredientes")
 router.get('/ingredientes', async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
-            { $match: { _id: req.user._id} },
+            { $match: { _id: ObjectId('608ecabd96fd742de4f1431d')} },
             {
                 $lookup:
                     {
@@ -188,6 +188,29 @@ router.post('/ajax-get-ingredientes', (req, res) => { // consulto pela rota  "/p
                     localField: "categoriasProdutos.idCategoriaProduto",
                     foreignField: "_id",
                     as: "categoriasProdutos"
+                }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentos.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentos"
+                }
+        },
+        {
+            $addFields: {
+                estabelecimentosUsuario: req.user.estabelecimentosVinculados
+            }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosUsuario.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosUsuario"
                 }
         }
     ]).then(ingrediente => {
@@ -369,6 +392,29 @@ router.post('/ajax-get-adicionais', (req, res) => { // consulto pela rota  "/pro
                     localField: "categoriasAdicionais.idCategoriaAdicional",
                     foreignField: "_id",
                     as: "categoriasAdicionais"
+                }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentos.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentos"
+                }
+        },
+        {
+            $addFields: {
+                estabelecimentosUsuario: req.user.estabelecimentosVinculados
+            }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosUsuario.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosUsuario"
                 }
         }
     ]).then(adicional => {
