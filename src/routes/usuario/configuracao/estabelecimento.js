@@ -2,13 +2,14 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
+const { eAdmin } = require("../../../helpers/eAdmin")
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 
-router.get('/estabelecimento/:idEstabelecimento', async (req, res) => { // Entrar no "perfil" do estabelecimento
+router.get('/estabelecimento/:idEstabelecimento',eAdmin, async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
         let estabelecimento = await Estabelecimento.aggregate([
             {$match: {_id: ObjectId(req.params.idEstabelecimento) }},
@@ -71,7 +72,7 @@ router.post('/delete-horarioFuncionamento', async (req, res) => { // deletar os 
     }
 })
 
-router.get('/estabelecimentos', async (req, res) => { // Listar todos os estabelecimentos
+router.get('/estabelecimentos',eAdmin, async (req, res) => { // Listar todos os estabelecimentos
     try {
         let estabelecimentos = await Usuario.aggregate([
             {$match: {_id: req.user._id }},

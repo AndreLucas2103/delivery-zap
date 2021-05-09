@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
+const { eAdmin } = require("../../../helpers/eAdmin")
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -18,7 +19,7 @@ const Ingrediente = mongoose.model("ingredientes")
 
 
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------
-router.get('/ingredientes', async (req, res) => { // listo todas as categorias
+router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id} },
@@ -223,7 +224,7 @@ router.post('/ajax-get-ingredientes', (req, res) => { // consulto pela rota  "/p
 
 
 // -----------  ADICIONAL ------------------------------------------------------------------------------------------
-router.get('/adicionais', async (req, res) => { // listo todas as categorias
+router.get('/adicionais',eAdmin, async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id} },
@@ -428,7 +429,7 @@ router.post('/ajax-get-adicionais', (req, res) => { // consulto pela rota  "/pro
 
 // ----------- CATEGORIA ADICIONAIS ------------------------------------------------------------------------------------------
 
-router.get('/categoria-adicionais', async (req, res) => { // listo todas as categorias
+router.get('/categoria-adicionais',eAdmin, async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id} },
@@ -542,7 +543,7 @@ router.post('/ajax-get-categoria-adicionais', (req, res) => { // consulto pela r
 
 // ----------- CATEGORIA PRODUTOS ------------------------------------------------------------------------------------------
 
-router.get('/categoria-produtos', async (req, res) => { // listo todas as categorias
+router.get('/categoria-produtos',eAdmin, async (req, res) => { // listo todas as categorias
     try {
         let usuario = await Usuario.aggregate([
             { $match: { _id: req.user._id} },

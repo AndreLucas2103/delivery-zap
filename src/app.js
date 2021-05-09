@@ -129,6 +129,8 @@ const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
 const usuarioUsuario = require("./routes/usuario/usuario/usuario")
 const usuarioProduto = require('./routes/usuario/produto/produto')
+const usuarioPedido= require('./routes/usuario/pedido/pedido')
+
 
     // Configuracoes do usuario
     const usuarioEstabelecimento = require("./routes/usuario/configuracao/estabelecimento")
@@ -137,6 +139,8 @@ app.use('/acessos', acessoUsuario)
 app.use('/dashboard', usuarioDashboard)
 app.use('/usuario', usuarioUsuario)
 app.use('/produto', usuarioProduto)
+app.use('/pedido', usuarioPedido)
+
 
     // Configuracoes do usuario
     app.use('/configuracao', usuarioEstabelecimento)

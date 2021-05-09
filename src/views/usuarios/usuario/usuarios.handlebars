@@ -28,6 +28,7 @@
                                 <ul class="list-group list-group-flush list my--3">
 
                                     {{#each usuarios.usuariosVinculados}}
+                                    {{#if statusAtivo}}
                                     <li class="list-group-item px-0">
                                         <div class="row align-items-center">
                                             <div class="col-auto">
@@ -44,12 +45,38 @@
                                                 <h4 class="h6 mb-0">
                                                     <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
                                                         data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
-                                                    <img src="/usuario/assets/img/favicon/star.png"
-                                                        id="show-useradiministrador">
+                                                    {{#if eTipoAdmin}}
+                                                    <img src="/usuario/assets/img/favicon/star.png">
+                                                    {{/if}}
                                                 </h4>
                                             </div>
                                         </div>
                                     </li>
+                                    {{else}}
+                                    <li class="list-group-item px-0" style="filter: grayscale(100%);">
+                                        <div class="row align-items-center">
+                                            <div class="col-auto">
+                                                <!-- Avatar -->
+                                                <a href="#" class="user-avatar">
+                                                    <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
+                                                    <img class="rounded-circle" data-bs-toggle="modal"
+                                                        data-bs-target="#modal-editar-usuario"
+                                                        data-bs-whatever="{{_id}}"
+                                                        src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
+                                                </a>
+                                            </div>
+                                            <div class="col-auto ml--2">
+                                                <h4 class="h6 mb-0">
+                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
+                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
+                                                    {{#if eTipoAdmin}}
+                                                    <img src="/usuario/assets/img/favicon/star.png">
+                                                    {{/if}}
+                                                </h4>
+                                            </div>
+                                        </div>
+                                    </li>
+                                    {{/if}}
                                     {{/each}}
                                 </ul>
                             </div>
@@ -114,10 +141,9 @@
                                         <div class="col-md-4">
                                             &nbsp;&nbsp;&nbsp;
                                             <div class="form-check form-switch col-9">
-                                                <input class="form-check-input" type="checkbox" id="usuarioMaster"
-                                                    name="usuarioMaster" value="true">
-                                                <label class="form-check-label"
-                                                    for="usuarioMaster">Administrador</label>
+                                                <input class="form-check-input" type="checkbox" id="eTipoAdmin"
+                                                    name="eTipoAdmin" value="true">
+                                                <label class="form-check-label" for="eTipoAdmin">Administrador</label>
                                             </div>
                                         </div>
                                     </div>
@@ -193,10 +219,9 @@
                                     <h5>Acesso</h5>
                                     <div class="col-md-4">
                                         <div class="form-check form-switch col-9">
-                                            <input class="form-check-input" type="checkbox" id="edit-usuarioMaster"
-                                                name="usuarioMaster" value="true">
-                                            <label class="form-check-label"
-                                                for="edit-usuarioMaster">Administrador</label>
+                                            <input class="form-check-input" type="checkbox" id="edit-eTipoAdmin"
+                                                name="eTipoAdmin" value="true">
+                                            <label class="form-check-label" for="edit-eTipoAdmin">Administrador</label>
                                         </div>
                                     </div>
                                     <hr>
@@ -214,9 +239,17 @@
 
                                         <input type="text" name="idUsuario" id="edit-idUsuario" hidden readonly>
                                     </div>
-                                    <button type="submit" class="btn btn-primary btn-sm mt-4">Salvar</button>
-                                    <button type="buttton" class="btn btn-white btn-sm mt-4" data-bs-dismiss="modal"
-                                        aria-label="Close">Cancelar</button>
+                                    <div class="mt-4">
+                                        <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
+                                        <button type="buttton" class="btn btn-white btn-sm " data-bs-dismiss="modal"
+                                            aria-label="Close">Cancelar</button>
+
+                                        <div class="form-check form-switch float-end " style="font-size: small;">
+                                            <input class="form-check-input" type="checkbox" name="statusAtivo"
+                                                id="edit-statusAtivo" value="true">
+                                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                                        </div>
+                                    </div>
                                 </form>
                             </div>
                         </div>
@@ -241,7 +274,7 @@
                                 $('#edit-email').val(response.email)
                                 $('#edit-cpf').val(response.cpf)
                                 $('#edit-idUsuario').val(response._id)
-                                $('#edit-usuarioMaster').prop('checked', response.usuarioMaster)
+                                $('#edit-eTipoAdmin').prop('checked', response.eTipoAdmin)
                                 $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
 
                                 response.estabelecimentosVinculados.forEach(element => {
@@ -251,7 +284,7 @@
                         });
                     })
                 </script>
-                
+
                 <script>
                     $("#cpf").mask("000.000.000-00");
                 </script>

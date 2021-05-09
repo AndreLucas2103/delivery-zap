@@ -42,7 +42,8 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                     email: req.body.email,
                     cpf: req.body.cpf,
                     senha: req.body.senha,
-                    eTipo:1,
+                    eTipoAdmin: true,
+                    eTipo: 1,
                     usuarioMaster: true,
                     statusAtivo: true,
                     perfilAvatar: 'businessman',
@@ -68,7 +69,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                     cep: req.body.cep,
                                     numero: req.body.numero,
                                     uf: req.body.uf,
-                                    
+
                                 },
                                 cnpj: req.body.cnpj,
                                 telefone: req.body.telefone,
@@ -84,8 +85,8 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                 Usuario.updateOne(
                                     { '_id': usuarioEdit._id },
                                     {
-                                        $push: { "estabelecimentosVinculados":  editUsuario},
-                                        $set: {"idUsuarioMaster": usuarioEdit._id}
+                                        $push: { "estabelecimentosVinculados": editUsuario },
+                                        $set: { "idUsuarioMaster": usuarioEdit._id }
                                     }
                                 ).then(e => {
                                     console.log('Usuario Criado')
@@ -94,7 +95,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                 }).catch(err => {
                                     console.log(err)
                                 })
-                                
+
                             }).catch(err => {
                                 req.flash('error_msg', 'Ocorreu um erro')
                                 res.redirect('back')
@@ -118,15 +119,22 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 
 
 router.post("/login", (req, res, next) => {
-
-    passport.authenticate("local", {
-        successRedirect: "/dashboard",
-        failureRedirect: "/login",
-        failureFlash: true      
-    })(req, res, next)
-
+    Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
+        if (usuario.eTipoAdmin == false) {
+            passport.authenticate("local", {
+                successRedirect: "/pedido/pedidos",
+                failureRedirect: "/login",
+                failureFlash: true
+            })(req, res, next)
+        } else {
+            passport.authenticate("local", {
+                successRedirect: "/dashboard",
+                failureRedirect: "/login",
+                failureFlash: true
+            })(req, res, next)
+        }
+    })
 })
-
 router.get("/logout", (req, res) => {
 
     req.logout()
@@ -135,4 +143,4 @@ router.get("/logout", (req, res) => {
 
 })
 
-module.exports = router ;
+module.exports = router;

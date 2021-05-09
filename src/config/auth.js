@@ -14,7 +14,9 @@ module.exports = function(passport){
             if(!usuario){
                 return done(null, false,{message: "E-mail não cadastrado."})
             }
-
+            if(usuario.statusAtivo == false){
+                return done(null, false,{message: "Usuário inativo."})
+            }
             bcrypt.compare(senha, usuario.senha, (erro, batem) => {
 
                 if(batem){

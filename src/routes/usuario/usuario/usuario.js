@@ -3,12 +3,13 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
 const bcryptjs = require("bcryptjs")
+const { eAdmin } = require("../../../helpers/eAdmin")
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 
 
-router.get('/usuarios', async (req, res) => {
+router.get('/usuarios',eAdmin, async (req, res) => {
     try {
         let usuarios = await Usuario.aggregate([
             { $match: { _id: req.user._id } },
@@ -39,8 +40,8 @@ router.get('/usuarios', async (req, res) => {
 })
 
 router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
-    let usuarioMaster
-    req.body.usuarioMaster == "true" ? usuarioMaster = true : usuarioMaster = false
+    let eTipoAdmin
+    req.body.eTipoAdmin == "true" ? eTipoAdmin = true : eTipoAdmin = false
     req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
 
 
@@ -50,8 +51,9 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
         email: req.body.email,
         cpf: req.body.cpf,
         senha: req.body.senha,
-        usuarioMaster: usuarioMaster,
+        usuarioMaster: false,
         statusAtivo: true,
+        eTipoAdmin: eTipoAdmin,
         perfilAvatar: 'cashier',
         idUsuarioMaster: req.user._id,
         identificaouuidv4: req.user.identificaouuidv4
@@ -96,9 +98,9 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
 })
 
 router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
-    let usuarioMaster
-    req.body.usuarioMaster == "true" ? usuarioMaster = true : usuarioMaster = false
+    let eTipoAdmin
     let statusAtivo
+    req.body.eTipoAdmin == "true" ? eTipoAdmin = true : eTipoAdmin = false   
     req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
     let arrayEstabelecimentos = req.body.estabelecimentos
 
@@ -109,7 +111,9 @@ router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
         Usuario.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
             {_id: req.body.idUsuario},
             { $set: 
-                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'statusAtivo': statusAtivo, 'usuarioMaster': usuarioMaster}
+                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'nomeCompleto': req.body.nomeCompleto, 'statusAtivo': statusAtivo, 
+                'eTipoAdmin': eTipoAdmin, 'email': req.body.email, 'cpf': req.body.cpf}
+                 
             }
         ).then(() => {
             arrayEstabelecimentos.forEach(element => {
@@ -237,6 +241,10 @@ router.post('/trocar-senha', async (req, res) => {
     })
 })
 
+//Rota para quando o usuário não tiver permissão para acessar
+router.get('/bloqueado', (req, res) => {
+    res.render('usuarios/usuario/bloqueado')
+})
 
 module.exports = router;
 

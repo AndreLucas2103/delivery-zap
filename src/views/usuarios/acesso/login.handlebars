@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
 
 {{>_msg}}
-
+<body style="background:#D8F3DC;"></body>
 <section style="background-color: #D8F3DC;"  class="pricing-table section">
     <div class="container">
         <form action="acessos/login" method="post">
@@ -20,11 +20,11 @@
                 <div class="col-lg-4 col-md-8 col-12" style="margin:auto;">
                     <div class="single-table wow fadeInUp" data-wow-delay=".4s">
                         <div class="form-floating mb-3">
-                            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com">
+                            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com" required>
                             <label for="floatingInput">Email</label>
                         </div>
                         <div class="form-floating">
-                            <input type="password" class="form-control" name="senha" id="floatingPassword" placeholder="Password">
+                            <input type="password" class="form-control" name="senha" id="floatingPassword" placeholder="Password"  required>
                             <label for="floatingPassword">Senha</label>
                         </div>
                         <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Login</button>
