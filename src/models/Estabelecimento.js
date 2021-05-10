@@ -42,7 +42,10 @@ const Estabelecimento = new Schema({
             key: String,
             url: String
         },
-        fundo: {
+    },
+
+    painel: {
+        imgfundo: {
             name: String,
             size: Number,
             key: String,

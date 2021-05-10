@@ -17,7 +17,6 @@ const Ingrediente = mongoose.model("ingredientes")
 
 
 
-
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------
 router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categorias
     try {
