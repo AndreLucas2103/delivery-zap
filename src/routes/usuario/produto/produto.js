@@ -534,8 +534,33 @@ router.post('/edit-categoria-adicionais', (req, res) => { // rota para editar
 })
 
 router.post('/ajax-get-categoria-adicionais', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    CategoriaAdicional.findById({_id: req.body.idCategoriaAdicional}).lean().then(categoria => {
-        res.json(categoria)
+    CategoriaAdicional.aggregate([
+        {$match: {_id: ObjectId(req.body.idCategoriaAdicional)}},
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentos.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentos"
+                }
+        },
+        {
+            $addFields: {
+                estabelecimentosUsuario: req.user.estabelecimentosVinculados
+            }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosUsuario.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosUsuario"
+                }
+        }
+    ]).then(categoria => {
+        res.json(categoria[0])
     })
 })
 
@@ -653,8 +678,33 @@ router.post('/edit-categoria-produtos', (req, res) => { // rota para editar
 })
 
 router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    CategoriaProduto.findById({_id: req.body.idCategoriaProduto}).lean().then(categoria => {
-        res.json(categoria)
+    CategoriaProduto.aggregate([
+        {$match: {_id: ObjectId(req.body.idCategoriaProduto)}},
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentos.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentos"
+                }
+        },
+        {
+            $addFields: {
+                estabelecimentosUsuario: req.user.estabelecimentosVinculados
+            }
+        },
+        {
+            $lookup:
+                {
+                    from: "estabelecimentos",
+                    localField: "estabelecimentosUsuario.idEstabelecimento",
+                    foreignField: "_id",
+                    as: "estabelecimentosUsuario"
+                }
+        }
+    ]).then(categoria => {
+        res.json(categoria[0])
     })
 })
 
