@@ -27,14 +27,6 @@ const Estabelecimento = new Schema({
         fim: String
     }],
 
-    cores: {
-        fundo: {
-            name: String,
-            rgb: String,
-            hex: String,
-        }
-    },
-    
     img: {
         capa: {
             name: String,
@@ -45,11 +37,18 @@ const Estabelecimento = new Schema({
     },
 
     painel: {
+        selectedImgFundo: Boolean,
         imgfundo: {
             name: String,
             size: Number,
             key: String,
             url: String
+        },
+        colorFundo: {
+            hex: {
+                type: String,
+                default: '360000'
+            }
         }
     },
 
