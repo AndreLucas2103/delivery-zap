@@ -91,6 +91,7 @@
     <script>
         var modalEditCategoria = document.getElementById('modal-editar-estabelecimento')
         modalEditCategoria.addEventListener('show.bs.modal', function (event) {
+            $('#checkEditEstabelecimentosVinculados').empty()
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever')
             jQuery.ajax({

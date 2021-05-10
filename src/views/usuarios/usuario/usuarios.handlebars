@@ -26,25 +26,20 @@
                             <div class="card-body">
 
                                 <ul class="list-group list-group-flush list my--3">
-
                                     {{#each usuarios.usuariosVinculados}}
-                                    {{#if statusAtivo}}
-                                    <li class="list-group-item px-0">
+                                    <li class="list-group-item px-0" {{#if statusAtivo}}  {{else}} style="filter: grayscale(100%);" {{/if}}>
                                         <div class="row align-items-center">
                                             <div class="col-auto">
                                                 <!-- Avatar -->
                                                 <a href="#" class="user-avatar">
                                                     <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
-                                                    <img class="rounded-circle" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}"
+                                                    <img class="rounded-circle"  {{#if usuarioMaster}} {{else}} data-bs-toggle="modal"data-bs-target="#modal-editar-usuario"  data-bs-whatever="{{_id}}" {{/if}}  
                                                         src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
                                                 </a>
                                             </div>
                                             <div class="col-auto ml--2">
                                                 <h4 class="h6 mb-0">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
+                                                    <a {{#if usuarioMaster}} {{else}} data-bs-toggle="modal"data-bs-target="#modal-editar-usuario"  data-bs-whatever="{{_id}}" {{/if}}>{{primeiroNome}}</a>
                                                     {{#if eTipoAdmin}}
                                                     <img src="/usuario/assets/img/favicon/star.png">
                                                     {{/if}}
@@ -52,31 +47,6 @@
                                             </div>
                                         </div>
                                     </li>
-                                    {{else}}
-                                    <li class="list-group-item px-0" style="filter: grayscale(100%);">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <!-- Avatar -->
-                                                <a href="#" class="user-avatar">
-                                                    <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
-                                                    <img class="rounded-circle" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}"
-                                                        src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
-                                                </a>
-                                            </div>
-                                            <div class="col-auto ml--2">
-                                                <h4 class="h6 mb-0">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
-                                                    {{#if eTipoAdmin}}
-                                                    <img src="/usuario/assets/img/favicon/star.png">
-                                                    {{/if}}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {{/if}}
                                     {{/each}}
                                 </ul>
                             </div>
