@@ -128,8 +128,10 @@ app.get('/registro', (req, res) => {
 const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
 const usuarioUsuario = require("./routes/usuario/usuario/usuario")
-const usuarioProduto = require('./routes/usuario/produto/produto')
-const usuarioPedido= require('./routes/usuario/pedido/pedido')
+const usuarioEntregador= require("./routes/usuario/entregador/entregador")
+const usuarioProduto = require("./routes/usuario/produto/produto")
+const usuarioPedido= require("./routes/usuario/pedido/pedido")
+
 
 
     // Configuracoes do usuario
@@ -138,6 +140,7 @@ const usuarioPedido= require('./routes/usuario/pedido/pedido')
 app.use('/acessos', acessoUsuario)
 app.use('/dashboard', usuarioDashboard)
 app.use('/usuario', usuarioUsuario)
+app.use('/entregador', usuarioEntregador)
 app.use('/produto', usuarioProduto)
 app.use('/pedido', usuarioPedido)
 
