@@ -244,7 +244,7 @@
                         $(`#edit-adicional${element.idEstabelecimento}`).prop('checked', true)
                     })
                     response.categoriasAdicionais.forEach(element => {
-                        tagifyEdit.addTags(element.nome)
+                        tagifyEdit.addTags([{value: element.nome, idCategoriaProduto: element._id}])
                     })
                 }
             });
