@@ -19,7 +19,7 @@
                     <div class="col-12 col-lg-8 mb-4">
                         <div class="card border-light shadow-sm">
                             <div class="card-header border-bottom border-light d-flex justify-content-between">
-                                <h2 class="h5 mb-0">Usuários</h2>
+                                <h2 class="h5 mb-0">Entregadores</h2>
                                 <a data-bs-toggle="modal" data-bs-target="#modal-cadastrar-usuario"
                                     class="btn btn-sm btn-secondary">Adicionar</a>
                             </div>
@@ -148,7 +148,8 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
+                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
+                                        value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
                                         {{#each usuarios.estabelecimentosVinculados}}
@@ -224,7 +225,8 @@
                                         </div>
                                     </div>
                                     <hr>
-                                    <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
+                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
+                                        value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
                                         {{#each usuarios.estabelecimentosVinculados}}
