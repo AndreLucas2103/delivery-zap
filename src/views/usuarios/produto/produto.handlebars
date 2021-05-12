@@ -55,7 +55,8 @@
                 </div>
             </div>
 
-            <div class="card border-light text-center p-0 mt-4">
+            <!-- Parte para os ingredientes START --> 
+            <div class="card border-light text-center p-0 mt-4  mb-4">
                 <div class="h5 mt-4">Ingredientes 
                     <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Adicionar</button>
                 </div>
@@ -87,19 +88,22 @@
                     <div class="modal-dialog">
                         <div class="modal-content">
                         <div class="modal-header">
-                            <h5 class="modal-title" id="modal-add-ingredienteLabel">Modal title</h5>
+                            <h5 class="modal-title" id="modal-add-ingredienteLabel">Ingredientes</h5>
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
+                            <label for="categoria-produto" class="form-label">Categoria do ingrediente</label>
+                            <select name="categoria-produto" id="categoria-produto">
+                                <option value="">Todos</option>
+                                {{#each categoriasProdutos}} <option value="{{_id}}">{{nome}}</option>{{/each}}
+                            </select>
+
+                            
                             <form action="/produto/add-produto-ingrediente" method="post">
                                 <input  class='tagify--outside' name="idIngredientes" id="add-ingredientes">
 
                                 <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
                                 <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
-
-                                <script>
-                                    $(".mask-hora").mask('00:00')
-                                </script>
                             </form>
                         </div>
                         </div>
@@ -118,20 +122,46 @@
                             },
                         })
                         tagifyAddIngrediente.addTags([{{#each produto.ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}}])
+                        
+                        $('#categoria-produto').change(() => {
+                            tagifyAddIngrediente.settings.whitelist.length = 0;
+                            tagifyAddIngrediente.loading(true)
+                            jQuery.ajax({
+                                type: "POST",
+                                url: '/produto/ajax-get-produto-ingredientes-categoria-produtos',
+                                data: {idCategoriaProduto: $('#categoria-produto').val()},
+                                success: function(response) {
+                                    response.forEach(element => {
+                                        tagifyAddIngrediente.settings.whitelist.push({'idIngrediente': String(element._id), value: String(element.nome) })
+                                    })
+                                    tagifyAddIngrediente.loading(false)
+                                }
+                            });
+                            
+                        })
                     </script>
                 </div>
                 <!-- Modal add ingredientes END-->
-
             </div>
+            <!-- Parte para os ingredientes END --> 
         </div>
         <!-- infos a esquerda END --> 
 
         <!-- infos a direita START --> 
         <div class="col-12 col-xl-8">
 
+            <!-- Parte para os adicionais START --> 
             <div class="card card-body bg-white border-light shadow-sm mb-4">
                 <div class="h5">Adicionais 
-                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Adicionar</button>
+                    <div class="dropdown float-end">
+                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdown-button-add-adiocinais" data-bs-toggle="dropdown" aria-expanded="false">
+                            Adicionar
+                        </button>
+                        <ul class="dropdown-menu" aria-labelledby="dropdown-button-add-adiocinais">
+                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-individual" >Individual</a></li>
+                            <li><a class="dropdown-item" href="#">Modelo de adicional</a></li>
+                        </ul>
+                    </div>
                 </div>
                 <div class="table-responsive">
                 <table class="table">
@@ -148,6 +178,7 @@
                         {{#each produto.adicionais}}
                         <tr>
                             <th >{{nome}}</th>
+                            <th class="valorFormatar">{{valor}}</th>
                             <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectIngrediente" value="{{_id}}" style="font-size: small;">X</button></td>
                         </tr>
                         {{/each}}
@@ -155,7 +186,66 @@
                     </tbody>
                 </table>
                 </div>
+
+                <!-- Modal add adicionais individual START-->
+                <div class="modal fade" id="modal-add-adicionais-individual" tabindex="-1" aria-labelledby="modal-add-adicionais-individualLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-add-adicionais-individualLabel">Adiconar Adicional individual</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <label for="categoria-adicional" class="form-label">Categoria do Adicional</label>
+                            <select name="categoria-adicional" id="categoria-adicional">
+                                <option value="">Todos</option>
+                                {{#each categoriasAdicional}} <option value="{{_id}}">{{nome}}</option>{{/each}}
+                            </select>
+
+                            <form action="/produto/add-produto-adicional-individual" method="post">
+                                <input  class='tagify--outside' name="idAdicional" id="add-adicional-individual">
+
+                                <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var tagAddAdicional = document.querySelector('input[id=add-adicional-individual]')
+                        var tagifyAddAdicional = new Tagify(tagAddAdicional, {
+                            whitelist: [ {{#each adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                            editTags: false,
+                            dropdown: {
+                                position: "input",
+                                maxItems: Infinity,
+                                closeOnSelect : false,
+                                enabled : 0 // always opens dropdown when input gets focus
+                            },
+                        })
+                        tagifyAddAdicional.addTags([{{#each produto.adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}}])
+                        
+                        $('#categoria-adicional').change(() => {
+                            tagifyAddAdicional.settings.whitelist.length = 0;
+                            tagifyAddAdicional.loading(true)
+                            jQuery.ajax({
+                                type: "POST",
+                                url: '/produto/ajax-get-produto-adicioanais-categoria-adicionais',
+                                data: {idCategoriaAdicional: $('#categoria-adicional').val()},
+                                success: function(response) {
+                                    response.forEach(element => {
+                                        tagifyAddAdicional.settings.whitelist.push({'idAdicional': String(element._id), value: String(element.nome) })
+                                    })
+                                    tagifyAddAdicional.loading(false)
+                                }
+                            });
+                        })
+                    </script>
+                </div>
+                <!-- Modal add adicionais individual END-->
             </div>
+            <!-- Parte para os adicionais END --> 
 
         </div>
         <!-- infos a direita END --> 
@@ -192,7 +282,7 @@
                     <hr class="w-25 ">
                     <div class="row mt-4 ml-2">
                         <h5>Categoria <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente uma categoria" style="font-size: small;"></i></h5>
-                        {{#each categorias}}
+                        {{#each categoriasProdutos}}
                             <div class="form-check col-6">
                                 <input class="form-check-input" type="radio" name="categoria" id="edit-categoria{{_id}}" value="{{_id}}">
                                 <label class="form-check-label" for="{{_id}}">{{nome}} </label>

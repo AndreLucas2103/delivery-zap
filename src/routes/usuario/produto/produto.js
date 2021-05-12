@@ -22,7 +22,7 @@ const Estabelecimento = mongoose.model("estabelecimentos")
 
 
 // -----------  PRODUTOS ------------------------------------------------------------------------------------------
-router.get('/', async(req, res) => {
+router.get('/perfil', async(req, res) => {
     try {
         let userEstabelecimentos = []
         req.user.estabelecimentoSelecionado == null ?  req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) : userEstabelecimentos.push(req.user.estabelecimentoSelecionado)
@@ -57,6 +57,15 @@ router.get('/', async(req, res) => {
                         as: "ingredientes"
                     }
             },
+            {
+                $lookup:
+                    {
+                        from: "adicionais",
+                        localField: "adicionais.idAdicional",
+                        foreignField: "_id",
+                        as: "adicionais"
+                    }
+            },
             {$unwind: '$idEstabelecimento'},
             {$unwind: '$idCategoriaProduto'}
         ])
@@ -74,9 +83,9 @@ router.get('/', async(req, res) => {
             }
         ])
         let estabelecimentos = await Estabelecimento.find({_id: userEstabelecimentos}).lean()
-
         let ingredientes = await Ingrediente.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
-
+        let adicionais = await Adicional.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
+        let categoriasAdicional = await CategoriaAdicional.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}, {statusAtivo:true}]}).lean()
 
         console.log()
 
@@ -84,7 +93,9 @@ router.get('/', async(req, res) => {
             produto: produto[0],
             categoriasProdutos: categoriasProdutos,
             estabelecimentos: estabelecimentos,
-            ingredientes: ingredientes
+            ingredientes: ingredientes,
+            categoriasAdicional: categoriasAdicional,
+            adicionais: adicionais
         })
     } catch (err) {
         console.log(err)
@@ -113,7 +124,7 @@ router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingrediente
             })
         })
 
-        req.flash('success_msg', 'Ingrediente adicionado')
+        req.flash('success_msg', 'Ingrediente editado')
         res.redirect('back')
     }).catch(err => {
         console.log(err)
@@ -121,6 +132,40 @@ router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingrediente
 
     
     
+})
+
+router.post('/add-produto-adicional-individual', (req, res) => { // adicionar ingredientes aos produtos
+    if(req.body.idAdicional){
+        Produto.updateOne(
+            {_id: req.body.idProduto},
+            {$set: {
+                'adicionais': []
+            }}
+        ).then(() => {
+            let arrayIdAdicionais = JSON.parse(req.body.idAdicional)
+    
+            arrayIdAdicionais.forEach(element => {
+                Produto.updateOne(
+                    {_id: req.body.idProduto},
+                    {$push: {
+                        'adicionais': {'idAdicional': element.idAdicional}
+                    }}
+                ).then(() => {
+        
+                }).catch(err => {
+                    console.log(err)
+                })
+            })
+    
+            req.flash('success_msg', 'Adicional editado')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    }else{
+        req.flash('warning_msg', 'Você deve selecionar pelo menos um adicional para adicionar')
+        res.redirect('back')
+    }
 })
 
 router.get('/produtos', (req, res ) => { // listo todos os produtos
@@ -171,7 +216,6 @@ router.post('/edit-produto', (req, res) => { // editar o produto
     })
 })
 
-
 router.post('/add-produto', (req, res) => { // adicionar produto
     let addProduto = {
         nome: req.body.nome,
@@ -190,6 +234,34 @@ router.post('/add-produto', (req, res) => { // adicionar produto
     })
 })
 
+
+router.post('/ajax-get-produto-ingredientes-categoria-produtos', (req, res) => { // consulto os ingredientes pela categoria e estabelecimento selecionado no perfil
+    let userEstabelecimentos = [], idCategoriaProduto
+    req.user.estabelecimentoSelecionado == null ?  req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) : userEstabelecimentos.push(req.user.estabelecimentoSelecionado)
+    // linha acima realiza a verificacao do usuario logado e busca quais estabelecimentos estão selecionados para listar, caso não tenha nenhum é realizado um forEach para juntar todos dentro da array, se tiver selecionado algum estabelecimento é feito apenas um push do estabelecimento selecionado, todos os dados são tratados como array
+    
+    req.body.idCategoriaProduto ? idCategoriaProduto = {$and: [{'categoriasProdutos.idCategoriaProduto': ObjectId(req.body.idCategoriaProduto)}, {statusAtivo:true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos} ]}  : idCategoriaProduto = {$and: [{statusAtivo:true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}
+    
+    Ingrediente.find(idCategoriaProduto).lean().then(ingredientes => {
+        res.json(ingredientes)
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/ajax-get-produto-adicioanais-categoria-adicionais', (req, res) => { // consulto os adicionais pela categoria e estabelecimento selecionado no perfil
+    let userEstabelecimentos = [], idCategoriaAdicional
+    req.user.estabelecimentoSelecionado == null ?  req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) : userEstabelecimentos.push(req.user.estabelecimentoSelecionado)
+    // linha acima realiza a verificacao do usuario logado e busca quais estabelecimentos estão selecionados para listar, caso não tenha nenhum é realizado um forEach para juntar todos dentro da array, se tiver selecionado algum estabelecimento é feito apenas um push do estabelecimento selecionado, todos os dados são tratados como array
+    
+    req.body.idCategoriaAdicional ? idCategoriaAdicional = {$and: [{'categoriasAdicionais.idCategoriaAdicional': ObjectId(req.body.idCategoriaAdicional)}, {statusAtivo:true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos} ]}  : idCategoriaAdicional = {$and: [{statusAtivo:true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}
+    
+    Adicional.find(idCategoriaAdicional).lean().then(adicionais => {
+        res.json(adicionais)
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------
