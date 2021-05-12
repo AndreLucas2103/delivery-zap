@@ -11,7 +11,7 @@
                         <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                             <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
                             <li class="breadcrumb-item"><a>Componentes</a></li>
-                            <li class="breadcrumb-item"><a href="/configuracao/estabelecimentos">Usuarios</a></li>
+                            <li class="breadcrumb-item">Entregadores</a></li>
                         </ol>
                     </nav>
                 </div>
@@ -126,7 +126,6 @@
                                             name="observacao" placeholder="Observações..." required></textarea>
                                     </div>
                                     <hr>
-                                    <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
                                         {{#each usuario.estabelecimentosVinculados}}
