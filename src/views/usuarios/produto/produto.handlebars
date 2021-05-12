@@ -1,0 +1,260 @@
+{{>usuario/_top-css}}
+
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<style>
+    .tagify--outside{
+        border: 0;
+    }
+
+    .tagify--outside .tagify__input{
+        order: 1;
+        flex: 100%;
+        border: 1px solid var(--tags-border-color);
+        transition: .1s;
+    }
+
+    .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+    .tagify--outside.tagify--focus .tagify__input{
+        transition:0s;
+        border-color: var(--tags-focus-border-color);
+    }
+</style>
+
+
+<main class="content mb-4">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Produto</a></li>
+                <li class="breadcrumb-item"><a href="/produto/produtos">Produtos</a></li>
+            </ol>
+        </nav>
+    </div>
+    
+    <div class="row">
+        <!-- infos a esquerda START --> 
+        <div class="col-12 col-xl-4">
+            <div class="card border-light text-center p-0">
+                <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
+                <div class="card-body pb-5">
+                    <img src="/img/perfil-avatar/svg/{{usuario.perfilAvatar}}.svg" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+                    <button type="button" class="btn btn-secondary btn-sm mb-4  " data-bs-toggle="modal" data-bs-target="#modal-edit-produto">Editar Produto</button>
+                    <h4 class="">{{produto.nome}}</h4>
+                    <h5 class="valorFormatar">{{produto.valor}}</h5>
+                    <h6><i class="fas fa-map-marker-alt text-danger"></i> {{produto.idEstabelecimento.nome}}</h6>
+                    <h6>Categoria: {{produto.idCategoriaProduto.nome}}</h6>
+                    <p class="fw-light">{{produto.descricao}}</p>
+                </div>
+            </div>
+
+            <div class="card border-light text-center p-0 mt-4">
+                <div class="h5 mt-4">Ingredientes 
+                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Adicionar</button>
+                </div>
+
+                <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Ingrendiente</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <form action="/produto/delete-produto-ingrediente" method="post">
+                        <input type="text" name="idEstabelecimento" value="{{produto._id}}" hidden>
+                        {{#each produto.ingredientes}}
+                        <tr>
+                            <th >{{nome}}</th>
+                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectIngrediente" value="{{_id}}" style="font-size: small;">X</button></td>
+                        </tr>
+                        {{/each}}
+                        </form>
+                    </tbody>
+                </table>
+                </div>
+
+                <!-- Modal add ingredientes START-->
+                <div class="modal fade" id="modal-add-ingrediente" tabindex="-1" aria-labelledby="modal-add-ingredienteLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-add-ingredienteLabel">Modal title</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <form action="/produto/add-produto-ingrediente" method="post">
+                                <input  class='tagify--outside' name="idIngredientes" id="add-ingredientes">
+
+                                <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+
+                                <script>
+                                    $(".mask-hora").mask('00:00')
+                                </script>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var tagAddIngrediente = document.querySelector('input[id=add-ingredientes]')
+                        var tagifyAddIngrediente = new Tagify(tagAddIngrediente, {
+                            whitelist: [ {{#each ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                            editTags: false,
+                            dropdown: {
+                                position: "input",
+                                maxItems: Infinity,
+                                closeOnSelect : false,
+                                enabled : 0 // always opens dropdown when input gets focus
+                            },
+                        })
+                        tagifyAddIngrediente.addTags([{{#each produto.ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}}])
+                    </script>
+                </div>
+                <!-- Modal add ingredientes END-->
+
+            </div>
+        </div>
+        <!-- infos a esquerda END --> 
+
+        <!-- infos a direita START --> 
+        <div class="col-12 col-xl-8">
+
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <div class="h5">Adicionais 
+                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Adicionar</button>
+                </div>
+                <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col">Adicional</th>
+                            <th scope="col">Valor</th>
+                            <th scope="col"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <form action="/produto/delete-produto-ingrediente" method="post">
+                        <input type="text" name="idEstabelecimento" value="{{produto._id}}" hidden>
+                        {{#each produto.adicionais}}
+                        <tr>
+                            <th >{{nome}}</th>
+                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectIngrediente" value="{{_id}}" style="font-size: small;">X</button></td>
+                        </tr>
+                        {{/each}}
+                        </form>
+                    </tbody>
+                </table>
+                </div>
+            </div>
+
+        </div>
+        <!-- infos a direita END --> 
+        
+    </div>    
+
+
+    <!-- Modal edit produtos START -->
+    <div class="modal fade" id="modal-edit-produto" tabindex="-1" aria-labelledby="modal-edit-produtoLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-produtoLabel">Editar Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/edit-produto" method="post">
+                    <div class="row">
+                        <div class="form-floating col">
+                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" value="{{produto.nome}}" required>
+                            <label for="edit-nome" class="ml-2">Nome *</label>
+                        </div>
+                        <div class="form-floating col-6">
+                            <input type="number" class="form-control" id="edit-valor" step=".01" name="valor" placeholder="-" value="{{produto.valor}}" required>
+                            <label for="edit-valor" class="ml-2">Valor (R$) *</label>
+                        </div>
+                    </div>
+
+                    <div class="form-floating mt-2">
+                        <textarea class="form-control" name="descricao" id="edit-descricao" style="height: 100px">{{produto.descricao}}</textarea>
+                        <label for="edit-descricao" class="form-label">Descrição</label>
+                    </div>
+
+                    <hr class="w-25 ">
+                    <div class="row mt-4 ml-2">
+                        <h5>Categoria <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente uma categoria" style="font-size: small;"></i></h5>
+                        {{#each categorias}}
+                            <div class="form-check col-6">
+                                <input class="form-check-input" type="radio" name="categoria" id="edit-categoria{{_id}}" value="{{_id}}">
+                                <label class="form-check-label" for="{{_id}}">{{nome}} </label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <hr class="w-25 ">
+                    <div class="row mt-4 ml-2">
+                        <h5>Estabelecimento <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente um estabelecimento" style="font-size: small;"></i></h5>
+                        {{#each estabelecimentos}}
+                            <div class="form-check form-switch col-6">
+                                <input class="form-check-input" type="radio" name="estabelecimento" id="edit-estabelecimento{{_id}}" value="{{_id}}">
+                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-sm " >Salvar</button>
+                        <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        
+                        <div class="form-check form-switch float-end " style="font-size: small;">
+                            <input class="form-check-input" type="checkbox" name="statusAtivo" id="edit-statusAtivo" value="true">
+                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                        </div>
+                    </div>
+                    
+                </form>
+
+                <script>
+                    $('#edit-estabelecimento{{produto.idEstabelecimento._id}}').prop('checked', true)
+                    $('#edit-categoria{{produto.idCategoriaProduto._id}}').prop('checked', true)
+                    $('#edit-statusAtivo').prop('checked', {{produto.statusAtivo}})
+                </script>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal edit produtos END -->
+
+    <script> // script para adicionar categorias
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        })
+
+        // script para puxas os tooltips "as informações de I no icone azul kk"
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

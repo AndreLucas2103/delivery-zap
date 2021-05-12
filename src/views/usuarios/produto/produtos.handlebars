@@ -1,0 +1,127 @@
+{{>usuario/_top-css}}
+
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Produto</a></li>
+                <li class="breadcrumb-item"><a href="/produto/produtos">Produtos</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-produtos">+ Adicionar</button>
+
+    <div class="row">
+        {{#each produtos}}
+        <div class="col-12 col-lg-3 mb-4">
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">{{nome}}</h2>
+                    <form action="/produto" method="get">
+                        <button type="submit" class="btn btn-sm btn-secondary" name="produto" value="{{_id}}">Ver</button>
+                    </form>
+                </div>
+                <div class="card-body">
+                    <div style="font-size: x-small;" class="text-center">
+                        <i class="fas fa-map-marker-alt text-danger"></i><span> {{idEstabelecimento.nome}}</span>
+                    </div>
+                    <div style="font-size: x-small;" class="text-center">
+                        <span>Categoria: {{idCategoriaProduto.nome}}</span>
+                    </div>
+                    <h5 class="mt-2 text-center valorFormatar">{{valor}}</h5>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <!-- Modal add ingredientes START -->
+    <div class="modal fade" id="modal-add-produtos" tabindex="-1" aria-labelledby="modal-add-produtosLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-produtosLabel">Adicionar Produto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/add-produto" method="post">
+                    <div class="row">
+                        <div class="form-floating col">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
+                            <label for="nome" class="ml-2">Nome *</label>
+                        </div>
+                        <div class="form-floating col-6">
+                            <input type="number" class="form-control" id="valor" step=".01" name="valor" placeholder="-" required>
+                            <label for="valor" class="ml-2">Valor (R$) *</label>
+                        </div>
+                    </div>
+                    <div class="form-floating mt-2">
+                        <textarea class="form-control" name="descricao" id="descricao" style="height: 100px"></textarea>
+                        <label for="descricao" class="form-label">Descrição</label>
+                    </div>
+
+                    <hr class="w-25 ">
+                    <div class="row mt-4 ml-2">
+                        <h5>Categoria <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente uma categoria" style="font-size: small;"></i></h5>
+                        {{#each categorias}}
+                            <div class="form-check col-6">
+                                <input class="form-check-input" type="radio" name="categoria" id="{{_id}}" value="{{_id}}" required>
+                                <label class="form-check-label" for="{{_id}}">{{nome}} </label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <hr class="w-25 ">
+                    <div class="row mt-4 ml-2">
+                        <h5>Estabelecimento <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente um estabelecimento" style="font-size: small;"></i></h5>
+                        {{#each estabelecimentos}}
+                            <div class="form-check form-switch col-6">
+                                <input class="form-check-input" type="radio" name="estabelecimento" id="{{_id}}" value="{{_id}}" required>
+                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
+
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal add ingredientes END -->
+
+    <script> // script para adicionar categorias
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        }) 
+
+        // script para puxas os tooltips "as informações de I no icone azul kk"
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

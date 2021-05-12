@@ -13,12 +13,9 @@ const Produto = new Schema({
     
     ingredientes: [{
         idIngrediente: ObjectId,
-        nome: String
     }],
     adicionais: [{
         idAdicional: ObjectId,
-        nome: String,
-        valor: Number
     }],
 
     opcao: [{
@@ -30,6 +27,15 @@ const Produto = new Schema({
         }],
         multiplaEscolha: Boolean
     }],
+
+    img: {
+        capa: {
+            name: String,
+            size: Number,
+            key: String,
+            url: String
+        },
+    },
 
     promocao: Boolean,
     valorPromocao: Boolean,
@@ -43,6 +49,8 @@ const Produto = new Schema({
         type: Schema.Types.ObjectId,
         ref: "estabelecimentos",
     },
+
+    identificaouuidv4: String,
 
     statusAtivo: {
         type: Boolean,

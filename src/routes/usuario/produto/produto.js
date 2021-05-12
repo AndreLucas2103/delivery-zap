@@ -14,6 +14,181 @@ require("../../../models/Adicional")
 const Adicional = mongoose.model("adicionais")
 require("../../../models/Ingrediente")
 const Ingrediente = mongoose.model("ingredientes")
+require("../../../models/Produto")
+const Produto = mongoose.model("produtos")
+require("../../../models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
+
+
+
+// -----------  PRODUTOS ------------------------------------------------------------------------------------------
+router.get('/', async(req, res) => {
+    try {
+        let userEstabelecimentos = []
+        req.user.estabelecimentoSelecionado == null ?  req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) : userEstabelecimentos.push(req.user.estabelecimentoSelecionado)
+        // linha acima realiza a verificacao do usuario logado e busca quais estabelecimentos estão selecionados para listar, caso não tenha nenhum é realizado um forEach para juntar todos dentro da array, se tiver selecionado algum estabelecimento é feito apenas um push do estabelecimento selecionado, todos os dados são tratados como array
+        
+        produto = await Produto.aggregate([
+            {$match: {_id: ObjectId(req.query.produto)}},
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "idEstabelecimento",
+                        foreignField: "_id",
+                        as: "idEstabelecimento"
+                    }
+            },
+            {
+                $lookup:
+                    {
+                        from: "categoriaprodutos",
+                        localField: "idCategoriaProduto",
+                        foreignField: "_id",
+                        as: "idCategoriaProduto"
+                    }
+            },
+            {
+                $lookup:
+                    {
+                        from: "ingredientes",
+                        localField: "ingredientes.idIngrediente",
+                        foreignField: "_id",
+                        as: "ingredientes"
+                    }
+            },
+            {$unwind: '$idEstabelecimento'},
+            {$unwind: '$idCategoriaProduto'}
+        ])
+        
+        let categoriasProdutos = await CategoriaProduto.aggregate([
+            {$match:  {$and: [{"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}}, {statusAtivo:true}]}},
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentos.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentos"
+                    }
+            }
+        ])
+        let estabelecimentos = await Estabelecimento.find({_id: userEstabelecimentos}).lean()
+
+        let ingredientes = await Ingrediente.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
+
+
+        console.log()
+
+        res.render('usuarios/produto/produto', {
+            produto: produto[0],
+            categoriasProdutos: categoriasProdutos,
+            estabelecimentos: estabelecimentos,
+            ingredientes: ingredientes
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingredientes aos produtos
+    Produto.updateOne(
+        {_id: req.body.idProduto},
+        {$set: {
+            'ingredientes': []
+        }}
+    ).then(() => {
+        let arrayIdIngredientes = JSON.parse(req.body.idIngredientes)
+
+        arrayIdIngredientes.forEach(element => {
+            Produto.updateOne(
+                {_id: req.body.idProduto},
+                {$push: {
+                    'ingredientes': {'idIngrediente': element.idIngrediente}
+                }}
+            ).then(() => {
+    
+            }).catch(err => {
+                console.log(err)
+            })
+        })
+
+        req.flash('success_msg', 'Ingrediente adicionado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+
+    
+    
+})
+
+router.get('/produtos', (req, res ) => { // listo todos os produtos
+    let userEstabelecimentos = []
+    req.user.estabelecimentoSelecionado == null ?  req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) : userEstabelecimentos.push(req.user.estabelecimentoSelecionado)
+    // linha acima realiza a verificacao do usuario logado e busca quais estabelecimentos estão selecionados para listar, caso não tenha nenhum é realizado um forEach para juntar todos dentro da array, se tiver selecionado algum estabelecimento é feito apenas um push do estabelecimento selecionado, todos os dados são tratados como array
+    
+    Produto.find({idEstabelecimento: userEstabelecimentos}).lean().populate('idEstabelecimento idCategoriaProduto').then( async produtos => {
+        let categorias = await CategoriaProduto.aggregate([
+            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
+            {
+                $lookup:
+                    {
+                        from: "estabelecimentos",
+                        localField: "estabelecimentos.idEstabelecimento",
+                        foreignField: "_id",
+                        as: "estabelecimentos"
+                    }
+            }
+        ])
+        let estabelecimentos = await Estabelecimento.find({_id: userEstabelecimentos}).lean()
+
+        res.render('usuarios/produto/produtos', {produtos: produtos, estabelecimentos: estabelecimentos, categorias: categorias})
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/edit-produto', (req, res) => { // editar o produto
+    let statusAtivo
+    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+
+    Produto.updateOne(
+        {_id: req.body.idProduto},
+        {$set: {
+            nome: req.body.nome,
+            valor: req.body.valor,
+            descricao: req.body.descricao,
+            idCategoriaProduto: req.body.categoria,
+            idEstabelecimento: req.body.estabelecimento,
+            statusAtivo: statusAtivo
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Produto editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
+router.post('/add-produto', (req, res) => { // adicionar produto
+    let addProduto = {
+        nome: req.body.nome,
+        valor: req.body.valor,
+        descricao: req.body.descricao,
+        idCategoriaProduto: req.body.categoria,
+        idEstabelecimento: req.body.estabelecimento,
+        identificaouuidv4: req.user.identificaouuidv4
+    }
+
+    new Produto(addProduto).save().then(() => {
+        req.flash('success_msg', 'Produto adicionado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 
 
