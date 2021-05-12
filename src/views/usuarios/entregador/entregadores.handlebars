@@ -20,139 +20,69 @@
                         <div class="card border-light shadow-sm">
                             <div class="card-header border-bottom border-light d-flex justify-content-between">
                                 <h2 class="h5 mb-0">Entregadores</h2>
-                                <a data-bs-toggle="modal" data-bs-target="#modal-cadastrar-usuario"
+                                <a data-bs-toggle="modal" data-bs-target="#modal-cadastrar-entregador"
                                     class="btn btn-sm btn-secondary">Adicionar</a>
                             </div>
                             <div class="card-body">
 
                                 <ul class="list-group list-group-flush list my--3">
-
-                                    {{#each usuarios.usuariosVinculados}}
-                                    {{#if statusAtivo}}
-                                    <li class="list-group-item px-0">
+                                    {{#each entregadores}}
+                                    <li class="list-group-item px-0" {{#if statusAtivo}} {{else}}
+                                        style="filter: grayscale(100%);" {{/if}}>
                                         <div class="row align-items-center">
                                             <div class="col-auto">
                                                 <!-- Avatar -->
                                                 <a href="#" class="user-avatar">
-                                                    <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
                                                     <img class="rounded-circle" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-editar-usuario"
+                                                        data-bs-target="#modal-editar-entregador"
                                                         data-bs-whatever="{{_id}}"
                                                         src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
                                                 </a>
                                             </div>
                                             <div class="col-auto ml--2">
                                                 <h4 class="h6 mb-0">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
-                                                    {{#if eTipoAdmin}}
-                                                    <img src="/usuario/assets/img/favicon/star.png">
-                                                    {{/if}}
+                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-entregador"
+                                                        data-bs-whatever="{{_id}}">{{nome}}</a>
                                                 </h4>
                                             </div>
                                         </div>
                                     </li>
-                                    {{else}}
-                                    <li class="list-group-item px-0" style="filter: grayscale(100%);">
-                                        <div class="row align-items-center">
-                                            <div class="col-auto">
-                                                <!-- Avatar -->
-                                                <a href="#" class="user-avatar">
-                                                    <input type="hidden" id="iconuser" value="{{usuarioMaster}}">
-                                                    <img class="rounded-circle" data-bs-toggle="modal"
-                                                        data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}"
-                                                        src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg">
-                                                </a>
-                                            </div>
-                                            <div class="col-auto ml--2">
-                                                <h4 class="h6 mb-0">
-                                                    <a data-bs-toggle="modal" data-bs-target="#modal-editar-usuario"
-                                                        data-bs-whatever="{{_id}}">{{primeiroNome}}</a>
-                                                    {{#if eTipoAdmin}}
-                                                    <img src="/usuario/assets/img/favicon/star.png">
-                                                    {{/if}}
-                                                </h4>
-                                            </div>
-                                        </div>
-                                    </li>
-                                    {{/if}}
                                     {{/each}}
                                 </ul>
                             </div>
                         </div>
                     </div>
                 </div>
+
                 <!-- Modal add usuários START -->
-                <div class="modal fade" id="modal-cadastrar-usuario" tabindex="-1"
-                    aria-labelledby="modal-cadastrar-usuarioLabel" aria-hidden="true">
+                <div class="modal fade" id="modal-cadastrar-entregador" tabindex="-1"
+                    aria-labelledby="modal-cadastrar-entregadorLabel" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Cadastrar usuário</h5>
+                                <h5 class="modal-title" id="modal-cadastrar-entregadorLabel">Cadastrar usuário</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="/usuario/add-usuario" method="POST">
+                                <form action="/entregador/add-entregador" method="POST">
                                     <div class="row g-2">
-                                        <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="primeiroNome"
-                                                    name="primeiroNome" placeholder="0" required>
-                                                <label for="primeiroNome">Primeiro Nome*</label>
-                                            </div>
-                                        </div>
                                         <div class="col-md-8">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="nomeCompleto"
-                                                    name="nomeCompleto" placeholder="0" required>
-                                                <label for="nomeCompleto">Nome Completo*</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row g-2">
-                                        <div class="col-md-9">
-                                            <div class="form-floating">
-                                                <input type="email" class="form-control" id="email" name="email"
+                                                <input type="text" class="form-control" id="nome" name="nome"
                                                     placeholder="0" required>
-                                                <label for="email">E-mail*</label>
+                                                <label for="nome">Nome*</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="cpf" name="cpf"
-                                                    placeholder="0" required>
-                                                <label for="cpf">CPF*</label>
-                                            </div>
-                                        </div>
+                                    </div><br>
+                                    <div class="col-md-10">
+                                        <textarea cols="30" rows="5" class="form-control" id="observacao"
+                                            name="observacao" placeholder="Observações" required></textarea>
                                     </div>
                                     <hr>
-                                    <h5>Acesso</h5><br>
-                                    <div class="row g-2">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="password" class="form-control" id="senha" name="senha"
-                                                    placeholder="0" required>
-                                                <label for="senha">Senha(4 dígitos)*</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            &nbsp;&nbsp;&nbsp;
-                                            <div class="form-check form-switch col-9">
-                                                <input class="form-check-input" type="checkbox" id="eTipoAdmin"
-                                                    name="eTipoAdmin" value="true">
-                                                <label class="form-check-label" for="eTipoAdmin">Administrador</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
-                                        value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
-                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        {{#each usuario.estabelecimentosVinculados}}
                                         <div class="form-check form-switch col-6">
                                             <br><input class="form-check-input" type="checkbox"
                                                 name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
@@ -171,73 +101,43 @@
                 <!-- Modal add usuários END -->
 
 
-                <div class="modal fade" id="modal-editar-usuario" tabindex="-1" aria-labelledby="modal-editar-usuario"
-                    aria-hidden="true">
+                <div class="modal fade" id="modal-editar-entregador" tabindex="-1"
+                    aria-labelledby="modal-editar-entregador" aria-hidden="true">
                     <div class="modal-dialog modal-lg">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <h5 class="modal-title" id="modal-cadastrar-usuarioLabel">Editar Usuário</h5>
+                                <h5 class="modal-title" id="modal-editar-entregadorLabel">Editar Usuário</h5>
                                 <button type="button" class="btn-close" data-bs-dismiss="modal"
                                     aria-label="Close"></button>
                             </div>
                             <div class="modal-body">
-                                <form action="/usuario/edit-usuario" method="POST">
+                                <form action="/entregador/edit-entregador" method="POST">
                                     <div class="row g-2">
-                                        <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="edit-primeiroNome"
-                                                    name="primeiroNome" placeholder="0" required>
-                                                <label for="edit-primeiroNome">Primeiro Nome*</label>
-                                            </div>
-                                        </div>
                                         <div class="col-md-8">
                                             <div class="form-floating">
-                                                <input type="text" class="form-control" id="edit-nomeCompleto"
-                                                    name="nomeCompleto" placeholder="0" required>
-                                                <label for="nomeCompleto">Nome Completo*</label>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row g-2">
-                                        <div class="col-md-9">
-                                            <div class="form-floating">
-                                                <input type="email" class="form-control" id="edit-email" name="email"
+                                                <input type="text" class="form-control" id="edit-nome" name="nome"
                                                     placeholder="0" required>
-                                                <label for="email">E-mail*</label>
+                                                <label for="nome">Nome*</label>
                                             </div>
                                         </div>
-                                        <div class="col-md-3">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control" id="edit-cpf" name="cpf"
-                                                    placeholder="0" required>
-                                                <label for="cpf">CPF*</label>
-                                            </div>
-                                        </div>
+                                    </div><br>
+                                    <div class="col-md-10">
+                                        <textarea cols="30" rows="5" class="form-control" id="edit-observacoes"
+                                            name="observacao" placeholder="Observações..." required></textarea>
                                     </div>
                                     <hr>
-                                    <h5>Acesso</h5>
-                                    <div class="col-md-4">
-                                        <div class="form-check form-switch col-9">
-                                            <input class="form-check-input" type="checkbox" id="edit-eTipoAdmin"
-                                                name="eTipoAdmin" value="true">
-                                            <label class="form-check-label" for="edit-eTipoAdmin">Administrador</label>
-                                        </div>
-                                    </div>
-                                    <hr>
-                                    <input type="hidden" id="estabelecimento" name="estabelecimento[]"
-                                        value="{{estabelecimento._id}}">
+                                    <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
-                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        {{#each usuario.estabelecimentosVinculados}}
                                         <div class="form-check form-switch col-6">
                                             <br><input class="form-check-input" type="checkbox"
-                                                name="estabelecimentos[]" id="edit-usuario{{_id}}" value="{{_id}}">
+                                                name="estabelecimentos[]" id="edit-entregador{{_id}}" value="{{_id}}">
                                             <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                                         </div>
                                         {{/each}}
 
-                                        <input type="text" name="idUsuario" id="edit-idUsuario" hidden readonly>
+                                        <input type="text" name="idEntregador" id="edit-idEntregador" hidden readonly>
                                     </div>
                                     <div class="mt-4">
                                         <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
@@ -258,27 +158,24 @@
 
                 <script>
 
-                    var modalEditusuario = document.getElementById('modal-editar-usuario')
-                    modalEditusuario.addEventListener('show.bs.modal', function (event) {
+                    var modalEditentregador = document.getElementById('modal-editar-entregador')
+                    modalEditentregador.addEventListener('show.bs.modal', function (event) {
                         $('.form-check-input').prop('checked', false)
                         var button = event.relatedTarget
                         var recipient = button.getAttribute('data-bs-whatever')
                         jQuery.ajax({
                             type: "POST",
-                            url: '/usuario/ajax-get-usuarios',
-                            data: { idUsuario: recipient },
+                            url: '/entregador/ajax-get-entregadores',
+                            data: { idEntregador: recipient },
                             success: function (response) {
                                 console.log(response)
-                                $('#edit-primeiroNome').val(response.primeiroNome)
-                                $('#edit-nomeCompleto').val(response.nomeCompleto)
-                                $('#edit-email').val(response.email)
-                                $('#edit-cpf').val(response.cpf)
-                                $('#edit-idUsuario').val(response._id)
-                                $('#edit-eTipoAdmin').prop('checked', response.eTipoAdmin)
-                                $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
+                                $('#edit-idEntregador').val(response._id)
+                                $('#edit-nome').val(response.nome)
+                                $('#edit-observacoes').val(response.observacao)
+                                $('#edit-statusAtivo').prop('checked', response.statusAtivo)
 
-                                response.estabelecimentosVinculados.forEach(element => {
-                                    $(`#edit-usuario${element.idEstabelecimento}`).prop('checked', true)
+                                response.estabelecimentos.forEach(element => {
+                                    $(`#edit-entregador${element.idEstabelecimento}`).prop('checked', true)
                                 })
                             }
                         });

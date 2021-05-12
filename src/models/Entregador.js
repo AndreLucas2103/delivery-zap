@@ -9,6 +9,7 @@ const Schema = mongoose.Schema;
 const Entregador = new Schema({
     nome: String,
     observacao: String,
+    perfilAvatar: String,
 
     estabelecimentos: [{
         idEstabelecimento: ObjectId
