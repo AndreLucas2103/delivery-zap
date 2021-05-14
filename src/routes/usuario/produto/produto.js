@@ -331,15 +331,20 @@ router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categ
 
 router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
     try {
-        let ingredienteExist = await Ingrediente.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaProduto: req.body.idCategoriaProduto}]})
-        if(ingredienteExist){
-            req.flash('warning_msg', 'Ingrediente já existe para essa categoria e estabelecimento')
+        if(!req.body.idCategoriaProduto || !req.body.idEstabelecimento){
+            req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
             res.redirect('back')
         }else{
-            new Ingrediente({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento, idCategoriaProduto: req.body.idCategoriaProduto}).save().then((categoria) => {
-                req.flash('success_msg', 'Ingrediente adicionado')
+            let ingredienteExist = await Ingrediente.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaProduto: req.body.idCategoriaProduto}]})
+            if(ingredienteExist){
+                req.flash('warning_msg', 'Ingrediente já existe para essa categoria e estabelecimento')
                 res.redirect('back')
-            })
+            }else{
+                new Ingrediente({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento, idCategoriaProduto: req.body.idCategoriaProduto}).save().then((categoria) => {
+                    req.flash('success_msg', 'Ingrediente adicionado')
+                    res.redirect('back')
+                })
+            }
         }
     } catch (err) {
         console.log(err)
@@ -420,16 +425,22 @@ router.get('/adicionais',eAdmin, async (req, res) => { // listo todas as categor
 
 router.post('/add-adicionais',async (req, res) => { // adiciono a categoria com todos os estabelecimentos
     try {
-        let adicionalExist = await Adicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaAdicional: req.body.idCategoriaAdicional}]})
-        if(adicionalExist){
-            req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
+        if(!req.body.idCategoriaAdicional || !req.body.idEstabelecimento){
+            req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
             res.redirect('back')
         }else{
-            new Adicional({nome: req.body.nome, valor: req.body.valor, idEstabelecimento: req.body.idEstabelecimento, idCategoriaAdicional: req.body.idCategoriaAdicional}).save().then((categoria) => {
-                req.flash('success_msg', 'Adicional adicionado')
+            let adicionalExist = await Adicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaAdicional: req.body.idCategoriaAdicional}]})
+            if(adicionalExist){
+                req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
                 res.redirect('back')
-            })
+            }else{
+                new Adicional({nome: req.body.nome, valor: req.body.valor, idEstabelecimento: req.body.idEstabelecimento, idCategoriaAdicional: req.body.idCategoriaAdicional}).save().then((categoria) => {
+                    req.flash('success_msg', 'Adicional adicionado')
+                    res.redirect('back')
+                })
+            }
         }
+        
     } catch (err) {
         console.log(err)
     }
