@@ -8,24 +8,7 @@
 <div class="col-12">
 {{>usuario/_menu}}
 
-<style>
-    .tagify--outside{
-        border: 0;
-    }
 
-    .tagify--outside .tagify__input{
-        order: 1;
-        flex: 100%;
-        border: 1px solid var(--tags-border-color);
-        transition: .1s;
-    }
-
-    .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
-    .tagify--outside.tagify--focus .tagify__input{
-        transition:0s;
-        border-color: var(--tags-focus-border-color);
-    }
-</style>
 
 <main class="content">
     <div class="">
@@ -42,7 +25,7 @@
 
     <div class="row">
         {{#each ingredientes}}
-        <div class="col-12 col-lg-4 mb-4">
+        <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">{{nome}}</h2>
@@ -50,18 +33,12 @@
                 </div>
                 <div class="card-body">
                     <div style="font-size: small;">
-                        <span>Categorias:</span>
-                        {{#each categoriasProdutos}}
-                            <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{nome}}</div>
-                        {{/each}}
+                        <i class="fas fa-tag"></i>
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaProduto.nome}}</div>
                     </div>
-                    <hr>
-
                     <div style="font-size: small;">
                         <i class="fas fa-map-marker-alt text-danger"></i>
-                        {{#each estabelecimentos}}
-                            <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{nome}}</div>
-                        {{/each}}
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idEstabelecimento.nome}}</div>
                     </div>
                 </div>
             </div>
@@ -85,19 +62,14 @@
                             <label for="nome" class="ml-2">Nome</label>
                         </div>
                     </div>
-
-                    <hr>
-                    <div class="row mt-4 mx-2">
-                        <h5>Categorias</h5>
-                        <input name='categoriasProdutos' id="edit-categoriasProdutos" class='tagify--outside' placeholder='Selecione as categorias' >
+                    <div class="mt-4">
+                        <span id="ajax-categoriaProduto" class="ml-2"></span>
+                        <span id="ajax-estabelecimento" class="ml-4"></span>
                     </div>
-                    <hr>
-
-                    <div class="row mt-4 ml-2" id="checkEditEstabelecimentosVinculados">
-                        <h5>Estabelecimentos</h5>
-                    </div>
-
+                    
                     <input type="text" name="idIngrediente" id="edit-idIngrediente" hidden  readonly>
+                    <input type="text" name="idCategoriaProduto" id="edit-idCategoriaProduto" hidden  readonly>
+                    <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden  readonly>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
@@ -116,6 +88,30 @@
     </div>
     <!-- Modal edit ingredientes END -->
 
+    <script>
+        var modalEditIngrediente = document.getElementById('modal-edit-ingredientes')
+        modalEditIngrediente.addEventListener('show.bs.modal', function (event) {
+            $('.form-check-input').prop('checked', false)
+
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-bs-whatever')
+            jQuery.ajax({
+                type: "POST",
+                url: '/produto/ajax-get-ingredientes',
+                data: {idIngrediente: recipient},
+                success: function(response) {
+                    $('#edit-nome').val(response.nome)
+                    $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
+                    $('#edit-idIngrediente').val(response._id)
+                    $('#edit-idEstabelecimento').val(response.idEstabelecimento._id)
+                    $('#edit-idCategoriaProduto').val(response.idCategoriaProduto._id)
+                    $(`#ajax-categoriaProduto`).html(`<i class="fas fa-tag"></i> ${response.idCategoriaProduto.nome}`)
+                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.idEstabelecimento.nome}`)
+                }
+            })
+        })
+    </script>
+
     <!-- Modal add ingredientes START -->
     <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
@@ -133,22 +129,17 @@
                         </div>
                     </div>
 
-                    <hr>
-                    <div class="row mt-4 mx-2">
-                        <h5>Categorias</h5>
-                        <input name='categoriasProdutos' id="add-categoriasProdutos" class='tagify--outside' placeholder='Selecione as categorias' >
-                    </div>
-                    <hr>
-
                     <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
                         {{#each usuario.estabelecimentosVinculados}}
                             <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="{{_id}}" value="{{_id}}">
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
                                 <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                             </div>
                         {{/each}}
                     </div>
+                    <h5 class=" mt-4 ml-2">Categoria Produto</h5>
+                    <div class="row  ml-2" id="radio-add-ingrediente-categoria"></div>
 
                     <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
                     <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
@@ -161,82 +152,21 @@
     <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
-        var tagAdicionais = document.querySelector('input[id=add-categoriasProdutos]')
-        var tagifyAdd = new Tagify(tagAdicionais, {
-            whitelist: [ {{#each categoriasProdutos}} {'idCategoriaProduto': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-            editTags: false,
-            dropdown: {
-                position: "input",
-                maxItems: Infinity,
-                closeOnSelect : false,
-                enabled : 0 // always opens dropdown when input gets focus
-            },
-            enforceWhitelist: true
-        })
-
-
-        var tagEditAdicionais = document.querySelector('input[id=edit-categoriasProdutos]')
-        var tagifyEdit = new Tagify(tagEditAdicionais, {
-            whitelist: [ {{#each categoriasProdutos}} {'idCategoriaProduto': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-            editTags: false,
-            dropdown: {
-                position: "input",
-                maxItems: Infinity,
-                closeOnSelect : false,
-                enabled : 0 // always opens dropdown when input gets focus
-            },
-        })      
-
-        var modalEditCategoria = document.getElementById('modal-edit-ingredientes')
-        modalEditCategoria.addEventListener('show.bs.modal', function (event) {
-
-            $('.form-check-input').prop('checked', false) // desmarcar todos os check - ainda analisar como irá reagir
-            tagifyEdit.removeAllTags()
-            $('#checkEditEstabelecimentosVinculados').empty()
-
-            var button = event.relatedTarget
-            var recipient = button.getAttribute('data-bs-whatever')
-            jQuery.ajax({
-                type: "POST",
-                url: '/produto/ajax-get-ingredientes',
-                data: {idIngrediente: recipient},
-                success: function(response) {
-                    $('#edit-nome').val(response.nome)
-                    $(`#edit-idIngrediente`).val(response._id)
-                    $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
-
-                    let estabelecimentosFiltrar = response.estabelecimentos.concat(response.estabelecimentosUsuario)
-                    function getUniqueListBy(array, key) {
-                        return [...new Map(array.map(item => [item[key], item])).values()]
-                    }
-                    const estabelecimentosFiltred = getUniqueListBy(estabelecimentosFiltrar, '_id')
-
-                    estabelecimentosFiltred.forEach(element => {
-                        if(response.estabelecimentos.some( vendor => vendor['_id'] === element._id ) == true){
-                            response.estabelecimentosUsuario.some( vendor => vendor['_id'] === element._id) == false ? hiddenBoolean = 'hidden' : hiddenBoolean =''
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" ${hiddenBoolean}>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}" checked readonly>
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }else{
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" disabled>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}"  >
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }
-                    }) 
-
-                    response.categoriasProdutos.forEach(element => {
-                        tagifyEdit.addTags([{value: element.nome, idCategoriaProduto: element._id}])
-                    })
+        var categoriasProdutos = {{{ categoriasProdutos }}};
+        $('input[type=radio][name=idEstabelecimento]').change(function() {
+            $('#radio-add-ingrediente-categoria').empty()
+            categoriasProdutos.forEach(element => {
+                if(element.idEstabelecimento._id == this.value){
+                    $('#radio-add-ingrediente-categoria').append(`
+                    <div class="form-check col-6 ">
+                        <input class="form-check-input" type="radio" name="idCategoriaProduto" id="${element._id}" value="${element._id}" required>
+                        <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                    </div>
+                    `)
                 }
-            });
-        })
-        
+            })
+        });
+
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
             $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));

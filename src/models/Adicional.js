@@ -10,13 +10,15 @@ const Adicional = new Schema({
     nome: String,
     valor: Number,
 
-    categoriasAdicionais: [{
-        idCategoriaAdicional: ObjectId
-    }],
+    idCategoriaAdicional: {
+        type: Schema.Types.ObjectId,
+        ref: "categoriaAdicionais",
+    },
 
-    estabelecimentos: [{
-        idEstabelecimento: ObjectId
-    }],
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
+    },
     
     statusAtivo: {
         type: Boolean,

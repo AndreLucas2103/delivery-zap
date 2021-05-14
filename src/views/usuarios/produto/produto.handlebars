@@ -71,7 +71,7 @@
                     </thead>
                     <tbody>
                         <form action="/produto/delete-produto-ingrediente" method="post">
-                        <input type="text" name="idEstabelecimento" value="{{produto._id}}" hidden>
+                        <input type="text" name="idProduto" value="{{produto._id}}" hidden>
                         {{#each produto.ingredientes}}
                         <tr>
                             <th >{{nome}}</th>
@@ -149,7 +149,8 @@
 
         <!-- infos a direita START --> 
         <div class="col-12 col-xl-8">
-
+            
+            <hr>
             <!-- Parte para os adicionais START --> 
             <div class="card card-body bg-white border-light shadow-sm mb-4">
                 <div class="h5">Adicionais 
@@ -173,13 +174,13 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form action="/produto/delete-produto-ingrediente" method="post">
-                        <input type="text" name="idEstabelecimento" value="{{produto._id}}" hidden>
+                        <form action="/produto/delete-produto-adicional" method="post">
+                        <input type="text" name="idProduto" value="{{produto._id}}" hidden>
                         {{#each produto.adicionais}}
                         <tr>
                             <th >{{nome}}</th>
                             <th class="valorFormatar">{{valor}}</th>
-                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectIngrediente" value="{{_id}}" style="font-size: small;">X</button></td>
+                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectAdicional" value="{{_id}}" style="font-size: small;">X</button></td>
                         </tr>
                         {{/each}}
                         </form>

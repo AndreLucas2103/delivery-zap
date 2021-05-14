@@ -41,27 +41,21 @@
     <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-adicional">+ Adicionar</button>
 
     <div class="row">
-        {{#each adiconais}}
-        <div class="col-12 col-lg-4 mb-4">
+        {{#each adicionais}}
+        <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">{{nome}} <span class="valorFormatar">{{valor}}</span></h2>
+                    <h2 class="h5 mb-0">{{nome}}</h2>
                     <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-adicional" data-bs-whatever="{{_id}}">Editar</a>
                 </div>
                 <div class="card-body">
                     <div style="font-size: small;">
-                        <span>Categorias:</span>
-                        {{#each categoriasAdicionais}}
-                            <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{nome}}</div>
-                        {{/each}}
+                        <i class="fas fa-tag"></i>
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaAdicional.nome}}</div>
                     </div>
-                    <hr>
-
                     <div style="font-size: small;">
                         <i class="fas fa-map-marker-alt text-danger"></i>
-                        {{#each estabelecimentos}}
-                            <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{nome}}</div>
-                        {{/each}}
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idEstabelecimento.nome}}</div>
                     </div>
                 </div>
             </div>
@@ -89,21 +83,17 @@
                         </div>
                     </div>
 
-                    <hr>
-                    <div class="row mt-4 mx-2">
-                        <h5>Categorias</h5>
-                        <input name='categoriasAdicionais' id="edit-categoriasAdicionais" class='tagify--outside' placeholder='Selecione as categorias' >
+                    <div class="mt-4">
+                        <span id="ajax-categoriaAdicional" class="ml-2"></span>
+                        <span id="ajax-estabelecimento" class="ml-4"></span>
                     </div>
-                    <hr>
-
-                    <div class="row mt-4 ml-2" id="checkEditEstabelecimentosVinculados">
-                        <i class="fas fa-map-marker-alt text-danger"></i>
-                    </div>
-
-                    <input type="text" name="idAdicional" id="edit-idAdicional" hidden  readonly>
+                    
+                    <input type="text" name="idAdicional" id="edit-idIngrediente" hidden  readonly>
+                    <input type="text" name="idCategoriaAdicional" id="edit-idCategoriaProduto" hidden  readonly>
+                    <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden  readonly>
 
                     <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm " >Salvar</button>
+                        <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
                         <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
                         
                         <div class="form-check form-switch float-end " style="font-size: small;">
@@ -119,89 +109,9 @@
     </div>
 
     <script>
-        
-    </script>
-
-    <!-- Modal add adicionais -->
-    <div class="modal fade" id="modal-add-adicional" tabindex="-1" aria-labelledby="modal-add-adicionalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
-            <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-adicionalLabel">Adicionar Categoria Adicionais</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/produto/add-adicionais" method="post">
-                    <div class="row">
-                        <div class="form-floating col-6">
-                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
-                            <label for="nome" class="ml-2">Nome</label>
-                        </div>
-                        <div class="form-floating col-6">
-                            <input type="number" class="form-control" id="valor" step=".01" name="valor" placeholder="-" required>
-                            <label for="valor" class="ml-2">Valor (R$)</label>
-                        </div>
-                    </div>
-
-                    <hr>
-                    <div class="row mt-4 mx-2">
-                        <h5>Categorias</h5>
-                        <input name='categoriasAdicionais' id="add-categoriasAdicionais" class='tagify--outside' placeholder='Selecione as categorias' >
-                    </div>
-                    <hr>
-
-                    <div class="row mt-4 ml-2">
-                        <h5>Estabelecimentos</h5>
-                        {{#each usuario.estabelecimentosVinculados}}
-                            <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="{{_id}}" value="{{_id}}">
-                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
-                            </div>
-                        {{/each}}
-                    </div>
-
-                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
-                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
-
-                </form>
-            </div>
-            </div>
-        </div>
-    </div>
-
-    <script> // script para adicionar categorias
-        var tagAdicionais = document.querySelector('input[id=add-categoriasAdicionais]')
-        var tagifyAdd = new Tagify(tagAdicionais, {
-            whitelist: [ {{#each categoriaAdicionais}} {'idCategoriaAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-            editTags: false,
-            dropdown: {
-                position: "input",
-                maxItems: Infinity,
-                closeOnSelect : false,
-                enabled : 0 // always opens dropdown when input gets focus
-            },
-            enforceWhitelist: true
-        })
-
-        var tagEditAdicionais = document.querySelector('input[id=edit-categoriasAdicionais]')
-        var tagifyEdit = new Tagify(tagEditAdicionais, {
-            whitelist: [ {{#each categoriaAdicionais}} {'idCategoriaAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-            editTags: false,
-            dropdown: {
-                position: "input",
-                maxItems: Infinity,
-                closeOnSelect : false,
-                enabled : 0 // always opens dropdown when input gets focus
-            },
-            enforceWhitelist: true
-        })      
-
-        var modalEditCategoria = document.getElementById('modal-edit-adicional')
-        modalEditCategoria.addEventListener('show.bs.modal', function (event) {
-            
-            $('.form-check-input').prop('checked', false) // desmarcar todos os check - ainda analisar como irá reagir
-            tagifyEdit.removeAllTags()
-            $('#checkEditEstabelecimentosVinculados').empty()
+        var modalEditAdicional= document.getElementById('modal-edit-adicional')
+        modalEditAdicional.addEventListener('show.bs.modal', function (event) {
+            $('.form-check-input').prop('checked', false)
 
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever')
@@ -212,43 +122,74 @@
                 success: function(response) {
                     $('#edit-nome').val(response.nome)
                     $('#edit-valor').val(response.valor)
-
-                    let estabelecimentosFiltrar = response.estabelecimentos.concat(response.estabelecimentosUsuario)
-                    function getUniqueListBy(array, key) {
-                        return [...new Map(array.map(item => [item[key], item])).values()]
-                    }
-                    const estabelecimentosFiltred = getUniqueListBy(estabelecimentosFiltrar, '_id')
-
-                    estabelecimentosFiltred.forEach(element => {
-                        if(response.estabelecimentos.some( vendor => vendor['_id'] === element._id ) == true){
-                            response.estabelecimentosUsuario.some( vendor => vendor['_id'] === element._id) == false ? hiddenBoolean = 'hidden' : hiddenBoolean =''
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" ${hiddenBoolean}>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}" checked readonly>
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }else{
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" disabled>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}"  >
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }
-                    }) 
-                    
-                    $(`#edit-idAdicional`).val(response._id)
                     $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
-                    response.estabelecimentos.forEach(element => {
-                        $(`#edit-adicional${element.idEstabelecimento}`).prop('checked', true)
-                    })
-                    response.categoriasAdicionais.forEach(element => {
-                        tagifyEdit.addTags([{value: element.nome, idCategoriaProduto: element._id}])
-                    })
+                    $('#edit-idIngrediente').val(response._id)
+                    $('#edit-idEstabelecimento').val(response.idEstabelecimento._id)
+                    $('#edit-idCategoriaProduto').val(response.idCategoriaAdicional._id)
+                    
+                    $(`#ajax-categoriaAdicional`).html(`<i class="fas fa-tag"></i> ${response.idCategoriaAdicional.nome}`)
+                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.idEstabelecimento.nome}`)
                 }
-            });
+            })
         })
+    </script>
+
+    <!-- Modal add adicionais -->
+    <div class="modal fade" id="modal-add-adicional" tabindex="-1" aria-labelledby="modal-add-adicionalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-adicionalLabel">Adicionar Adicional</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/add-adicionais" method="post">
+                    <div class="row">
+                        <div class="form-floating col">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                        <div class="form-floating col">
+                            <input type="number" class="form-control" id="valor" step=".01" name="valor" placeholder="-" required>
+                            <label for="valor" class="ml-2">Valor (R$)</label>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 ml-2">
+                        <h5>Estabelecimentos</h5>
+                        {{#each usuario.estabelecimentosVinculados}}
+                            <div class="form-check form-switch col-6">
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
+                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+                    <h5 class=" mt-4 ml-2">Categoria Adicional</h5>
+                    <div class="row  ml-2" id="radio-add-adicional-categoria"></div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
+                    <buttoype="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script> // script para adicionar categorias
+        var categoriasAdicionais = {{{ categoriasAdicionais }}};
+        $('input[type=radio][name=idEstabelecimento]').change(function() {
+            $('#radio-add-adicional-categoria').empty()
+            categoriasAdicionais.forEach(element => {
+                if(element.idEstabelecimento._id == this.value){
+                    $('#radio-add-adicional-categoria').append(`
+                    <div class="form-check col-6 ">
+                        <input class="form-check-input" type="radio" name="idCategoriaAdicional" id="${element._id}" value="${element._id}" required>
+                        <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                    </div>
+                    `)
+                }
+            })
+        });
         
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()

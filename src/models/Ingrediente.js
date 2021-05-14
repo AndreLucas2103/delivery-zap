@@ -9,13 +9,15 @@ const Schema = mongoose.Schema;
 const Ingrediente = new Schema({
     nome: String,
 
-    estabelecimentos: [{
-        idEstabelecimento: ObjectId
-    }],
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
+    },
 
-    categoriasProdutos: [{
-        idCategoriaProduto: ObjectId
-    }],
+    idCategoriaProduto: {
+        type: Schema.Types.ObjectId,
+        ref: "categoriaProdutos",
+    },
 
     statusAtivo: {
         type: Boolean,

@@ -21,31 +21,24 @@
 
     <div class="row">
         {{#each categorias}}
-        <div class="col-12 col-lg-4 mb-4">
-            <div class="card border-light shadow-sm">
-                <div class="card-header border-bottom border-light d-flex justify-content-between">
+        <div class="col-12 col-lg-3 mb-4 " {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
+            <div class="card border-light shadow-sm ">
+                <div class="card-header border-bottom border-light d-flex justify-content-between ">
                     <h2 class="h5 mb-0">{{nome}}</h2>
                     <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-editar-estabelecimento" data-bs-whatever="{{_id}}">Editar</a>
                 </div>
-                <div class="card-body">
-                    <ul class="list-group list-group-flush list my--3">
-                        {{#each estabelecimentos}}
+                <div class="card-body ">
+                    <ul class="list-group list-group-flush list my--3 ">
                         <li class="list-group-item px-0">
                             <div class="row align-items-center">
-                            <div class="col-auto">
-                                <!-- Avatar -->
-                                <a href="#" class="user-avatar">
-                                    <img class="rounded-circle" src="/img/perfil-avatar/svg/123.svg">
-                                </a>
-                            </div>
                             <div class="col-auto ml--2">
                                 <h4 class="h6 mb-0">
-                                    <a href="#">{{nome}}</a>
+                                    <i class="fas fa-map-marker-alt text-danger"></i>
+                                    <span >{{idEstabelecimento.nome}}</span>
                                 </h4>
                             </div>
                             </div>
                         </li>
-                        {{/each}}
                     </ul>
                 </div>
             </div>
@@ -66,12 +59,11 @@
                         <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-">
                         <label for="edit-nome" class="ml-2">Nome</label>
                     </div>
-                
-                    <div class="row mt-4 ml-2" id="checkEditEstabelecimentosVinculados">
-                        <h5>Estabelecimentos</h5>
-                    </div>
+
+                    <div id="ajax-estabelecimento" class="mt-4"></div>
 
                     <input type="text" name="idCategoriaProduto" id="edit-idCategoriaProduto" hidden readonly>
+                    <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden readonly>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
@@ -93,49 +85,19 @@
     <script>
         var modalEditCategoria = document.getElementById('modal-editar-estabelecimento')
         modalEditCategoria.addEventListener('show.bs.modal', function (event) {
-            $('#checkEditEstabelecimentosVinculados').empty()
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever')
+
             jQuery.ajax({
                 type: "POST",
                 url: '/produto/ajax-get-categoria-produtos',
                 data: {idCategoriaProduto: recipient},
                 success: function(response) {
-                    console.log(response)
                     $('#edit-nome').val(response.nome)
                     $('#edit-idCategoriaProduto').val(response._id)
+                    $('#edit-idEstabelecimento').val(response.idEstabelecimento._id)
                     $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
-
-                    let estabelecimentosFiltrar = response.estabelecimentos.concat(response.estabelecimentosUsuario)
-                    function getUniqueListBy(array, key) {
-                        return [...new Map(array.map(item => [item[key], item])).values()]
-                    }
-                    const estabelecimentosFiltred = getUniqueListBy(estabelecimentosFiltrar, '_id')
-
-                    console.log(estabelecimentosFiltred)
-
-                    estabelecimentosFiltred.forEach(element => {
-                        if(response.estabelecimentos.some( vendor => vendor['_id'] === element._id ) == true){
-                            response.estabelecimentosUsuario.some( vendor => vendor['_id'] === element._id) == false ? hiddenBoolean = 'hidden' : hiddenBoolean =''
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" ${hiddenBoolean}>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}" checked readonly>
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }else{
-                            $('#checkEditEstabelecimentosVinculados').append(`
-                            <div class="form-check form-switch col-6" disabled>
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="edit-adicional${element._id}" value="${element._id}"  >
-                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                            </div>
-                            `)
-                        }
-                    }) 
-
-                    response.estabelecimentos.forEach(element => {
-                        $(`#edit-categoria${element.idEstabelecimento}`).prop('checked', true)
-                    })
+                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.idEstabelecimento.nome}`)
                 }
             });
         })
@@ -160,7 +122,7 @@
                         <h5>Estabelecimentos</h5>
                         {{#each usuario.estabelecimentosVinculados}}
                             <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="checkbox" name="estabelecimentos[]" id="{{_id}}" value="{{_id}}">
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}">
                                 <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                             </div>
                         {{/each}}

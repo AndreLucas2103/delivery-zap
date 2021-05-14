@@ -87,7 +87,7 @@ router.get('/perfil', async(req, res) => {
         let adicionais = await Adicional.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
         let categoriasAdicional = await CategoriaAdicional.find({$and: [{'estabelecimentos.idEstabelecimento': userEstabelecimentos}, {statusAtivo:true}]}).lean()
 
-        console.log()
+        console.log(produto[0].ingredientes)
 
         res.render('usuarios/produto/produto', {
             produto: produto[0],
@@ -166,6 +166,36 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
         req.flash('warning_msg', 'Você deve selecionar pelo menos um adicional para adicionar')
         res.redirect('back')
     }
+})
+
+router.post('/delete-produto-ingrediente', (req, res) => {
+    console.log(req.body.idObjectIngrediente)
+    Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
+        {'_id': req.body.idProduto},
+        { $pull: {
+            'ingredientes': {idIngrediente: ObjectId(req.body.idObjectIngrediente)},
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Ingrediente removido')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/delete-produto-adicional', (req, res) => {
+    console.log(req.body.idObjectIngrediente)
+    Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
+        {'_id': req.body.idProduto},
+        { $pull: {
+            'adicionais': {idAdicional: ObjectId(req.body.idObjectAdicional)},
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Adicional removido')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
 })
 
 router.get('/produtos', (req, res ) => { // listo todos os produtos
@@ -285,183 +315,67 @@ router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categ
             userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
         })
 
-        let ingredientes = await Ingrediente.aggregate([
-            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentos.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentos"
-                    }
-            },
-            {
-                $lookup:
-                    {
-                        from: "categoriaprodutos",
-                        localField: "categoriasProdutos.idCategoriaProduto",
-                        foreignField: "_id",
-                        as: "categoriasProdutos"
-                    }
-            },
-            {$sort: {createdAt: -1}}
-        ])
+        let ingredientes = await Ingrediente.find({$and: [{idEstabelecimento: userEstabelecimentos}]}).populate('idEstabelecimento idCategoriaProduto').lean().sort({createdAt: -1})
+        let categoriasProdutos = await CategoriaProduto.find({$and: [{idEstabelecimento: userEstabelecimentos}, {statusAtivo: true}]}).populate('idEstabelecimento').lean()
 
-        let categoriasProdutos = await CategoriaProduto.find({$and: [{statusAtivo: true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
-
-        res.render('usuarios/produto/ingredientes', {usuario: usuario[0], ingredientes: ingredientes, categoriasProdutos: categoriasProdutos})
+        res.render('usuarios/produto/ingredientes', {
+            usuario: usuario[0], 
+            ingredientes: ingredientes, 
+            categoriasProdutos: JSON.stringify(categoriasProdutos)
+        })
 
     } catch (err) {
         console.log(err)
     }
 })
 
-router.post('/add-ingredientes', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    if(req.body.estabelecimentos){
-        if(req.body.categoriasProdutos){
-            new Ingrediente({nome: req.body.nome}).save().then((categoria) => {
-                let arrayEstabelecimentos = req.body.estabelecimentos
-                let arrayCategoriaProduto = JSON.parse(req.body.categoriasProdutos)
-        
-                arrayEstabelecimentos.forEach(element => {
-                    Ingrediente.updateOne(
-                        {_id: categoria._id},
-                        { $push: {
-                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                arrayCategoriaProduto.forEach(element => {
-                    Ingrediente.updateOne(
-                        {_id: categoria._id},
-                        { $push: {
-                            'categoriasProdutos': {'idCategoriaProduto': ObjectId(element.idCategoriaProduto)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-        
-                req.flash('success_msg', 'Categoria adicionada')
+router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    try {
+        let ingredienteExist = await Ingrediente.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaProduto: req.body.idCategoriaProduto}]})
+        if(ingredienteExist){
+            req.flash('warning_msg', 'Ingrediente já existe para essa categoria e estabelecimento')
+            res.redirect('back')
+        }else{
+            new Ingrediente({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento, idCategoriaProduto: req.body.idCategoriaProduto}).save().then((categoria) => {
+                req.flash('success_msg', 'Ingrediente adicionado')
                 res.redirect('back')
             })
-        }else{
-            req.flash('warning_msg', 'O adicional deve possuir pelo menos uma categoria')
-            res.redirect('back')
         }
-    }else{
-        req.flash('warning_msg', 'O adicional deve possuir pelo menos um estabelecimento')
-        res.redirect('back')
+    } catch (err) {
+        console.log(err)
     }
-    
 })
 
-router.post('/edit-ingredientes', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    let statusAtivo
-    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+router.post('/edit-ingredientes', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    try {
+        let ingredienteExist = await Ingrediente.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaProduto: req.body.idCategoriaProduto}]})
+        if(ingredienteExist && req.body.idIngrediente != ingredienteExist._id){
+            req.flash('warning_msg', 'Ingrediente já existe para essa categoria e estabelecimento')
+            res.redirect('back')
+        }else{
+            let statusAtivo
+            req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
 
-    if(req.body.estabelecimentos){
-        if(req.body.categoriasProdutos){
             Ingrediente.updateOne(
-                {_id: ObjectId(req.body.idIngrediente)},
-                {$set: {
-                    'nome': req.body.nome, categoriasProdutos: [], estabelecimentos: [], statusAtivo: statusAtivo
-                }}
+                {_id: req.body.idIngrediente},
+                { $set: 
+                    {'nome': req.body.nome, 'statusAtivo': statusAtivo}
+                }
             ).then(() => {
-
-                let arrayEstabelecimentos = req.body.estabelecimentos
-                let arrayCategoriaProduto = JSON.parse(req.body.categoriasProdutos)
-        
-                arrayEstabelecimentos.forEach(element => {
-                    Ingrediente.updateOne(
-                        {_id: ObjectId(req.body.idIngrediente)},
-                        { $push: {
-                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                arrayCategoriaProduto.forEach(element => {
-                    Ingrediente.updateOne(
-                        {_id: ObjectId(req.body.idIngrediente)},
-                        { $push: {
-                            'categoriasProdutos': {'idCategoriaProduto': ObjectId(element.idCategoriaProduto)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                setTimeout(() => {
-                    req.flash('success_msg', 'Ingrediente editado')
-                    res.redirect('back')
-                }, 1000)
+                req.flash('success_msg', 'Ingrediente editado')
+                res.redirect('back')
             }).catch(err => {
                 console.log(err)
             })
-
-        }else{
-            req.flash('warning_msg', 'O ingrediente deve possuir pelo menos uma categoria')
-            res.redirect('back')
         }
-    }else{
-        req.flash('warning_msg', 'O ingrediente deve possuir pelo menos um estabelecimento')
-        res.redirect('back')
+    } catch (err) {
+        console.log(err)
     }
 })
 
 router.post('/ajax-get-ingredientes', (req, res) => { // consulto pela rota  "/produto/adicionais" para poder pegar as informações e editar seus valores
-    Ingrediente.aggregate([
-        {$match: {_id: ObjectId(req.body.idIngrediente)}},
-        {
-            $lookup:
-                {
-                    from: "categoriaprodutos",
-                    localField: "categoriasProdutos.idCategoriaProduto",
-                    foreignField: "_id",
-                    as: "categoriasProdutos"
-                }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentos.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentos"
-                }
-        },
-        {
-            $addFields: {
-                estabelecimentosUsuario: req.user.estabelecimentosVinculados
-            }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosUsuario.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosUsuario"
-                }
-        }
-    ]).then(ingrediente => {
-        res.json(ingrediente[0])
+    Ingrediente.findById({_id: req.body.idIngrediente}).populate('idEstabelecimento idCategoriaProduto').then(ingrediente => {
+        res.json(ingrediente)
     }).catch(err => {
         console.log(err)
     })
@@ -490,182 +404,70 @@ router.get('/adicionais',eAdmin, async (req, res) => { // listo todas as categor
             userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
         })
 
-        let adiconais = await Adicional.aggregate([
-            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentos.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentos"
-                    }
-            },
-            {
-                $lookup:
-                    {
-                        from: "categoriaadicionais",
-                        localField: "categoriasAdicionais.idCategoriaAdicional",
-                        foreignField: "_id",
-                        as: "categoriasAdicionais"
-                    }
-            },
-            {$sort: {createdAt: -1}}
-        ])
+        let adicionais = await Adicional.find({$and: [{idEstabelecimento: userEstabelecimentos}]}).populate('idEstabelecimento idCategoriaAdicional').lean().sort({createdAt: -1})
+        let categoriasAdicionais = await CategoriaAdicional.find({$and: [{idEstabelecimento: userEstabelecimentos}, {statusAtivo: true}]}).populate('idEstabelecimento').lean()
 
-        let categoriaAdicionais = await CategoriaAdicional.find({$and: [{statusAtivo: true}, {'estabelecimentos.idEstabelecimento': userEstabelecimentos}]}).lean()
-
-        res.render('usuarios/produto/adicionais', {usuario: usuario[0], adiconais: adiconais, categoriaAdicionais: categoriaAdicionais})
+        res.render('usuarios/produto/adicionais', {
+            usuario: usuario[0], 
+            adicionais: adicionais, 
+            categoriasAdicionais: JSON.stringify(categoriasAdicionais)
+        })
 
     } catch (err) {
         console.log(err)
     }
 })
 
-router.post('/add-adicionais', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    if(req.body.estabelecimentos){
-        if(req.body.categoriasAdicionais){
-            new Adicional({nome: req.body.nome, valor: req.body.valor}).save().then((categoria) => {
-                let arrayEstabelecimentos = req.body.estabelecimentos
-                let arrayCategoriaAdicional = JSON.parse(req.body.categoriasAdicionais)
-        
-                arrayEstabelecimentos.forEach(element => {
-                    Adicional.updateOne(
-                        {_id: categoria._id},
-                        { $push: {
-                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                arrayCategoriaAdicional.forEach(element => {
-                    Adicional.updateOne(
-                        {_id: categoria._id},
-                        { $push: {
-                            'categoriasAdicionais': {'idCategoriaAdicional': ObjectId(element.idCategoriaAdicional)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                req.flash('success_msg', 'Adicional editado')
+router.post('/add-adicionais',async (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    try {
+        let adicionalExist = await Adicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaAdicional: req.body.idCategoriaAdicional}]})
+        if(adicionalExist){
+            req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
+            res.redirect('back')
+        }else{
+            new Adicional({nome: req.body.nome, valor: req.body.valor, idEstabelecimento: req.body.idEstabelecimento, idCategoriaAdicional: req.body.idCategoriaAdicional}).save().then((categoria) => {
+                req.flash('success_msg', 'Adicional adicionado')
                 res.redirect('back')
             })
-        }else{
-            req.flash('warning_msg', 'O adicional deve possuir pelo menos uma categoria')
-            res.redirect('back')
         }
-    }else{
-        req.flash('warning_msg', 'O adicional deve possuir pelo menos um estabelecimento')
-        res.redirect('back')
+    } catch (err) {
+        console.log(err)
     }
-    
 })
 
-router.post('/edit-adicionais', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    let statusAtivo
-    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+router.post('/edit-adicionais', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
+    try {
+        let adicionalExist = await Adicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaAdicional: req.body.idCategoriaAdicional}]})
+        if(adicionalExist && req.body.idAdicional != adicionalExist._id){
+            req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
+            res.redirect('back')
+        }else{
+            let statusAtivo
+            req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
 
-    if(req.body.estabelecimentos){
-        if(req.body.categoriasAdicionais){
             Adicional.updateOne(
-                {_id: ObjectId(req.body.idAdicional)},
-                {$set: {
-                    'nome': req.body.nome, 'valor': req.body.valor, categoriasAdicionais: [], estabelecimentos: [], statusAtivo: statusAtivo
-                }}
+                {_id: req.body.idAdicional},
+                { $set: 
+                    {'nome': req.body.nome, 'statusAtivo': statusAtivo, 'valor': req.body.valor}
+                }
             ).then(() => {
-
-                let arrayEstabelecimentos = req.body.estabelecimentos
-                let arrayCategoriaAdicional = JSON.parse(req.body.categoriasAdicionais)
-        
-                arrayEstabelecimentos.forEach(element => {
-                    Adicional.updateOne(
-                        {_id: ObjectId(req.body.idAdicional)},
-                        { $push: {
-                            'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                arrayCategoriaAdicional.forEach(element => {
-                    Adicional.updateOne(
-                        {_id: ObjectId(req.body.idAdicional)},
-                        { $push: {
-                            'categoriasAdicionais': {'idCategoriaAdicional': ObjectId(element.idCategoriaAdicional)},
-                        }}
-                    ).then(() => {
-                        
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                })
-
-                setTimeout(() => {
-                    req.flash('success_msg', 'Categoria adicionada')
-                    res.redirect('back')
-                }, 1000)
+                req.flash('success_msg', 'Adicional editado')
+                res.redirect('back')
             }).catch(err => {
                 console.log(err)
             })
-
-        }else{
-            req.flash('warning_msg', 'O adicional deve possuir pelo menos uma categoria')
-            res.redirect('back')
         }
-    }else{
-        req.flash('warning_msg', 'O adicional deve possuir pelo menos um estabelecimento')
-        res.redirect('back')
+    } catch (err) {
+        console.log(err)
     }
 })
 
 router.post('/ajax-get-adicionais', (req, res) => { // consulto pela rota  "/produto/adicionais" para poder pegar as informações e editar seus valores
-    Adicional.aggregate([
-        {$match: {_id: ObjectId(req.body.idAdicional)}},
-        {
-            $lookup:
-                {
-                    from: "categoriaadicionais",
-                    localField: "categoriasAdicionais.idCategoriaAdicional",
-                    foreignField: "_id",
-                    as: "categoriasAdicionais"
-                }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentos.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentos"
-                }
-        },
-        {
-            $addFields: {
-                estabelecimentosUsuario: req.user.estabelecimentosVinculados
-            }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosUsuario.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosUsuario"
-                }
-        }
-    ]).then(adicional => {
-        res.json(adicional[0])
+    Adicional.findById({_id: req.body.idAdicional}).populate('idEstabelecimento idCategoriaAdicional').then(adicional => {
+        
+        console.log(adicional)
+        res.json(adicional)
+        
     }).catch(err => {
         console.log(err)
     })
@@ -695,118 +497,63 @@ router.get('/categoria-adicionais',eAdmin, async (req, res) => { // listo todas 
             userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
         })
 
-        let categorias = await CategoriaAdicional.aggregate([
-            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentos.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentos"
-                    }
-            }
-        ])
-        
-        res.render('usuarios/produto/categoria-adicionais', {usuario: usuario[0], categorias: categorias})
+        let categorias = await CategoriaAdicional.find({idEstabelecimento: userEstabelecimentos}).populate('idEstabelecimento').lean().sort({createdAt: -1})
 
+        res.render('usuarios/produto/categoria-adicionais', {usuario: usuario[0], categorias: categorias})
     } catch (err) {
         console.log(err)
     }
 })
 
-router.post('/add-categoria-adicionais', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    if(req.body.estabelecimentos){
-        new CategoriaAdicional({nome: req.body.nome}).save().then((categoria) => {
-            let arrayEstabelecimentos = req.body.estabelecimentos
-    
-            arrayEstabelecimentos.forEach(element => {
-                CategoriaAdicional.updateOne(
-                    {_id: categoria._id},
-                    { $push: {
-                        'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                    }}
-                ).then(() => {
-                    
-                }).catch(err => {
-                    console.log(err)
-                })
-            })
-    
-            req.flash('success_msg', 'Categoria adicionada')
+router.post('/add-categoria-adicionais', async (req, res) => { 
+    try {
+        let categoriaProdutoExist = await CategoriaAdicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}]})
+        if(categoriaProdutoExist){
+            req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
-        })
-    }else{
-        req.flash('warning_msg', 'Ao adicionar uma categoria ela deve possui pelo menos UM estabelecimento')
-        res.redirect('back')
+        }else{
+            new CategoriaAdicional({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento}).save().then((categoria) => {
+                req.flash('success_msg', 'Categoria adicionada')
+                res.redirect('back')
+            })
+        }
+    } catch (err) {
+        console.log(err)
     }
 })
 
-router.post('/edit-categoria-adicionais', (req, res) => { // rota para editar 
-    let statusAtivo
-    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
-    let arrayEstabelecimentos = req.body.estabelecimentos
+router.post('/edit-categoria-adicionais', async (req, res) => { // rota para editar 
+    try {
+        let categoriaAdicionalExist = await CategoriaAdicional.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}]})
+        if(categoriaAdicionalExist && req.body.idCategoriaAdicional != categoriaAdicionalExist._id){
+            req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
+            res.redirect('back')
+        }else{
+            let statusAtivo
+            req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
 
-    if(!arrayEstabelecimentos){
-        req.flash('warning_msg', 'Ao editar uma categoria ela deve possui pelo menos UM estabelecimento')
-        res.redirect('back')
-    }else{
-        CategoriaAdicional.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
-            {_id: req.body.idCategoriaAdicional},
-            { $set: 
-                {'estabelecimentos': [], 'nome': req.body.nome, 'statusAtivo': statusAtivo}
-            }
-        ).then(() => {
-            arrayEstabelecimentos.forEach(element => {
-                CategoriaAdicional.updateOne(
-                    {_id: req.body.idCategoriaAdicional},
-                    { $push: 
-                        {'estabelecimentos': {'idEstabelecimento': ObjectId(element)}}
-                    }
-                ).then(() => {
-                    
-                }).catch(err => {
-                    console.log(err)
-                })
-            })
-            setTimeout(() => {
-                req.flash('success_msg', 'Categoria adicionada')
+            CategoriaAdicional.updateOne(
+                {_id: req.body.idCategoriaAdicional},
+                { $set: 
+                    {'nome': req.body.nome, 'statusAtivo': statusAtivo}
+                }
+            ).then(() => {
+                req.flash('success_msg', 'Categoria editada')
                 res.redirect('back')
-            }, 1000)
-        }).catch(err => {
-            console.log(err)
-        })
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    } catch (err) {
+        console.log(err)
     }
 })
 
 router.post('/ajax-get-categoria-adicionais', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    CategoriaAdicional.aggregate([
-        {$match: {_id: ObjectId(req.body.idCategoriaAdicional)}},
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentos.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentos"
-                }
-        },
-        {
-            $addFields: {
-                estabelecimentosUsuario: req.user.estabelecimentosVinculados
-            }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosUsuario.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosUsuario"
-                }
-        }
-    ]).then(categoria => {
-        res.json(categoria[0])
+    CategoriaAdicional.findById({_id: req.body.idCategoriaAdicional}).populate('idEstabelecimento').then(produto => {
+        res.json(produto)
+    }).catch(err => {
+        console.log(err)
     })
 })
 
@@ -830,127 +577,67 @@ router.get('/categoria-produtos',eAdmin, async (req, res) => { // listo todas as
         ])
 
         let userEstabelecimentos = []
-
         usuario[0].estabelecimentosVinculados.forEach(element => { // alterar para usuario logado
             userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
         })
 
-        let categorias = await CategoriaProduto.aggregate([
-            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentos.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentos"
-                    }
-            }
-        ])
-        
-        //res.json(usuario)
-        res.render('usuarios/produto/categoria-produtos', {usuario: usuario[0], categorias: categorias})
+        let categorias = await CategoriaProduto.find({idEstabelecimento: userEstabelecimentos}).populate('idEstabelecimento').lean().sort({createdAt: -1})
 
+        res.render('usuarios/produto/categoria-produtos', {usuario: usuario[0], categorias: categorias})
     } catch (err) {
         console.log(err)
     }
 })
 
-router.post('/add-categoria-produtos', (req, res) => { // adiciono a categoria com todos os estabelecimentos
-    if(req.body.estabelecimentos){
-        new CategoriaProduto({nome: req.body.nome}).save().then((categoria) => {
-            let arrayEstabelecimentos = req.body.estabelecimentos
-    
-            arrayEstabelecimentos.forEach(element => {
-                CategoriaProduto.updateOne(
-                    {_id: categoria._id},
-                    { $push: {
-                        'estabelecimentos': {'idEstabelecimento': ObjectId(element)},
-                    }}
-                ).then(() => {
-                    
-                }).catch(err => {
-                    console.log(err)
-                })
-            })
-    
-            req.flash('success_msg', 'Categoria adicionada')
+router.post('/add-categoria-produtos', async (req, res) => { // 
+    try {
+        let categoriaProdutoExist = await CategoriaProduto.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}]})
+        if(categoriaProdutoExist){
+            req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
-        })
-    }else{
-        req.flash('warning_msg', 'Ao adicionar uma categoria ela deve possui pelo menos UM estabelecimento')
-        res.redirect('back')
+        }else{
+            new CategoriaProduto({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento}).save().then((categoria) => {
+                req.flash('success_msg', 'Categoria adicionada')
+                res.redirect('back')
+            })
+        }
+    } catch (err) {
+        console.log(err)
     }
-    
 })
 
-router.post('/edit-categoria-produtos', (req, res) => { // rota para editar 
-    let statusAtivo
-    req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
-
-    let arrayEstabelecimentos = req.body.estabelecimentos
-
-    if(!arrayEstabelecimentos){
-        req.flash('warning_msg', 'Ao editar uma categoria ela deve possui pelo menos UM estabelecimento')
-        res.redirect('back')
-    }else{
-        CategoriaProduto.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
-            {_id: req.body.idCategoriaProduto},
-            { $set: 
-                {'estabelecimentos': [], 'nome': req.body.nome, 'statusAtivo': statusAtivo}
-            }
-        ).then(() => {
-            arrayEstabelecimentos.forEach(element => {
-                CategoriaProduto.updateOne(
-                    {_id: req.body.idCategoriaProduto},
-                    { $push: 
-                        {'estabelecimentos': {'idEstabelecimento': ObjectId(element)}}
-                    }
-                ).then(() => {
-                    
-                }).catch(err => {
-                    console.log(err)
-                })
-            })
-        }).catch(err => {
-            console.log(err)
-        })
-
-        setTimeout(() => {
-            req.flash('success_msg', 'Categoria adicionada')
+router.post('/edit-categoria-produtos', async (req, res) => { // rota para editar 
+    try {
+        let categoriaProdutoExist = await CategoriaProduto.findOne({$and: [{nome: req.body.nome}, {'idEstabelecimento': req.body.idEstabelecimento}]})
+        if(categoriaProdutoExist && req.body.idCategoriaProduto != categoriaProdutoExist._id){
+            req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
-        }, 1000)
+        }else{
+            let statusAtivo
+            req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+
+            CategoriaProduto.updateOne(
+                {_id: req.body.idCategoriaProduto},
+                { $set: 
+                    {'nome': req.body.nome, 'statusAtivo': statusAtivo}
+                }
+            ).then(() => {
+                req.flash('success_msg', 'Categoria editada')
+                res.redirect('back')
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+    } catch (err) {
+        console.log(err)
     }
 })
 
 router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    CategoriaProduto.aggregate([
-        {$match: {_id: ObjectId(req.body.idCategoriaProduto)}},
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentos.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentos"
-                }
-        },
-        {
-            $addFields: {
-                estabelecimentosUsuario: req.user.estabelecimentosVinculados
-            }
-        },
-        {
-            $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosUsuario.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosUsuario"
-                }
-        }
-    ]).then(categoria => {
-        res.json(categoria[0])
+    CategoriaProduto.findById({_id: req.body.idCategoriaProduto}).populate('idEstabelecimento').then(produto => {
+        res.json(produto)
+    }).catch(err => {
+        console.log(err)
     })
 })
 

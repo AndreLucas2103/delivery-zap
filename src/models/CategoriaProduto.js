@@ -9,9 +9,10 @@ const Schema = mongoose.Schema;
 const CategoriaProduto = new Schema({
     nome: String,
 
-    estabelecimentos: [{
-        idEstabelecimento: ObjectId
-    }],
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
+    },
 
     statusAtivo: {
         type: Boolean,
