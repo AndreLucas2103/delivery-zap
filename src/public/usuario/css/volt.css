@@ -33648,6 +33648,14 @@ label {
     min-width: 4.5rem;
 }
 
+.user-avatar.smart-avatar {
+    border: 2px solid #ffffff;
+    height: 5rem;
+    width: 5rem;
+    min-height: 5rem;
+    min-width: 5rem;
+}
+
 .user-avatar.large-avatar {
     border: 2px solid #ffffff;
     height: 10rem;

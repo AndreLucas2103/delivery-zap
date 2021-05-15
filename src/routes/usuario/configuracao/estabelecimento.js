@@ -206,7 +206,9 @@ router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
     }
 })
 
-
+router.get('/painel',eAdmin, (req, res) => {
+    res.render('usuarios/configuracao/paineldevendas', {})
+})
 
 
 module.exports = router;
