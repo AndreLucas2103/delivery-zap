@@ -35,9 +35,17 @@ const Usuario = new Schema({
     },
     identificaouuidv4: String,
 
-    estabelecimentoSelecionado: ObjectId,
+    estabelecimentosSelecionados: [{
+        idEstabelecimento: {
+            type: Schema.Types.ObjectId,
+            ref: "estabelecimentos",
+        },
+    }],
     estabelecimentosVinculados: [{
-        idEstabelecimento: ObjectId,
+        idEstabelecimento: {
+            type: Schema.Types.ObjectId,
+            ref: "estabelecimentos",
+        },
     }],
 
     observacao: String,

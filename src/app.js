@@ -36,11 +36,42 @@ app.use((req, res, next) => {
     next();
 })
 
-app.use(function (req, res, next) {
-    if (req.user) {
-        res.locals.usuarioLogado = req.user.toObject();
+
+
+app.use(async function (req, res, next) {
+    require("./models/Usuario")
+    const Usuario = mongoose.model("usuarios")
+
+    try {
+        if (req.user) {
+            let usuario = await Usuario.aggregate([
+                { $match: { _id: req.user._id} },
+                {
+                    $lookup:
+                        {
+                            from: "estabelecimentos",
+                            localField: "estabelecimentosVinculados.idEstabelecimento",
+                            foreignField: "_id",
+                            as: "estabelecimentosVinculados"
+                        }
+                },
+                {
+                    $lookup:
+                        {
+                            from: "estabelecimentos",
+                            localField: "estabelecimentosSelecionados.idEstabelecimento",
+                            foreignField: "_id",
+                            as: "estabelecimentosSelecionados"
+                        }
+                }
+            ])
+
+            res.locals.usuarioLogado = usuario[0];
+        }
+        next();
+    } catch (err) {
+        console.log(err)
     }
-    next();
 });
 
 

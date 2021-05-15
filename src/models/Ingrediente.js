@@ -14,10 +14,12 @@ const Ingrediente = new Schema({
         ref: "estabelecimentos",
     },
 
-    idCategoriaProduto: {
-        type: Schema.Types.ObjectId,
-        ref: "categoriaProdutos",
-    },
+    categoriasProdutos: [{
+        idCategoriaProduto: {
+            type: Schema.Types.ObjectId,
+            ref: "categoriaProdutos",
+        }
+    }],
 
     statusAtivo: {
         type: Boolean,

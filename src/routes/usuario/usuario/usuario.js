@@ -241,6 +241,39 @@ router.post('/trocar-senha', async (req, res) => {
     })
 })
 
+router.post('/edit-estabelecimentosSelecionados', (req, res) => {
+    if(req.body.estabelecimentosSelecionados){
+        Usuario.updateOne(
+            {_id: req.user._id},
+            {
+                $set: {'estabelecimentosSelecionados': []},
+            }
+        ).then(() => {
+            let arrayEstabelecimentos = JSON.parse(req.body.estabelecimentosSelecionados)
+            arrayEstabelecimentos.forEach(element => {
+                Usuario.updateOne(
+                    {_id: req.user._id},
+                    { $push: {
+                        'estabelecimentosSelecionados': {'idEstabelecimento': ObjectId(element.idEstabelecimento)},
+                    }}
+                ).then(() => {
+                    
+                }).catch(err => {
+                    console.log(err)
+                })
+            })
+    
+            setTimeout(() => {
+                req.flash('success_msg', 'Estabelecimentos selecionados editado')
+                res.redirect('back')
+            }, 2000)
+        })
+    }else{
+        req.flash('error_msg', 'Selecione ao menos UM estabelecimento')
+        res.redirect('back')
+    }
+})
+
 //Rota para quando o usuário não tiver permissão para acessar
 router.get('/bloqueado', (req, res) => {
     res.render('usuarios/usuario/bloqueado')

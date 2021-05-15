@@ -28,18 +28,18 @@
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">{{nome}}</h2>
-                    <form action="/produto/perfil" method="get">
-                        <button type="submit" class="btn btn-sm btn-secondary" name="produto" value="{{_id}}">Ver</button>
-                    </form>
+                    <a type="submit" class="btn btn-sm btn-secondary" href="/produto/perfil?produto={{_id}}">Ver</a>
                 </div>
                 <div class="card-body">
-                    <div style="font-size: x-small;" class="text-center">
-                        <i class="fas fa-map-marker-alt text-danger"></i><span> {{idEstabelecimento.nome}}</span>
-                    </div>
-                    <div style="font-size: x-small;" class="text-center">
-                        <span>Categoria: {{idCategoriaProduto.nome}}</span>
-                    </div>
                     <h5 class="mt-2 text-center valorFormatar">{{valor}}</h5>
+                    <div style="font-size: small;">
+                        <i class="fas fa-tag"></i>
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaProduto.nome}}</div>
+                    </div>
+                    <div style="font-size: small;">
+                        <i class="fas fa-map-marker-alt text-danger"></i>
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idEstabelecimento.nome}}</div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -71,27 +71,18 @@
                         <label for="descricao" class="form-label">Descrição</label>
                     </div>
 
-                    <hr class="w-25 ">
-                    <div class="row mt-4 ml-2">
-                        <h5>Categoria <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente uma categoria" style="font-size: small;"></i></h5>
-                        {{#each categorias}}
-                            <div class="form-check col-6">
-                                <input class="form-check-input" type="radio" name="categoria" id="{{_id}}" value="{{_id}}" required>
-                                <label class="form-check-label" for="{{_id}}">{{nome}} </label>
-                            </div>
-                        {{/each}}
-                    </div>
-
-                    <hr class="w-25 ">
-                    <div class="row mt-4 ml-2">
-                        <h5>Estabelecimento <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente um estabelecimento" style="font-size: small;"></i></h5>
+                    <h5 class="mt-4 ml-2">Estabelecimentos</h5>
+                    <div class="row  ml-2">
                         {{#each estabelecimentos}}
                             <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="radio" name="estabelecimento" id="{{_id}}" value="{{_id}}" required>
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
                                 <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                             </div>
                         {{/each}}
                     </div>
+                    
+                    <h5 class="mt-4 ml-2">Categoria Produto</h5>
+                    <div class="row  ml-2" id="radio-add-produto-categoria-produto"></div>
 
                     <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
                     <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
@@ -104,16 +95,26 @@
     <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
+        var categoriasProdutos = {{{ categoriasProdutos }}};
+        $('input[type=radio][name=idEstabelecimento]').change(function() {
+            $('#radio-add-produto-categoria-produto').empty()
+            categoriasProdutos.forEach(element => {
+                if(element.idEstabelecimento._id == this.value){
+                    $('#radio-add-produto-categoria-produto').append(`
+                    <div class="form-check col-6 ">
+                        <input class="form-check-input" type="radio" name="idCategoriaProduto" id="${element._id}" value="${element._id}" required>
+                        <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                    </div>
+                    `)
+                }
+            })
+        });
+        
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
             $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
         }) 
 
-        // script para puxas os tooltips "as informações de I no icone azul kk"
-        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
-        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
-            return new bootstrap.Tooltip(tooltipTriggerEl)
-        })
     </script>
 
 </main>

@@ -34,7 +34,9 @@
                 <div class="card-body">
                     <div style="font-size: small;">
                         <i class="fas fa-tag"></i>
+                        {{#each categoriasProdutos}}
                         <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaProduto.nome}}</div>
+                        {{/each}}
                     </div>
                     <div style="font-size: small;">
                         <i class="fas fa-map-marker-alt text-danger"></i>
@@ -63,12 +65,13 @@
                         </div>
                     </div>
                     <div class="mt-4">
-                        <span id="ajax-categoriaProduto" class="ml-2"></span>
                         <span id="ajax-estabelecimento" class="ml-4"></span>
                     </div>
+
+                    <h5 class=" mt-4 ml-2">Categoria Produto</h5>
+                    <div class="row  ml-2" id="radio-edit-ingrediente-categoria"></div>
                     
                     <input type="text" name="idIngrediente" id="edit-idIngrediente" hidden  readonly>
-                    <input type="text" name="idCategoriaProduto" id="edit-idCategoriaProduto" hidden  readonly>
                     <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden  readonly>
 
                     <div class="mt-4">
@@ -92,6 +95,7 @@
         var modalEditIngrediente = document.getElementById('modal-edit-ingredientes')
         modalEditIngrediente.addEventListener('show.bs.modal', function (event) {
             $('.form-check-input').prop('checked', false)
+            $('#radio-edit-ingrediente-categoria').empty()
 
             var button = event.relatedTarget
             var recipient = button.getAttribute('data-bs-whatever')
@@ -100,13 +104,27 @@
                 url: '/produto/ajax-get-ingredientes',
                 data: {idIngrediente: recipient},
                 success: function(response) {
-                    $('#edit-nome').val(response.nome)
-                    $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
-                    $('#edit-idIngrediente').val(response._id)
-                    $('#edit-idEstabelecimento').val(response.idEstabelecimento._id)
-                    $('#edit-idCategoriaProduto').val(response.idCategoriaProduto._id)
-                    $(`#ajax-categoriaProduto`).html(`<i class="fas fa-tag"></i> ${response.idCategoriaProduto.nome}`)
-                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.idEstabelecimento.nome}`)
+                    $('#edit-nome').val(response.ingrediente.nome)
+                    $(`#edit-statusAtivo`).prop('checked', response.ingrediente.statusAtivo)
+                    $('#edit-idIngrediente').val(response.ingrediente._id)
+                    $('#edit-idEstabelecimento').val(response.ingrediente.idEstabelecimento._id)
+
+                    response.categoriasProdutos.forEach(element => {
+                        let checkedCategoria
+                        if(response.ingrediente.categoriasProdutos.findIndex(elementArray => elementArray.idCategoriaProduto._id == element._id) != -1){
+                            checkedCategoria = 'checked'
+                        }else{
+                            checkedCategoria = ''
+                        }
+                        $('#radio-edit-ingrediente-categoria').append(`
+                        <div class="form-check form-switch col-6 ">
+                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="edit-categoria${element._id}" value="${element._id}" ${checkedCategoria}>
+                            <label class="form-check-label" for="edit-categoria${element._id}">${element.nome}</label>
+                        </div>
+                        `)
+                    })
+
+                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.ingrediente.idEstabelecimento.nome}`)
                 }
             })
         })
@@ -131,7 +149,7 @@
 
                     <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
-                        {{#each usuario.estabelecimentosVinculados}}
+                        {{#each usuarioLogado.estabelecimentosSelecionados}}
                             <div class="form-check form-switch col-6">
                                 <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
                                 <label class="form-check-label" for="{{_id}}">{{nome}}</label>
@@ -158,8 +176,8 @@
             categoriasProdutos.forEach(element => {
                 if(element.idEstabelecimento._id == this.value){
                     $('#radio-add-ingrediente-categoria').append(`
-                    <div class="form-check col-6 ">
-                        <input class="form-check-input" type="radio" name="idCategoriaProduto" id="${element._id}" value="${element._id}" required>
+                    <div class="form-check form-switch col-6 ">
+                        <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="${element._id}" value="${element._id}" >
                         <label class="form-check-label" for="${element._id}">${element.nome}</label>
                     </div>
                     `)

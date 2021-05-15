@@ -78,14 +78,11 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                             new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
                                 editUsuario = {
                                     idEstabelecimento: estabelecimento._id,
-                                    cnpj: estabelecimento.cnpj,
-                                    nome: estabelecimento.nome,
-                                    url: estabelecimento.url
                                 }
                                 Usuario.updateOne(
                                     { '_id': usuarioEdit._id },
                                     {
-                                        $push: { "estabelecimentosVinculados": editUsuario },
+                                        $push: { "estabelecimentosVinculados": editUsuario, 'estabelecimentosSelecionados': editUsuario },
                                         $set: { "idUsuarioMaster": usuarioEdit._id }
                                     }
                                 ).then(e => {
