@@ -1,51 +1,63 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+/* The device with borders */
+.smartphone {
+  position: relative;
+  width: 360px;
+  height: 640px;
+  margin: auto;
+  border: 16px black solid;
+  border-top-width: 60px;
+  border-bottom-width: 60px;
+  border-radius: 36px;
+}
 
+/* The horizontal line on the top of the device */
+.smartphone:before {
+  content: '';
+  display: block;
+  width: 60px;
+  height: 5px;
+  position: absolute;
+  top: -30px;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 10px;
+}
 
+/* The circle on the bottom of the device */
+.smartphone:after {
+  content: '';
+  display: block;
+  width: 35px;
+  height: 35px;
+  position: absolute;
+  left: 50%;
+  bottom: -65px;
+  transform: translate(-50%, -50%);
+  background: #333;
+  border-radius: 50%;
+}
 
-<form action="" method="get">
-  <input name='tags' placeholder='write some tags' value='1'>
-  <button type="submit">as</button>
-</form>
+/* The screen (or content) of the device */
+.smartphone .content {
+  width: 360px;
+  height: 640px;
+  background: white;
+}
+</style>
+</head>
+<body>
 
-<script>
+<div class="smartphone">
+  <div class="content" style="width:100%;border:none;height:100%">
+    
+  </div>
+</div>
 
-  var whitelist = [{ "id": 1, "value": 1, "name": "foo bar" }, { "id": 2, "value": 2, "name": "foo bar" }]
-
-  var input = document.querySelector('input[name=tags]');
-
-  // init Tagify script on the above inputs
-  var tagify = new Tagify(input, {
-    whitelist: whitelist,
-    dropdown: {
-      position: "manual",
-      maxItems: Infinity,
-      enabled: 0,
-      classname: "customSuggestionsList"
-    },
-    enforceWhitelist: true
-  })
-
-  tagify.on("dropdown:show", onSuggestionsListUpdate)
-    .on("dropdown:hide", onSuggestionsListHide)
-    .on('dropdown:scroll', onDropdownScroll)
-
-  renderSuggestionsList()
-
-  // ES2015 argument destructuring
-  function onSuggestionsListUpdate({ detail: suggestionsElm }) {
-    console.log(suggestionsElm)
-  }
-
-  function onSuggestionsListHide() {
-    console.log("hide dropdown")
-  }
-
-  function onDropdownScroll(e) {
-    console.log(e.detail)
-  }
-
-  // https://developer.mozilla.org/en-US/docs/Web/API/Element/insertAdjacentElement
-  function renderSuggestionsList() {
-    tagify.dropdown.show.call(tagify) // load the list
-    tagify.DOM.scope.parentNode.appendChild(tagify.DOM.dropdown)
-  }
-</script>
+</body>
+</html>
