@@ -1,3 +1,24 @@
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+<style>
+    .tagify--outside{
+        border: 0;
+    }
+
+    .tagify--outside .tagify__input{
+        order: 1;
+        flex: 100%;
+        border: 1px solid var(--tags-border-color);
+        transition: .1s;
+    }
+
+    .tagify--outside .tagify__input:hover{ border-color:var(--tags-hover-border-color); }
+    .tagify--outside.tagify--focus .tagify__input{
+        transition:0s;
+        border-color: var(--tags-focus-border-color);
+    }
+</style>
+
 <nav id="sidebarMenu" class="sidebar d-md-block bg-primary text-white collapse" data-simplebar>
     <div class="sidebar-inner px-3 pt-4">
         <!-- menu para mobile -->
@@ -136,6 +157,45 @@
                         </div>
                     </div>
                 </li> --> 
+
+                <li class="nav-item dropdown">
+                    <i class="fas fa-store mr-4" data-bs-toggle="modal" data-bs-target="#modal-estabelecimentosSelecionados" style="cursor: pointer;"></i>
+                </li> 
+
+                <!-- Modal estabelecimentosSelecionados START-->
+                <div class="modal fade" id="modal-estabelecimentosSelecionados" tabindex="-1" aria-labelledby="modal-estabelecimentosSelecionadosLabel" aria-hidden="true">
+                    <div class="modal-dialog">
+                        <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="modal-estabelecimentosSelecionadosLabel">Estabelecimentos Selecionados</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <h6>Selecione os estabelecimentos que deseja filtrar nas paginas</h6>
+                            <form action="/usuario/edit-estabelecimentosSelecionados" method="post">
+                                <input  class='tagify--outside' name="estabelecimentosSelecionados" id="estabelecimentosSelecionados">
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                            </form>
+                        </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var tagestabelecimentosSelecionados = document.querySelector('input[id=estabelecimentosSelecionados]')
+                        var tagifyestabelecimentosSelecionados = new Tagify(tagestabelecimentosSelecionados, {
+                            whitelist: [ {{#each usuarioLogado.estabelecimentosVinculados}} {'idEstabelecimento': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                            editTags: false,
+                            dropdown: {
+                                position: "input",
+                                maxItems: Infinity,
+                                closeOnSelect : false,
+                                enabled : 0 // always opens dropdown when input gets focus
+                            },
+                        })
+                        tagifyestabelecimentosSelecionados.addTags([{{#each usuarioLogado.estabelecimentosSelecionados}} {'idEstabelecimento': '{{_id}}', value: '{{nome}}' },  {{/each}}])
+                    </script>
+                </div>
+                <!-- Modal estabelecimentosSelecionados END-->
                 
                 <li class="nav-item dropdown">
                     <a class="nav-link pt-1 px-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

@@ -49,38 +49,22 @@
                     <button type="button" class="btn btn-secondary btn-sm mb-4  " data-bs-toggle="modal" data-bs-target="#modal-edit-produto">Editar Produto</button>
                     <h4 class="">{{produto.nome}}</h4>
                     <h5 class="valorFormatar">{{produto.valor}}</h5>
+                    <h6><i class="fas fa-tag"></i> {{produto.idCategoriaProduto.nome}}</h6>
                     <h6><i class="fas fa-map-marker-alt text-danger"></i> {{produto.idEstabelecimento.nome}}</h6>
-                    <h6>Categoria: {{produto.idCategoriaProduto.nome}}</h6>
-                    <p class="fw-light">{{produto.descricao}}</p>
+                    <p class="fw-light">Descrição: {{produto.descricao}}</p>
                 </div>
             </div>
 
             <!-- Parte para os ingredientes START --> 
             <div class="card border-light text-center p-0 mt-4  mb-4">
                 <div class="h5 mt-4">Ingredientes 
-                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Adicionar</button>
+                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Editar</button>
                 </div>
-
-                <div class="table-responsive">
-                <table class="table">
-                    <thead>
-                        <tr>
-                            <th scope="col">Ingrendiente</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <form action="/produto/delete-produto-ingrediente" method="post">
-                        <input type="text" name="idProduto" value="{{produto._id}}" hidden>
-                        {{#each produto.ingredientes}}
-                        <tr>
-                            <th >{{nome}}</th>
-                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectIngrediente" value="{{_id}}" style="font-size: small;">X</button></td>
-                        </tr>
-                        {{/each}}
-                        </form>
-                    </tbody>
-                </table>
+                
+                <div class="card-body">
+                    {{#each produto.ingredientes}}
+                        <div class="btn btn-light btn-sm " style="font-size: small;">{{nome}}</div>
+                    {{/each}}
                 </div>
 
                 <!-- Modal add ingredientes START-->
@@ -92,18 +76,12 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <label for="categoria-produto" class="form-label">Categoria do ingrediente</label>
-                            <select name="categoria-produto" id="categoria-produto">
-                                <option value="">Todos</option>
-                                {{#each categoriasProdutos}} <option value="{{_id}}">{{nome}}</option>{{/each}}
-                            </select>
-
-                            
+                            <h6>Somente ingredientes vinculados a categoria do produto serão exibidos</h6>
                             <form action="/produto/add-produto-ingrediente" method="post">
                                 <input  class='tagify--outside' name="idIngredientes" id="add-ingredientes">
 
                                 <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
                             </form>
                         </div>
                         </div>
@@ -122,28 +100,12 @@
                             },
                         })
                         tagifyAddIngrediente.addTags([{{#each produto.ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}}])
-                        
-                        $('#categoria-produto').change(() => {
-                            tagifyAddIngrediente.settings.whitelist.length = 0;
-                            tagifyAddIngrediente.loading(true)
-                            jQuery.ajax({
-                                type: "POST",
-                                url: '/produto/ajax-get-produto-ingredientes-categoria-produtos',
-                                data: {idCategoriaProduto: $('#categoria-produto').val()},
-                                success: function(response) {
-                                    response.forEach(element => {
-                                        tagifyAddIngrediente.settings.whitelist.push({'idIngrediente': String(element._id), value: String(element.nome) })
-                                    })
-                                    tagifyAddIngrediente.loading(false)
-                                }
-                            });
-                            
-                        })
                     </script>
                 </div>
                 <!-- Modal add ingredientes END-->
             </div>
             <!-- Parte para os ingredientes END --> 
+            
         </div>
         <!-- infos a esquerda END --> 
 
@@ -164,12 +126,14 @@
                         </ul>
                     </div>
                 </div>
+
                 <div class="table-responsive">
-                <table class="table">
+                <table class="table table-sm">
                     <thead>
                         <tr>
                             <th scope="col">Adicional</th>
                             <th scope="col">Valor</th>
+                            <th>Categoria</th>
                             <th scope="col"></th>
                         </tr>
                     </thead>
@@ -180,6 +144,7 @@
                         <tr>
                             <th >{{nome}}</th>
                             <th class="valorFormatar">{{valor}}</th>
+                            <th>{{categoria}}</th>
                             <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectAdicional" value="{{_id}}" style="font-size: small;">X</button></td>
                         </tr>
                         {{/each}}
@@ -225,7 +190,6 @@
                                 enabled : 0 // always opens dropdown when input gets focus
                             },
                         })
-                        tagifyAddAdicional.addTags([{{#each produto.adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}}])
                         
                         $('#categoria-adicional').change(() => {
                             tagifyAddAdicional.settings.whitelist.length = 0;
@@ -233,7 +197,7 @@
                             jQuery.ajax({
                                 type: "POST",
                                 url: '/produto/ajax-get-produto-adicioanais-categoria-adicionais',
-                                data: {idCategoriaAdicional: $('#categoria-adicional').val()},
+                                data: {idCategoriaAdicional: $('#categoria-adicional').val(), idProduto: '{{produto._id}}'},
                                 success: function(response) {
                                     response.forEach(element => {
                                         tagifyAddAdicional.settings.whitelist.push({'idAdicional': String(element._id), value: String(element.nome) })
@@ -254,7 +218,7 @@
     </div>    
 
 
-    <!-- Modal edit produtos START -->
+    <!-- Modal edit produto START -->
     <div class="modal fade" id="modal-edit-produto" tabindex="-1" aria-labelledby="modal-edit-produtoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -280,29 +244,9 @@
                         <label for="edit-descricao" class="form-label">Descrição</label>
                     </div>
 
-                    <hr class="w-25 ">
-                    <div class="row mt-4 ml-2">
-                        <h5>Categoria <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente uma categoria" style="font-size: small;"></i></h5>
-                        {{#each categoriasProdutos}}
-                            <div class="form-check col-6">
-                                <input class="form-check-input" type="radio" name="categoria" id="edit-categoria{{_id}}" value="{{_id}}">
-                                <label class="form-check-label" for="{{_id}}">{{nome}} </label>
-                            </div>
-                        {{/each}}
-                    </div>
-
-                    <hr class="w-25 ">
-                    <div class="row mt-4 ml-2">
-                        <h5>Estabelecimento <i class="fas fa-info-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Selecione somente um estabelecimento" style="font-size: small;"></i></h5>
-                        {{#each estabelecimentos}}
-                            <div class="form-check form-switch col-6">
-                                <input class="form-check-input" type="radio" name="estabelecimento" id="edit-estabelecimento{{_id}}" value="{{_id}}">
-                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
-                            </div>
-                        {{/each}}
-                    </div>
-
                     <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                    <input type="text" name="idCategoriaProduto" value="{{produto.idCategoriaProduto._id}}" hidden readonly>
+                    <input type="text" name="idEstabelecimento" value="{{produto.idEstabelecimento._id}}" hidden readonly>
 
                     <div class="mt-4">
                         <button type="submit" class="btn btn-primary btn-sm " >Salvar</button>
@@ -325,7 +269,7 @@
             </div>
         </div>
     </div>
-    <!-- Modal edit produtos END -->
+    <!-- Modal edit produto END -->
 
     <script> // script para adicionar categorias
         $(".valorFormatar").each(function(item) {
