@@ -37,19 +37,15 @@ const Estabelecimento = new Schema({
     },
 
     painel: {
-        selectedImgFundo: Boolean,
-        imgfundo: {
-            name: String,
-            size: Number,
-            key: String,
-            url: String
-        },
-        colorFundo: {
-            hex: {
+            colorFundo:{
                 type: String,
-                default: '360000'
-            }
-        }
+                default : "#FFFFFF"
+            },
+            colorFonte:{
+                type: String,
+                default : "#000000"
+            },
+            
     },
 
     useMercadoPago: {

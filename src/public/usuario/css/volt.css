@@ -2976,7 +2976,6 @@ progress {
     font-weight: 400;
     line-height: 1.5;
     color: #66799e;
-    vertical-align: middle;
     background-color: #ffffff;
     background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23506690' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
     background-repeat: no-repeat;
@@ -24359,9 +24358,6 @@ pre[class*="language-"] {
 }
 
 .ct-chart-pie .ct-label,
-.ct-chart-donut .ct-label {
-    dominant-baseline: central;
-}
 
 .ct-label.ct-horizontal.ct-start {
     align-items: flex-end;
@@ -37172,7 +37168,6 @@ label {
     stroke: #fff;
     stroke-width: 1;
     stroke-linejoin: round;
-    vector-effect: non-scaling-stroke;
     transition: fill .2s, stroke .2s;
 }
 
@@ -44059,4 +44054,45 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
     background-color: #131620;
 }
 
+  /* Smartphone */
+  .smartphone {
+    position: relative;
+    width: 340px;
+    height: 620px;
+    margin: auto;
+    border: 16px #262B40 solid;
+    border-top-width: 60px;
+    border-bottom-width: 60px;
+    border-radius: 36px;
+}
+
+/* Barra de volume */
+.smartphone:before {
+    content: '';
+    display: block;
+    width: 60px;
+    height: 5px;
+    position: absolute;
+    top: -30px;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: rgb(255, 255, 255);
+    border-radius: 10px;
+}
+
+/* Botão*/
+.smartphone:after {
+    content: '';
+    display: block;
+    width: 30px;
+    height: 30px;
+    position: absolute;
+    left: 50%;
+    bottom: -72px;
+    transform: translate(-50%, -50%);
+    background: rgb(255, 255, 255);
+    border-radius: 50%;
+}
+
 /*# sourceMappingURL=volt.css.map */
+

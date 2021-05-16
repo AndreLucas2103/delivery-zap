@@ -1,51 +1,6 @@
 {{>usuario/_top-css}}
 <style>
-    /* The device with borders */
-    .smartphone {
-        position: relative;
-        width: 340px;
-        height: 640px;
-        margin: auto;
-        border: 16px black solid;
-        border-top-width: 60px;
-        border-bottom-width: 60px;
-        border-radius: 36px;
-    }
 
-    /* Barra de volume */
-    .smartphone:before {
-        content: '';
-        display: block;
-        width: 60px;
-        height: 5px;
-        position: absolute;
-        top: -30px;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: #333;
-        border-radius: 10px;
-    }
-
-    /* Botão*/
-    .smartphone:after {
-        content: '';
-        display: block;
-        width: 35px;
-        height: 35px;
-        position: absolute;
-        left: 50%;
-        bottom: -65px;
-        transform: translate(-50%, -50%);
-        background: #333;
-        border-radius: 50%;
-    }
-
-    /* Conteudo */
-    .smartphone .content {
-        width: 360px;
-        height: 640px;
-        background: white;
-    }
 </style>
 <style>
     input[type="radio"] {
@@ -75,7 +30,7 @@
     .file-input label {
         display: block;
         position: relative;
-        width: 200px;
+        width: 150px;
         height: 50px;
         border-radius: 25px;
         background: rgba(36, 46, 64);
@@ -114,7 +69,7 @@
                     <nav aria-label="breadcrumb">
                         <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
                             <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
-                            <li class="breadcrumb-item"><a href="#">Perfil</a></li>
+                            <li class="breadcrumb-item"><a href="#">Painel De Vendas</a></li>
 
                         </ol>
                     </nav>
@@ -124,122 +79,92 @@
 
                     <div class="col-12 col-xl-8">
                         <div class="card card-body bg-white border-light shadow-sm mb-4">
-                            <h2 class="h5 mb-4">Informações Gerais</h2>
-                            <form action="/usuario/edit-perfil-infos-gerais" method="POST">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="primeiroNome">Primeiro Nome</label>
-                                            <input class="form-control" id="primeiroNome" name="primeiroNome"
-                                                type="color" value="{{usuario.primeiroNome}}" required>
+                            <h2 class="h5 mb-4">Selecione o estabelecimento:</h2>
+                             <form action="/configuracao/edit-config-painel" method="POST">
+                            <div class="col-md-6 mb-3">
+                                <select class="form-select mb-0" id="estabelecimentoSelecionado"
+                                    name="estabelecimentoSelecionado">
+                                    {{#each usuarios.estabelecimentosVinculados}}
+                                    <option value="{{_id}}">{{nome}} - {{cnpj}}</option>
+                                    {{/each}}
+                                </select>
+                            </div>
+                            <hr>
+                            <h2 style="text-align: center;" class="h5 mb-4">Configuração</h2>
+                                <center>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <div>
+                                                <h6>Link do painel</h6>
+                                                <a href="" id="url" name="url"></a>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="nomeCompleto">Nome Completo</label>
-                                            <input class="form-control" id="nomeCompleto" name="nomeCompleto"
-                                                type="text" value="{{usuario.nomeCompleto}}" required>
-                                        </div>
-                                    </div>
-                                    <div class="file-input">
-                                        <input type="file" id="file" class="file">
-                                        <label for="file">
-                                            Modelo de file type.
-                                            <p class="file-name"></p>
-                                        </label>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="email">E-mail</label>
-                                            <input class="form-control" id="email" name="email" type="email"
-                                                value="{{usuario.email}}" required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="cpf">CPF&nbsp;&nbsp;<span class="d-inline" id="cpfResponse"
-                                                    name="cpfResponse"></span></label></label>
-                                            <input class="form-control" id="cpf" name="cpf" onkeyup="cpfCheck(this)"
-                                                maxlength="18" onkeydown="javascript: fMasc( this, mCPF );"
-                                                onblur="cpfvalid(this)" type="text" value="{{usuario.cpf}}" required>
-                                        </div>
-                                    </div>
-                                    <script>
-                                        $('#cpf').mask('000.000.000-00')
-                                    </script>
-                                </div>
+                                    <br>
+                                    <div class="row">
+                                        <div class="form-floating mb-3 col-6">
 
+                                        </div>
+
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md">
+                                            <h6>Sua logo</h6>
+                                            <span class="file-name"></span>
+                                            <div class="file-input">
+                                                <input type="file" id="file" onchange="readURL(this);" class="file">
+                                                <input type="text" name="base64TipoDocumento1" id="base64TipoDocumento1" hidden>
+                                                <label for="file">
+                                                    Selecionar
+                                                </label>
+
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <h6>Imagem de capa</h6>
+                                            <div class="file-input">
+                                                <input type="file" id="file-capa" onchange="readURL(this);" class="file">
+                                                <input type="text" name="base64TipoDocumento2" id="base64TipoDocumento2" hidden>
+                                                <label for="file-capa">
+                                                    Selecionar
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div>
+                                                <h6>Cor de fundo</h6>
+                                                <input style="width: 50px;border-radius: 50%;" class="form-control" id="colorFundo" name="colorFundo"
+                                                    type="color">
+                                            </div>
+                                        </div>
+                                        <div class="col-md">
+                                            <div>
+                                                <h6>Cor da fonte</h6>
+                                                <input style="width: 50px;border-radius: 50%;" class="form-control" id="colorFonte" name="colorFonte"
+                                                    type="color">
+                                            </div>
+                                        </div>
+                                    </div><br>
+                                </center>
                                 <hr>
-
-                                <div class="row align-items-center">
-                                    <div class="col-md-6 mb-3">
-                                        <label for="timeZone">Fuso horário</label>
-                                        <select class="form-select mb-0" id="timeZone" name="timeZone">
-                                            <option value="-05:00">(UTC-05:00) Rio Branco</option>
-                                            <option value="-04:00">(UTC-04:00) Cuiabá</option>
-                                            <option value="-03:00">(UTC-03:00) Brasília</option>
-                                            <option value="-02:00">(UTC-02:00) Fernando de Noronha</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
-                                        <select class="form-select mb-0" id="estabelecimentoSelecionado"
-                                            name="estabelecimentoSelecionado">
-                                            <option value="">Todos</option>
-                                            {{#each usuario.estabelecimentosVinculados}}
-                                            <option value="{{_id}}">{{nome}} - {{cnpj}}</option>
-                                            {{/each}}
-                                        </select>
-                                    </div>
-                                    <script>
-                                        $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
-                                        $('#estabelecimentoSelecionado option[value="{{usuario.estabelecimentoSelecionado}}"').prop('selected', 'selected').change();
-                                    </script>
-                                </div>
-                                <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary">Salvar</button>
-                                </div>
-                            </form>
-                        </div>
-
-                        <div class="card card-body bg-white border-light shadow-sm mb-4">
-                            <h2 class="h5 mb-4">Senha</h2>
-                            <form action="/usuario/trocar-senha" method="POST">
-                                <div class="row">
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="senhaAtual">Senha nova</label>
-                                            <input class="form-control" id="novaSenha" name="novaSenha" type="password"
-                                                required>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6 mb-3">
-                                        <div>
-                                            <label for="novaSenha">Confirmar senha</label>
-                                            <input class="form-control" id="confirmaSenha" name="confirmaSenha"
-                                                type="password" required>
-                                        </div>
-                                    </div>
-                                </div>
-
-                                <div class="mt-3">
-                                    <button type="submit" class="btn btn-primary">Alterar Senha</button>
+                                <input type="text" name="idEstabelecimentoConfig" id="edit-idEstabelecimentoConfig" hidden readonly>
+                                <div class="mt-5">
+                                    <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
                                 </div>
                             </form>
                         </div>
                     </div>
                     <div class="col-13 col-xl-3">
-                        <div class="row">
-                            <div class="col-12 mb-3">
-                                <div class="smartphone card border-light text-center p-0">
-                                    <div class="profile-cover rounded-top"
-                                        style="background-color: rgb(201, 201, 201);widht: 50px;"></div>
-                                    <div class="card-body pb-5">
-                                        <img src="/img/perfil-avatar/svg/chef.svg"
-                                            class="user-avatar smart-avatar rounded-circle mx-auto mt-n6 mb-4"
-                                            alt="Neil Portrait">
-                                        <h4 class="h3">{{usuario.primeiroNome}}</h4>
-                                    </div>
+                        <div class="smartphone">
+                            <div class="card border-light text-center p-0" >
+                                <div class="profile-cover rounded-top"><img style="max-width:100%;height:200px;" id="img2">
+                                </div>
+                                <span style="color: white;background-color:green">Aberto</span>
+                                <div class="card-body" style="height: 297px;" id="backcolor">                                     
+                                    <img id="img1" class="user-avatar smart-avatar rounded-circle mx-auto mt-n7 mb-4"
+                                        src="/img/perfil-avatar/svg/chef.svg" >
+                                   <span id="nomeEstabelecimento"></span></br>
+                                   <span id="enderecoEstabelecimento"></span>                             
                                 </div>
                             </div>
                         </div>
@@ -254,20 +179,76 @@
     </div>
 </div>
 
+<script>
+    $('#estabelecimentoSelecionado').on('change', function (event) {
+        var recipient = $('#estabelecimentoSelecionado').val()
+        jQuery.ajax({
+            type: "POST",
+            url: '/configuracao/ajax-get-estabelecimento-painel',
+            data: {idEstabelecimentoConfig: recipient },
+            success: function (response) {
+                $('#nomeEstabelecimento').text(response.nome)
+                $('#url').prop('href',"deliveryzap.com/estabelecimento/"+ response.url)
+                $('#url').text("deliveryzap.com/estabelecimento/"+ response.url)
+                $('#colorFundo').val(response.painel.colorFundo)
+                $('#colorFonte').val(response.painel.colorFundo)
+                $('#edit-idEstabelecimentoConfig').val(response._id)
+                $("#backcolor").css("background-color", response.painel.colorFundo);
+                $("#fontcolor").css("color", response.painel.colorFonte);
+            }
+        });
+    })
+</script>
 
 <script>
-    const file = document.querySelector('#file');
+    window.onload = function () {
+        var inputColor = document.querySelector('[name=colorFundo]');
+        inputColor.oninput = function () {
+            $("#backcolor").css("background-color", inputColor.value);
+        }
+    }
+</script>
+
+<!--
+<script>
+    const file = document.querySelector('#file')
     file.addEventListener('change', (e) => {
-        // Get the selected file
         const [file] = e.target.files;
-        // Get the file name and size
         const { name: fileName, size } = file;
-        // Convert size in bytes to kilo bytes
         const fileSize = (size / 1000).toFixed(2);
-        // Set the text content
         const fileNameAndSize = `${fileName} - ${fileSize}KB`;
         document.querySelector('.file-name').textContent = fileNameAndSize;
     });
+</script>
+
+<script>
+    const file = document.querySelector('#file-capa')
+    file.addEventListener('change', (e) => {
+        const [file] = e.target.files;
+        const { name: fileName, size } = file;
+        const fileSize = (size / 1000).toFixed(2);
+        const fileNameAndSize = `${fileName} - ${fileSize}KB`;
+        document.querySelector('.file-capa').textContent = fileNameAndSize;
+    });
+</script>
+-->
+<script>
+function readURL(input) {
+    if (input.files && input.files[0]) {
+        console.log(input.id)
+        var reader = new FileReader();
+        reader.onload = function (e) {
+            if(input.id == "file"){
+                $('#img1').attr('src', e.target.result);
+                $('#base64TipoDocumento1').val(e.target.result);
+            }else if(input.id == "file-capa"){
+                $('#img2').attr('src', e.target.result);
+                $('#base64TipoDocumento2').val(e.target.result);
+            }
+        };
+        reader.readAsDataURL(input.files[0]);
+    }
+}
 </script>
 
 {{>usuario/_rodape}}
