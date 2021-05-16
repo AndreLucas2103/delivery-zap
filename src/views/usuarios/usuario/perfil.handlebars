@@ -326,18 +326,8 @@
                                 <option value="-02:00">(UTC-02:00) Fernando de Noronha</option>
                             </select>
                         </div>
-                        <div class="col-md-6 mb-3">
-                            <label for="estabelecimentoSelecionado">Estabelecimento selecionado</label>
-                            <select class="form-select mb-0" id="estabelecimentoSelecionado" name="estabelecimentoSelecionado">
-                                <option value="">Todos</option>
-                                {{#each usuario.estabelecimentosVinculados}}
-                                    <option value="{{_id}}">{{nome}} - {{cnpj}}</option>
-                                {{/each}}
-                            </select>
-                        </div>
                         <script>
                             $('#timeZone option[value="{{usuario.timeZone}}"').prop('selected', 'selected').change();
-                            $('#estabelecimentoSelecionado option[value="{{usuario.estabelecimentoSelecionado}}"').prop('selected', 'selected').change();
                         </script>
                     </div>
                     <div class="mt-3">

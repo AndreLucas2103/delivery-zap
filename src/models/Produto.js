@@ -12,10 +12,20 @@ const Produto = new Schema({
     descricao: String,
     
     ingredientes: [{
-        idIngrediente: ObjectId,
+        idIngrediente: {
+            type: Schema.Types.ObjectId,
+            ref: "ingredientes",
+        },
     }],
     adicionais: [{
-        idAdicional: ObjectId,
+        idAdicional: {
+            type: Schema.Types.ObjectId,
+            ref: "adicionais",
+        },
+        idCategoriaAdicional: {
+            type: Schema.Types.ObjectId,
+            ref: "categoriaAdicionais",
+        }
     }],
 
     opcao: [{

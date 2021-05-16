@@ -40,9 +40,10 @@ app.use((req, res, next) => {
 
 app.use(async function (req, res, next) {
     try {
-        require("./models/Usuario")
-        const Usuario = mongoose.model("usuarios")
         if (req.user) {
+            require("./models/Usuario")
+            const Usuario = mongoose.model("usuarios")
+
             let usuario = await Usuario.aggregate([
                 { $match: { _id: req.user._id} },
                 {

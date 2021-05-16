@@ -35,6 +35,7 @@
                 <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
                 <li class="breadcrumb-item"><a>Produto</a></li>
                 <li class="breadcrumb-item"><a href="/produto/produtos">Produtos</a></li>
+                <li class="breadcrumb-item">{{produto.nome}}</li>
             </ol>
         </nav>
     </div>
@@ -55,162 +56,186 @@
                 </div>
             </div>
 
-            <!-- Parte para os ingredientes START --> 
-            <div class="card border-light text-center p-0 mt-4  mb-4">
-                <div class="h5 mt-4">Ingredientes 
-                    <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Editar</button>
-                </div>
-                
-                <div class="card-body">
-                    {{#each produto.ingredientes}}
-                        <div class="btn btn-light btn-sm " style="font-size: small;">{{nome}}</div>
-                    {{/each}}
-                </div>
-
-                <!-- Modal add ingredientes START-->
-                <div class="modal fade" id="modal-add-ingrediente" tabindex="-1" aria-labelledby="modal-add-ingredienteLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-add-ingredienteLabel">Ingredientes</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                        </div>
-                        <div class="modal-body">
-                            <h6>Somente ingredientes vinculados a categoria do produto serão exibidos</h6>
-                            <form action="/produto/add-produto-ingrediente" method="post">
-                                <input  class='tagify--outside' name="idIngredientes" id="add-ingredientes">
-
-                                <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
-                            </form>
-                        </div>
-                        </div>
-                    </div>
-
-                    <script>
-                        var tagAddIngrediente = document.querySelector('input[id=add-ingredientes]')
-                        var tagifyAddIngrediente = new Tagify(tagAddIngrediente, {
-                            whitelist: [ {{#each ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-                            editTags: false,
-                            dropdown: {
-                                position: "input",
-                                maxItems: Infinity,
-                                closeOnSelect : false,
-                                enabled : 0 // always opens dropdown when input gets focus
-                            },
-                        })
-                        tagifyAddIngrediente.addTags([{{#each produto.ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}}])
-                    </script>
-                </div>
-                <!-- Modal add ingredientes END-->
-            </div>
-            <!-- Parte para os ingredientes END --> 
+            
             
         </div>
         <!-- infos a esquerda END --> 
+        
+        
 
         <!-- infos a direita START --> 
         <div class="col-12 col-xl-8">
-            
-            <hr>
-            <!-- Parte para os adicionais START --> 
-            <div class="card card-body bg-white border-light shadow-sm mb-4">
-                <div class="h5">Adicionais 
-                    <div class="dropdown float-end">
-                        <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdown-button-add-adiocinais" data-bs-toggle="dropdown" aria-expanded="false">
-                            Adicionar
-                        </button>
-                        <ul class="dropdown-menu" aria-labelledby="dropdown-button-add-adiocinais">
-                            <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-individual" >Individual</a></li>
-                            <li><a class="dropdown-item" href="#">Modelo de adicional</a></li>
-                        </ul>
-                    </div>
-                </div>
 
-                <div class="table-responsive">
-                <table class="table table-sm">
-                    <thead>
-                        <tr>
-                            <th scope="col">Adicional</th>
-                            <th scope="col">Valor</th>
-                            <th>Categoria</th>
-                            <th scope="col"></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <form action="/produto/delete-produto-adicional" method="post">
-                        <input type="text" name="idProduto" value="{{produto._id}}" hidden>
-                        {{#each produto.adicionais}}
-                        <tr>
-                            <th >{{nome}}</th>
-                            <th class="valorFormatar">{{valor}}</th>
-                            <th>{{categoria}}</th>
-                            <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectAdicional" value="{{_id}}" style="font-size: small;">X</button></td>
-                        </tr>
-                        {{/each}}
-                        </form>
-                    </tbody>
-                </table>
-                </div>
-
-                <!-- Modal add adicionais individual START-->
-                <div class="modal fade" id="modal-add-adicionais-individual" tabindex="-1" aria-labelledby="modal-add-adicionais-individualLabel" aria-hidden="true">
-                    <div class="modal-dialog">
-                        <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title" id="modal-add-adicionais-individualLabel">Adiconar Adicional individual</h5>
-                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <ul class="nav nav-pills " id="pills-tab" role="tablist">
+            <li class="nav-item" >
+                <button class="nav-link active" id="perfil-produto" data-bs-toggle="pill" data-bs-target="#nav-opcoes-and-adicionais" type="button" role="tab" aria-selected="true">Opções/Adicionais</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link " id="perfil-produto" data-bs-toggle="pill" data-bs-target="#nav-ingredientes" type="button" role="tab" aria-selected="false">Ingredientes</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <!-- Navbar para opcoes e adicionais START --> 
+            <div class="tab-pane fade show active" id="nav-opcoes-and-adicionais">
+                <!-- Parte para os adicionais START --> 
+                <div class="card card-body bg-white border-light shadow-sm mb-4">
+                    <div class="h5">Adicionais 
+                        <div class="dropdown float-end">
+                            <button class="btn btn-secondary btn-sm dropdown-toggle" type="button" id="dropdown-button-add-adiocinais" data-bs-toggle="dropdown" aria-expanded="false">
+                                Adicionar
+                            </button>
+                            <ul class="dropdown-menu" aria-labelledby="dropdown-button-add-adiocinais">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-individual" >Individual</a></li>
+                                <li><a class="dropdown-item" href="#">Modelo de adicional</a></li>
+                            </ul>
                         </div>
-                        <div class="modal-body">
-                            <label for="categoria-adicional" class="form-label">Categoria do Adicional</label>
-                            <select name="categoria-adicional" id="categoria-adicional">
-                                <option value="">Todos</option>
-                                {{#each categoriasAdicional}} <option value="{{_id}}">{{nome}}</option>{{/each}}
-                            </select>
+                    </div>
 
-                            <form action="/produto/add-produto-adicional-individual" method="post">
-                                <input  class='tagify--outside' name="idAdicional" id="add-adicional-individual">
-
-                                <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
-                                <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                    <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th scope="col">Adicional</th>
+                                <th scope="col">Valor</th>
+                                <th>Categoria</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form action="/produto/delete-produto-adicional" method="post">
+                            <input type="text" name="idProduto" value="{{produto._id}}" hidden>
+                            {{#each produto.adicionais}}
+                            <tr>
+                                <th >{{idAdicional.nome}}</th>
+                                <th class="valorFormatar">{{idAdicional.valor}}</th>
+                                <th>{{idCategoriaAdicional.nome}}</th>
+                                <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectAdicional" value="{{_id}}" style="font-size: small;">X</button></td>
+                            </tr>
+                            {{/each}}
                             </form>
-                        </div>
-                        </div>
+                        </tbody>
+                    </table>
                     </div>
 
-                    <script>
-                        var tagAddAdicional = document.querySelector('input[id=add-adicional-individual]')
-                        var tagifyAddAdicional = new Tagify(tagAddAdicional, {
-                            whitelist: [ {{#each adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
-                            editTags: false,
-                            dropdown: {
-                                position: "input",
-                                maxItems: Infinity,
-                                closeOnSelect : false,
-                                enabled : 0 // always opens dropdown when input gets focus
-                            },
-                        })
-                        
-                        $('#categoria-adicional').change(() => {
-                            tagifyAddAdicional.settings.whitelist.length = 0;
-                            tagifyAddAdicional.loading(true)
-                            jQuery.ajax({
-                                type: "POST",
-                                url: '/produto/ajax-get-produto-adicioanais-categoria-adicionais',
-                                data: {idCategoriaAdicional: $('#categoria-adicional').val(), idProduto: '{{produto._id}}'},
-                                success: function(response) {
-                                    response.forEach(element => {
-                                        tagifyAddAdicional.settings.whitelist.push({'idAdicional': String(element._id), value: String(element.nome) })
-                                    })
-                                    tagifyAddAdicional.loading(false)
-                                }
-                            });
-                        })
-                    </script>
+                    <!-- Modal add adicionais individual START-->
+                    <div class="modal fade" id="modal-add-adicionais-individual" tabindex="-1" aria-labelledby="modal-add-adicionais-individualLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-adicionais-individualLabel">Adiconar Adicional individual</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <label for="categoria-adicional" class="form-label">Categoria do Adicional</label>
+                                <select name="categoria-adicional" id="categoria-adicional">
+                                    <option value="">Todos</option>
+                                    {{#each categoriasAdicional}} <option value="{{_id}}">{{nome}}</option>{{/each}}
+                                </select>
+
+                                <form action="/produto/add-produto-adicional-individual" method="post">
+                                    <input  class='tagify--outside' name="idAdicional" id="add-adicional-individual">
+
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var tagAddAdicional = document.querySelector('input[id=add-adicional-individual]')
+                            var tagifyAddAdicional = new Tagify(tagAddAdicional, {
+                                whitelist: [ {{#each adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}} - {{idCategoriaAdicional.nome}}', idCategoriaAdicional: '{{idCategoriaAdicional._id}}' },  {{/each}} ],
+                                editTags: false,
+                                dropdown: {
+                                    position: "input",
+                                    maxItems: Infinity,
+                                    closeOnSelect : false,
+                                    enabled : 0 // always opens dropdown when input gets focus
+                                },
+                            })
+                            
+                            $('#categoria-adicional').change(() => {
+                                tagifyAddAdicional.settings.whitelist.length = 0;
+                                tagifyAddAdicional.loading(true)
+                                jQuery.ajax({
+                                    type: "POST",
+                                    url: '/produto/ajax-get-produto-adicioanais-categoria-adicionais',
+                                    data: {idCategoriaAdicional: $('#categoria-adicional').val(), idProduto: '{{produto._id}}'},
+                                    success: function(response) {
+                                        response.forEach(element => {
+                                            tagifyAddAdicional.settings.whitelist.push({'idAdicional': element._id, value: `${element.nome} - ${element.idCategoriaAdicional.nome}`, idCategoriaAdicional: element.idCategoriaAdicional._id })
+                                        })
+                                        tagifyAddAdicional.loading(false)
+                                    }
+                                });
+                            })
+                        </script>
+                    </div>
+                    <!-- Modal add adicionais individual END-->
                 </div>
-                <!-- Modal add adicionais individual END-->
+                <!-- Parte para os adicionais END --> 
             </div>
-            <!-- Parte para os adicionais END --> 
+            <!-- Navbar para opcoes e adicionais START --> 
+
+            <!-- Navbar para ingredientes START --> 
+            <div class="tab-pane fade" id="nav-ingredientes">
+                <!-- Parte para os ingredientes START --> 
+                <div class="card border-light p-0 mb-4 ">
+                    <div class="h5 mt-4 mx-4">Ingredientes 
+                        <button class="btn btn-secondary btn-sm float-end mr-2" data-bs-toggle="modal" data-bs-target="#modal-add-ingrediente">Editar</button>
+                    </div>
+                    
+                    <div class="card-body">
+                        {{#each produto.ingredientes}}
+                            <div class="btn btn-light btn-sm " style="font-size: small;">{{idIngrediente.nome}}</div>
+                        {{/each}}
+                    </div>
+
+                    <!-- Modal add ingredientes START-->
+                    <div class="modal fade" id="modal-add-ingrediente" tabindex="-1" aria-labelledby="modal-add-ingredienteLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-ingredienteLabel">Ingredientes</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <h6>Somente ingredientes vinculados a categoria do produto serão exibidos</h6>
+                                <form action="/produto/add-produto-ingrediente" method="post">
+                                    <input  class='tagify--outside' name="idIngredientes" id="add-ingredientes">
+
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var tagAddIngrediente = document.querySelector('input[id=add-ingredientes]')
+                            var tagifyAddIngrediente = new Tagify(tagAddIngrediente, {
+                                whitelist: [ {{#each ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                                editTags: false,
+                                dropdown: {
+                                    position: "input",
+                                    maxItems: Infinity,
+                                    closeOnSelect : false,
+                                    enabled : 0 // always opens dropdown when input gets focus
+                                },
+                            })
+                            tagifyAddIngrediente.addTags([{{#each produto.ingredientes}} {'idIngrediente': '{{_id}}', value: '{{idIngrediente.nome}}' },  {{/each}}])
+                        </script>
+                    </div>
+                    <!-- Modal add ingredientes END-->
+                </div>
+                <!-- Parte para os ingredientes END --> 
+            </div>
+            <!-- Navbar para ingredientes END --> 
+
+        </div>
+            
+            
 
         </div>
         <!-- infos a direita END --> 

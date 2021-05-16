@@ -26,62 +26,19 @@ router.get('/perfil', async(req, res) => {
     try {
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
+        let produto = await  Produto.findById({_id: req.query.produto})
+            .populate('adicionais.idCategoriaAdicional adicionais.idAdicional idCategoriaProduto idEstabelecimento ingredientes.idIngrediente').lean()
+
+        let ingredientes = await Ingrediente.find({$and: [{'categoriasProdutos.idCategoriaProduto': produto.idCategoriaProduto},{statusAtivo:true} ]}).lean()
         
-        produto = await Produto.aggregate([
-            {$match: {_id: ObjectId(req.query.produto)}},
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "idEstabelecimento",
-                        foreignField: "_id",
-                        as: "idEstabelecimento"
-                    }
-            },
-            {
-                $lookup:
-                    {
-                        from: "categoriaprodutos",
-                        localField: "idCategoriaProduto",
-                        foreignField: "_id",
-                        as: "idCategoriaProduto"
-                    }
-            },
-            {
-                $lookup:
-                    {
-                        from: "ingredientes",
-                        localField: "ingredientes.idIngrediente",
-                        foreignField: "_id",
-                        as: "ingredientes"
-                    }
-            },
-            {
-                $lookup:
-                    {
-                        from: "adicionais",
-                        localField: "adicionais.idAdicional",
-                        foreignField: "_id",
-                        as: "adicionaiss"
-                    }
-            },
-            {
-                $unwind:"$vendor_details"
-            },
+        let adicionais = await Adicional.find({$and: [{'idEstabelecimento': produto.idEstabelecimento}]}).populate('idCategoriaAdicional').lean()
 
-
-            {$unwind: '$idEstabelecimento'},
-            {$unwind: '$idCategoriaProduto'}
-        ])
-
-        console.log(produto[0])
-
-        let ingredientes = await Ingrediente.find({$and: [{'categoriasProdutos.idCategoriaProduto': produto[0].idCategoriaProduto},{statusAtivo:true} ]}).lean()
+        let categoriasAdicional = await CategoriaAdicional.find({$and: [{'idEstabelecimento': produto.idEstabelecimento}, {statusAtivo:true}]}).lean()
         
-        let adicionais = await Adicional.find({$and: [{'idEstabelecimento': produto[0].idEstabelecimento}]}).lean()
-        let categoriasAdicional = await CategoriaAdicional.find({$and: [{'idEstabelecimento': produto[0].idEstabelecimento}, {statusAtivo:true}]}).lean()
+
         res.render('usuarios/produto/produto', {
-            produto: produto[0],
+            produto: produto,
             ingredientes: ingredientes,
             categoriasAdicional: categoriasAdicional,
             adicionais: adicionais
@@ -133,7 +90,7 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
             Produto.updateOne(
                 {_id: req.body.idProduto},
                 {$push: {
-                    'adicionais': {'idAdicional': element.idAdicional}
+                    'adicionais': {'idAdicional': element.idAdicional, 'idCategoriaAdicional': element.idCategoriaAdicional}
                 }}
             ).then(() => {
     
@@ -152,11 +109,10 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
 
 
 router.post('/delete-produto-adicional', (req, res) => {
-    console.log(req.body.idObjectIngrediente)
     Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
         {'_id': req.body.idProduto},
         { $pull: {
-            'adicionais': {idAdicional: ObjectId(req.body.idObjectAdicional)},
+            'adicionais': {_id: ObjectId(req.body.idObjectAdicional)},
         }}
     ).then(() => {
         req.flash('success_msg', 'Adicional removido')
@@ -243,8 +199,7 @@ router.post('/ajax-get-produto-adicioanais-categoria-adicionais', (req, res) => 
     Produto.findById({_id: req.body.idProduto}).then(produto => {
         req.body.idCategoriaAdicional ? idCategoriaAdicional = {$and: [{'idCategoriaAdicional': ObjectId(req.body.idCategoriaAdicional)}, {statusAtivo:true}]}  : idCategoriaAdicional = {$and: [{statusAtivo:true}, {'idEstabelecimento': produto.idEstabelecimento}]}
     
-        Adicional.find(idCategoriaAdicional).lean().then(adicionais => {
-            console.log(adicionais)
+        Adicional.find(idCategoriaAdicional).populate('idCategoriaAdicional').lean().then(adicionais => {
             res.json(adicionais)
         }).catch(err => {
             console.log(err)
