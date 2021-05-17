@@ -8,6 +8,7 @@ const Schema = mongoose.Schema;
 
 const Estabelecimento = new Schema({
     nome: String,
+    nomePainel:String,
     url: String,
     endereco: {
         logradouro: String,

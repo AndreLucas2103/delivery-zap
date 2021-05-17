@@ -232,9 +232,16 @@ router.get('/painel', eAdmin, async (req, res) => {
 
 router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabelecimento
     Estabelecimento.findById({ _id: req.body.estabelecimentoSelecionado }).then(estabelecimento => {
-        
+        estabelecimento.nomePainel = req.body.nome,
+
+        estabelecimento.endereco = {
+            logradouro: req.body.logradouro,
+            numero: req.body.numero,
+            bairro: req.body.bairro,
+        },
         estabelecimento.painel = {
-        colorFundo : req.body.colorFundo
+        colorFundo : req.body.colorFundo,
+        colorFonte : req.body.colorFonte
     } 
         estabelecimento.save().then(() => {
             req.flash('success_msg', 'Painel de vendas editado.')

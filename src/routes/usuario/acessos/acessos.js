@@ -61,6 +61,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 
                             addEstabelecimento = {
                                 nome: req.body.nome,
+                                nomePainel: req.body.nome,
                                 url: req.body.url,
                                 endereco: {
                                     logradouro: req.body.logradouro,

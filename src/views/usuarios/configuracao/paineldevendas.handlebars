@@ -76,108 +76,145 @@
                 </div>
 
                 <div class="row">
-
                     <div class="col-12 col-xl-8">
                         <div class="card card-body bg-white border-light shadow-sm mb-4">
                             <h2 class="h5 mb-4">Selecione o estabelecimento:</h2>
-                             <form action="/configuracao/edit-config-painel" method="POST">
-                            <div class="col-md-6 mb-3">
-                                <select class="form-select mb-0" id="estabelecimentoSelecionado"
-                                    name="estabelecimentoSelecionado">
-                                    {{#each usuarios.estabelecimentosVinculados}}
-                                    <option value="{{_id}}">{{nome}} - {{cnpj}}</option>
-                                    {{/each}}
-                                </select>
-                            </div>
-                            <hr>
-                            <h2 style="text-align: center;" class="h5 mb-4">Configuração</h2>
-                                <center>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Link do painel</h6>
-                                                <a href="" id="url" name="url"></a>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <br>
-                                    <div class="row">
-                                        <div class="form-floating mb-3 col-6">
-
-                                        </div>
-
-                                    </div>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <h6>Sua logo</h6>
-                                            <span class="file-name"></span>
-                                            <div class="file-input">
-                                                <input type="file" id="file" onchange="readURL(this);" class="file">
-                                                <input type="text" name="base64TipoDocumento1" id="base64TipoDocumento1" hidden>
-                                                <label for="file">
-                                                    Selecionar
-                                                </label>
-
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <h6>Imagem de capa</h6>
-                                            <div class="file-input">
-                                                <input type="file" id="file-capa" onchange="readURL(this);" class="file">
-                                                <input type="text" name="base64TipoDocumento2" id="base64TipoDocumento2" hidden>
-                                                <label for="file-capa">
-                                                    Selecionar
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Cor de fundo</h6>
-                                                <input style="width: 50px;border-radius: 50%;" class="form-control" id="colorFundo" name="colorFundo"
-                                                    type="color">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Cor da fonte</h6>
-                                                <input style="width: 50px;border-radius: 50%;" class="form-control" id="colorFonte" name="colorFonte"
-                                                    type="color">
-                                            </div>
-                                        </div>
-                                    </div><br>
-                                </center>
-                                <hr>
-                                <input type="text" name="idEstabelecimentoConfig" id="edit-idEstabelecimentoConfig" hidden readonly>
-                                <div class="mt-5">
-                                    <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+                            <form action="/configuracao/edit-config-painel" method="POST">
+                                <div class="col-md-6 mb-3">
+                                    <select class="form-select mb-0" id="estabelecimentoSelecionado"
+                                        name="estabelecimentoSelecionado">
+                                        <option>---</option>
+                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        <option value="{{_id}}">{{nome}}</option>
+                                        {{/each}}
+                                    </select>
                                 </div>
+                                <hr>
+                                <section>
+                                    <h2 style="text-align: center;" class="h5 mb-4">Configuração</h2>
+                                    <center>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <div>
+                                                    <h6>Link do painel</h6>
+                                                    <a href="" id="url" name="url"></a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="row g-2">
+                                            <center>
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="nome"
+                                                        name="nome" placeholder="0" required>
+                                                    <label for="nome">Nome do estabelecimento*</label>
+                                                </div>
+                                            </div>
+                                            </center>
+                                        </div><br>
+                                        <div class="row g-2">
+                                            <div class="col-md-6">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="logradouro"
+                                                        name="logradouro" placeholder="0" required>
+                                                    <label for="logradouro">Endereço*</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-2">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="numero" name="numero"
+                                                        placeholder="0" required>
+                                                    <label for="numero">N°*</label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-floating">
+                                                    <input type="text" class="form-control" id="bairro" name="bairro"
+                                                        placeholder="0" required>
+                                                    <label for="bairro">Bairro*</label>
+                                                </div>
+                                            </div>
+                                        </div><br>
+                                        <div class="row">
+                                            <div class="col-md">
+                                                <h6>Sua logo</h6>
+                                                <span class="file-name"></span>
+                                                <div class="file-input">
+                                                    <input type="file" id="file" onchange="readURL(this);" class="file">
+                                                    <input type="text" name="base64TipoDocumento1"
+                                                        id="base64TipoDocumento1" hidden>
+                                                    <label for="file">
+                                                        Selecionar
+                                                    </label>
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <h6>Imagem de capa</h6>
+                                                <div class="file-input">
+                                                    <input type="file" id="file-capa" onchange="readURL(this);"
+                                                        class="file">
+                                                    <input type="text" name="base64TipoDocumento2"
+                                                        id="base64TipoDocumento2" hidden>
+                                                    <label for="file-capa">
+                                                        Selecionar
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div>
+                                                    <h6>Cor de fundo</h6>
+                                                    <input style="width: 50px;border-radius: 50%;" class="form-control"
+                                                        id="colorFundo" name="colorFundo" type="color">
+                                                </div>
+                                            </div>
+                                            <div class="col-md">
+                                                <div>
+                                                    <h6>Cor da fonte</h6>
+                                                    <input style="width: 50px;border-radius: 50%;" class="form-control"
+                                                        id="colorFonte" name="colorFonte" type="color">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </center>
+                                    <hr>
+                                    <input type="text" name="idEstabelecimentoConfig" id="edit-idEstabelecimentoConfig"
+                                        hidden readonly>
+                                    <div class="mt-5">
+                                        <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
+                                    </div>
                             </form>
                         </div>
                     </div>
-                    <div class="col-13 col-xl-3">
+                   
+                    <div class="col-xl">
+                         <center><label style=>Pré-visualização:</label></center>
                         <div class="smartphone">
-                            <div class="card border-light text-center p-0" >
-                                <div class="profile-cover rounded-top"><img style="max-width:100%;height:200px;" id="img2">
+                            <div class="card border-light text-center p-0">
+                                <div class="profile-cover rounded-top"><img style="max-width:100%;height:200px;"
+                                        id="img2">
+
                                 </div>
                                 <span style="color: white;background-color:green">Aberto</span>
-                                <div class="card-body" style="height: 297px;" id="backcolor">                                     
+                                <div class="card-body" style="height: 297px;" id="backcolor">
                                     <img id="img1" class="user-avatar smart-avatar rounded-circle mx-auto mt-n7 mb-4"
-                                        src="/img/perfil-avatar/svg/chef.svg" >
-                                   <span id="nomeEstabelecimento"></span></br>
-                                   <span id="enderecoEstabelecimento"></span>                             
+                                        src="/img/perfil-avatar/svg/chef.svg">
+                                    <span style="font-weight: bold;font-size:large" id="nomeEstabelecimento"></span><br>
+                                    <i class="fas fa-map-marker-alt text-danger"></i>
+                                    <span id="enderecoEstabelecimento"></span>
+                                    <span id="numeroEstabelecimento"></span>
+                                    <span id="bairroEstabelecimento"></span>
                                 </div>
                             </div>
                         </div>
                     </div>
-
-
                 </div>
-
             </main>
-
         </div>
     </div>
 </div>
+
 
 <script>
     $('#estabelecimentoSelecionado').on('change', function (event) {
@@ -185,16 +222,26 @@
         jQuery.ajax({
             type: "POST",
             url: '/configuracao/ajax-get-estabelecimento-painel',
-            data: {idEstabelecimentoConfig: recipient },
+            data: { idEstabelecimentoConfig: recipient },
             success: function (response) {
-                $('#nomeEstabelecimento').text(response.nome)
-                $('#url').prop('href',"deliveryzap.com/estabelecimento/"+ response.url)
-                $('#url').text("deliveryzap.com/estabelecimento/"+ response.url)
+                $('#nomeEstabelecimento').text(response.nomePainel)
+                $('#enderecoEstabelecimento').text(response.endereco.logradouro)
+                $('#numeroEstabelecimento').text("- "+response.endereco.numero)
+                $('#bairroEstabelecimento').text("- "+response.endereco.bairro)
+                 $('#nome').val(response.nomePainel)
+                $('#logradouro').val(response.endereco.logradouro)              
+                $('#numero').val(response.endereco.numero)
+                $('#bairro').val(response.endereco.bairro)
+                $('#url').prop('href', "deliveryzap.com/estabelecimento/" + response.url)
+                $('#url').text("deliveryzap.com/estabelecimento/" + response.url)
                 $('#colorFundo').val(response.painel.colorFundo)
-                $('#colorFonte').val(response.painel.colorFundo)
+                $('#colorFonte').val(response.painel.colorFonte)
                 $('#edit-idEstabelecimentoConfig').val(response._id)
                 $("#backcolor").css("background-color", response.painel.colorFundo);
-                $("#fontcolor").css("color", response.painel.colorFonte);
+                $("#nomeEstabelecimento").css("color", response.painel.colorFonte);
+                $("#enderecoEstabelecimento").css("color", response.painel.colorFonte);
+                $("#numeroEstabelecimento").css("color", response.painel.colorFonte);
+                $("#bairroEstabelecimento").css("color", response.painel.colorFonte);
             }
         });
     })
@@ -203,9 +250,33 @@
 <script>
     window.onload = function () {
         var inputColor = document.querySelector('[name=colorFundo]');
+        var inputColor2 = document.querySelector('[name=colorFonte]');
+        var inputNome = document.querySelector('[name=nome]');
+        var inputEndereco = document.querySelector('[name=logradouro]');
+        var inputNumero = document.querySelector('[name=numero]');    
+        var inputBairro = document.querySelector('[name=bairro]');       
         inputColor.oninput = function () {
             $("#backcolor").css("background-color", inputColor.value);
         }
+        inputColor2.oninput = function () {
+            $("#nomeEstabelecimento").css("color", inputColor2.value);
+            $("#enderecoEstabelecimento").css("color", inputColor2.value);
+            $("#numeroEstabelecimento").css("color", inputColor2.value);
+            $("#bairroEstabelecimento").css("color", inputColor2.value);
+        }
+          inputNome.oninput = function () {
+            $("#nomeEstabelecimento").text(inputNome.value);
+        }
+        inputEndereco.oninput = function () {
+            $("#enderecoEstabelecimento").text(inputEndereco.value);
+        }
+        inputNumero.oninput = function () {
+            $("#numeroEstabelecimento").text("- " + inputNumero.value);
+        }
+        inputBairro.oninput = function () {
+            $("#bairroEstabelecimento").text("- " + inputBairro.value);
+        }
+      
     }
 </script>
 
@@ -233,22 +304,22 @@
 </script>
 -->
 <script>
-function readURL(input) {
-    if (input.files && input.files[0]) {
-        console.log(input.id)
-        var reader = new FileReader();
-        reader.onload = function (e) {
-            if(input.id == "file"){
-                $('#img1').attr('src', e.target.result);
-                $('#base64TipoDocumento1').val(e.target.result);
-            }else if(input.id == "file-capa"){
-                $('#img2').attr('src', e.target.result);
-                $('#base64TipoDocumento2').val(e.target.result);
-            }
-        };
-        reader.readAsDataURL(input.files[0]);
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            console.log(input.id)
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                if (input.id == "file") {
+                    $('#img1').attr('src', e.target.result);
+                    $('#base64TipoDocumento1').val(e.target.result);
+                } else if (input.id == "file-capa") {
+                    $('#img2').attr('src', e.target.result);
+                    $('#base64TipoDocumento2').val(e.target.result);
+                }
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
     }
-}
 </script>
 
 {{>usuario/_rodape}}
