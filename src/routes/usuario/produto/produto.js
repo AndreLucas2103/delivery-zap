@@ -48,6 +48,69 @@ router.get('/perfil', async(req, res) => {
     }
 })
 
+// Parte para opcoes dos produtos
+router.post('/add-produto-opcoes-individual', (req, res) => { // adicionar opcoes a uma opcao 
+    let multiplaEscolha
+    req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
+    Produto.updateOne(
+        {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
+        {$push: {
+            'opcao.$.opcoes': {'nome': req.body.nome, 'valor': req.body.valor}
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Opção adicionada')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/delete-produto-opcoes/:idOpcao', (req, res) => { // adicionar opcoes a uma opcao 
+    Produto.updateOne(
+        {_id: req.body.idProduto, 'opcao._id': req.params.idOpcao},
+        {$pull: {
+            'opcao.$.opcoes': {_id: ObjectId(req.body.id_opcoes_opcoes)}
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Opção removida')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nova opcao ao produto
+    let multiplaEscolha
+    req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
+    Produto.updateOne(
+        {_id: req.body.idProduto},
+        {$push: {
+            'opcao': {'nome': req.body.nome, 'descricao': req.body.descricao, multiplaEscolha: multiplaEscolha}
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Opção criada')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/edit-produto-opcao', (req, res) => { // rota para editar as informacoes de uma opcao do produto
+    let multiplaEscolha
+    req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
+    Produto.updateOne(
+        {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
+        {$set:  {'opcao.$.nome': req.body.nome, 'opcao.$.descricao': req.body.descricao, "opcao.$.multiplaEscolha": multiplaEscolha}}
+    ).then(() => {
+        req.flash('success_msg', 'Opção editada')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
+// rota onde pego os ingredientes selecionados pela pessoa
 router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingredientes aos produtos
     if(!req.body.idIngredientes){
         req.flash('error_msg', 'O produto deve possuir pelo menos um ingrediente')
@@ -82,6 +145,7 @@ router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingrediente
     }
 })
 
+// adicionar e remover adicionais do produto
 router.post('/add-produto-adicional-individual', (req, res) => { // adicionar ingredientes aos produtos
     if(req.body.idAdicional){
         let arrayIdAdicionais = JSON.parse(req.body.idAdicional)
@@ -107,7 +171,6 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
     }
 })
 
-
 router.post('/delete-produto-adicional', (req, res) => {
     Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
         {'_id': req.body.idProduto},
@@ -121,6 +184,7 @@ router.post('/delete-produto-adicional', (req, res) => {
         console.log(err)
     })
 })
+
 
 router.get('/produtos', async (req, res ) => { // listo todos os produtos
     let userEstabelecimentos = []
@@ -138,6 +202,7 @@ router.get('/produtos', async (req, res ) => { // listo todos os produtos
     
 })
 
+// Adicionar produto no geral mesmo
 router.post('/edit-produto', async (req, res) => { // editar o produto
     try {
         let produtoExist = await Produto.findOne({$and: [{nome: {$regex: req.body.nome, $options:"i"}}, {'idEstabelecimento': req.body.idEstabelecimento}, {idCategoriaProduto: req.body.idCategoriaProduto}]})
@@ -195,6 +260,7 @@ router.post('/add-produto', async (req, res) => { // adicionar produto
 })
 
 
+// Consultas ajax que realizo na pagina de produtos
 router.post('/ajax-get-produto-adicioanais-categoria-adicionais', (req, res) => { // consulto os adicionais pela categoria e estabelecimento selecionado no perfil
     Produto.findById({_id: req.body.idProduto}).then(produto => {
         req.body.idCategoriaAdicional ? idCategoriaAdicional = {$and: [{'idCategoriaAdicional': ObjectId(req.body.idCategoriaAdicional)}, {statusAtivo:true}]}  : idCategoriaAdicional = {$and: [{statusAtivo:true}, {'idEstabelecimento': produto.idEstabelecimento}]}

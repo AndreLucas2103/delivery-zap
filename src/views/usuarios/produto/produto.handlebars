@@ -77,6 +77,190 @@
         <div class="tab-content">
             <!-- Navbar para opcoes e adicionais START --> 
             <div class="tab-pane fade show active" id="nav-opcoes-and-adicionais">
+
+                <!-- Parte para os opcoes START --> 
+                <div class="card card-body bg-white border-light shadow-sm mb-4">
+                    <div class="h5 ">Opções 
+                        <button class="btn btn-secondary btn-sm float-end " data-bs-toggle="modal" data-bs-target="#modal-add-opcao">Criar opção</button>
+                    </div>
+
+                    {{#each produto.opcao}}
+                    <div class="card card-body bg-light border-light  my-1">
+                        <div>
+
+                            <div class="dropdown float-end">
+                                <button class="btn btn-white btn-sm  float-end dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">+</button>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-opcoes-individual" data-bs-idOpcao="{{_id}}" >Individual</a></li>
+                                    <li><a class="dropdown-item" href="#">Modelo de opções</a></li>
+                                </ul>
+                            </div>
+                            <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-opcao-{{_id}}"><i class="fas fa-list"></i></button>
+                            <button class="btn btn-white btn-sm  float-end mx-1" type="button" data-bs-idOpcao="{{_id}}" data-bs-nome="{{nome}}" data-bs-descricao="{{descricao}}" data-bs-multiplaEscolha="{{multiplaEscolha}}"  data-bs-toggle="modal" data-bs-target="#modal-edit-opcao"><i class="fas fa-pen"></i></button>
+                            
+                            <div>Nome: {{nome}}</div>
+                            {{#if descricao}}
+                            <div>Descricao: {{descricao}}</div>
+                            {{/if}}
+                            <div>Multipla Escolha: <span class="formatarTrueFalse">{{multiplaEscolha}}</span></div>
+
+                        </div>
+
+                        <div class="collapse" id="collapse-opcao-{{_id}}">
+                            <hr>
+                            <div class="table-responsive " style="max-height:300px">
+                            <table class="table table-sm border-white table-hover">
+                                <thead>
+                                    <tr>
+                                        <th scope="col">Nome</th>
+                                        <th scope="col">Valor</th>
+                                        <th scope="col"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <form action="/produto/delete-produto-opcoes/{{_id}}" method="post">
+                                    <input type="text" name="idProduto" class="idProduto-remove-opcao-opcoes" hidden readonly>
+                                    {{#each opcoes}}
+                                    <tr>
+                                        <th >{{nome}}</th>
+                                        <th class="valorFormatar">{{valor}}</th>
+                                        <td><button type="submit" class="btn btn-light btn-sm text-danger" name="id_opcoes_opcoes" value="{{_id}}" style="font-size: small;">X</button></td>
+                                    </tr>
+                                    {{/each}}
+                                    </form>
+                                </tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                    {{/each}}
+
+                    <script>
+                        $('.idProduto-remove-opcao-opcoes').val('{{produto._id}}')
+                    </script>
+
+
+                    <!-- Modal add opcoes INDIVIDUAL START-->
+                    <div class="modal fade" id="modal-add-opcoes-individual" tabindex="-1" aria-labelledby="modal-add-opcoes-individualLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-opcoes-individualLabel">Adicionar Opções</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/produto/add-produto-opcoes-individual" method="post">
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <input type="text" name="idOpcao" id="edit-idOpcao-individual" hidden  readonly>
+                                    <div class="row">
+                                        <div class="form-floating col-6">
+                                            <input type="text" class="form-control" id="opcao-nome-individual"  name="nome" placeholder="-" required>
+                                            <label for="opcao-nome-individual" class="ml-2">Nome *</label>
+                                        </div>
+                                        <div class="form-floating col-6">
+                                            <input type="number" class="form-control" id="opcao-valor-individual" step=".01" name="valor" placeholder="-" required>
+                                            <label for="opcao-valor-individual" class="ml-2">Valor (R$) *</label>
+                                        </div>
+                                    </div>
+                                    <h6 class="mt-2">* Caso seja valor GRÁTIS, insira o valor 0 no campo</h6>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var modalAddOpcoesIndividualProduto = document.getElementById('modal-add-opcoes-individual')
+                        modalAddOpcoesIndividualProduto.addEventListener('show.bs.modal', function (event) {
+                            var button = event.relatedTarget
+                            $('#edit-idOpcao-individual').val(button.getAttribute('data-bs-idOpcao'))
+                        })
+                    </script>
+                    <!-- Modal add opcoes INDIVIDUAL END-->
+
+                    <!-- Modal edit opção START-->
+                    <div class="modal fade" id="modal-edit-opcao" tabindex="-1" aria-labelledby="modal-edit-opcaoLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-edit-opcaoLabel">Editar Opção <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/produto/edit-produto-opcao" method="post">
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <input type="text" name="idOpcao" id="edit-idOpcao" hidden  readonly>
+
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="edit-opcao-nome"  name="nome" placeholder="-" required>
+                                        <label for="edit-opcao-nome" class="ml-2">Nome *</label>
+                                    </div>
+                                    <div class="form-floating mt-2">
+                                        <input type="text" class="form-control" id="edit-opcao-descricao"  name="descricao" placeholder="-" >
+                                        <label for="edit-opcao-descricao" class="ml-2">Descrição</label>
+                                    </div>
+                                    <div class="form-check form-switch  mt-2">
+                                        <input class="form-check-input" type="checkbox" id="edit-opcao-multiplaEscolha" name="multiplaEscolha" value="true">
+                                        <label class="form-check-label" for="edit-opcao-multiplaEscolha">Multipla Escolha</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var modalEditOpcaoProduto = document.getElementById('modal-edit-opcao')
+                        modalEditOpcaoProduto.addEventListener('show.bs.modal', function (event) {
+                            var button = event.relatedTarget
+                            $('#edit-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
+                            $('#edit-opcao-nome').val(button.getAttribute('data-bs-nome'))
+                            $('#edit-opcao-descricao').val(button.getAttribute('data-bs-descricao'))
+                            button.getAttribute('data-bs-multiplaEscolha')  == "true" ? multiplaEscolha = true : multiplaEscolha = false
+                            $('#edit-opcao-multiplaEscolha').prop('checked', multiplaEscolha )
+                        })
+                    </script>
+                    <!-- Modal edit opção END-->
+
+                    <!-- Modal add opção START-->
+                    <div class="modal fade" id="modal-add-opcao" tabindex="-1" aria-labelledby="modal-add-opcaoLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-opcaoLabel">Criar Opção <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/produto/add-produto-opcao" method="post">
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <div class="form-floating">
+                                        <input type="text" class="form-control" id="opcao-nome"  name="nome" placeholder="-" required>
+                                        <label for="opcao-nome" class="ml-2">Nome *</label>
+                                    </div>
+                                    <div class="form-floating mt-2">
+                                        <input type="text" class="form-control" id="opcao-descricao"  name="descricao" placeholder="-" >
+                                        <label for="opcao-descricao" class="ml-2">Descrição</label>
+                                    </div>
+
+                                    <div class="form-check form-switch  mt-2">
+                                        <input class="form-check-input" type="checkbox" id="opcao-multiplaEscolha" name="multiplaEscolha" value="true">
+                                        <label class="form-check-label" for="opcao-multiplaEscolha">Multipla Escolha</label>
+                                    </div>
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Criar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal add opção END-->
+
+
+                </div>
+
+                <!-- Parte para os opcoes END --> 
+
                 <!-- Parte para os adicionais START --> 
                 <div class="card card-body bg-white border-light shadow-sm mb-4">
                     <div class="h5">Adicionais 
@@ -91,7 +275,7 @@
                         </div>
                     </div>
 
-                    <div class="table-responsive">
+                    <div class="table-responsive " style="max-height:300px">
                     <table class="table table-sm">
                         <thead>
                             <tr>
@@ -175,6 +359,7 @@
                     <!-- Modal add adicionais individual END-->
                 </div>
                 <!-- Parte para os adicionais END --> 
+
             </div>
             <!-- Navbar para opcoes e adicionais START --> 
 
@@ -300,6 +485,15 @@
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
             $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        })
+
+        $(".formatarTrueFalse").each(function(item) {
+            let textFormat = $(this).text()
+            if(textFormat == "true"){
+                $(this).html('<span hidden>true</span><i class="fas fa-check-circle text-success"></i>');
+            }else if(textFormat == "false"){
+                $(this).html('<span hidden>false</span><i class="fas fa-times-circle text-danger"></i>');
+            }
         })
 
         // script para puxas os tooltips "as informações de I no icone azul kk"
