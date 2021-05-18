@@ -212,6 +212,7 @@ router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
 
 router.get('/painel', eAdmin, async (req, res) => {
     try {
+        let estabelecimento = await Estabelecimento.findById({_id:'60a13699df46330c28432b78'})
         let usuarios = await Usuario.aggregate([
             { $match: { _id: req.user._id } },
             {
@@ -223,8 +224,8 @@ router.get('/painel', eAdmin, async (req, res) => {
                     as: "estabelecimentosVinculados"
                 }
             }
-        ])
-        res.render('usuarios/configuracao/paineldevendas', { usuarios: usuarios[0] })
+        ])   
+        res.render('usuarios/configuracao/paineldevendas', { usuarios: usuarios[0],estabelecimento:estabelecimento[0]})
     } catch (err) {
         console.log(err)
     }
