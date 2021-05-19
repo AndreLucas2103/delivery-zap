@@ -77,20 +77,7 @@
 
                 <div class="row">
                     <div class="col-12 col-xl-8">
-                        <div class="card card-body bg-white border-light shadow-sm mb-4">
-                            <h2 class="h5 mb-4">Selecione o estabelecimento:</h2>
-                            <form action="/configuracao/edit-config-painel" method="POST">
-                                <div class="col-md-6 mb-3">
-                                    <select class="form-select mb-0" id="estabelecimentoSelecionado"
-                                        name="estabelecimentoSelecionado">
-                                        <option>---</option>
-                                        {{#each usuarios.estabelecimentosVinculados}}
-                                        <option value="{{_id}}">{{nome}}</option>
-                                        {{/each}}
-                                    </select>
-                                </div>
-                                <hr>
-                                <section>
+                        <div class="card card-body bg-white border-light shadow-sm mb-4">                     
                                     <h2 style="text-align: center;" class="h5 mb-4">Configuração</h2>
                                     <center>
                                         <div class="row">
@@ -214,38 +201,6 @@
         </div>
     </div>
 </div>
-
-
-<script>
-    $('#estabelecimentoSelecionado').on('change', function (event) {
-        var recipient = $('#estabelecimentoSelecionado').val()
-        jQuery.ajax({
-            type: "POST",
-            url: '/configuracao/ajax-get-estabelecimento-painel',
-            data: { idEstabelecimentoConfig: recipient },
-            success: function (response) {
-                $('#nomeEstabelecimento').text(response.nomePainel)
-                $('#enderecoEstabelecimento').text(response.endereco.logradouro)
-                $('#numeroEstabelecimento').text("- "+response.endereco.numero)
-                $('#bairroEstabelecimento').text("- "+response.endereco.bairro)
-                 $('#nome').val(response.nomePainel)
-                $('#logradouro').val(response.endereco.logradouro)              
-                $('#numero').val(response.endereco.numero)
-                $('#bairro').val(response.endereco.bairro)
-                $('#url').prop('href', "deliveryzap.com/estabelecimento/" + response.url)
-                $('#url').text("deliveryzap.com/estabelecimento/" + response.url)
-                $('#colorFundo').val(response.painel.colorFundo)
-                $('#colorFonte').val(response.painel.colorFonte)
-                $('#edit-idEstabelecimentoConfig').val(response._id)
-                $("#backcolor").css("background-color", response.painel.colorFundo);
-                $("#nomeEstabelecimento").css("color", response.painel.colorFonte);
-                $("#enderecoEstabelecimento").css("color", response.painel.colorFonte);
-                $("#numeroEstabelecimento").css("color", response.painel.colorFonte);
-                $("#bairroEstabelecimento").css("color", response.painel.colorFonte);
-            }
-        });
-    })
-</script>
 
 <script>
     window.onload = function () {

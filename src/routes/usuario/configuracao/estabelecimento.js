@@ -210,26 +210,27 @@ router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
     }
 })
 
-router.get('/painel', eAdmin, async (req, res) => {
+router.get('/painel/:idPainel', eAdmin, async (req, res) => {
     try {
-        let estabelecimento = await Estabelecimento.findById({_id:'60a13699df46330c28432b78'})
-        let usuarios = await Usuario.aggregate([
-            { $match: { _id: req.user._id } },
+        let estabelecimento = await Estabelecimento.aggregate([
+            { $match: { _id: ObjectId(req.params.idPainel) } },
             {
                 $lookup:
                 {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosVinculados.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosVinculados"
+                    from: "usuarios",
+                    localField: "_id",
+                    foreignField: "estabelecimentosVinculados.idPainel",
+                    as: "usuarios"
                 }
             }
-        ])   
-        res.render('usuarios/configuracao/paineldevendas', { usuarios: usuarios[0],estabelecimento:estabelecimento[0]})
+        ])
+
+        res.render('usuarios/configuracao/estabelecimento', { estabelecimento: estabelecimento[0] })
     } catch (err) {
         console.log(err)
     }
 })
+
 
 router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabelecimento
     Estabelecimento.findById({ _id: req.body.estabelecimentoSelecionado }).then(estabelecimento => {

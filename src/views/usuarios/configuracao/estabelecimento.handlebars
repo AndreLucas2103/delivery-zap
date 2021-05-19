@@ -18,7 +18,9 @@
     </div>
 
     <button type="button" class="btn btn-secondary btn-sm mb-4 float-end " data-bs-toggle="modal" data-bs-target="#modal-edit-estabelecimento">Editar Informações</button>
-
+    {{#each estabelecimentos}}
+    <button type="button" class="btn btn-secondary btn-sm mb-4 float-end "><a href="/configuracao/painel/{{estabelecimentosVinculados._id}}">Painel de Vendas</button></a>
+{{/each}}
     <!-- Modal edit estabelecimento START -->
     <div class="modal fade" id="modal-edit-estabelecimento" tabindex="-1" aria-labelledby="modal-edit-estabelecimentoLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
