@@ -28,7 +28,7 @@ router.get('/perfil', async(req, res) => {
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
         let produto = await  Produto.findById({_id: req.query.produto})
-            .populate('adicionais.idCategoriaAdicional adicionais.idAdicional idCategoriaProduto idEstabelecimento ingredientes.idIngrediente').lean()
+            .populate('adicionais.idCategoriaAdicional adicionais.idAdicional idCategoriaProduto idEstabelecimento opcao.opcoesProduto.idProduto').lean()
 
         let ingredientes = await Ingrediente.find({$and: [{'categoriasProdutos.idCategoriaProduto': produto.idCategoriaProduto},{statusAtivo:true} ]}).lean()
         
@@ -50,27 +50,46 @@ router.get('/perfil', async(req, res) => {
 
 // Parte para opcoes dos produtos
 router.post('/add-produto-opcoes-individual', (req, res) => { // adicionar opcoes a uma opcao 
-    let multiplaEscolha
-    req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
-    Produto.updateOne(
-        {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
-        {$push: {
-            'opcao.$.opcoes': {'nome': req.body.nome, 'valor': req.body.valor}
-        }}
-    ).then(() => {
+    console.log(req.body)
+    if(req.body.vinculoProduto == 'true'){
+        let arrayidProdutos = JSON.parse(req.body.idProdutos)
+
+        arrayidProdutos.forEach(element => {
+            Produto.updateOne(
+                {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
+                {$push: {
+                    'opcao.$.opcoesProduto': {'idProduto': element.idProduto}
+                }}
+            ).then(() => {
+                
+            }).catch(err => {
+                console.log(err)
+            })
+        })
+
         req.flash('success_msg', 'Opção adicionada')
         res.redirect('back')
-    }).catch(err => {
-        console.log(err)
-    })
+        
+    }else{
+        Produto.updateOne(
+            {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
+            {$push: {
+                'opcao.$.opcoes': {'nome': req.body.nome, 'valor': req.body.valor}
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Opção adicionada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    }
 })
 
-router.post('/delete-produto-opcoes/:idOpcao', (req, res) => { // adicionar opcoes a uma opcao 
+router.post('/delete-produto-opcoes/:vinculoProduto/:idOpcao', (req, res) => { // adicionar opcoes a uma opcao 
+    req.params.vinculoProduto == "true" ? condicao = {'opcao.$.opcoesProduto': {_id: ObjectId(req.body.id_opcoes_opcoes)}} : condicao = {'opcao.$.opcoes': {_id: ObjectId(req.body.id_opcoes_opcoes)}}
     Produto.updateOne(
         {_id: req.body.idProduto, 'opcao._id': req.params.idOpcao},
-        {$pull: {
-            'opcao.$.opcoes': {_id: ObjectId(req.body.id_opcoes_opcoes)}
-        }}
+        {$pull: condicao}
     ).then(() => {
         req.flash('success_msg', 'Opção removida')
         res.redirect('back')
@@ -80,12 +99,21 @@ router.post('/delete-produto-opcoes/:idOpcao', (req, res) => { // adicionar opco
 })
 
 router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nova opcao ao produto
-    let multiplaEscolha
+    let multiplaEscolha, vinculoProduto, dividendo, obrigatorio
     req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
+    req.body.vinculoProduto == "true" ? vinculoProduto = true  : vinculoProduto = false
+    req.body.vinculoProduto == "true" ? dividendo = req.body.dividendo  : dividendo = 1
+
     Produto.updateOne(
         {_id: req.body.idProduto},
         {$push: {
-            'opcao': {'nome': req.body.nome, 'descricao': req.body.descricao, multiplaEscolha: multiplaEscolha}
+            'opcao': {   
+                'nome': req.body.nome, 
+                'descricao': req.body.descricao,
+                'multiplaEscolha': multiplaEscolha, 
+                'vinculoProduto': vinculoProduto, 
+                'dividendo': dividendo, 
+            }
         }}
     ).then(() => {
         req.flash('success_msg', 'Opção criada')
@@ -96,11 +124,36 @@ router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nov
 })
 
 router.post('/edit-produto-opcao', (req, res) => { // rota para editar as informacoes de uma opcao do produto
-    let multiplaEscolha
+    let multiplaEscolha, vinculoProduto, dividendo, obrigatorio
     req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
+    req.body.obrigatorio == "true" ? obrigatorio = true : obrigatorio = false
+    req.body.vinculoProduto == "true" ? vinculoProduto = true  : vinculoProduto = false
+    req.body.vinculoProduto == "true" ? dividendo = req.body.dividendo  : dividendo = 1
+    if(req.body.vinculoProduto == "true"){
+        condicao = {
+            'opcao.$.nome': req.body.nome, 
+            'opcao.$.descricao': req.body.descricao, 
+            "opcao.$.multiplaEscolha": multiplaEscolha,
+            "opcao.$.obrigatorio": obrigatorio,
+            "opcao.$.vinculoProduto": vinculoProduto,
+            "opcao.$.dividendo": dividendo,
+            "opcao.$.opcoes": []
+        }
+    }else{
+        condicao = {
+            'opcao.$.nome': req.body.nome, 
+            'opcao.$.descricao': req.body.descricao, 
+            "opcao.$.multiplaEscolha": multiplaEscolha,
+            "opcao.$.obrigatorio": obrigatorio,
+            "opcao.$.vinculoProduto": vinculoProduto,
+            "opcao.$.dividendo": dividendo,
+            "opcao.$.opcoesProduto": []
+        }
+    }
+    
     Produto.updateOne(
         {_id: req.body.idProduto, 'opcao._id': req.body.idOpcao},
-        {$set:  {'opcao.$.nome': req.body.nome, 'opcao.$.descricao': req.body.descricao, "opcao.$.multiplaEscolha": multiplaEscolha}}
+        {$set:  condicao }
     ).then(() => {
         req.flash('success_msg', 'Opção editada')
         res.redirect('back')
@@ -128,7 +181,7 @@ router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingrediente
                 Produto.updateOne(
                     {_id: req.body.idProduto},
                     {$push: {
-                        'ingredientes': {'idIngrediente': element.idIngrediente}
+                        'ingredientes': {'nome': element.value}
                     }}
                 ).then(() => {
         
@@ -275,6 +328,17 @@ router.post('/ajax-get-produto-adicioanais-categoria-adicionais', (req, res) => 
     })
 })
 
+router.post('/ajax-get-produto-produtos-opcoes-produtos', (req, res) => { // consulto os 
+    Produto.findById({_id: req.body.idProduto}).then(produto => {
+        Produto.find({idEstabelecimento: produto.idEstabelecimento}).populate('idCategoriaProduto').lean().then(produtos => {
+            res.json(produtos)
+        }).catch(err => {
+            console.log(err)
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------
 router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categorias
