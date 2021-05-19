@@ -1,0 +1,185 @@
+{{>usuario/_top-css}}
+
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Produto</a></li>
+                <li class="breadcrumb-item"><a href="/produto/modelo-opcoes">Modelo Opções</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
+
+    <div class="row">
+        {{#each ingredientes}}
+        <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">{{nome}}</h2>
+                    <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-ingredientes" data-bs-whatever="{{_id}}">Editar</a>
+                </div>
+                <div class="card-body">
+                    <div style="font-size: small;">
+                        <i class="fas fa-tag"></i>
+                        {{#each categoriasProdutos}}
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaProduto.nome}}</div>
+                        {{/each}}
+                    </div>
+                    <div style="font-size: small;">
+                        <i class="fas fa-map-marker-alt text-danger"></i>
+                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idEstabelecimento.nome}}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <!-- Modal edit ingredientes START -->
+    <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-ingredientesLabel">Editar Categoria</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/edit-ingredientes" method="post">
+                    <div class="row">
+                        <div class="form-floating col">
+                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" required >
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                    </div>
+                    <div class="mt-4">
+                        <span id="ajax-estabelecimento" class="ml-4"></span>
+                    </div>
+
+                    <h5 class=" mt-4 ml-2">Categoria Produto</h5>
+                    <div class="row  ml-2" id="radio-edit-ingrediente-categoria"></div>
+                    
+                    <input type="text" name="idIngrediente" id="edit-idIngrediente" hidden  readonly>
+                    <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden  readonly>
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
+                        <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        
+                        <div class="form-check form-switch float-end " style="font-size: small;">
+                            <input class="form-check-input" type="checkbox" name="statusAtivo" id="edit-statusAtivo" value="true">
+                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal edit ingredientes END -->
+
+    <script>
+        var modalEditIngrediente = document.getElementById('modal-edit-ingredientes')
+        modalEditIngrediente.addEventListener('show.bs.modal', function (event) {
+            $('.form-check-input').prop('checked', false)
+            $('#radio-edit-ingrediente-categoria').empty()
+
+            var button = event.relatedTarget
+            var recipient = button.getAttribute('data-bs-whatever')
+            jQuery.ajax({
+                type: "POST",
+                url: '/produto/ajax-get-ingredientes',
+                data: {idIngrediente: recipient},
+                success: function(response) {
+                    $('#edit-nome').val(response.ingrediente.nome)
+                    $(`#edit-statusAtivo`).prop('checked', response.ingrediente.statusAtivo)
+                    $('#edit-idIngrediente').val(response.ingrediente._id)
+                    $('#edit-idEstabelecimento').val(response.ingrediente.idEstabelecimento._id)
+
+                    response.categoriasProdutos.forEach(element => {
+                        let checkedCategoria
+                        if(response.ingrediente.categoriasProdutos.findIndex(elementArray => elementArray.idCategoriaProduto._id == element._id) != -1){
+                            checkedCategoria = 'checked'
+                        }else{
+                            checkedCategoria = ''
+                        }
+                        $('#radio-edit-ingrediente-categoria').append(`
+                        <div class="form-check form-switch col-6 ">
+                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="edit-categoria${element._id}" value="${element._id}" ${checkedCategoria}>
+                            <label class="form-check-label" for="edit-categoria${element._id}">${element.nome}</label>
+                        </div>
+                        `)
+                    })
+
+                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.ingrediente.idEstabelecimento.nome}`)
+                }
+            })
+        })
+    </script>
+
+    <!-- Modal add ingredientes START -->
+    <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-ingredientesLabel">Adicionar Ingredientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/add-modelo-opcoes" method="post">
+                    <div class="row">
+                        <div class="form-floating col">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                    </div>
+
+                    <div class="row mt-4 ml-2">
+                        <h5>Estabelecimentos</h5>
+                        {{#each usuarioLogado.estabelecimentosSelecionados}}
+                            <div class="form-check form-switch col-6">
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
+                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
+
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal add ingredientes END -->
+
+    <script> // script para adicionar categorias
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        }) 
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

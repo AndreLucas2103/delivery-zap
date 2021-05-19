@@ -161,8 +161,8 @@ const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
 const usuarioUsuario = require("./routes/usuario/usuario/usuario")
 const usuarioEntregador= require("./routes/usuario/entregador/entregador")
 const usuarioProduto = require("./routes/usuario/produto/produto")
+const usuarioProdutoModelo = require("./routes/usuario/produto/modelo")
 const usuarioPedido= require("./routes/usuario/pedido/pedido")
-
 
 
     // Configuracoes do usuario
@@ -173,6 +173,7 @@ app.use('/dashboard', usuarioDashboard)
 app.use('/usuario', usuarioUsuario)
 app.use('/entregador', usuarioEntregador)
 app.use('/produto', usuarioProduto)
+app.use('/produto', usuarioProdutoModelo)
 app.use('/pedido', usuarioPedido)
 
 

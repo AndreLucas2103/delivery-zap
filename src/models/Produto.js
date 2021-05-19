@@ -12,10 +12,7 @@ const Produto = new Schema({
     descricao: String,
     
     ingredientes: [{
-        idIngrediente: {
-            type: Schema.Types.ObjectId,
-            ref: "ingredientes",
-        },
+        nome: String
     }],
     adicionais: [{
         idAdicional: {
@@ -31,10 +28,29 @@ const Produto = new Schema({
     opcao: [{
         nome: String,
         descricao: String,
+
+        obrigatorio: {
+            type: Boolean,
+            default: true
+        },
+
         opcoes: [{
             nome: String,
             valor: Number
         }],
+
+        vinculoProduto: Boolean,
+        dividendo: {
+            type: Number,
+            default: 1
+        },
+        opcoesProduto: [{
+            idProduto: {
+                type: Schema.Types.ObjectId,
+                ref: "produtos",
+            },
+        }],
+        
         multiplaEscolha: Boolean
     }],
 
@@ -48,7 +64,7 @@ const Produto = new Schema({
     },
 
     promocao: Boolean,
-    valorPromocao: Boolean,
+    valorPromocao: Number,
     
     idCategoriaProduto: {
         type: Schema.Types.ObjectId,
