@@ -1,0 +1,35 @@
+<header>
+    <div class="container-md"
+        style="width: 100%;height:250px; background-size: 100% 100%; background-image: url(/usuario/assets/img/favicon/capaApp.png);">
+        <center>
+            <div style="border-radius: 25px;border-color:white">
+                <br>
+                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border" style="width: 100px;height:100px;background-repeat:no-repeat;top:120px;
+                        background-size: contain;position:relative">
+            </div>
+    </div>
+    </center>
+    <div class="container-md" style="background-color:green">
+        <center>
+            <span style="color: white;">Aberto</span>
+        </center>
+    </div>
+
+</header>
+<div style="text-align: center;">
+<span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
+    id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
+<i class="fas fa-map-marker-alt text-danger"></i>
+<span style="color:{{estabelecimento.painel.colorFonte}};"
+    id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
+<span style="color:{{estabelecimento.painel.colorFonte}};" id="numeroEstabelecimento"> -
+    {{estabelecimento.endereco.numero}}</span>
+<span style="color:{{estabelecimento.painel.colorFonte}};" id="bairroEstabelecimento"> -
+    {{estabelecimento.endereco.bairro}}</span>
+<span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};"> -
+    {{estabelecimento.endereco.localidade}}</span>
+<body style="background:{{estabelecimento.painel.colorFundo}};">
+</div>
+</body>
+
+{{>_msg}}

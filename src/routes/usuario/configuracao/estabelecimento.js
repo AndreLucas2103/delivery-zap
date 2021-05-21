@@ -121,7 +121,7 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                     estabelecimento.endereco = {
                         logradouro: req.body.logradouro,
                         bairro: req.body.bairro,
-                        cidade: req.body.cidade,
+                        localidade: req.body.cidade,
                         cep: req.body.cep,
                         numero: req.body.numero,
                         uf: req.body.uf
@@ -164,11 +164,12 @@ router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
         if (user.usuarioMaster == true) {
             addEstabelecimento = {
                 nome: req.body.nome,
+                nomePainel: req.body.nome,
                 url: req.body.url,
                 endereco: {
                     logradouro: req.body.logradouro,
                     bairro: req.body.bairro,
-                    cidade: req.body.cidade,
+                    localidade: req.body.cidade,
                     cep: req.body.cep,
                     numero: req.body.numero,
                     uf: req.body.uf
@@ -219,13 +220,13 @@ router.get('/painel/:idPainel', eAdmin, async (req, res) => {
                 {
                     from: "usuarios",
                     localField: "_id",
-                    foreignField: "estabelecimentosVinculados.idPainel",
+                    foreignField: "estabelecimentosVinculados.idEstabelecimento",
                     as: "usuarios"
                 }
             }
         ])
 
-        res.render('usuarios/configuracao/estabelecimento', { estabelecimento: estabelecimento[0] })
+        res.render('usuarios/configuracao/configpainel', { estabelecimento: estabelecimento[0] })
     } catch (err) {
         console.log(err)
     }
@@ -233,36 +234,31 @@ router.get('/painel/:idPainel', eAdmin, async (req, res) => {
 
 
 router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabelecimento
-    Estabelecimento.findById({ _id: req.body.estabelecimentoSelecionado }).then(estabelecimento => {
-        estabelecimento.nomePainel = req.body.nome,
+    Estabelecimento.findById({ _id: req.body.idPainel }).then(estabelecimento => {
+     if (estabelecimento) {
+            estabelecimento.nomePainel = req.body.nome,
 
-        estabelecimento.endereco = {
-            logradouro: req.body.logradouro,
-            numero: req.body.numero,
-            bairro: req.body.bairro,
-        },
-        estabelecimento.painel = {
-        colorFundo : req.body.colorFundo,
-        colorFonte : req.body.colorFonte
-    } 
-        estabelecimento.save().then(() => {
-            req.flash('success_msg', 'Painel de vendas editado.')
-            res.redirect('back')
-        }).catch(err => {
+                estabelecimento.endereco.logradouro = req.body.logradouro,
+                estabelecimento.endereco.numero = req.body.numero,
+                estabelecimento.endereco.bairro = req.body.bairro,
+
+                estabelecimento.painel = {
+                    colorFundo: req.body.colorFundo,
+                    colorFonte: req.body.colorFonte
+                }
+            estabelecimento.save().then(() => {
+                req.flash('success_msg', 'Painel de vendas editado.')
+                res.redirect('back')
+            }).catch(err => {
+                req.flash('error_msg', 'Ocorreu um erro')
+                res.redirect('back')
+            })
+        } else {
             req.flash('error_msg', 'Ocorreu um erro')
             res.redirect('back')
-        })  
+        }
     })
 
-})
-
-
-router.post('/ajax-get-estabelecimento-painel', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    Estabelecimento.findById({_id:req.body.idEstabelecimentoConfig}).then(produto => {
-        res.json(produto)
-    }).catch(err => {
-        console.log(err)
-    })
 })
 
 

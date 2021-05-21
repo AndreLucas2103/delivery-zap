@@ -44057,7 +44057,7 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
   /* Smartphone */
   .smartphone {
     position: relative;
-    width: 340px;
+    width: 320px;
     height: 620px;
     margin: auto;
     border: 16px #262B40 solid;
