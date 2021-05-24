@@ -17,19 +17,32 @@
 
 </header>
 <div style="text-align: center;">
-<span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
-    id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
-<i class="fas fa-map-marker-alt text-danger"></i>
-<span style="color:{{estabelecimento.painel.colorFonte}};"
-    id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
-<span style="color:{{estabelecimento.painel.colorFonte}};" id="numeroEstabelecimento"> -
-    {{estabelecimento.endereco.numero}}</span>
-<span style="color:{{estabelecimento.painel.colorFonte}};" id="bairroEstabelecimento"> -
-    {{estabelecimento.endereco.bairro}}</span>
-<span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};"> -
-    {{estabelecimento.endereco.localidade}}</span>
-<body style="background:{{estabelecimento.painel.colorFundo}};">
+    <span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
+        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
+    <i class="fas fa-map-marker-alt text-danger"></i>
+    <span style="color:{{estabelecimento.painel.colorFonte}};"
+        id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
+    <span style="color:{{estabelecimento.painel.colorFonte}};" id="numeroEstabelecimento"> -
+        {{estabelecimento.endereco.numero}}</span>
+    <span style="color:{{estabelecimento.painel.colorFonte}};" id="bairroEstabelecimento"> -
+        {{estabelecimento.endereco.bairro}}</span>
+    <span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};"> -
+        {{estabelecimento.endereco.localidade}}</span>
+
+    <body style="background:{{estabelecimento.painel.colorFundo}};">
 </div>
 </body>
+<br><br><br>
+<h3 style="font-family: fantasy;color:{{estabelecimento.painel.colorFonte}};text-align: center;">Cardápio</h3>
 
 {{>_msg}}
+
+<style>
+    .border-produto {
+        width: 50px;
+        height: 50px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: relative
+    }
+</style>
