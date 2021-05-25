@@ -45,10 +45,14 @@
     <script>
         $('.spinner-loading').hide()
         $('form').submit(() => {
-            $('#app-root').attr('disabled', true);
+            spinngLoading(true)
+        });
+
+        function spinngLoading(status){
+            $('#app-root').attr('disabled', status);
             $("div").on("keydown keypress keyup click contextmenu", false);
             $('.spinner-loading').show()
-        });
+        }
     </script>
 
     </body>
