@@ -44,6 +44,7 @@
 
     <script>
         $('.spinner-loading').hide()
+        
         $('form').submit(() => {
             spinngLoading(true)
         });
@@ -51,7 +52,11 @@
         function spinngLoading(status){
             $('#app-root').attr('disabled', status);
             $("div").on("keydown keypress keyup click contextmenu", false);
-            $('.spinner-loading').show()
+            if(status == true){
+                $('.spinner-loading').show()
+            }else{
+                $('.spinner-loading').hide()
+            }
         }
     </script>
 
