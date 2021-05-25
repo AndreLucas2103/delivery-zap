@@ -30,37 +30,44 @@
                 -ms-user-select: none;
                 user-select: none;
             }
+            
+            .spinner-loading{
+                position: fixed;      /* SET TO FIXED */
+                top: 50%;
+                left: 50%;
+                z-index: 1001; 
+            }
         </style>
     </head>
-    <body>
-
+    <body >
         <div class="text-center spinner-loading" id="spinner-loading">
             <div class="spinner-border " style="width: 3rem; height: 3rem;" role="status"></div>
         </div>
 
-        <div id="app-root" >
+        <div id="app-root">
             {{{body}}}
         </div>
 
-    <script>
-        $('.spinner-loading').hide()
+        <script>
+            $('#spinner-loading').hide()
 
-        $('form').submit(() => {
-            spinngLoading(true)
-        });
+            $('form').submit(() => {
+                spinngLoading(true)
+            });
 
-        function spinngLoading(status){
-            $('#app-root').attr('disabled', status);
-            if(status == true){
-                $("div").on("keydown keypress keyup click contextmenu", false);
-                $('.spinner-loading').show()
-            }else{
-                $("div").on("keydown keypress keyup click contextmenu", true);
-                $('.spinner-loading').hide()
+            function spinngLoading(status){
+                $('#app-root').attr('disabled', status);
+                if(status == true){
+                    $("div").on("keydown keypress keyup click contextmenu", false);
+                    $('.spinner-loading').show()
+                }else{
+                    $("div").on("keydown keypress keyup click contextmenu", true);
+                    $('.spinner-loading').hide()
+                }
             }
-        }
-    </script>
+        </script>
 
+        <script src="/js/scripts.js"></script>
     </body>
 </html>
 
