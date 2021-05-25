@@ -239,17 +239,47 @@ router.post('/delete-produto-adicional', (req, res) => {
 
 
 router.get('/produtos', async (req, res ) => { // listo todos os produtos
-    let userEstabelecimentos = []
-    req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+    let userEstabelecimentos = [], idCategorias, nome, filtroExist
+    req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento)})
+    
+    if(req.query.idCategorias || req.query.nome){
+        filtroExist = true
+    }else{
+        filtroExist = false
+    }
 
-    let produtos = await Produto.find({idEstabelecimento: userEstabelecimentos}).populate('idCategoriaProduto idEstabelecimento').lean().sort({createdAt: -1})
+    let arrayIdCategorias = []
+    if(req.query.idCategorias){
+        JSON.parse(req.query.idCategorias).forEach(element => {
+            arrayIdCategorias.push(element.idCategoria)
+        })
+        idCategorias = {'idCategoriaProduto': arrayIdCategorias}
+    }else{
+        idCategorias = {}
+    }
+
+    req.query.nome ? nome = {nome: {$regex: req.query.nome, $options:"i"}} : nome ={}
+
+    let produtos = await Produto.find({
+        $and: [
+            {idEstabelecimento: userEstabelecimentos}, nome, idCategorias
+        ]
+    })
+    .populate('idCategoriaProduto idEstabelecimento').lean().sort({createdAt: -1})
+
     let estabelecimentos = await Estabelecimento.find({_id: userEstabelecimentos}).lean()
     let categoriasProdutos = await CategoriaProduto.find({$and: [{idEstabelecimento: userEstabelecimentos}, {statusAtivo: true}]}).populate('idEstabelecimento').lean()
 
     res.render('usuarios/produto/produtos', {
         produtos: produtos, 
         estabelecimentos: estabelecimentos, 
-        categoriasProdutos: JSON.stringify(categoriasProdutos)
+        categoriasProdutos: JSON.stringify(categoriasProdutos),
+
+        //filter
+        nome: req.query.nome,
+        idCategorias: req.query.idCategorias,
+
+        filtroExist: filtroExist
     })
     
 })

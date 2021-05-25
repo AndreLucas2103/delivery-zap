@@ -20,7 +20,23 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-produtos">+ Adicionar</button>
+    <div>
+        <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-produtos">+ Adicionar</button>
+        <button class="btn btn-{{#if filtroExist}}danger{{else}}white{{/if}} btn-sm mb-4 float-end" data-bs-toggle="collapse" data-bs-target="#collapseExample"> <i class="fas fa-filter"></i> </button>
+
+        <div class="collapse mb-4" id="collapseExample">
+            <div class="card card-body">
+                <form method="get">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="nome" id="filtro-nome" value="{{nome}}" placeholder="-">
+                        <label for="filtro-nome">Nome</label>
+                    </div>
+                    <input name="idCategorias" id="filtro-categorias-produtos" placeholder="Categorias" value="{{idCategorias}}">
+                    <button class="btn btn-dark btn-sm mt-2" type="submit">Filtrar</button>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="row">
         {{#each produtos}}
@@ -109,6 +125,20 @@
                 }
             })
         });
+        
+        var tagAddOpcoesProduto = document.querySelector('input[id=filtro-categorias-produtos]')
+        var tagifyAddOpcoesProduto = new Tagify(tagAddOpcoesProduto, {
+            editTags: false,
+            dropdown: {
+                maxItems: Infinity,
+                enabled : 0 // always opens dropdown when input gets focus
+            },
+        })
+
+        console.log(categoriasProdutos)
+        categoriasProdutos.forEach(element => {
+            tagifyAddOpcoesProduto.settings.whitelist.push({'idCategoria': element._id, value: `${element.nome} - ${element.idEstabelecimento.nome}`})
+        })
         
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
