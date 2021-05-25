@@ -21,9 +21,35 @@
         
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.bundle.min.js" integrity="sha384-JEW9xMcG8R+pH31jmWH6WWP0WintQrMb4s7ZOdauHnUtxwoG2vI5DkLtS3qm9Ekf" crossorigin="anonymous"></script>
 
+        <style>
+            div[disabled] {
+                opacity: 0.8;
+                pointer-events: none;
+                -webkit-user-select: none;
+                -moz-user-select: none;
+                -ms-user-select: none;
+                user-select: none;
+            }
+        </style>
     </head>
+    <body>
 
-        {{{body}}}
+        <div class="text-center spinner-loading" id="spinner-loading">
+            <div class="spinner-border " style="width: 3rem; height: 3rem;" role="status"></div>
+        </div>
+
+        <div id="app-root" >
+            {{{body}}}
+        </div>
+
+    <script>
+        $('.spinner-loading').hide()
+        $('form').submit(() => {
+            $('#app-root').attr('disabled', true);
+            $("div").on("keydown keypress keyup click contextmenu", false);
+            $('.spinner-loading').show()
+        });
+    </script>
 
     </body>
 </html>

@@ -50,7 +50,6 @@ router.get('/perfil', async(req, res) => {
 
 // Parte para opcoes dos produtos
 router.post('/add-produto-opcoes-individual', (req, res) => { // adicionar opcoes a uma opcao 
-    console.log(req.body)
     if(req.body.vinculoProduto == 'true'){
         let arrayidProdutos = JSON.parse(req.body.idProdutos)
 

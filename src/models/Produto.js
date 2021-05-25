@@ -10,6 +10,10 @@ const Produto = new Schema({
     nome: String,
     valor: Number,
     descricao: String,
+
+    img: {
+        
+    },
     
     ingredientes: [{
         nome: String
