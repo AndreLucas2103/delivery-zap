@@ -28,7 +28,9 @@
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">{{nome}}</h2>
-                    <a type="submit" class="btn btn-sm btn-secondary" href="/produto/perfil?produto={{_id}}">Ver</a>
+                    <form action="/produto/perfil" method="get">
+                        <button type="submit" class="btn btn-sm btn-secondary" name="produto" value="{{_id}}">Ver</button>
+                    </form>
                 </div>
                 <div class="card-body">
                     <h5 class="mt-2 text-center valorFormatar">{{valor}}</h5>
