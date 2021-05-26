@@ -21,131 +21,295 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-opcao">+ Adicionar</button>
 
     <div class="row">
-        {{#each ingredientes}}
-        <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
-            <div class="card border-light shadow-sm">
-                <div class="card-header border-bottom border-light d-flex justify-content-between">
-                    <h2 class="h5 mb-0">{{nome}}</h2>
-                    <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-ingredientes" data-bs-whatever="{{_id}}">Editar</a>
+        {{#each modelosOpcoes}}
+            <div class="col-12 col-lg-4 mb-4">
+            <div class="card card-body bg-light border-light mb-2 mx-2">
+                <div>
+                    <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="modal" data-bs-target="#modal-add-opcoes-individual" data-bs-idOpcao="{{_id}}" data-bs-vinculoProduto="{{vinculoProduto}}" >+</button>
+                    <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-opcao-{{_id}}"><i class="fas fa-list"></i></button>
+                    <button class="btn btn-white btn-sm  float-end mx-1" type="button" data-bs-idOpcao="{{_id}}" data-bs-nome="{{nome}}" data-bs-descricao="{{descricao}}" data-bs-multiplaEscolha="{{multiplaEscolha}}" data-bs-vinculoProduto="{{vinculoProduto}}" data-bs-dividendo="{{dividendo}}"  data-bs-obrigatorio="{{obrigatorio}}"  data-bs-toggle="modal" data-bs-target="#modal-edit-opcao"><i class="fas fa-pen"></i></button>
+                    
+                    <div>Nome: {{nome}}</div>
+                    {{#if descricao}}
+                    <div>Descricao: {{descricao}}</div>
+                    {{/if}}
+                    <div>Multipla Escolha: <span class="formatarTrueFalse">{{multiplaEscolha}}</span></div>
+                    <div class="mt-2"><i class="fas fa-map-marker-alt text-danger"></i> {{idEstabelecimento.nome}}</div>
                 </div>
-                <div class="card-body">
-                    <div style="font-size: small;">
-                        <i class="fas fa-tag"></i>
-                        {{#each categoriasProdutos}}
-                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idCategoriaProduto.nome}}</div>
-                        {{/each}}
-                    </div>
-                    <div style="font-size: small;">
-                        <i class="fas fa-map-marker-alt text-danger"></i>
-                        <div class="btn btn-light btn-sm my-1" style="font-size: x-small;">{{idEstabelecimento.nome}}</div>
+
+                <div class="collapse" id="collapse-opcao-{{_id}}">
+                    <hr>
+                    <div class="table-responsive " style="max-height:300px">
+                    <table class="table table-sm border-white table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nome</th>
+                                <th scope="col">Valor</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form action="/produto/delete-modelo-opcoes-opcoes/{{vinculoProduto}}/{{_id}}" method="post">
+                            {{#if vinculoProduto}}
+
+                                {{#each opcoesProduto}}
+                                <tr>
+                                    <th >{{idProduto.nome}}</th>
+                                    <th class="valorFormatar">{{idProduto.valor}}</th>
+                                    <td><button type="submit" class="btn btn-light btn-sm text-danger" name="id_opcoes_opcoes" value="{{_id}}" style="font-size: small;">X</button></td>
+                                </tr>
+                                {{/each}}
+
+                            {{else}}
+
+                                {{#each opcoes}}
+                                <tr>
+                                    <th >{{nome}}</th>
+                                    <th class="valorFormatar">{{valor}}</th>
+                                    <td><button type="submit" class="btn btn-light btn-sm text-danger" name="id_opcoes_opcoes" value="{{_id}}" style="font-size: small;">X</button></td>
+                                </tr>
+                                {{/each}}
+
+                            {{/if}}
+                            </form>
+                        </tbody>
+                    </table>
                     </div>
                 </div>
             </div>
-        </div>
-        {{/each}}
+            </div>
+            {{/each}}
     </div>
 
-    <!-- Modal edit ingredientes START -->
-    <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <!-- Modal add opcoes INDIVIDUAL START-->
+    <div class="modal fade" id="modal-add-opcoes-individual" tabindex="-1" aria-labelledby="modal-add-opcoes-individualLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-edit-ingredientesLabel">Editar Categoria</h5>
+                <h5 class="modal-title" id="modal-add-opcoes-individualLabel">Adicionar Opções</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/produto/edit-ingredientes" method="post">
-                    <div class="row">
-                        <div class="form-floating col">
-                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" required >
-                            <label for="nome" class="ml-2">Nome</label>
-                        </div>
-                    </div>
-                    <div class="mt-4">
-                        <span id="ajax-estabelecimento" class="ml-4"></span>
-                    </div>
-
-                    <h5 class=" mt-4 ml-2">Categoria Produto</h5>
-                    <div class="row  ml-2" id="radio-edit-ingrediente-categoria"></div>
+                <form action="/produto/add-modelo-opcoes-opcao"  method="post">
+                    <input type="text" name="idOpcao" id="edit-idOpcao-individual" hidden  readonly>
+                    <input type="text" name="vinculoProduto" id="edit-idOpcao-vinculoProduto" hidden  readonly>
                     
-                    <input type="text" name="idIngrediente" id="edit-idIngrediente" hidden  readonly>
-                    <input type="text" name="idEstabelecimento" id="edit-idEstabelecimento" hidden  readonly>
-
-                    <div class="mt-4">
-                        <button type="submit" class="btn btn-primary btn-sm ">Salvar</button>
-                        <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
-                        
-                        <div class="form-check form-switch float-end " style="font-size: small;">
-                            <input class="form-check-input" type="checkbox" name="statusAtivo" id="edit-statusAtivo" value="true">
-                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                    <div class="row" id="div-add-produto-opcoes-individual-false-vinculoProduto">
+                        <div class="form-floating col-6">
+                            <input type="text" class="form-control" id="opcao-nome-individual"  name="nome" placeholder="-" >
+                            <label for="opcao-nome-individual" class="ml-2">Nome *</label>
                         </div>
+                        <div class="form-floating col-6">
+                            <input type="number" class="form-control" id="opcao-valor-individual" step=".01" name="valor" placeholder="-" >
+                            <label for="opcao-valor-individual" class="ml-2">Valor (R$) *</label>
+                        </div>
+                        <h6 class="mt-2">* Caso seja valor GRÁTIS, insira o valor 0 no campo</h6>
                     </div>
 
+                    <div class="row" id="div-add-produto-opcoes-individual-true-vinculoProduto">
+                        <input  class='tagify--outside' name="idProdutos" id="add-opcoes-produtos">
+                    </div>
+
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
                 </form>
             </div>
             </div>
         </div>
     </div>
-    <!-- Modal edit ingredientes END -->
 
     <script>
-        var modalEditIngrediente = document.getElementById('modal-edit-ingredientes')
-        modalEditIngrediente.addEventListener('show.bs.modal', function (event) {
-            $('.form-check-input').prop('checked', false)
-            $('#radio-edit-ingrediente-categoria').empty()
+        var tagAddOpcoesProduto = document.querySelector('input[id=add-opcoes-produtos]')
+        var tagifyAddOpcoesProduto = new Tagify(tagAddOpcoesProduto, {
+            editTags: false,
+            dropdown: {
+                position: "input",
+                maxItems: Infinity,
+                closeOnSelect : false,
+                enabled : 0 // always opens dropdown when input gets focus
+            },
+        })
 
+        var modalAddOpcoesIndividualProduto = document.getElementById('modal-add-opcoes-individual')
+        modalAddOpcoesIndividualProduto.addEventListener('show.bs.modal', function (event) {
+            
             var button = event.relatedTarget
-            var recipient = button.getAttribute('data-bs-whatever')
-            jQuery.ajax({
-                type: "POST",
-                url: '/produto/ajax-get-ingredientes',
-                data: {idIngrediente: recipient},
-                success: function(response) {
-                    $('#edit-nome').val(response.ingrediente.nome)
-                    $(`#edit-statusAtivo`).prop('checked', response.ingrediente.statusAtivo)
-                    $('#edit-idIngrediente').val(response.ingrediente._id)
-                    $('#edit-idEstabelecimento').val(response.ingrediente.idEstabelecimento._id)
+            $('#edit-idOpcao-individual').val(button.getAttribute('data-bs-idOpcao'))
+            $('#edit-idOpcao-vinculoProduto').val(button.getAttribute('data-bs-vinculoProduto'))
 
-                    response.categoriasProdutos.forEach(element => {
-                        let checkedCategoria
-                        if(response.ingrediente.categoriasProdutos.findIndex(elementArray => elementArray.idCategoriaProduto._id == element._id) != -1){
-                            checkedCategoria = 'checked'
-                        }else{
-                            checkedCategoria = ''
-                        }
-                        $('#radio-edit-ingrediente-categoria').append(`
-                        <div class="form-check form-switch col-6 ">
-                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="edit-categoria${element._id}" value="${element._id}" ${checkedCategoria}>
-                            <label class="form-check-label" for="edit-categoria${element._id}">${element.nome}</label>
-                        </div>
-                        `)
-                    })
-
-                    $(`#ajax-estabelecimento`).html(`<i class="fas fa-map-marker-alt text-danger"></i> ${response.ingrediente.idEstabelecimento.nome}`)
-                }
-            })
+            if(button.getAttribute('data-bs-vinculoProduto') == 'true'){
+                $('#div-add-produto-opcoes-individual-false-vinculoProduto').hide()
+                $('#div-add-produto-opcoes-individual-true-vinculoProduto').show()
+                
+                tagifyAddOpcoesProduto.settings.whitelist.length = 0;
+                tagifyAddOpcoesProduto.removeAllTags()
+                tagifyAddOpcoesProduto.loading(true)
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/produto/ajax-get-produto-modelo-opcoes',
+                    data: {idModeloOpcao: button.getAttribute('data-bs-idOpcao')},
+                    success: function(response) {
+                        response.forEach(element => {
+                            console.log(element)
+                            tagifyAddOpcoesProduto.settings.whitelist.push({'idProduto': element._id, value: `${element.nome} - ${element.idCategoriaProduto.nome}`})
+                        })
+                        tagifyAddOpcoesProduto.loading(false)
+                    }
+                });
+            }else{
+                $('#div-add-produto-opcoes-individual-false-vinculoProduto').show()
+                $('#div-add-produto-opcoes-individual-true-vinculoProduto').hide()
+            }
         })
     </script>
+    <!-- Modal add opcoes INDIVIDUAL END-->
 
-    <!-- Modal add ingredientes START -->
-    <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+    <!-- Modal edit opção START-->
+    <div class="modal fade" id="modal-edit-opcao" tabindex="-1" aria-labelledby="modal-edit-opcaoLabel" aria-hidden="true">
+        <div class="modal-dialog">
             <div class="modal-content">
             <div class="modal-header">
-                <h5 class="modal-title" id="modal-add-ingredientesLabel">Adicionar Ingredientes</h5>
+                <h5 class="modal-title" id="modal-edit-opcaoLabel">Editar Opção <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/edit-modelo-opcoes" method="post">
+                    <input type="text" name="idOpcao" id="edit-idOpcao" hidden  readonly>
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="edit-opcao-nome"  name="nome" placeholder="-" required>
+                        <label for="edit-opcao-nome" class="ml-2">Nome *</label>
+                    </div>
+                    <div class="form-floating mt-2">
+                        <input type="text" class="form-control" id="edit-opcao-descricao"  name="descricao" placeholder="-" >
+                        <label for="edit-opcao-descricao" class="ml-2">Descrição</label>
+                    </div>
+
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="edit-opcao-obrigatorio" name="obrigatorio" value="true">
+                        <label class="form-check-label" for="edit-opcao-obrigatorio">Obrigatório</label>
+                    </div>
+
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="edit-opcao-multiplaEscolha" name="multiplaEscolha" value="true">
+                        <label class="form-check-label" for="edit-opcao-multiplaEscolha">Multipla Escolha</label>
+                    </div>
+
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="edit-opcao-vinculoProduto" name="vinculoProduto" value="true">
+                        <label class="form-check-label" for="edit-opcao-vinculoProduto">Vinculo Produto <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso a opção seja para vincular produtos as opções. Se enquadra em situações de pizzas onde o usuário monta"></i></label>
+                    </div>
+
+                    <div id="edit-div-opcoes-dividendo">
+                        <label for="edit-opcao-dividendo" class="mt-2">Dividendo <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Exemplo: uma pizza onde usuário monta, ele escolhe a primeira opção que seria o valor total da pizza divido por 2, e a segunda metade fica para a segunda opção fazer a mesma divisão"></i></label>
+                        <input type="text" class="form-control mb-2" id="edit-opcao-dividendo"  name="dividendo"  >
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+
+                    <script>
+                        $('#edit-div-opcoes-dividendo').hide()
+                        $('#edit-opcao-multiplaEscolha').change(() => {
+                            $('#edit-opcao-vinculoProduto').prop('checked', false)
+                            $('#edit-div-opcoes-dividendo').hide()
+                        })
+
+                        $('#edit-opcao-vinculoProduto').change((e) => {
+                            $('#edit-opcao-multiplaEscolha').prop('checked', false)
+                            if(e.currentTarget.checked == true){
+                                $('#edit-div-opcoes-dividendo').show()
+                            }else{
+                                $('#edit-div-opcoes-dividendo').hide()
+                            }
+                        })
+                    </script>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modalEditOpcaoProduto = document.getElementById('modal-edit-opcao')
+        modalEditOpcaoProduto.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            $('#edit-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
+            $('#edit-opcao-nome').val(button.getAttribute('data-bs-nome'))
+            $('#edit-opcao-dividendo').val(button.getAttribute('data-bs-dividendo'))
+            $('#edit-opcao-descricao').val(button.getAttribute('data-bs-descricao'))
+
+            button.getAttribute('data-bs-obrigatorio')  == "true" ? obrigatorio = true : obrigatorio = false
+            $('#edit-opcao-obrigatorio').prop('checked', obrigatorio )
+
+            button.getAttribute('data-bs-multiplaEscolha')  == "true" ? multiplaEscolha = true : multiplaEscolha = false
+
+            $('#edit-opcao-multiplaEscolha').prop('checked', multiplaEscolha )
+
+            if(button.getAttribute('data-bs-vinculoProduto')  == "true"){
+                $('#edit-opcao-vinculoProduto').prop('checked', true)
+                $('#edit-div-opcoes-dividendo').show()
+            }else{
+                $('#edit-opcao-vinculoProduto').prop('checked', false)
+                $('#edit-div-opcoes-dividendo').hide()
+            }
+        })
+    </script>
+    <!-- Modal edit opção END-->
+
+    <!-- Modal add modeloOpcao START -->
+    <div class="modal fade" id="modal-add-opcao" tabindex="-1" aria-labelledby="modal-add-opcaoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-opcaoLabel">Criar Opção <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
                 <form action="/produto/add-modelo-opcoes" method="post">
-                    <div class="row">
-                        <div class="form-floating col">
-                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
-                            <label for="nome" class="ml-2">Nome</label>
-                        </div>
+                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="opcao-nome"  name="nome" placeholder="-" required>
+                        <label for="opcao-nome" class="ml-2">Nome *</label>
                     </div>
+                    <div class="form-floating mt-2">
+                        <input type="text" class="form-control" id="opcao-descricao"  name="descricao" placeholder="-" >
+                        <label for="opcao-descricao" class="ml-2">Descrição</label>
+                    </div>
+
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="opcao-multiplaEscolha" name="multiplaEscolha" value="true">
+                        <label class="form-check-label" for="opcao-multiplaEscolha">Multipla Escolha</label>
+                    </div>
+
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="opcao-vinculoProduto" name="vinculoProduto" value="true">
+                        <label class="form-check-label" for="opcao-vinculoProduto">Vinculo Produto <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso a opção seja para vincular produtos as opções. Se enquadra em situações de pizzas onde o usuário monta"></i></label>
+                    </div>
+
+                    <div id="div-opcoes-dividendo">
+                        <label for="opcao-dividendo" class="mt-2">Dividendo <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Exemplo: uma pizza onde usuário monta, ele escolhe a primeira opção que seria o valor total da pizza divido por 2, e a segunda metade fica para a segunda opção fazer a mesma divisão"></i></label>
+                        <input type="text" class="form-control mb-2" id="opcao-dividendo"  name="dividendo"  >
+                    </div>
+
+                    <script>
+                        $('#div-opcoes-dividendo').hide()
+                        $('#opcao-multiplaEscolha').change(() => {
+                            $('#opcao-vinculoProduto').prop('checked', false)
+                            $('#div-opcoes-dividendo').hide()
+                        })
+
+                        $('#opcao-vinculoProduto').change((e) => {
+                            $('#opcao-multiplaEscolha').prop('checked', false)
+                            if(e.currentTarget.checked == true){
+                                $('#div-opcoes-dividendo').show()
+                            }else{
+                                $('#div-opcoes-dividendo').hide()
+                            }
+                        })
+                    </script>
 
                     <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
@@ -157,21 +321,25 @@
                         {{/each}}
                     </div>
 
-                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
-                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
-
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Criar</button>
                 </form>
             </div>
             </div>
         </div>
     </div>
-    <!-- Modal add ingredientes END -->
+    <!-- Modal add modeloOpcao END -->
 
     <script> // script para adicionar categorias
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
             $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
         }) 
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
     </script>
 
 </main>

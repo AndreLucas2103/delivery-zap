@@ -18,6 +18,8 @@ require("../../../models/Produto")
 const Produto = mongoose.model("produtos")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("../../../models/ModeloOpcao")
+const ModeloOpcao = mongoose.model("modeloOpcoes")
 
 
 
@@ -117,6 +119,24 @@ router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nov
     ).then(() => {
         req.flash('success_msg', 'Opção criada')
         res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/add-produto-opcao-modelo-opcoes', (req, res) => { // rota para adicionar uma nova opcao ao produto
+    ModeloOpcao.findById({_id: req.body.idModeloOpcao}, {_id: 0}).then(modelo => {
+        Produto.updateOne(
+            {_id: req.body.idProduto},
+            {$push: {
+                'opcao': modelo
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Opção criada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
     }).catch(err => {
         console.log(err)
     })
@@ -368,6 +388,21 @@ router.post('/ajax-get-produto-produtos-opcoes-produtos', (req, res) => { // con
         console.log(err)
     })
 })
+
+router.post('/ajax-get-produto-modelos-opcoes', (req, res) => { // consulto os 
+    Produto.findById({_id: req.body.idProduto}).then(produto => {
+        ModeloOpcao.find({idEstabelecimento: produto.idEstabelecimento}).lean().then(modelos => {
+            console.log(req.body)
+            res.json(modelos)
+        }).catch(err => {
+            console.log(err)
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
 
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------
 router.get('/ingredientes',eAdmin, async (req, res) => { // listo todas as categorias

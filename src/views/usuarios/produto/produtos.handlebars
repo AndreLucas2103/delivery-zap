@@ -10,15 +10,13 @@
 
 
 <main class="content">
-    <div class="">
-        <nav aria-label="breadcrumb">
-            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
-                <li class="breadcrumb-item"><a>Produto</a></li>
-                <li class="breadcrumb-item"><a href="/produto/produtos">Produtos</a></li>
-            </ol>
-        </nav>
-    </div>
+    <nav aria-label="breadcrumb">
+        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+            <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+            <li class="breadcrumb-item"><a>Produto</a></li>
+            <li class="breadcrumb-item"><a href="/produto/produtos">Produtos</a></li>
+        </ol>
+    </nav>
 
     <div>
         <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-produtos">+ Adicionar</button>
@@ -27,12 +25,19 @@
         <div class="collapse mb-4" id="collapseExample">
             <div class="card card-body">
                 <form method="get">
-                    <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="nome" id="filtro-nome" value="{{nome}}" placeholder="-">
-                        <label for="filtro-nome">Nome</label>
+                    <div class="row">
+                        <div class="col-sm">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" name="nome" id="filtro-nome" value="{{nome}}" placeholder="-">
+                                <label for="filtro-nome">Nome</label>
+                            </div>
+                        </div>
+                        <div class="col-sm">
+                            <input name="idCategorias" class="" id="filtro-categorias-produtos" placeholder="Categorias" value="{{idCategorias}}">
+                        </div>
                     </div>
-                    <input name="idCategorias" id="filtro-categorias-produtos" placeholder="Categorias" value="{{idCategorias}}">
                     <button class="btn btn-dark btn-sm mt-2" type="submit">Filtrar</button>
+                    {{#if filtroExist}}<a href="/produto/produtos" class="btn btn-white btn-sm mt-2 text-danger">Limpar filtro</a>{{else}}{{/if}}
                 </form>
             </div>
         </div>

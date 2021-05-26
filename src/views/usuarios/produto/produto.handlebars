@@ -80,20 +80,19 @@
                 <!-- Parte para os opcoes START --> 
                 <div class="card card-body bg-white border-light shadow-sm mb-4">
                     <div class="h5 ">Opções 
-                        <button class="btn btn-secondary btn-sm float-end " data-bs-toggle="modal" data-bs-target="#modal-add-opcao">Criar opção</button>
+                        <div class="dropdown float-end">
+                            <button class="btn btn-secondary btn-sm float-end  dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">Adicionar Opção</button>
+                            <ul class="dropdown-menu">
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-opcao">Criar opção</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-opcoes-modelo-opcoes">Modelo de opções</a></li>
+                            </ul>
+                        </div>
                     </div>
 
                     {{#each produto.opcao}}
                     <div class="card card-body bg-light border-light  my-1">
                         <div>
-
-                            <div class="dropdown float-end">
-                                <button class="btn btn-white btn-sm  float-end dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false">+</button>
-                                <ul class="dropdown-menu">
-                                    <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-opcoes-individual" data-bs-idOpcao="{{_id}}" data-bs-vinculoProduto="{{vinculoProduto}}" >Individual</a></li>
-                                    <li><a class="dropdown-item" href="#">Modelo de opções</a></li>
-                                </ul>
-                            </div>
+                            <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="modal" data-bs-target="#modal-add-opcoes-individual" data-bs-idOpcao="{{_id}}" data-bs-vinculoProduto="{{vinculoProduto}}" >+</button>
                             <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-opcao-{{_id}}"><i class="fas fa-list"></i></button>
                             <button class="btn btn-white btn-sm  float-end mx-1" type="button" data-bs-idOpcao="{{_id}}" data-bs-nome="{{nome}}" data-bs-descricao="{{descricao}}" data-bs-multiplaEscolha="{{multiplaEscolha}}" data-bs-vinculoProduto="{{vinculoProduto}}" data-bs-dividendo="{{dividendo}}"  data-bs-obrigatorio="{{obrigatorio}}"  data-bs-toggle="modal" data-bs-target="#modal-edit-opcao"><i class="fas fa-pen"></i></button>
                             
@@ -102,7 +101,6 @@
                             <div>Descricao: {{descricao}}</div>
                             {{/if}}
                             <div>Multipla Escolha: <span class="formatarTrueFalse">{{multiplaEscolha}}</span></div>
-
                         </div>
 
                         <div class="collapse" id="collapse-opcao-{{_id}}">
@@ -235,6 +233,52 @@
                         })
                     </script>
                     <!-- Modal add opcoes INDIVIDUAL END-->
+
+                    <!-- Modal add opcoes Modelo Opcoes START-->
+                    <div class="modal fade" id="modal-add-opcoes-modelo-opcoes" tabindex="-1" aria-labelledby="modal-add-opcoes-modelo-opcoesLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-opcoes-modelo-opcoesLabel">Adicionar Modelo Opções</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/produto/add-produto-opcao-modelo-opcoes"  method="post">
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <div class="row  ml-2" id="radio-add-opcoes-modelo-opcoes"></div>
+
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Criar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var modalAddOpcoesModeloOpcoesProduto = document.getElementById('modal-add-opcoes-modelo-opcoes')
+                        modalAddOpcoesModeloOpcoesProduto.addEventListener('show.bs.modal', function (event) {
+                            jQuery.ajax({
+                                type: "POST",
+                                url: '/produto/ajax-get-produto-modelos-opcoes',
+                                data: {idProduto: '{{produto._id}}'},
+                                success: function(response) {
+                                    $('#radio-add-opcoes-modelo-opcoes').empty()
+                                    console.log(response)
+                                    response.forEach(element => {
+                                        if(element.idEstabelecimento._id == this.value){
+                                            $('#radio-add-opcoes-modelo-opcoes').append(`
+                                            <div class="form-check col-6 ">
+                                                <input class="form-check-input" type="radio" name="idModeloOpcao" id="${element._id}" value="${element._id}" >
+                                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                                            </div>
+                                            `)
+                                        }
+                                    })
+                                }
+                            });
+                        })
+                    </script>
+                    <!-- Modal add opcoes Modelo Opcoes END-->
 
                     <!-- Modal edit opção START-->
                     <div class="modal fade" id="modal-edit-opcao" tabindex="-1" aria-labelledby="modal-edit-opcaoLabel" aria-hidden="true">
