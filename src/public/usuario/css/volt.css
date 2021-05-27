@@ -44068,8 +44068,8 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 ******CONFIGURAÇÃO DO PAINEL******
 --------------------------------*/
 .logo-image-st {
-    width: 125px;
-    height: 125px;
+    width: 100px;
+    height: 100px;
     background-repeat: no-repeat;
     background-size: contain;
     position: relative;
