@@ -1,62 +1,5 @@
 {{>usuario/_top-css}}
-<style>
 
-</style>
-<style>
-    input[type="radio"] {
-        position: absolute;
-        visibility: hidden;
-    }
-
-    .label-avatar {
-        display: block;
-        border: 3px solid rgb(255, 255, 255);
-        float: left;
-    }
-
-    input[type="radio"]:checked+.label-avatar {
-        border-color: rgb(155, 155, 250);
-    }
-</style>
-
-<style>
-    .file {
-        opacity: 0;
-        width: 0.1px;
-        height: 0.1px;
-        position: absolute;
-    }
-
-    .file-input label {
-        display: block;
-        position: relative;
-        width: 150px;
-        height: 50px;
-        border-radius: 25px;
-        background: rgba(36, 46, 64);
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        color: #fff;
-        font-weight: bold;
-        cursor: pointer;
-        transition: transform .2s ease-out;
-    }
-
-    input:hover+label,
-    input:focus+label {
-        transform: scale(1.02);
-    }
-
-
-    .file-name {
-        position: absolute;
-        bottom: -35px;
-        left: 10px;
-        font-size: 0.85rem;
-        color: #555;
-    }
-</style>
 
 <div class="container-fluid bg-soft">
     <div class="row">
@@ -79,145 +22,159 @@
 
                     <div class="col-12 col-xl-8">
                         <div class="card card-body bg-white border-light shadow-sm mb-4">
-                            <h2 class="h5 mb-4">Configuração</h2>
-                            <center>
-                                <form action="/configuracao/edit-config-painel" method="POST">
-                                    <input type="text" name="idPainel" id="idPainel" value="{{estabelecimento._id}}"
-                                        hidden readonly>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Link do painel</h6>
-                                                <a href="/pedido/{{estabelecimento.url}}" id="url"
-                                                    name="url">hotpedidos.com/pedido/{{estabelecimento.url}}</a>
-                                            </div>
+                            <form action="/configuracao/edit-config-painel" method="POST">
+                                <input type="text" name="idPainel" id="idPainel" value="{{estabelecimento._id}}" hidden
+                                    readonly>
+                                <div class="row">
+                                    <div class="col-md">
+                                        <div style="border-radius: 25px;border-color:white">
+                                            <br>
+                                            <img src="/usuario/assets/img/favicon/logoApp.png"
+                                                class="rounded-circle rounded border logo-image-st" id="imgst">
+                                        </div>
+                                        </div>
+                                          <div class="col-md mt-6 mr-9">
+                                        <div>
+                                            <h6>Link para pedidos:</h6>
+                                            <a href="/pedido/{{estabelecimento.url}}" id="url" name="url"
+                                                style="color: #5A7FFF;">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a>
                                         </div>
                                     </div>
-                                    <br>
-                                    <div class="row g-2">
-                                        <center>
-                                            <div class="col-md-6">
-                                                <div class="form-floating">
-                                                    <input type="text" class="form-control" id="nome" name="nome"
-                                                        placeholder="0" value="{{estabelecimento.nomePainel}}" required>
-                                                    <label for="nome">Nome do estabelecimento*</label>
-                                                </div>
-                                            </div>
-                                        </center>
-                                    </div><br>
-                                    <div class="row g-2">
-                                        <div class="col-md-6">
-                                            <div class="form-floating">
-                                                <input type="text" value="{{estabelecimento.endereco.logradouro}}"
-                                                    class="form-control" id="logradouro" name="logradouro"
-                                                    placeholder="0" required>
-                                                <label for="logradouro">Endereço*</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-2">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control"
-                                                    value="{{estabelecimento.endereco.numero}}" id="numero"
-                                                    name="numero" placeholder="0" required>
-                                                <label for="numero">N°*</label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md-4">
-                                            <div class="form-floating">
-                                                <input type="text" class="form-control"
-                                                    value="{{estabelecimento.endereco.bairro}}" id="bairro"
-                                                    name="bairro" placeholder="0" required>
-                                                <label for="bairro">Bairro*</label>
-                                            </div>
-                                        </div>
-                                    </div><br>
-                                    <div class="row">
-                                        <div class="col-md">
-                                            <h6>Sua logo</h6>
-                                            <span class="file-name"></span>
-                                            <div class="file-input">
-                                                <input type="file" id="file" onchange="readURL(this);" class="file">
-                                                <input type="text" name="base64TipoDocumento1" id="base64TipoDocumento1"
-                                                    hidden>
-                                                <label for="file">
-                                                    Selecionar
-                                                </label>
+                                </div>
+                                <br>
+                                <div class="row g-2">
 
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <h6>Imagem de capa</h6>
-                                            <div class="file-input">
-                                                <input type="file" id="file-capa" onchange="readURL(this);"
-                                                    class="file">
-                                                <input type="text" name="base64TipoDocumento2" id="base64TipoDocumento2"
-                                                    hidden>
-                                                <label for="file-capa">
-                                                    Selecionar
-                                                </label>
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Cor de fundo</h6>
-                                                <input style="width: 50px;border-radius: 50%;" class="form-control"
-                                                    id="colorFundo" value="{{estabelecimento.painel.colorFundo}}"
-                                                    name="colorFundo" type="color">
-                                            </div>
-                                        </div>
-                                        <div class="col-md">
-                                            <div>
-                                                <h6>Cor da fonte</h6>
-                                                <input style="width: 50px;border-radius: 50%;" class="form-control"
-                                                    id="colorFonte" value="{{estabelecimento.painel.colorFonte}}"
-                                                    name="colorFonte" type="color">
-                                            </div>
+                                    <div class="col-md">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control" id="nome" name="nome"
+                                                placeholder="0" value="{{estabelecimento.nomePainel}}" required>
+                                            <label for="nome">Nome do estabelecimento*</label>
                                         </div>
                                     </div>
-                            </center>
-                            <hr>
-
-                            <div class="mt-5">
-                                <button type="submit" class="btn btn-primary btn-lg">Salvar</button>
-                            </div>
+                                    </center>
+                                </div><br>
+                                <div class="row g-2">
+                                    <div class="col-md-6">
+                                        <div class="form-floating">
+                                            <input type="text" value="{{estabelecimento.endereco.logradouro}}"
+                                                class="form-control" id="logradouro" name="logradouro" placeholder="0"
+                                                required>
+                                            <label for="logradouro">Endereço*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control"
+                                                value="{{estabelecimento.endereco.numero}}" id="numero" name="numero"
+                                                placeholder="0" required>
+                                            <label for="numero">N°*</label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="form-floating">
+                                            <input type="text" class="form-control"
+                                                value="{{estabelecimento.endereco.bairro}}" id="bairro" name="bairro"
+                                                placeholder="0" required>
+                                            <label for="bairro">Bairro*</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <br><br>
+                                <div class="row">
+                                    <div class="col-md-3sm">
+                                        <h6>Carregar logo</h6>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="file-input">
+                                            <input type="file" id="file" onchange="readURL(this);" class="file">
+                                            <input type="text" name="base64TipoDocumento1" id="base64TipoDocumento1"
+                                                hidden>
+                                            <label for="file">
+                                                Selecionar
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3sm">
+                                        <h6>Cor do fundo</h6>
+                                    </div>
+                                    <div class="col-md mr-2">
+                                        <input type="color" value="{{estabelecimento.painel.colorFundo}}"
+                                            name="colorFundo" id="colorFundo" class="color-circle">
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-3sm">
+                                        <h6>Imagem de capa</h6>
+                                    </div>
+                                    <div class="col-md-5">
+                                        <div class="file-input">
+                                            <input type="file" id="file-capa" onchange="readURL(this);" class="file">
+                                            <input type="text" name="base64TipoDocumento2" id="base64TipoDocumento2"
+                                                hidden>
+                                            <label for="file-capa">
+                                                Selecionar
+                                            </label>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3sm">
+                                        <h6>Cor da fonte</h6>
+                                    </div>
+                                    <div class="col-md mr-2">
+                                        <input type="color" value="{{estabelecimento.painel.colorFonte}}"
+                                            name="colorFonte" id="colorFonte" class="color-circle">
+                                    </div>
+                                </div>
+                                <br><br><br>
+                                <div>
+                                    <button type="submit" class="save-button">Salvar</button>
+                                </div>
                             </form>
                         </div>
                     </div>
 
                     <div class="col-xl-4">
-                        <center><label style=>Pré-visualização:</label></center>
-                        <div class="smartphone">
-                            <div class="card border-light text-center p-0">
-                                <div class="profile-cover rounded-top"><img src="/usuario/assets/img/favicon/capaApp.png" style="width:100%;height:200px;background-size: 100%;"
-                                        id="img2">
+                        <center><label>Pré-visualização:</label></center>
+                        <div class="smartphone" style="background:{{estabelecimento.painel.colorFundo}};"
+                            id="backcolor">
+                            <div class="container-md capa-image-sm" id="img2">
+                                <center>
+                                    <div style="border-radius: 25px;border-color:white">
+                                        <br>
+                                        <img src="/usuario/assets/img/favicon/logoApp.png"
+                                            class="rounded-circle rounded border logo-image" id="img1">
+                                    </div>
+                            </div>
+                            <br>
+                            <center>
+                                <div style="background-color:green;width: 100px;border-radius:20px;">
+                                    <span style="color: white;">Aberto</span>
                                 </div>
-                                <span style="color: white;background-color:green">Aberto</span>
-                                <div class="card-body"
-                                    style="height: 297px;background:{{estabelecimento.painel.colorFundo}};"
-                                    id="backcolor">
-                                    <img id="img1" class="user-avatar smart-avatar rounded-circle mx-auto mt-n7 mb-4"
-                                        src="/usuario/assets/img/favicon/logoApp.png">
+                                <div>
                                     <span
                                         style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
-                                        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
-                                    <i class="fas fa-map-marker-alt text-danger"></i>
-                                    <span style="color:{{estabelecimento.painel.colorFonte}};"
-                                        id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
-                                    <span style="color:{{estabelecimento.painel.colorFonte}};"
-                                        id="numeroEstabelecimento"> - {{estabelecimento.endereco.numero}}</span>
-                                    <span style="color:{{estabelecimento.painel.colorFonte}};"
-                                        id="bairroEstabelecimento"> - {{estabelecimento.endereco.bairro}}</span>
-                                    <span id="localidadeEstabelecimento"
-                                        style="color:{{estabelecimento.painel.colorFonte}};"> - {{estabelecimento.endereco.localidade}}</span>
+                                        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span>
                                 </div>
-                            </div>
+                                <i class="fas fa-map-marker-alt text-danger" style="font-size: small;"></i>
+                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
+                                    id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
+                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
+                                    id="numeroEstabelecimento"> -
+                                    {{estabelecimento.endereco.numero}}</span>
+                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
+                                    id="bairroEstabelecimento"> -
+                                    {{estabelecimento.endereco.bairro}}</span>
+                                <span id="localidadeEstabelecimento"
+                                    style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"> /
+                                    {{estabelecimento.endereco.localidade}}</span>
+                            </center>
                         </div>
                     </div>
                 </div>
-            </main>
         </div>
     </div>
 </div>
+</div>
+
 
 <script>
     window.onload = function () {
@@ -244,38 +201,14 @@
             $("#enderecoEstabelecimento").text(inputEndereco.value);
         }
         inputNumero.oninput = function () {
-            $("#numeroEstabelecimento").text(" - "+inputNumero.value);
+            $("#numeroEstabelecimento").text(" - " + inputNumero.value);
         }
         inputBairro.oninput = function () {
-            $("#bairroEstabelecimento").text(" - "+inputBairro.value);
+            $("#bairroEstabelecimento").text(" - " + inputBairro.value);
         }
-
     }
 </script>
 
-<!--
-<script>
-    const file = document.querySelector('#file')
-    file.addEventListener('change', (e) => {
-        const [file] = e.target.files;
-        const { name: fileName, size } = file;
-        const fileSize = (size / 1000).toFixed(2);
-        const fileNameAndSize = `${fileName} - ${fileSize}KB`;
-        document.querySelector('.file-name').textContent = fileNameAndSize;
-    });
-</script>
-
-<script>
-    const file = document.querySelector('#file-capa')
-    file.addEventListener('change', (e) => {
-        const [file] = e.target.files;
-        const { name: fileName, size } = file;
-        const fileSize = (size / 1000).toFixed(2);
-        const fileNameAndSize = `${fileName} - ${fileSize}KB`;
-        document.querySelector('.file-capa').textContent = fileNameAndSize;
-    });
-</script>
--->
 <script>
     function readURL(input) {
         if (input.files && input.files[0]) {
@@ -284,9 +217,10 @@
             reader.onload = function (e) {
                 if (input.id == "file") {
                     $('#img1').attr('src', e.target.result);
+                    $('#imgst').attr('src', e.target.result);
                     $('#base64TipoDocumento1').val(e.target.result);
                 } else if (input.id == "file-capa") {
-                    $('#img2').attr('src', e.target.result);
+                    $('#img2').css('background-image', 'url(' + e.target.result + ')');
                     $('#base64TipoDocumento2').val(e.target.result);
                 }
             };
@@ -294,6 +228,109 @@
         }
     }
 </script>
+
+
+<style>
+    .logo-image-st {
+        width: 125px;
+        height: 125px;
+        background-repeat: no-repeat;
+        background-size: contain;
+        position: relative;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
+    }
+
+    .logo-image {
+        width: 80px;
+        height: 80px;
+        background-repeat: no-repeat;
+        top: 55px;
+        background-size: contain;
+        position: relative;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
+    }
+
+    .capa-image-sm {
+        width: 100%;
+        height: 140px;
+        background-size: 100% 100%;
+        background-image: url(/usuario/assets/img/favicon/capaApp.png);
+
+    }
+
+    input[type="radio"] {
+        position: absolute;
+        visibility: hidden;
+    }
+
+    .label-avatar {
+        display: block;
+        border: 3px solid rgb(255, 255, 255);
+        float: left;
+    }
+
+    input[type="radio"]:checked+.label-avatar {
+        border-color: rgb(155, 155, 250);
+    }
+</style>
+
+<style>
+    .file {
+        opacity: 0;
+        width: 0.1px;
+        height: 0.1px;
+        position: absolute;
+    }
+
+    .file-input label {
+        position: relative;
+        width: 225px;
+        height: 50px;
+        border-radius: 8px;
+        background: rgba(36, 46, 64);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .save-button {
+        position: relative;
+        width: 150px;
+        height: 50px;
+        border-radius: 8px;
+        background: #FF975C;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-weight: bold;
+    }
+
+    .color-circle {
+        border-radius: 100%;
+        height: 40px;
+        width: 40px;
+        border: none;
+        border-color: black;
+        outline: none;
+
+    }
+
+    .color-circle::-webkit-color-swatch-wrapper {
+        padding: 0;
+    }
+
+    .color-circle::-webkit-color-swatch {
+        border-radius: 20px;
+        border-color: black;
+        border-radius: 100%;
+    }
+</style>
+
+
+
+
 
 {{>usuario/_rodape}}
 

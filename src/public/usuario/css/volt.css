@@ -1402,6 +1402,16 @@ progress {
         width: 25%;
     }
 
+    .col-md-3sm {
+        flex: 0 0 auto;
+        width: 23%;
+    }
+
+    .col-md-2sm {
+        flex: 0 0 auto;
+        width: 17%;
+    }
+
     .col-md-4 {
         flex: 0 0 auto;
         width: 33.33333%;
@@ -44057,8 +44067,8 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
   /* Smartphone */
   .smartphone {
     position: relative;
-    width: 320px;
-    height: 620px;
+    width: 300px;
+    height: 580px;
     margin: auto;
     border: 16px #262B40 solid;
     border-top-width: 60px;

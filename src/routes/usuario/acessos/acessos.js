@@ -34,79 +34,80 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
             if (usuario) {
                 req.flash("error_msg", "E-mail já cadastrado.")
                 res.redirect("/registro")
-            } else {
 
-                const novoUsuario = new Usuario({
-                    primeiroNome: req.body.primeiroNome,
-                    nomeCompleto: req.body.nomeCompleto,
-                    email: req.body.email,
-                    cpf: req.body.cpf,
-                    senha: req.body.senha,
-                    eTipoAdmin: true,
-                    eTipo: 1,
-                    usuarioMaster: true,
-                    statusAtivo: true,
-                    perfilAvatar: 'businessman',
-                    identificaouuidv4: uuidv4()
-                })
-                bcryptjs.genSalt(10, (erro, salt) => {
-                    bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
-                        if (erro) {
-                            res.json(402)
-                        }
+                } else {
 
-                        novoUsuario.senha = hash
-
-                        novoUsuario.save().then((usuarioEdit) => {
-
-                            addEstabelecimento = {
-                                nome: req.body.nome,
-                                nomePainel: req.body.nome,
-                                url: req.body.url,
-                                endereco: {
-                                    logradouro: req.body.logradouro,
-                                    bairro: req.body.bairro,
-                                    localidade: req.body.localidade,
-                                    cep: req.body.cep,
-                                    numero: req.body.numero,
-                                    uf: req.body.uf,
-
-                                },
-                                cnpj: req.body.cnpj,
-                                telefone: req.body.telefone,
-                                idUsuarioMaster: usuarioEdit._id
+                    const novoUsuario = new Usuario({
+                        primeiroNome: req.body.primeiroNome,
+                        nomeCompleto: req.body.nomeCompleto,
+                        email: req.body.email,
+                        cpf: req.body.cpf,
+                        senha: req.body.senha,
+                        eTipoAdmin: true,
+                        eTipo: 1,
+                        usuarioMaster: true,
+                        statusAtivo: true,
+                        perfilAvatar: 'businessman',
+                        identificaouuidv4: uuidv4()
+                    })
+                    bcryptjs.genSalt(10, (erro, salt) => {
+                        bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
+                            if (erro) {
+                                res.json(402)
                             }
-                            new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
-                                editUsuario = {
-                                    idEstabelecimento: estabelecimento._id,
-                                }
-                                Usuario.updateOne(
-                                    { '_id': usuarioEdit._id },
-                                    {
-                                        $push: { "estabelecimentosVinculados": editUsuario, 'estabelecimentosSelecionados': editUsuario },
-                                        $set: { "idUsuarioMaster": usuarioEdit._id }
-                                    }
-                                ).then(e => {
-                                    console.log('Usuario Criado')
-                                    req.flash('success_msg', 'Cadastro realizado')
-                                    res.redirect('/login')
-                                }).catch(err => {
-                                    console.log(err)
-                                })
 
-                            }).catch(err => {
-                                req.flash('error_msg', 'Ocorreu um erro')
-                                res.redirect('back')
+                            novoUsuario.senha = hash
+
+                            novoUsuario.save().then((usuarioEdit) => {
+
+                                addEstabelecimento = {
+                                    nome: req.body.nome,
+                                    nomePainel: req.body.nome,
+                                    url: req.body.url,
+                                    endereco: {
+                                        logradouro: req.body.logradouro,
+                                        bairro: req.body.bairro,
+                                        localidade: req.body.localidade,
+                                        cep: req.body.cep,
+                                        numero: req.body.numero,
+                                        uf: req.body.uf,
+
+                                    },
+                                    cnpj: req.body.cnpj,
+                                    telefone: req.body.telefone,
+                                    idUsuarioMaster: usuarioEdit._id
+                                }
+                                new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
+                                    editUsuario = {
+                                        idEstabelecimento: estabelecimento._id,
+                                    }
+                                    Usuario.updateOne(
+                                        { '_id': usuarioEdit._id },
+                                        {
+                                            $push: { "estabelecimentosVinculados": editUsuario, 'estabelecimentosSelecionados': editUsuario },
+                                            $set: { "idUsuarioMaster": usuarioEdit._id }
+                                        }
+                                    ).then(e => {
+                                        console.log('Usuario Criado')
+                                        req.flash('success_msg', 'Cadastro realizado')
+                                        res.redirect('/login')
+                                    }).catch(err => {
+                                        console.log(err)
+                                    })
+
+                                }).catch(err => {
+                                    req.flash('error_msg', 'Ocorreu um erro')
+                                    res.redirect('back')
+                                })
+                            }).catch((err) => {
+                                console.log(err)
+                                req.flash("error_msg", "Ocorreu um erro interno.")
+                                res.redirect("/registro")
                             })
-                        }).catch((err) => {
-                            console.log(err)
-                            req.flash("error_msg", "Ocorreu um erro interno.")
-                            res.redirect("/registro")
                         })
                     })
-                })
-            }
-
+                }
+            
         }).catch((err) => {
             req.flash("error_msg", "Houve um erro interno")
             res.redirect("/registro")
@@ -114,6 +115,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 
     }
 })
+
 
 
 router.post("/login", (req, res, next) => {
