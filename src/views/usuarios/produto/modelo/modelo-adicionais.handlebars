@@ -1,0 +1,254 @@
+{{>usuario/_top-css}}
+
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Produto</a></li>
+                <li class="breadcrumb-item"><a href="/produto/modelo-adicionais">Modelo Adicionais</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-adicional">+ Adicionar</button>
+
+    <div class="row">
+        {{#each modelosAdicionais}}
+            <div class="col-12 col-lg-4 mb-4">
+            <div class="card card-body bg-light border-light mb-2 mx-2">
+                <div>
+                    <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-individual" data-bs-idModeloAdicional="{{_id}}" >+</button>
+                    <button class="btn btn-white btn-sm  float-end mr-1" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-opcao-{{_id}}"><i class="fas fa-list"></i></button>
+                    <button class="btn btn-white btn-sm  float-end mx-1" type="button" data-bs-idModeloAdicional="{{_id}}" data-bs-nome="{{nome}}"  data-bs-toggle="modal" data-bs-target="#modal-edit-adicional"><i class="fas fa-pen"></i></button>
+                    
+                    <div>Nome: {{nome}}</div>
+                    <div class="mt-2"><i class="fas fa-map-marker-alt text-danger"></i> {{idEstabelecimento.nome}}</div>
+                </div>
+
+                <div class="collapse" id="collapse-opcao-{{_id}}">
+                    <hr>
+                    <div class="table-responsive " style="max-height:300px">
+                    <table class="table table-sm border-white table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Adicional</th>
+                                <th scope="col">Valor</th>
+                                <th>Categoria</th>
+                                <th scope="col"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <form action="/produto/delete-modelo-adicionais-adiocinal" method="post">
+                            <input type="text" name="idModeloAdicional" value="{{_id}}" hidden>
+                            {{#each adicionais}}
+                            <tr>
+                                <th >{{idAdicional.nome}}</th>
+                                <th class="valorFormatar">{{idAdicional.valor}}</th>
+                                <th>{{idCategoriaAdicional.nome}}</th>
+                                <td><button type="submit" class="btn btn-white btn-sm text-danger" name="idObjectAdicional" value="{{_id}}" style="font-size: small;">X</button></td>
+                            </tr>
+                            {{/each}}
+                            </form>
+                        </tbody>
+                    </table>
+                    </div>
+                </div>
+            </div>
+            </div>
+        {{/each}}
+    </div>
+
+    <!-- Modal add adicionais individual START-->
+    <div class="modal fade" id="modal-add-adicionais-individual" tabindex="-1" aria-labelledby="modal-add-adicionais-individualLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-adicionais-individualLabel">Adiconar Adicional individual</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <label for="categoria-adicional" class="form-label">Categoria do Adicional</label>
+                <select name="categoria-adicional" id="categoria-adicional">
+                    <option value="">Todos</option>
+                    {{#each categoriasAdicional}} <option value="{{_id}}">{{nome}}</option>{{/each}}
+                </select>
+
+                <form action="/produto/add-modelo-adicionais-adiocinal" method="post">
+                    <input type="text" name="idModeloAdicional" id="add-adicional-modeloAdicional" hidden readonly>
+                    <input  class='tagify--outside' name="idAdicional" id="add-adicional-individual">
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+
+        <script>
+            var tagAddAdicional = document.querySelector('input[id=add-adicional-individual]')
+            var tagifyAddAdicional = new Tagify(tagAddAdicional, {
+                whitelist: [ {{#each adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}} - {{idCategoriaAdicional.nome}}', idCategoriaAdicional: '{{idCategoriaAdicional._id}}' },  {{/each}} ],
+                editTags: false,
+                dropdown: {
+                    position: "input",
+                    maxItems: Infinity,
+                    closeOnSelect : false,
+                    enabled : 0 // always opens dropdown when input gets focus
+                },
+            })
+
+            var modalAddAdicionaisIndividual = document.getElementById('modal-add-adicionais-individual')
+            modalAddAdicionaisIndividual.addEventListener('show.bs.modal', function (event) {
+                spinngLoading(true)
+                var button = event.relatedTarget
+                tagifyAddAdicional.settings.whitelist.length = 0;
+                tagifyAddAdicional.removeAllTags()
+
+                $('#add-adicional-modeloAdicional').val(button.getAttribute('data-bs-idModeloAdicional'))
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/produto/ajax-get-modelo-adicionais-adicionais',
+                    data: {idCategoriaAdicional: '', idModeloAdicional: $('#add-adicional-modeloAdicional').val()},
+                    success: function(response) {
+                        response.forEach(element => {
+                            tagifyAddAdicional.settings.whitelist.push({'idAdicional': element._id, value: `${element.nome} - ${element.idCategoriaAdicional.nome}`, idCategoriaAdicional: element.idCategoriaAdicional._id })
+                        })
+                        
+                    }
+                });
+
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/produto/ajax-get-modelo-adicionais-categorias-adicionais',
+                    data: {idModeloAdicional: button.getAttribute('data-bs-idModeloAdicional'), },
+                    success: function(response) {
+                        $('#categoria-adicional').empty();
+                        $('#categoria-adicional').append(`<option value="">Todos</option>`)
+                        response.forEach(element => {
+                            $('#categoria-adicional').append(`<option value="${element._id}">${element.nome}</option>`)
+                        })
+                        spinngLoading(false)
+                    }
+                });
+            })
+        
+            $('#categoria-adicional').change(() => {
+                tagifyAddAdicional.settings.whitelist.length = 0;
+                tagifyAddAdicional.loading(true)
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/produto/ajax-get-modelo-adicionais-adicionais',
+                    data: {idCategoriaAdicional: $('#categoria-adicional').val(), idModeloAdicional: $('#add-adicional-modeloAdicional').val()},
+                    success: function(response) {
+                        response.forEach(element => {
+                            tagifyAddAdicional.settings.whitelist.push({'idAdicional': element._id, value: `${element.nome} - ${element.idCategoriaAdicional.nome}`, idCategoriaAdicional: element.idCategoriaAdicional._id })
+                        })
+                        tagifyAddAdicional.loading(false)
+                    }
+                });
+            })
+        </script>
+    </div>
+    <!-- Modal add adicionais individual END-->
+
+    <!-- Modal edit opção START-->
+    <div class="modal fade" id="modal-edit-adicional" tabindex="-1" aria-labelledby="modal-edit-adicionalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-adicionalLabel">Editar Modelo Adicionais <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/edit-modelo-adicional" method="post">
+                    <input type="text" name="idModeloAdicional" id="edit-idModeloAdicional" hidden  readonly>
+
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="edit-adicional-nome"  name="nome" placeholder="-" required>
+                        <label for="edit-adicional-nome" class="ml-2">Nome *</label>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modalEditOpcaoProduto = document.getElementById('modal-edit-adicional')
+        modalEditOpcaoProduto.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            $('#edit-idModeloAdicional').val(button.getAttribute('data-bs-idModeloAdicional'))
+            $('#edit-adicional-nome').val(button.getAttribute('data-bs-nome'))
+        })
+    </script>
+    <!-- Modal edit opção END-->
+
+    <!-- Modal add modeloAdicional START -->
+    <div class="modal fade" id="modal-add-adicional" tabindex="-1" aria-labelledby="modal-add-opcaoLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-opcaoLabel">Criar Modelo Adicional <i class="fas fa-question-circle text-info" data-bs-toggle="tooltip" data-bs-placement="right" title="Caso não tenha descrição, deixe o campo em branco"></i></h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/produto/add-modelo-adicionais" method="post">
+                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                    <div class="form-floating">
+                        <input type="text" class="form-control" id="opcao-nome"  name="nome" placeholder="-" required>
+                        <label for="opcao-nome" class="ml-2">Nome *</label>
+                    </div>
+
+                    <div class="row mt-4 ml-2">
+                        <h5>Estabelecimentos</h5>
+                        {{#each usuarioLogado.estabelecimentosSelecionados}}
+                            <div class="form-check form-switch col-6">
+                                <input class="form-check-input" type="radio" name="idEstabelecimento" id="{{_id}}" value="{{_id}}" required>
+                                <label class="form-check-label" for="{{_id}}">{{nome}}</label>
+                            </div>
+                        {{/each}}
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Criar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal add modeloAdicional END -->
+
+    <script> // script para adicionar categorias
+
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        }) 
+
+        var tooltipTriggerList = [].slice.call(document.querySelectorAll('[data-bs-toggle="tooltip"]'))
+        var tooltipList = tooltipTriggerList.map(function (tooltipTriggerEl) {
+            return new bootstrap.Tooltip(tooltipTriggerEl)
+        })
+
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

@@ -16,7 +16,7 @@ const moment = require('moment')
 
 // ----- Middleware -----------------------------------------------------------------------------------------------------------------------
 app.use(session({
-    secret: "cursodenode",
+    secret: "hotpedidos",
     resave: true,
     saveUninitialized: true
 }))

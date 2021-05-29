@@ -435,7 +435,6 @@
 
 
                 </div>
-
                 <!-- Parte para os opcoes END --> 
 
                 <!-- Parte para os adicionais START --> 
@@ -447,7 +446,7 @@
                             </button>
                             <ul class="dropdown-menu" aria-labelledby="dropdown-button-add-adiocinais">
                                 <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-individual" >Individual</a></li>
-                                <li><a class="dropdown-item" href="#">Modelo de adicional</a></li>
+                                <li><a class="dropdown-item" data-bs-toggle="modal" data-bs-target="#modal-add-adicionais-modelo-adicionais">Modelo de adicional</a></li>
                             </ul>
                         </div>
                     </div>
@@ -534,6 +533,53 @@
                         </script>
                     </div>
                     <!-- Modal add adicionais individual END-->
+                    
+                    <!-- Modal add adicionais Modelo adicionais START-->
+                    <div class="modal fade" id="modal-add-adicionais-modelo-adicionais" tabindex="-1" aria-labelledby="modal-add-opcoes-modelo-opcoesLabel" aria-hidden="true">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                            <div class="modal-header">
+                                <h5 class="modal-title" id="modal-add-opcoes-modelo-opcoesLabel">Adicionar Modelo Opções</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <form action="/produto/add-produto-adicionais-modelo-adicionais"  method="post">
+                                    <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                    <div class="row  ml-2" id="radio-add-adicionais-modelo-adicionais"></div>
+
+                                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                </form>
+                            </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <script>
+                        var modalAddadicionaisModeloadicionaisProduto = document.getElementById('modal-add-adicionais-modelo-adicionais')
+                        modalAddadicionaisModeloadicionaisProduto.addEventListener('show.bs.modal', function (event) {
+                            jQuery.ajax({
+                                type: "POST",
+                                url: '/produto/ajax-get-produto-modelos-adicionais',
+                                data: {idProduto: '{{produto._id}}'},
+                                success: function(response) {
+                                    $('#radio-add-adicionais-modelo-adicionais').empty()
+                                    console.log(response)
+                                    response.forEach(element => {
+                                        if(element.idEstabelecimento._id == this.value){
+                                            $('#radio-add-adicionais-modelo-adicionais').append(`
+                                            <div class="form-check col-6 ">
+                                                <input class="form-check-input" type="radio" name="idModeloAdicional" id="${element._id}" value="${element._id}" >
+                                                <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                                            </div>
+                                            `)
+                                        }
+                                    })
+                                }
+                            });
+                        })
+                    </script>
+                    <!-- Modal add adicionais Modelo adicionais END-->
+
                 </div>
                 <!-- Parte para os adicionais END --> 
 
