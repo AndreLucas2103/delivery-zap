@@ -112,9 +112,6 @@ router.get('/estabelecimentos', eAdmin, async (req, res) => { // Listar todos os
 router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelecimento
     try {
         Estabelecimento.findById({ _id: req.body.idEstabelecimento }).then(estabelecimento => {
-            req.body.useMercadoPago == "true" ? useMercadoPagoBoolean = true : useMercadoPagoBoolean = false
-            estabelecimento.mercadoPago.ativo == true ? integracaoMercadoPagoAtiva = true : integracaoMercadoPagoAtiva = false
-
             if (estabelecimento) {
                 estabelecimento.nome = req.body.nome,
                     estabelecimento.url = req.body.url,
@@ -129,12 +126,6 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                     estabelecimento.cnpj = req.body.cnpj,
                     estabelecimento.telefone = req.body.telefone
 
-                estabelecimento.useMercadoPago = useMercadoPagoBoolean
-                estabelecimento.mercadoPago = {
-                    ativo: integracaoMercadoPagoAtiva,
-                    publickey: req.body.publickey,
-                    acessToken: req.body.acessToken
-                },
 
                     estabelecimento.save().then(() => {
                         req.flash('success_msg', 'Estabelecimento editado')
@@ -153,6 +144,46 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
             res.redirect('back')
         })
     } catch (err) {
+        req.flash('error_msg', 'Ocorreu um erro')
+        res.redirect('back')
+    }
+})
+
+router.post('/edit-estabelecimento-integracao-mercado-pago', (req, res) => {
+    try {
+        Estabelecimento.findById({ _id: req.body.idEstabelecimento }).then(estabelecimento => {
+            if (estabelecimento) {
+                req.body.statusAtivo == "true" ? statusAtivo = true : statusAtivo = false
+                estabelecimento.integracao.mercadoPago.testadoAtivo == true ? integracaoMercadoPagoAtiva = true : integracaoMercadoPagoAtiva = false
+
+                estabelecimento.integracao.mercadoPago = {
+                    statusAtivo: statusAtivo,
+                    testadoAtivo: integracaoMercadoPagoAtiva,
+                    publickey: req.body.publickey,
+                    acessToken: req.body.acessToken
+                },
+
+                    estabelecimento.save().then(() => {
+                        req.flash('success_msg', 'Estabelecimento editado')
+                        res.redirect('back')
+                    }).catch(err => {
+                        console.log(err)
+
+                        req.flash('error_msg', 'Ocorreu um erro')
+                        res.redirect('back')
+                    })
+            } else {
+                req.flash('error_msg', 'Ocorreu um erro')
+                res.redirect('back')
+            }
+        }).catch(err => {
+            console.log(err)
+            req.flash('error_msg', 'Ocorreu um erro')
+            res.redirect('back')
+        })
+    } catch (err) {
+        console.log(err)
+
         req.flash('error_msg', 'Ocorreu um erro')
         res.redirect('back')
     }

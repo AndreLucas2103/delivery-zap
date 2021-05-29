@@ -17,6 +17,7 @@
         transition:0s;
         border-color: var(--tags-focus-border-color);
     }
+
 </style>
 
 <nav id="sidebarMenu" class="sidebar d-md-block bg-primary text-white collapse" data-simplebar>
@@ -82,13 +83,37 @@
 
                         <li role="separator" class="dropdown-divider  border-black"></li>
 
-                        <li class="nav-item"><a class="nav-link" href="/produto/modelo-opcoes"><span>Modelo Opções</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="/produto/modelo-adicionais"><span>Modelo Adicionais</span></a></li>
-                        
+                        <li class="nav-item ">
+                            <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                                data-toggle="collapse" data-target="#submenu-modelos">
+                                <span>
+                                    Modelos
+                                </span>
+                            </span>
+                            <div class="multi-level collapse " role="list" id="submenu-modelos" aria-expanded="false">
+                                <ul class="flex-column nav" >
+                                    <li class="nav-item"><a class="nav-link" style="font-size: small;" href="/produto/modelo-opcoes"><span>- Modelo Opções</span></a></li>
+                                    <li class="nav-item"><a class="nav-link" style="font-size: small;" href="/produto/modelo-adicionais"><span>- Modelo Adicionais</span></a></li>
+                                </ul>
+                            </div>
+                        </li>
+
                         <li role="separator" class="dropdown-divider  border-black"></li>
 
-                        <li class="nav-item"><a class="nav-link" href="/produto/categoria-produtos"><span>Categoria Produtos</span></a></li>
-                        <li class="nav-item"><a class="nav-link" href="/produto/categoria-adicionais"><span>Categoria Adicionais</span></a></li>
+                        <li class="nav-item ">
+                            <span class="nav-link  collapsed  d-flex justify-content-between align-items-center"
+                                data-toggle="collapse" data-target="#submenu-categorias">
+                                <span>
+                                    Categorias
+                                </span>
+                            </span>
+                            <div class="multi-level collapse " role="list" id="submenu-categorias" aria-expanded="false">
+                                <ul class="flex-column nav" >
+                                    <li class="nav-item"><a class="nav-link" style="font-size: small;" href="/produto/categoria-produtos"><span>- Categoria Produtos</span></a></li>
+                                    <li class="nav-item"><a class="nav-link" style="font-size: small;" href="/produto/categoria-adicionais"><span>- Categoria Adicionais</span></a></li>
+                                </ul>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </li>

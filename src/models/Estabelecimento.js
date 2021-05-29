@@ -49,15 +49,25 @@ const Estabelecimento = new Schema({
             
     },
 
-    useMercadoPago: {
-        type: Boolean,
-        default: false
+    integracao: {
+        mercadoPago: {
+            statusAtivo: {
+                type: Boolean,
+                default: false
+            },
+            testadoAtivo: Boolean,
+            publickey: String,
+            acessToken: String
+        },
     },
-    mercadoPago: {
-        ativo: Boolean,
-        publickey: String,
-        acessToken: String
+
+    entrega: {
+        taxaEntrega: Number,
+        cepsDisponiveis: [{
+            cep: String
+        }]
     },
+    
 
     idUsuarioMaster: {
         type: Schema.Types.ObjectId,

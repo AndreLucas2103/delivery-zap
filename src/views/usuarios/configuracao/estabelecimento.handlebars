@@ -117,35 +117,6 @@
 
                     <hr>
 
-                    <h5 class="mt-4">Integração Mercado Pago</h5>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="useMercadoPago" name="useMercadoPago" value="true">
-                        <label class="form-check-label" for="useMercadoPago">Utilizar Mercado Pago</label>
-                    </div>
-                    {{#if estabelecimento.mercadoPago.ativo}}
-                    <div class="row">
-                        <div class="form-floating mb-3 col-6">
-                            <input type="text" class="form-control" id="publickey" name="publickey" placeholder="-" value="{{estabelecimento.mercadoPago.publickey}}" readonly>
-                            <label for="publickey" class="ml-2">Public Key</label>
-                        </div>
-                        <div class="form-floating mb-3 col-6">
-                            <input type="text" class="form-control" id="acessToken" name="acessToken" placeholder="-" value="{{estabelecimento.mercadoPago.acessToken}}" readonly>
-                            <label for="acessToken" class="ml-2">Acess Token</label>
-                        </div>
-                    </div>
-                    {{else}}
-                    <div class="row">
-                        <div class="form-floating mb-3 col-6">
-                            <input type="text" class="form-control" id="publickey" name="publickey" placeholder="-" value="{{estabelecimento.mercadoPago.publickey}}">
-                            <label for="publickey" class="ml-2">Public Key</label>
-                        </div>
-                        <div class="form-floating mb-3 col-6">
-                            <input type="text" class="form-control" id="acessToken" name="acessToken" placeholder="-" value="{{estabelecimento.mercadoPago.acessToken}}">
-                            <label for="acessToken" class="ml-2">Acess Token</label>
-                        </div>
-                    </div>
-                    {{/if}}
-
                     <script>
                         $('#uf option[value="{{estabelecimento.endereco.uf}}"').prop('selected', 'selected').change();
                         $('#useMercadoPago').prop('checked', {{estabelecimento.useMercadoPago}})
@@ -295,6 +266,42 @@
             </div>
         </div>
         <!-- Modal add horarios END-->
+
+
+        <div class="col-12 col-lg-6 mb-4 ">
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">Integrações</h2>
+                </div>
+                <div class="card-body">
+                    <form action="/configuracao/edit-estabelecimento-integracao-mercado-pago" method="post">
+                    
+                    <img src="https://http2.mlstatic.com/frontend-assets/ui-navigation/5.14.5/mercadopago/favicon.svg" alt="">
+                    <span class="ml-2">Mercado Pago</span>
+                    <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="mercado-pago-statusAtivo" name="statusAtivo" value="true" {{#if estabelecimento.integracao.mercadoPago.statusAtivo}} checked {{else}} {{/if}}>
+                        <label class="form-check-label" for="mercado-pago-statusAtivo">Utilizar Mercado Pago</label>
+                    </div>
+
+                    <div class="row">
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="publickey" name="publickey" placeholder="-" value="{{estabelecimento.integracao.mercadoPago.publickey}}" {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}} readonly {{else}} {{/if}}>
+                            <label for="publickey" class="ml-2">Public Key</label>
+                        </div>
+                        <div class="form-floating mb-3 col-6">
+                            <input type="text" class="form-control" id="acessToken" name="acessToken" placeholder="-" value="{{estabelecimento.integracao.mercadoPago.acessToken}}"{{#if estabelecimento.integracao.mercadoPago.testadoAtivo}} readonly {{else}} {{/if}}>
+                            <label for="acessToken" class="ml-2">Acess Token</label>
+                        </div>
+                    </div>
+
+                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
+                    <button type="submit" class="btn btn-dark btn-sm">Salvar</button>
+
+                    </form>
+
+                </div>
+            </div>
+        </div>
 
     </div>
 
