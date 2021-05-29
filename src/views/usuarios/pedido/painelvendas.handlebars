@@ -1,45 +1,204 @@
+<body style="background:{{estabelecimento.painel.colorFundo}};"></body>
 <header>
-    <div class="container-md"
-        style="width: 100%;height:225px; background-size: 100% 100%; background-image: url(/usuario/assets/img/favicon/capaApp.png);">
+    <div class="container-md capa-painel">
         <center>
             <div style="border-radius: 25px;border-color:white">
                 <br>
-                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border" style="width: 100px;height:100px;background-repeat:no-repeat;top:120px;
-                        background-size: contain;position:relative">
+                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border logo-painel">
+            </div>
+            <div class="status-sm">
+                <span style="color: white;">Aberto</span>
             </div>
     </div>
     </center>
     <br>
-    
-
 </header>
-<div style="text-align: center;">
+
+<div style="text-align: center; margin-top: 9px;">
     <span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
         id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
     <i class="fas fa-map-marker-alt text-danger"></i>
-    <span style="color:{{estabelecimento.painel.colorFonte}};"
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
         id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
-    <span style="color:{{estabelecimento.painel.colorFonte}};" id="numeroEstabelecimento"> -
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="numeroEstabelecimento"> -
         {{estabelecimento.endereco.numero}}</span>
-    <span style="color:{{estabelecimento.painel.colorFonte}};" id="bairroEstabelecimento"> -
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="bairroEstabelecimento"> -
         {{estabelecimento.endereco.bairro}}</span>
-    <span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};"> -
+    <span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"> /
         {{estabelecimento.endereco.localidade}}</span>
 
-    <body style="background:{{estabelecimento.painel.colorFundo}};">
+
 </div>
-</body>
-<br><br><br>
-<h3 style="font-family: fantasy;color:{{estabelecimento.painel.colorFonte}};text-align: center;">Cardápio</h3>
+<center>
+    <div class="container-md">
+        <div class="scrolling-wrapper" id="container">
+            <div class="card">
+                <h2 class="card-image"></h2>
+                <p class="card-text">Bolonhesa cheedar</p>
+                <button class="button-adicionar">Adicionar</button>
+            </div>
+            
+        </div>
+        <button class="button-scroll-left" id="button-scroll" onclick="clickscrollleft()">«</button>
+        <button class="button-scroll-right" id="button-scroll" onclick="clickscrollright()">»</button>
+    </div>
+
+</center>
+
 
 {{>_msg}}
 
 <style>
-    .border-produto {
-        width: 50px;
-        height: 50px;
+    .capa-painel {
+        width: 100%;
+        height: 200px;
+        background-size: 100% 100%;
+        background-image: url(/usuario/assets/img/favicon/capaApp.png);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.39);
+    }
+
+    .logo-painel {
+        width: 100px;
+        height: 100px;
         background-repeat: no-repeat;
+        top: 100px;
         background-size: contain;
-        position: relative
+        position: relative;
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
+    }
+
+    .status-sm {
+        background-color: green;
+        width: 80px;
+        border-radius: 20px;
+        margin-top: 85px;
+        position: relative;
+    }
+
+    .scrolling-wrapper {
+
+        margin-top: 50px;
+        height: 200px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
+    @media (max-width: 400px) {
+        .button-scroll-left {
+            visibility: hidden;
+        }
+
+        .button-scroll-right {
+            visibility: hidden;
+        }
+    }
+
+    @media (min-width: 400px) {
+        .button-scroll-left {
+            width: 50px;
+            height: 50px;
+            color: rgb(115, 153, 223);
+            background: none;
+            border: none;
+            border-radius: 20px;
+            font-size: 70px;
+            position: relative;
+            right: 500px;
+            top: -180px;
+        }
+
+        .button-scroll-right {
+            width: 50px;
+            height: 50px;
+            color: rgb(115, 153, 223);
+            background: none;
+            border: none;
+            border-radius: 20px;
+            font-size: 70px;
+            position: relative;
+            left: 500px;
+            top: -180px;
+        }
+    }
+
+    .button-scroll-left:active {
+        filter: brightness(50%)
+    }
+
+    .button-scroll-right:active {
+        filter: brightness(50%)
+    }
+
+
+    .card {
+        border-radius: 25px;
+        display: inline-block;
+        overflow:visible;
+        width: 150px;
+        height: 170px;
+        margin-right: 0.5rem !important;
+
+    }
+
+    .card-image {
+        width: 100px;
+        height: 80px;
+        background-size: 100% 100%;
+        margin-top: 10px;
+        border: none;
+        border-radius: 20px;
+        background-image: url(/usuario/assets/img/illustrations/hamburguer.png);
+    }
+
+    .card-text {
+        color: #F0A431;
+        font-family:Roboto;
+        font-weight: 700;
+        font-size: 0.9rem;
+        line-height: 0.5;
+        margin-bottom: 1rem;
+        font-weight: 400;
+        margin: 0
+    }
+
+    .button-adicionar {
+        border-radius: 10px;
+        width: 110px;
+        height: 30px;
+        font-family: Roboto;
+        font-style: normal;
+        font-weight: bold;
+        margin-top: 50px;
+        position: relative;
+        border: none;
+        color: white;
+        background-color: rgb(216, 87, 62);
+        box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
+
+    }
+
+    .button-adicionar:active {
+        filter: brightness(50%)
+    }
+
+    .scrolling-wrapper::-webkit-scrollbar {
+        display: none;
     }
 </style>
+
+<script>
+    function clickscrollright() {
+
+        var leftPos = $('#container').scrollLeft();
+        $("#container").animate({ scrollLeft: leftPos + 200 }, 800);
+    }
+
+    function clickscrollleft() {
+
+        var leftPos = $('#container').scrollLeft();
+        $("#container").animate({ scrollLeft: leftPos - 200 }, 800);
+    }
+
+
+</script>

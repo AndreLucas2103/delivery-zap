@@ -117,7 +117,6 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 })
 
 
-
 router.post("/login", (req, res, next) => {
     Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
         if (usuario.eTipoAdmin == false) {
