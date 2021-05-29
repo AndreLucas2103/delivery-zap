@@ -1,54 +1,6 @@
-<body style="background:{{estabelecimento.painel.colorFundo}};"></body>
-<header>
-    <div class="container-md capa-painel">
-        <center>
-            <div style="border-radius: 25px;border-color:white">
-                <br>
-                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border logo-painel">
-            </div>
-            <div class="status-sm">
-                <span style="color: white;">Aberto</span>
-            </div>
-    </div>
-    </center>
-    <br>
-</header>
-
-<div style="text-align: center; margin-top: 9px;">
-    <span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
-        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
-    <i class="fas fa-map-marker-alt text-danger"></i>
-    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
-        id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
-    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="numeroEstabelecimento"> -
-        {{estabelecimento.endereco.numero}}</span>
-    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="bairroEstabelecimento"> -
-        {{estabelecimento.endereco.bairro}}</span>
-    <span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"> /
-        {{estabelecimento.endereco.localidade}}</span>
-
-
-</div>
-<center>
-    <div class="container-md">
-        <div class="scrolling-wrapper" id="container">
-            <div class="card">
-                <h2 class="card-image"></h2>
-                <p class="card-text">Bolonhesa cheedar</p>
-                <button class="button-adicionar">Adicionar</button>
-            </div>
-            
-        </div>
-        <button class="button-scroll-left" id="button-scroll" onclick="clickscrollleft()">«</button>
-        <button class="button-scroll-right" id="button-scroll" onclick="clickscrollright()">»</button>
-    </div>
-
-</center>
-
-
-{{>_msg}}
 
 <style>
+
     .capa-painel {
         width: 100%;
         height: 200px;
@@ -169,7 +121,6 @@
         font-family: Roboto;
         font-style: normal;
         font-weight: bold;
-        margin-top: 50px;
         position: relative;
         border: none;
         color: white;
@@ -187,18 +138,101 @@
     }
 </style>
 
+<header>
+    <div class="container-md capa-painel">
+        <center>
+            <div style="border-radius: 25px;border-color:white">
+                <br>
+                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border logo-painel">
+            </div>
+            <div class="status-sm">
+                <span style="color: white;">Aberto</span>
+            </div>
+    </div>
+    </center>
+    <br>
+</header>
+
+<body style="background:{{estabelecimento.painel.colorFundo}};"></body>
+
+<div style="text-align: center; margin-top: 9px;">
+    <span style="font-weight: bold;font-size:large;color:{{estabelecimento.painel.colorFonte}};"
+        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span><br>
+    <i class="fas fa-map-marker-alt text-danger"></i>
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"
+        id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="numeroEstabelecimento"> -
+        {{estabelecimento.endereco.numero}}</span>
+    <span style="color:{{estabelecimento.painel.colorFonte}};font-size: small;" id="bairroEstabelecimento"> -
+        {{estabelecimento.endereco.bairro}}</span>
+    <span id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};font-size: small;"> /
+        {{estabelecimento.endereco.localidade}}</span>
+
+
+</div>
+<center>
+
+    <hr class="w-25 text-center">
+
+    {{#each produtos}}
+    <div class="container-md">
+        <h4>{{categoriaProdutos.nome}}</h4>
+        <div class="scrolling-wrapper" id="container-{{_id}}">
+            {{#each produtos}}
+            <div class="card">
+                <h2 class="card-image"></h2>
+                <p class="card-text">{{nome}}</p>
+                <p class="mt-2 valorFormatar">{{valor}}</p>
+                <button class="button-adicionar">Adicionar</button>
+            </div>
+            {{/each}}
+            {{#each produtos}}
+            <div class="card">
+                <h2 class="card-image"></h2>
+                <p class="card-text">{{nome}}</p>
+                <p class="mt-2 valorFormatar">{{valor}}</p>
+                <button class="button-adicionar">Adicionar</button>
+            </div>
+            {{/each}}
+
+            {{#each produtos}}
+            <div class="card">
+                <h2 class="card-image"></h2>
+                <p class="card-text">{{nome}}</p>
+                <p class="mt-2 valorFormatar">{{valor}}</p>
+                <button class="button-adicionar">Adicionar</button>
+            </div>
+            {{/each}}
+
+        </div>
+        <button class="button-scroll-left" id="button-scroll" onclick="clickscrollleft('{{_id}}')">«</button>
+        <button class="button-scroll-right" id="button-scroll" onclick="clickscrollright('{{_id}}')">»</button>
+    </div>
+    {{/each}}
+
+
+</center>
+
+
+{{>_msg}}
+
+
 <script>
-    function clickscrollright() {
+    let teste = {{{teste}}}
+    console.log(teste)
 
-        var leftPos = $('#container').scrollLeft();
-        $("#container").animate({ scrollLeft: leftPos + 200 }, 800);
+    function clickscrollright(idCategoria) {
+        var leftPos = $(`#container-${idCategoria}`).scrollLeft();
+        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos + 200 }, 400);
     }
 
-    function clickscrollleft() {
-
-        var leftPos = $('#container').scrollLeft();
-        $("#container").animate({ scrollLeft: leftPos - 200 }, 800);
+    function clickscrollleft(idCategoria) {
+        var leftPos = $(`#container-${idCategoria}`).scrollLeft();
+        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos - 200 }, 400);
     }
 
-
+    $(".valorFormatar").each(function(item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
 </script>

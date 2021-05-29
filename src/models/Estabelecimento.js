@@ -38,15 +38,14 @@ const Estabelecimento = new Schema({
     },
 
     painel: {
-            colorFundo:{
-                type: String,
-                default : "#FFFFFF"
-            },
-            colorFonte:{
-                type: String,
-                default : "#000000"
-            },
-            
+        colorFundo:{
+            type: String,
+            default : "#FFFFFF"
+        },
+        colorFonte:{
+            type: String,
+            default : "#000000"
+        },
     },
 
     integracao: {

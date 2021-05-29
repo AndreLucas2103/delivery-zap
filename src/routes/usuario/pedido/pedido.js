@@ -25,10 +25,35 @@ router.get('/pedidos', (req, res) => {
 
 router.get('/:urlPainel', async (req, res)=>{
     try {
-        let estabelecimento = await Estabelecimento.find({url: req.params.urlPainel}).lean()
-    
+        let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
+        let produtos = await Produto.aggregate([
+            {$match: {idEstabelecimento: estabelecimento._id}},
+            {
+                $group:{
+                    _id: '$idCategoriaProduto', 
+                    produtos: {$push: {_id:"$_id", nome: '$nome', valor: '$valor'}},
+                }
+            },
+            {
+                $lookup:
+                    {
+                        from: "categoriaprodutos",
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "categoriaProdutos"
+                    },
+            },
+            {$unwind: '$categoriaProdutos'},
+        ])
 
-        res.render('usuarios/pedido/painelvendas', { estabelecimento: estabelecimento[0]})
+        console.log(produtos)
+        
+
+        res.render('usuarios/pedido/painelvendas', {
+            estabelecimento: estabelecimento,
+            produtos: produtos,
+            teste: JSON.stringify(produtos),
+        })
     } catch (err) {
         console.log(err)
     }
