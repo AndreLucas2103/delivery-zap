@@ -20,6 +20,8 @@ require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/ModeloOpcao")
 const ModeloOpcao = mongoose.model("modeloOpcoes")
+require("../../../models/ModeloAdicional")
+const ModeloAdicional = mongoose.model("modeloAdicionais")
 
 
 
@@ -243,6 +245,27 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
     }
 })
 
+router.post('/add-produto-adicionais-modelo-adicionais', (req, res) => { // rota para adicionar uma nova opcao ao produto
+    ModeloAdicional.findById({_id: req.body.idModeloAdicional}, {_id: 0}).then(modelo => {
+        modelo.adicionais.forEach(element => {
+            Produto.updateOne(
+                {_id: req.body.idProduto},
+                {$push: {
+                    'adicionais': {'idAdicional': element.idAdicional, 'idCategoriaAdicional': element.idCategoriaAdicional}
+                }}
+            ).then(() => {
+                
+            }).catch(err => {
+                console.log(err)
+            })
+        })
+        req.flash('success_msg', 'Opção criada')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
 router.post('/delete-produto-adicional', (req, res) => {
     Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
         {'_id': req.body.idProduto},
@@ -402,6 +425,17 @@ router.post('/ajax-get-produto-modelos-opcoes', (req, res) => { // consulto os
     })
 })
 
+router.post('/ajax-get-produto-modelos-adicionais', (req, res) => { // consulto os 
+    Produto.findById({_id: req.body.idProduto}).then(produto => {
+        ModeloAdicional.find({idEstabelecimento: produto.idEstabelecimento}).lean().then(modelos => {
+            res.json(modelos)
+        }).catch(err => {
+            console.log(err)
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+})
 
 
 // -----------  INGREDIENTES ------------------------------------------------------------------------------------------

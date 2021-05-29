@@ -8,9 +8,9 @@ function spinngLoading(status){
     $('#app-root').attr('disabled', status);
     if(status == true){
         $("div").on("keydown keypress keyup click contextmenu", false);
-        $('.spinner-loading').show()
+        $('#spinner-loading').show()
     }else{
-        $("div").on("keydown keypress keyup click contextmenu", true);
-        $('.spinner-loading').hide()
+        $( "div" ).off();
+        $('#spinner-loading').hide()
     }
 }

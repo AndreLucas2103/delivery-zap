@@ -20,6 +20,8 @@ require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/ModeloOpcao")
 const ModeloOpcao = mongoose.model("modeloOpcoes")
+require("../../../models/ModeloAdicional")
+const ModeloAdicional = mongoose.model("modeloAdicionais")
 
 
 // -----------  MODELO OPCOES ------------------------------------------------------------------------------------------
@@ -158,6 +160,104 @@ router.post('/ajax-get-produto-modelo-opcoes', (req, res) => { // consulto os
         console.log(err)
     })
 })
+
+// -----------  MODELO ADICONAIS ------------------------------------------------------------------------------------------
+router.get('/modelo-adicionais', async(req, res) => {
+    try {
+        let userEstabelecimentos = [], idCategorias, nome, filtroExist
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento)})
+
+        let modelosAdicionais = await ModeloAdicional.find({idEstabelecimento: userEstabelecimentos}).populate('idEstabelecimento adicionais.idCategoriaAdicional adicionais.idAdicional').lean()
+        res.render('usuarios/produto/modelo/modelo-adicionais', {
+            modelosAdicionais: modelosAdicionais
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/add-modelo-adicionais', (req, res) => {
+    new ModeloAdicional({nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento}).save().then(() => {
+        req.flash('success_msg','Modelo adicionado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/add-modelo-adicionais-adiocinal', (req, res) => {
+    let arrayIdAdicionais = JSON.parse(req.body.idAdicional)
+
+    arrayIdAdicionais.forEach(element => {
+        ModeloAdicional.updateOne(
+            {_id: req.body.idModeloAdicional},
+            {$push: {
+                'adicionais': {'idAdicional': element.idAdicional, idCategoriaAdicional: element.idCategoriaAdicional}
+            }}
+        ).then(() => {
+            
+        }).catch(err => {
+            console.log(err)
+        })
+    })
+
+    req.flash('success_msg', 'Adicional adicionado')
+    res.redirect('back')
+})
+
+router.post('/delete-modelo-adicionais-adiocinal', (req, res) => {
+    ModeloAdicional.updateOne( 
+        {'_id': req.body.idModeloAdicional},
+        { $pull: {
+            'adicionais': {_id: ObjectId(req.body.idObjectAdicional)},
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Adicional removido')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/edit-modelo-adicional', (req, res) => {
+    ModeloAdicional.updateOne(
+        {_id: req.body.idModeloAdicional},
+        {$set: {nome: req.body.nome}}
+    ).then(() => {
+        req.flash('success_msg','Modelo editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
+router.post('/ajax-get-modelo-adicionais-categorias-adicionais', async (req, res) => {
+    try {
+        let modeloAdicional = await ModeloAdicional.findById({_id: req.body.idModeloAdicional})
+        let categorias = await CategoriaAdicional.find({$and: [{idEstabelecimento: modeloAdicional.idEstabelecimento}, {statusAtivo: true}]}).lean();
+
+        res.json(categorias)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/ajax-get-modelo-adicionais-adicionais', (req, res) => {
+    ModeloAdicional.findById({_id: req.body.idModeloAdicional}).then(produto => {
+        req.body.idCategoriaAdicional ? idCategoriaAdicional = {$and: [{'idCategoriaAdicional': ObjectId(req.body.idCategoriaAdicional)}, {statusAtivo:true}]}  : idCategoriaAdicional = {$and: [{statusAtivo:true}, {'idEstabelecimento': produto.idEstabelecimento}]}
+    
+        Adicional.find(idCategoriaAdicional).populate('idCategoriaAdicional').lean().then(adicionais => {
+            res.json(adicionais)
+        }).catch(err => {
+            console.log(err)
+        })
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
 
 
 module.exports = router;
