@@ -334,7 +334,6 @@
     .categoria {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
-        color: black;
         font-size: 30px;
         text-align: center;
         position: relative;
@@ -346,7 +345,15 @@
     }
 
     .scrolling-wrapper::-webkit-scrollbar {
-        display: none;
+       filter: brightness(50%)
+    }
+
+    .carrinho:active {
+        filter: brightness(50%)
+    }
+
+    .finalizar:active {
+        filter: brightness(50%)
     }
 </style>
 
@@ -384,9 +391,9 @@
     </center>
 </div>
 
-<center>
+<center style="color:{{estabelecimento.painel.colorFonte}};">
 
-    <hr class="w-25 text-center" style="color:{{estabelecimento.painel.colorFonte}};">
+    <hr class="w-25 text-center">
     <br><br>
 
     {{#each produtos}}
