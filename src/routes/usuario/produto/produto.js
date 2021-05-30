@@ -39,7 +39,6 @@ router.get('/perfil', async(req, res) => {
         let adicionais = await Adicional.find({$and: [{'idEstabelecimento': produto.idEstabelecimento}]}).populate('idCategoriaAdicional').lean()
 
         let categoriasAdicional = await CategoriaAdicional.find({$and: [{'idEstabelecimento': produto.idEstabelecimento}, {statusAtivo:true}]}).lean()
-        
 
         res.render('usuarios/produto/produto', {
             produto: produto,
