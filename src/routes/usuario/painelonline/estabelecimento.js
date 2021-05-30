@@ -43,6 +43,7 @@ router.get('/:urlPainel', async (req, res)=>{
         ])
 
         console.log(produtos)
+        console.log(produtos)
         
 
         res.render('usuarios/pedido/painelonline', {
