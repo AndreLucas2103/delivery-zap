@@ -1,5 +1,5 @@
 <style>
-    @media (max-width: 400px) {
+    @media (max-width: 900px) {
         .capa-painel {
             width: 95%;
             height: 200px;
@@ -61,11 +61,39 @@
         .button-scroll-right {
             visibility: hidden;
         }
+
+        .carrinho {
+            width: 100px;
+            height: 50px;
+            background: #081C15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff !important;
+            position: fixed;
+            bottom: 10px;
+            left: 30px;
+            border-radius: 20px;
+        }
+
+        .finalizar {
+            width: 100px;
+            height: 50px;
+            background: #081C15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff !important;
+            position: fixed;
+            bottom: 10px;
+            right: 30px;
+            border-radius: 20px;
+        }
     }
 
-    @media (min-width: 700px) {
+    @media (min-width: 900px) {
         .capa-painel {
-            width: 95%;
+            width: 70%;
             height: 200px;
             border: none;
             border-radius: 20px;
@@ -145,17 +173,15 @@
     }
 
     .button-scroll-left:active {
-        width: 40px;
-        height: 40px;
+        filter: brightness(50%);
     }
 
     .button-scroll-right:active {
-        width: 40px;
-        height: 40px;
+        filter: brightness(50%);
     }
 
 
-    @media (max-width: 400px) {
+    @media (max-width: 900px) {
         .card {
             margin-top: 10px;
             border: none;
@@ -215,7 +241,7 @@
 
     }
 
-    @media (min-width: 700px) {
+    @media (min-width: 900px) {
         .card {
             margin-top: 10px;
             border: none;
@@ -272,6 +298,35 @@
             font-size: 16px;
             line-height: 19px;
         }
+
+           .carrinho {
+            width: 125px;
+            height: 50px;
+            background: #081C15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff !important;
+            position: fixed;
+            bottom: 10px;
+            left: 300px;
+            border-radius: 20px;
+        }
+
+        .finalizar {
+            width: 125px;
+            height: 50px;
+            background: #081C15;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff !important;
+            position: fixed;
+            bottom: 10px;
+            right: 300px;
+            border-radius: 20px;
+        }
+
 
 
     }
@@ -353,8 +408,9 @@
     </div>
 
     {{/each}}
-
-
+<br><br><br>
+    <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
+    <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
 </center>
 
 
