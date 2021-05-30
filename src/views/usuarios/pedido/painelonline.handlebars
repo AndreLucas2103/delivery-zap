@@ -405,7 +405,7 @@
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
-                <button class="button-adicionar">Adicionar</button>
+                <button class="button-adicionar" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto" data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
         </div>
@@ -419,6 +419,109 @@
     <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
 </center>
+
+
+
+
+<div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+        <div class="modal-body">
+            <form action="/pedido/add-painel-carrinho-produto"  method="post" id="form-add-painel-carrinho-produto"> 
+                <div class="card bg-light border-light" style="width: 100%; height: 100%">
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-4 text-center mt-2">
+                                <img src="/usuario/assets/img/favicon/logoApp.png" class="mx-auto" style="object-fit: contain; width: 100pxx; height: 100px;" >
+                            </div>
+                            <div class="col-lg-8 mt-2">
+                                <p>Nome: <span id="add-produto-nome"></span></p>
+                                <p>Valor: <span id="add-produto-valor"></span></p>
+                                <p id="p-add-produto-descricao">Descrição: <span id="add-produto-descricao"></span></p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
+                    <div class="card-body" >
+                        <h6  class="d-block">Ingredientes:</h6>
+                        <span id="add-ingredientes"></span>
+                    </div>
+                </div>
+
+                <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-adicionais">
+                    <div class="card-body" >
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th>Adicionais</th>
+                                    <th>Valor</th>
+                                </tr>
+                            </thead>
+                            <tbody id="add-adicionais">
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-sm mt-2" >Adicionar</button>
+                <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
+            </form>
+        </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
+    modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
+        spinngLoading(true)
+        var button = event.relatedTarget
+        jQuery.ajax({
+            type: "POST",
+            url: '/estabelecimento/ajax-get-painel-produto',
+            data: {idProduto: button.getAttribute('data-bs-id')},
+            success: function(response) {
+                console.log(response)
+
+                $('#modal-add-opcoes-modelo-opcoesLabel').text(response.nome)
+                $('#add-produto-nome').text(response.nome)
+                $('#add-produto-valor').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valor))  
+                response.descricao ? $('#p-add-produto-descricao').show(1, () => { $('#add-produto-descricao').text(response.descricao)})   : $('#p-add-produto-descricao').hide()
+                
+                // ingredientes
+                response.ingredientes.length == 0 ? $('#card-add-ingredientes').hide() : $('#card-add-ingredientes').show()  
+                $('#add-ingredientes').empty()
+                response.ingredientes.forEach(element => {
+                    $('#add-ingredientes').append(`<button type="button" class="btn btn-secondary btn-sm m-1" style="font-size: x-small;">${element.nome}</button>`)
+                })
+
+                // adicionais
+                response.adicionais.length == 0 ? $('#card-add-adicionais').hide() : $('#card-add-adicionais').show()  
+                $('#add-adicionais').empty()
+                response.adicionais.forEach(element => {
+                    $('#add-adicionais').append(`
+                        <tr>
+                            <td>
+                                <input type="checkbox" name="adicionais" value="{nome: '${element.idAdicional.nome}', num: 1}"> ${element.idAdicional.nome}</input>
+                            </td>
+                            <td>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
+                        </tr>
+                    `)
+                })
+
+
+
+                spinngLoading(false)
+            }
+        });
+    })
+
+    $('#form-add-painel-carrinho-produto').submit(() => {
+        
+    })
+</script>
 
 
 {{>_msg}}

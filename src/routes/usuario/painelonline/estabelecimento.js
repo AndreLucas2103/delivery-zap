@@ -56,5 +56,15 @@ router.get('/:urlPainel', async (req, res)=>{
     }
 })
 
+router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os 
+    try {
+        let produto = await  Produto.findById({_id: req.body.idProduto}).lean()
+        .populate('adicionais.idCategoriaAdicional adicionais.idAdicional idCategoriaProduto idEstabelecimento opcao.opcoesProduto.idProduto').lean()
+
+        res.json(produto)
+    } catch (err) {
+        console.log(err)
+    }
+})
 
 module.exports = router;
