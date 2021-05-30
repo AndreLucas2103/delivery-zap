@@ -292,6 +292,5 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
 
 })
 
-
 module.exports = router;
 

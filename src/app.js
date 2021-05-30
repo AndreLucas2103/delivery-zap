@@ -163,6 +163,7 @@ const usuarioEntregador= require("./routes/usuario/entregador/entregador")
 const usuarioProduto = require("./routes/usuario/produto/produto")
 const usuarioProdutoModelo = require("./routes/usuario/produto/modelo")
 const usuarioPedido= require("./routes/usuario/pedido/pedido")
+const usuarioPainel= require("./routes/usuario/painelonline/estabelecimento")
 
 
     // Configuracoes do usuario
@@ -175,6 +176,7 @@ app.use('/entregador', usuarioEntregador)
 app.use('/produto', usuarioProduto)
 app.use('/produto', usuarioProdutoModelo)
 app.use('/pedido', usuarioPedido)
+app.use('/estabelecimento', usuarioPainel)
 
 
     // Configuracoes do usuario
