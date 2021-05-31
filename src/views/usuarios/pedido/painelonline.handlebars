@@ -347,7 +347,7 @@
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
             {{#each produtos}}
-            <div class="card card-style-produto card-produto-{{_id}}" data-bs-nome="{{nome}}">
+            <div class="card card-style-produto" data-bs-nome="{{nome}}">
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
@@ -359,7 +359,6 @@
         <button class="button-scroll-right" style="color:{{estabelecimento.painel.colorFundo}};" id="button-scroll"
             onclick="clickscrollright('{{_id}}')">»</button>
     </div>
-
     {{/each}}
 
     <script>
