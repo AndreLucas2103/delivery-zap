@@ -347,7 +347,7 @@
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
             {{#each produtos}}
-            <div class="card card-style-produto" data-nomeProduto="{{nome}}">
+            <div class="card card-style-produto card-produto-{{_id}}" data-bs-nome="{{nome}}">
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
@@ -363,9 +363,10 @@
     {{/each}}
 
     <script>
-        $(".card-style-produto").children().each(function () {
-            console.log(this)
-            $('.card-style-produto').css({'width': '100%'});
+        $(".card-style-produto").each(function (i, elementDiv) {
+            if(elementDiv.getAttribute('data-bs-nome').length > 20){
+                $(this).css({'width': `${elementDiv.getAttribute('data-bs-nome').length*10}px` });
+            }
         })
     </script>
 
