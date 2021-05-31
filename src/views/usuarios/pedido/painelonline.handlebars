@@ -347,7 +347,7 @@
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
             {{#each produtos}}
-            <div class="card">
+            <div class="card card-style-produto" data-nomeProduto="{{nome}}">
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
@@ -361,6 +361,16 @@
     </div>
 
     {{/each}}
+
+    <script>
+        $(".card-style-produto").children().each(function () {
+            console.log(this)
+            $('.card-style-produto').css({'width': '100%'});
+        })
+    </script>
+
+
+
 <br><br><br>
     <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
