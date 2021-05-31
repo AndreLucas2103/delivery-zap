@@ -1,307 +1,4 @@
-<style>
-    @media (max-width: 900px) {
-        .capa-painel {
-            width: 95%;
-            height: 200px;
-            border: none;
-            border-radius: 20px;
-            background-size: 100% 100%;
-            background-image: url(/usuario/assets/img/favicon/capaApp.png);
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .logo-painel {
-            width: 100px;
-            height: 100px;
-            background-repeat: no-repeat;
-            top: 100px;
-            bottom: 50px;
-            background-size: contain;
-            position: relative;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .status-icon {
-            background-color: green;
-            width: 100px;
-            border-radius: 8px;
-            margin-top: 105px;
-            position: relative;
-        }
-        .estabelecimento {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-weight: bold;
-            margin-top: 10px;
-            font-size: 20px;
-            text-align: center;
-        }
-        .endereco {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-weight: bold;
-            font-size: 13px;
-            display: inline;
-            text-align: center;
-        }
-        .scrolling-wrapper {
-            margin-top: 10px;
-            height: 240px;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
-        }
-        .button-scroll-left {
-            visibility: hidden;
-        }
-        .button-scroll-right {
-            visibility: hidden;
-        }
-        .carrinho {
-            width: 100px;
-            height: 50px;
-            background: #081C15;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff !important;
-            position: fixed;
-            bottom: 10px;
-            left: 30px;
-            border-radius: 20px;
-        }
-        .finalizar {
-            width: 100px;
-            height: 50px;
-            background: #081C15;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff !important;
-            position: fixed;
-            bottom: 10px;
-            right: 30px;
-            border-radius: 20px;
-        }
-    }
-    @media (min-width: 900px) {
-        .capa-painel {
-            width: 70%;
-            height: 200px;
-            border: none;
-            border-radius: 20px;
-            background-size: 100% 100%;
-            background-image: url(/usuario/assets/img/favicon/capaApp.png);
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .logo-painel {
-            width: 100px;
-            height: 100px;
-            background-repeat: no-repeat;
-            top: 100px;
-            bottom: 50px;
-            background-size: contain;
-            position: relative;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        }
-        .status-icon {
-            background-color: green;
-            width: 100px;
-            border-radius: 8px;
-            margin-top: 105px;
-            position: relative;
-        }
-        .estabelecimento {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-weight: bold;
-            margin-top: 10px;
-            font-size: 20px;
-            text-align: center;
-        }
-        .endereco {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-weight: bold;
-            font-size: 13px;
-            display: inline;
-            text-align: center;
-        }
-        .scrolling-wrapper {
-            margin-top: 10px;
-            height: 240px;
-            overflow-x: scroll;
-            overflow-y: hidden;
-            white-space: nowrap;
-        }
-        .button-scroll-left {
-            width: 50px;
-            height: 50px;
-            background: none;
-            border: none;
-            border-radius: 20px;
-            font-size: 70px;
-            position: relative;
-            right: 500px;
-            top: -220px;
-        }
-        .button-scroll-right {
-            width: 50px;
-            height: 50px;
-            background: none;
-            border: none;
-            color: -50%;
-            border-radius: 20px;
-            font-size: 70px;
-            position: relative;
-            left: 500px;
-            top: -220px;
-        }
-    }
-    .button-scroll-left:active {
-        filter: brightness(50%);
-    }
-    .button-scroll-right:active {
-        filter: brightness(50%);
-    }
-    @media (max-width: 900px) {
-        .card {
-            margin-top: 10px;
-            border: none;
-            border-radius: 20px;
-            display: inline-block;
-            overflow: visible;
-            width: 190px;
-            height: 199px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-            margin-right: 12px !important;
-        }
-        .button-adicionar {
-            border-radius: 10px;
-            width: 145px;
-            height: 36px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            position: relative;
-            border: none;
-            color: white;
-            background-color: #F0A431;
-        }
-        .card-image {
-            width: 100px;
-            height: 80px;
-            background-size: 100% 100%;
-            margin-top: 23px;
-            border: none;
-            border-radius: 20px;
-            background-image: url(/usuario/assets/img/illustrations/hamburguer.png);
-        }
-        .card-text {
-            color: #000000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 19px;
-            margin-top: 20px;
-        }
-        .card-value {
-            color: #F0A431;
-            margin-top: -10px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 19px;
-        }
-    }
-    @media (min-width: 900px) {
-        .card {
-            margin-top: 10px;
-            border: none;
-            border-radius: 20px;
-            display: inline-block;
-            overflow: visible;
-            width: 190px;
-            height: 199px;
-            box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-            margin-right: 12px !important;
-        }
-        .button-adicionar {
-            border-radius: 10px;
-            width: 145px;
-            height: 36px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            position: relative;
-            border: none;
-            color: white;
-            background-color: #F0A431;
-        }
-        .card-image {
-            width: 100px;
-            height: 80px;
-            background-size: 100% 100%;
-            margin-top: 23px;
-            border: none;
-            border-radius: 20px;
-            background-image: url(/usuario/assets/img/illustrations/hamburguer.png);
-        }
-        .card-text {
-            color: #000000;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 19px;
-            margin-top: 20px;
-        }
-        .card-value {
-            color: #F0A431;
-            margin-top: -10px;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-            font-style: normal;
-            font-weight: bold;
-            font-size: 16px;
-            line-height: 19px;
-        }
-           .carrinho {
-            width: 125px;
-            height: 50px;
-            background: #081C15;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff !important;
-            position: fixed;
-            bottom: 10px;
-            left: 300px;
-            border-radius: 20px;
-        }
-        .finalizar {
-            width: 125px;
-            height: 50px;
-            background: #081C15;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            color: #fff !important;
-            position: fixed;
-            bottom: 10px;
-            right: 300px;
-            border-radius: 20px;
-        }
-    }
-    .categoria {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
-        font-weight: bold;
-        font-size: 30px;
-        text-align: center;
-        position: relative;
-    }
-    .button-adicionar:active {
-        filter: brightness(50%)
-    }
-    .scrolling-wrapper::-webkit-scrollbar {
-        display: none;
-    }
-</style>
+<link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
 <header>
     <div class="container-md capa-painel">
@@ -337,7 +34,7 @@
     </center>
 </div>
 
-<center  style="color:{{estabelecimento.painel.colorFonte}};">
+<center style="color:{{estabelecimento.painel.colorFonte}};">
 
     <hr class="w-25 text-center">
     <br><br>
@@ -351,7 +48,8 @@
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
-                <button class="button-adicionar" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto" data-bs-id="{{_id}}">Adicionar</button>
+                <button class="button-adicionar" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
+                    data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
         </div>
@@ -362,69 +60,110 @@
     {{/each}}
 
     <script>
-        $(".card-style-produto").each(function (i, elementDiv) {
-            if(elementDiv.getAttribute('data-bs-nome').length > 20){
-                $(this).css({'width': `${elementDiv.getAttribute('data-bs-nome').length*10}px` });
+        //Aumenta o card caso a resolução seja menor ou mair que 900px
+        $(document).ready(() => {
+            x = window.screen.width;
+            if (x < 900) {
+                $(".card-style-produto").each(function (i, elementDiv) {
+                    if (elementDiv.getAttribute('data-bs-nome').length > 20) {
+                        $(this).css({ 'width': `${elementDiv.getAttribute('data-bs-nome').length * 10}px` });
+                    }
+                })
             }
-        })
+            if (x > 900) {
+                $(".card-style-produto").each(function (i, elementDiv) {
+                    if (elementDiv.getAttribute('data-bs-nome').length > 20) {
+                        $(this).css({ 'width': `${elementDiv.getAttribute('data-bs-nome').length * 15}px` });
+                    }
+                })
+            }
+  })
+                //Aumenta o card caso alterar a resolução caso a resolução seja menor ou mair que 900px
+                document.body.onresize = function () {
+                    if (document.body.clientWidth < 900) {
+                        $(".card-style-produto").each(function (i, elementDiv) {
+                            if (elementDiv.getAttribute('data-bs-nome').length > 20) {
+                                $(this).css({ 'width': `${elementDiv.getAttribute('data-bs-nome').length * 10}px` });
+                            }
+                        })
+                    }
+                    if (document.body.clientWidth > 900) {
+                        $(".card-style-produto").each(function (i, elementDiv) {
+                            if (elementDiv.getAttribute('data-bs-nome').length > 20) {
+                                $(this).css({ 'width': `${elementDiv.getAttribute('data-bs-nome').length * 15}px` });
+                            }
+                        })
+                    }
+
+                }
+
+
+          
+
+
     </script>
 
 
 
-<br><br><br>
+    <br><br><br>
     <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
-    
+
 </center>
 
 
 
-<div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel" aria-hidden="true">
+<div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-        <div class="modal-body">
-            <form action="/pedido/add-painel-carrinho-produto"  method="post" id="form-add-painel-carrinho-produto"> 
-                <div class="card bg-light border-light" style="width: 100%; height: 100%">
-                    <div class="card-body">
-                        <div class="row">
-                            <div class="col-lg-4 text-center mt-2">
-                                <img src="/usuario/assets/img/favicon/logoApp.png" class="mx-auto" style="object-fit: contain; width: 100pxx; height: 100px;" >
-                            </div>
-                            <div class="col-lg-8 mt-2">
-                                <p>Nome: <span id="add-produto-nome"></span></p>
-                                <p>Valor: <span id="add-produto-valor"></span></p>
-                                <p id="p-add-produto-descricao">Descrição: <span id="add-produto-descricao"></span></p>
+            <div class="modal-body">
+                <form action="/pedido/add-painel-carrinho-produto" method="post" id="form-add-painel-carrinho-produto">
+                    <div class="card bg-light border-light" style="width: 100%; height: 100%">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-lg-4 text-center mt-2">
+                                    <img src="/usuario/assets/img/favicon/logoApp.png" class="mx-auto"
+                                        style="object-fit: contain; width: 100pxx; height: 100px;">
+                                </div>
+                                <div class="col-lg-8 mt-2">
+                                    <p>Nome: <span id="add-produto-nome"></span></p>
+                                    <p>Valor: <span id="add-produto-valor"></span></p>
+                                    <p id="p-add-produto-descricao">Descrição: <span id="add-produto-descricao"></span>
+                                    </p>
+                                </div>
                             </div>
                         </div>
                     </div>
-                </div>
 
-                <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
-                    <div class="card-body" >
-                        <h6  class="d-block">Ingredientes:</h6>
-                        <span id="add-ingredientes"></span>
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
+                        id="card-add-ingredientes">
+                        <div class="card-body">
+                            <h6 class="d-block">Ingredientes:</h6>
+                            <span id="add-ingredientes"></span>
+                        </div>
                     </div>
-                </div>
 
-                <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-adicionais">
-                    <div class="card-body" >
-                        <table class="table">
-                            <thead>
-                                <tr>
-                                    <th>Adicionais</th>
-                                    <th>Valor</th>
-                                </tr>
-                            </thead>
-                            <tbody id="add-adicionais">
-                            </tbody>
-                        </table>
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
+                        id="card-add-adicionais">
+                        <div class="card-body">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Adicionais</th>
+                                        <th>Valor</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="add-adicionais">
+                                </tbody>
+                            </table>
+                        </div>
                     </div>
-                </div>
 
-                <button type="submit" class="btn btn-primary btn-sm mt-2" >Adicionar</button>
-                <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
-            </form>
-        </div>
+                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                    <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
+                </form>
+            </div>
         </div>
     </div>
 </div>
@@ -437,24 +176,24 @@
         jQuery.ajax({
             type: "POST",
             url: '/estabelecimento/ajax-get-painel-produto',
-            data: {idProduto: button.getAttribute('data-bs-id')},
-            success: function(response) {
+            data: { idProduto: button.getAttribute('data-bs-id') },
+            success: function (response) {
                 console.log(response)
 
                 $('#modal-add-opcoes-modelo-opcoesLabel').text(response.nome)
                 $('#add-produto-nome').text(response.nome)
-                $('#add-produto-valor').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valor))  
-                response.descricao ? $('#p-add-produto-descricao').show(1, () => { $('#add-produto-descricao').text(response.descricao)})   : $('#p-add-produto-descricao').hide()
-                
+                $('#add-produto-valor').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valor))
+                response.descricao ? $('#p-add-produto-descricao').show(1, () => { $('#add-produto-descricao').text(response.descricao) }) : $('#p-add-produto-descricao').hide()
+
                 // ingredientes
-                response.ingredientes.length == 0 ? $('#card-add-ingredientes').hide() : $('#card-add-ingredientes').show()  
+                response.ingredientes.length == 0 ? $('#card-add-ingredientes').hide() : $('#card-add-ingredientes').show()
                 $('#add-ingredientes').empty()
                 response.ingredientes.forEach(element => {
                     $('#add-ingredientes').append(`<button type="button" class="btn btn-secondary btn-sm m-1" style="font-size: x-small;">${element.nome}</button>`)
                 })
 
                 // adicionais
-                response.adicionais.length == 0 ? $('#card-add-adicionais').hide() : $('#card-add-adicionais').show()  
+                response.adicionais.length == 0 ? $('#card-add-adicionais').hide() : $('#card-add-adicionais').show()
                 $('#add-adicionais').empty()
                 response.adicionais.forEach(element => {
                     $('#add-adicionais').append(`
@@ -475,7 +214,7 @@
     })
 
     $('#form-add-painel-carrinho-produto').submit(() => {
-        
+
     })
 </script>
 
@@ -485,6 +224,7 @@
 
 <script>
     let teste = {{{ teste }}}
+
     console.log(teste)
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
