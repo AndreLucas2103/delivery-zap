@@ -92,20 +92,20 @@
 @media (min-width: 900px) {
     .capa-painel {
         width: 70%;
-        height: 300px;
+        height: 200px;
         border: none;
-        border-radius: 30px;
+        border-radius: 20px;
         background-size: 100% 100%;
         background-image: url(/usuario/assets/img/favicon/capaApp.png);
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     .logo-painel {
-        width: 150px;
-        height: 150px;
+        width: 100px;
+        height: 100px;
         background-repeat: no-repeat;
-        top: 150px;
-        bottom: 75px;
+        top: 100px;
+        bottom: 50px;
         background-size: contain;
         position: relative;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
@@ -115,29 +115,29 @@
         background-color: green;
         width: 100px;
         border-radius: 8px;
-        margin-top: 157.5px;
+        margin-top: 105px;
         position: relative;
     }
 
     .estabelecimento {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
-        margin-top: 15px;
-        font-size: 30px;
+        margin-top: 10px;
+        font-size: 20px;
         text-align: center;
     }
 
     .endereco {
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
-        font-size: 19.5px;
+        font-size: 13px;
         display: inline;
         text-align: center;
     }
 
     .scrolling-wrapper {
-        margin-top: 15px;
-        height: 360px;
+        margin-top: 10px;
+        height: 240px;
         overflow-x: scroll;
         overflow-y: hidden;
         white-space: nowrap;
@@ -236,21 +236,21 @@
 
 @media (min-width: 900px) {
     .card {
-        margin-top: 15px;
+        margin-top: 10px;
         border: none;
         border-radius: 20px;
         display: inline-block;
         overflow: visible;
-        width: 270px;
-        height: 298.5px;
+        width: 190px;
+        height: 199px;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        margin-right: 18px !important;
+        margin-right: 12px !important;
     }
 
     .button-adicionar {
-        border-radius: 15px;
-        width: 217.5px;
-        height: 54px;
+        border-radius: 10px;
+        width: 145px;
+        height: 36px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
@@ -261,12 +261,12 @@
     }
 
     .card-image {
-        width: 150px;
-        height: 120px;
+        width: 100px;
+        height: 80px;
         background-size: 100% 100%;
-        margin-top: 34.5px;
+        margin-top: 23px;
         border: none;
-        border-radius: 30px;
+        border-radius: 20px;
         background-image: url(/usuario/assets/img/illustrations/hamburguer.png);
     }
 
@@ -275,19 +275,19 @@
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 24px;
-        line-height: 28.5px;
-        margin-top: 30px;
+        font-size: 16px;
+        line-height: 19px;
+        margin-top: 20px;
     }
 
     .card-value {
         color: #F0A431;
-        margin-top: -5px;
+        margin-top: -10px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
-        font-size: 24px;
-        line-height: 28.5px;
+        font-size: 16px;
+        line-height: 19px;
     }
 
     .carrinho {
