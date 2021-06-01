@@ -59,7 +59,6 @@
     </div>
     {{/each}}
 
-
     <script>
         //Aumenta o card caso a resolução seja menor ou mair que 900px
         $(document).ready(() => {
@@ -100,8 +99,6 @@
 
     </script>
 
-
-
     <br><br><br>
     <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
@@ -139,6 +136,8 @@
                         </div>
                     </div>
 
+                    <span id="add-opcoes"></span>
+
                     <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
                         id="card-add-adicionais">
                         <div class="card-body">
@@ -154,10 +153,6 @@
                             </table>
                         </div>
                     </div>
-
-                    <span id="add-opcoes">
-
-                    </span>
 
                     <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
                     <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
@@ -200,7 +195,7 @@
                             <td>
                                 <input type="checkbox" name="adicionais" value="{nome: '${element.idAdicional.nome}', num: 1}"> ${element.idAdicional.nome}</input>
                             </td>
-                            <td>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
+                            <td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
                         </tr>
                     `)
                 })
@@ -209,41 +204,58 @@
                 $('#add-opcoes').empty()
 
                 response.opcao.forEach(element => {
+                    
+                    if(element.vinculoProduto == true){
+                        var opcoes_opcoes = ""
+                        element.opcoesProduto.forEach(opcoes => {
+                            console.log(opcoes)
+                            opcoes_opcoes += `<tr> <td><input type="radio" name="opcao-${element._id}" value="${opcoes.idProduto.nome}"> ${opcoes.idProduto.nome}</input></td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
+                        })
 
-                    $('#add-opcoes').append(`
-                        ${element.opcoes}
-                        <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
-                            <div class="card-body" >
-                                <h6  class="d-block">${element.nome}:</h6>
-                                <table class="table">
-                                    <thead>
-                                        <tr>
-                                            <th>Opções</th>
-                                            <th>Valor</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="add-opcoes-opcoes">
-                                        <tr>
-                                            <td>asd
-                                            </td>
-                                            <td>123</td>
-                                        </tr>
-                                    </tbody>
-                                </table>
+                        $('#add-opcoes').append(`
+                            <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
+                                <div class="card-body" >
+                                    <h6  class="d-block">${element.nome}</h6>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Opções</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="add-opcoes-opcoes">
+                                            ${opcoes_opcoes}
+                                        </tbody>
+                                    </table>
+                                </div>
                             </div>
-                        </div>
-                    `)
-
-                    element.opcoes.forEach(opcoes => {
-                        $('#add-opcao-opcoes').append(`
-                            <tr>
-                                <td>
-                                    <input type="checkbox" name="adicionais" value="{nome: '${opcoes.nome}', num: 1}"> ${element.nome}</input>
-                                </td>
-                                <td>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</td>
-                            </tr>
                         `)
-                    })
+                    }else{
+                        element.multiplaEscolha == true ? multiplaEscolha = "checkbox" : multiplaEscolha = "radio"
+                        var opcoes_opcoes = ""
+                        element.opcoes.forEach(opcoes => {
+                            opcoes_opcoes += `<tr> <td><input type="${multiplaEscolha}" name="opcao-${element._id}" value="${opcoes.nome}"> ${opcoes.nome}</input></td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                        })
+
+                        $('#add-opcoes').append(`
+                            <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
+                                <div class="card-body" >
+                                    <h6  class="d-block">${element.nome}</h6>
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                                <th>Opções</th>
+                                                <th>Valor</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="add-opcoes-opcoes">
+                                            ${opcoes_opcoes}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        `)
+                    }
                 })
 
                 spinngLoading(false)
