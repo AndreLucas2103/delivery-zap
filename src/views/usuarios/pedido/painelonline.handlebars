@@ -193,7 +193,7 @@
                     $('#add-adicionais').append(`
                         <tr>
                             <td>
-                                <input type="checkbox" name="adicionais" value="{nome: '${element.idAdicional.nome}', num: 1}"> ${element.idAdicional.nome}</input>
+                                <input type="checkbox" name="adicionais" value='{"nome": "${element.idAdicional.nome}", "num": "1"}'> ${element.idAdicional.nome}</input>
                             </td>
                             <td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
                         </tr>
@@ -209,7 +209,7 @@
                         var opcoes_opcoes = ""
                         element.opcoesProduto.forEach(opcoes => {
                             console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td><input type="radio" name="opcao-${element._id}" value="${opcoes.idProduto.nome}"> ${opcoes.idProduto.nome}</input></td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td><input type="radio" name="opcao-${element._id}" value='{"nome": "${opcoes.idProduto.nome}"}'> ${opcoes.idProduto.nome}</input></td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -234,7 +234,7 @@
                         element.multiplaEscolha == true ? multiplaEscolha = "checkbox" : multiplaEscolha = "radio"
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td><input type="${multiplaEscolha}" name="opcao-${element._id}" value="${opcoes.nome}"> ${opcoes.nome}</input></td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td><input type="${multiplaEscolha}" name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -263,8 +263,15 @@
         });
     })
 
-    $('#form-add-painel-carrinho-produto').submit(() => {
+    $('#form-add-painel-carrinho-produto').submit((e) => {
+        console.log($("#form-add-painel-carrinho-produto").serializeArray())
 
+        jQuery.ajax({
+            type: "POST",
+            url: '/estabelecimento/add-painel-carrinho-produto',
+            data: { produto: $("#form-add-painel-carrinho-produto").serializeArray()},
+        });
+        event.preventDefault()
     })
 </script>
 
@@ -273,8 +280,6 @@
 
 
 <script>
-    let teste = {{{ teste }}}
-    console.log(teste)
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
         $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos + 200 }, 400);

@@ -42,10 +42,6 @@ router.get('/:urlPainel', async (req, res)=>{
             {$unwind: '$categoriaProdutos'},
         ])
 
-        console.log(produtos)
-        console.log(produtos)
-        
-
         res.render('usuarios/pedido/painelonline', {
             estabelecimento: estabelecimento,
             produtos: produtos,
@@ -65,6 +61,13 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
     } catch (err) {
         console.log(err)
     }
+})
+
+
+router.post('/add-painel-carrinho-produto', (req, res) => {
+    req.body.produto.forEach(element => {
+        console.log(JSON.parse(element.value))
+    })
 })
 
 module.exports = router;
