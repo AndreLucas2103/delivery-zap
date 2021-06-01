@@ -304,7 +304,7 @@
 </style>
 
 <header>
-    <div class="container-md capa-painel">
+    <div class="container-md capa-painel mt-2">
         <center>
             <div style="border-radius: 25px;border-color:white">
                 <br>
@@ -351,7 +351,7 @@
                 <h2 class="card-image"></h2>
                 <p class="card-text">{{nome}}</p>
                 <p class="card-value valorFormatar">{{valor}}</p>
-                <button class="button-adicionar" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto" data-bs-id="{{_id}}">Adicionar</button>
+                <button class="button-adicionar"  data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto" data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
         </div>
@@ -374,9 +374,7 @@
 <br><br><br>
     <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
-    
 </center>
-
 
 
 <div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel" aria-hidden="true">
@@ -420,6 +418,10 @@
                         </table>
                     </div>
                 </div>
+
+                <span id="add-opcoes">
+
+                </span>
 
                 <button type="submit" class="btn btn-primary btn-sm mt-2" >Adicionar</button>
                 <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
@@ -467,7 +469,46 @@
                     `)
                 })
 
+                response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()  
+                $('#add-opcoes').empty()
+                
+                response.opcao.forEach(element => {
+                    
+                    $('#add-opcoes').append(`
+                        ${element.opcoes}
+                        <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
+                            <div class="card-body" >
+                                <h6  class="d-block">${element.nome}:</h6>
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>Opções</th>
+                                            <th>Valor</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="add-opcoes-opcoes">
+                                        <tr>
+                                            <td>asd
+                                            </td>
+                                            <td>123</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    `)
 
+                    element.opcoes.forEach(opcoes => {
+                        $('#add-opcao-opcoes').append(`
+                            <tr>
+                                <td>
+                                    <input type="checkbox" name="adicionais" value="{nome: '${opcoes.nome}', num: 1}"> ${element.nome}</input>
+                                </td>
+                                <td>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</td>
+                            </tr>
+                        `)
+                    })
+                })
 
                 spinngLoading(false)
             }
