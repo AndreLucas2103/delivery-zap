@@ -249,7 +249,6 @@
 
     .button-adicionar {
         border-radius: 15px;
-        margin-top: 15px;
         width: 217.5px;
         height: 54px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
@@ -283,7 +282,7 @@
 
     .card-value {
         color: #F0A431;
-        margin-top: -15px;
+        margin-top: -5px;
         font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
