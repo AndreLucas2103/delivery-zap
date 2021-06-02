@@ -65,7 +65,9 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
 
 
 router.post('/add-painel-carrinho-produto', (req, res) => {
+    console.log(req.body)
     req.body.produto.forEach(element => {
+        console.log('------')
         console.log(JSON.parse(element.value))
     })
 })

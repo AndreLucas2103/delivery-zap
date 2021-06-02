@@ -109,8 +109,11 @@
     aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
             <div class="modal-body">
-                <form action="/pedido/add-painel-carrinho-produto" method="post" id="form-add-painel-carrinho-produto">
+                <form action="/pedido/add-painel-carrinho-produto" method="post" id="form-add-painel-carrinho-produto-1">
                     <div class="card bg-light border-light" style="width: 100%; height: 100%">
                         <div class="card-body">
                             <div class="row">
@@ -128,8 +131,7 @@
                         </div>
                     </div>
 
-                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
-                        id="card-add-ingredientes">
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
                         <div class="card-body">
                             <h6 class="d-block">Ingredientes:</h6>
                             <span id="add-ingredientes"></span>
@@ -138,8 +140,7 @@
 
                     <span id="add-opcoes"></span>
 
-                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
-                        id="card-add-adicionais">
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-adicionais">
                         <div class="card-body">
                             <table class="table">
                                 <thead>
@@ -153,16 +154,33 @@
                             </table>
                         </div>
                     </div>
-
-                    <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
-                    <button type="button" class="btn btn-dark btn-sm mt-2" data-bs-dismiss="modal">Cancelar</button>
                 </form>
+
+                <form action="" method="post" id="form-add-painel-carrinho-produto-2">
+
+                    <div class="form-floating mb-3">
+                        <input type="number" class="form-control" min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
+                        <label for="add-produto-carrinho-quantidade">Quantidade</label>
+                    </div>
+
+                    <div class="form-floating">
+                        <textarea class="form-control" placeholder="-" id="add-produto-carrinho-observacao" name="observacao" style="height: 100px"></textarea>
+                        <label for="add-produto-carrinho-observacao">Observação</label>
+                    </div>
+
+                    <input type="text" id="add-produto-carrinho-idProduto" name="idProduto" hidden readonly>
+                </form>
+
+                <button type="submit" class="btn btn-primary btn-sm mt-2" id="button-submit-add-produto-carrinho">Adicionar</button>
             </div>
         </div>
     </div>
 </div>
 
 <script>
+
+    
+
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
@@ -176,6 +194,7 @@
 
                 $('#modal-add-opcoes-modelo-opcoesLabel').text(response.nome)
                 $('#add-produto-nome').text(response.nome)
+                $('#add-produto-carrinho-idProduto').val(response._id)
                 $('#add-produto-valor').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valor))
                 response.descricao ? $('#p-add-produto-descricao').show(1, () => { $('#add-produto-descricao').text(response.descricao) }) : $('#p-add-produto-descricao').hide()
 
@@ -200,6 +219,7 @@
                     `)
                 })
 
+
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()
 
@@ -207,9 +227,10 @@
                     
                     if(element.vinculoProduto == true){
                         var opcoes_opcoes = ""
+                        
                         element.opcoesProduto.forEach(opcoes => {
                             console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td><input type="radio" name="opcao-${element._id}" value='{"nome": "${opcoes.idProduto.nome}"}'> ${opcoes.idProduto.nome}</input></td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -234,7 +255,7 @@
                         element.multiplaEscolha == true ? multiplaEscolha = "checkbox" : multiplaEscolha = "radio"
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td><input type="${multiplaEscolha}" name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input type="${multiplaEscolha}" name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -263,23 +284,60 @@
         });
     })
 
-    $('#form-add-painel-carrinho-produto').submit((e) => {
-        console.log($("#form-add-painel-carrinho-produto").serializeArray())
+    function inputCheckBoxOption(optionClass, num){
+        $(`input[name="opcao-${optionClass}"]`).on('change', function (e) {
+            if ($(`input[name="opcao-${optionClass}"]:checked`).length > num) {
+                $(this).prop('checked', false);
+            }
+        });
+    }
 
+    
+
+    $('#button-submit-add-produto-carrinho').click(() => {
+        spinngLoading(true)
+        console.log($("#form-add-painel-carrinho-produto").serializeArray())
+        
         jQuery.ajax({
             type: "POST",
             url: '/estabelecimento/add-painel-carrinho-produto',
-            data: { produto: $("#form-add-painel-carrinho-produto").serializeArray()},
+            data: { 
+                produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
+                idProduto: $("#add-produto-carrinho-idProduto").val(),
+                quantidade: $("#add-produto-carrinho-quantidade").val(),
+                observacao: $("#add-produto-carrinho-observacao").val(),
+                uuid4Client: localStorage.getItem('uuid4Cliente')
+            },
         });
+        event.preventDefault()
+    })
+
+    $('#form-add-painel-carrinho-produto-1').submit((e) => {
         event.preventDefault()
     })
 </script>
 
 
+
 {{>_msg}}
 
 
+
 <script>
+
+if(!localStorage.getItem('uuid4Cliente')){
+    localStorage.setItem('uuid4Cliente', uuidv4()+uuidv4()+uuidv4()+uuidv4()+uuidv4());
+}else{
+    console.log(localStorage.getItem('uuid4Cliente'))
+}
+
+
+function uuidv4() {
+    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+    );
+}
+
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
         $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos + 200 }, 400);
