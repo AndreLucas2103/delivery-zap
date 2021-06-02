@@ -230,7 +230,7 @@
                         
                         element.opcoesProduto.forEach(opcoes => {
                             console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -300,7 +300,7 @@
                 }else{
                     Swal.fire(
                         'Esqueceu de algo?',
-                        'Selecione as opções corretamente',
+                        `Selecione as opções de ${elementDiv.getAttribute('data-bs-nome')} corretamente`,
                         'warning'
                     )
                     passou = false
