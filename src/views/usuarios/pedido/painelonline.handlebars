@@ -230,7 +230,7 @@
                         
                         element.opcoesProduto.forEach(opcoes => {
                             console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td> <label><input onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -310,6 +310,7 @@
             },
         });
         event.preventDefault()
+        
     })
 
     $('#form-add-painel-carrinho-produto-1').submit((e) => {
@@ -325,18 +326,19 @@
 
 <script>
 
-if(!localStorage.getItem('uuid4Cliente')){
-    localStorage.setItem('uuid4Cliente', uuidv4()+uuidv4()+uuidv4()+uuidv4()+uuidv4());
-}else{
-    console.log(localStorage.getItem('uuid4Cliente'))
-}
-
-
 function uuidv4() {
     return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
         (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
     );
 }
+
+if(!localStorage.getItem('uuid4Cliente')){
+    localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4()+uuidv4()+uuidv4());
+}else{
+    console.log(localStorage.getItem('uuid4Cliente'))
+}
+
+
 
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
