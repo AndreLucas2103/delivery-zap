@@ -230,7 +230,7 @@
                         
                         element.opcoesProduto.forEach(opcoes => {
                             console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td> <label><input onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" /> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -291,26 +291,38 @@
             }
         });
     }
-
     
-
     $('#button-submit-add-produto-carrinho').click(() => {
-        spinngLoading(true)
-        console.log($("#form-add-painel-carrinho-produto").serializeArray())
-        
-        jQuery.ajax({
-            type: "POST",
-            url: '/estabelecimento/add-painel-carrinho-produto',
-            data: { 
-                produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
-                idProduto: $("#add-produto-carrinho-idProduto").val(),
-                quantidade: $("#add-produto-carrinho-quantidade").val(),
-                observacao: $("#add-produto-carrinho-observacao").val(),
-                uuid4Client: localStorage.getItem('uuid4Cliente')
-            },
-        });
         event.preventDefault()
-        
+        $("input:checkbox").each(function (i, elementDiv) {
+            if(elementDiv.getAttribute('onclick')){
+                if ($(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length == Number(elementDiv.getAttribute('data-bs-dividendo'))) {
+                }else{
+                    Swal.fire(
+                        'Esqueceu de algo?',
+                        'Selecione as opções corretamente',
+                        'warning'
+                    )
+                    passou = false
+                    return false
+                }
+            }else{
+                if($(`input:checkbox`).length-1 == i){
+                    console.log('passou')
+                    jQuery.ajax({
+                        type: "POST",
+                        url: '/estabelecimento/add-painel-carrinho-produto',
+                        data: { 
+                            produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
+                            idProduto: $("#add-produto-carrinho-idProduto").val(),
+                            quantidade: $("#add-produto-carrinho-quantidade").val(),
+                            observacao: $("#add-produto-carrinho-observacao").val(),
+                            uuid4Client: localStorage.getItem('uuid4Cliente')
+                        },
+                    }); 
+                }
+            }
+        })
     })
 
     $('#form-add-painel-carrinho-produto-1').submit((e) => {
