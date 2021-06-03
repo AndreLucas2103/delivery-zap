@@ -296,9 +296,11 @@
     $('#button-submit-add-produto-carrinho').click(() => {
         spinngLoading(true)
         event.preventDefault()
+
         $("input:checkbox").each(function (i, elementDiv) {
             if(elementDiv.getAttribute('onclick')){
                 if ($(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length == Number(elementDiv.getAttribute('data-bs-dividendo'))) {
+                    
                 }else{
                     Swal.fire(
                         'Esqueceu de algo?',
@@ -306,40 +308,40 @@
                         'warning'
                     )
                     spinngLoading(false)
-                    passou = false
                     return false
                 }
-            }else{
-                if($(`input:checkbox`).length-1 == i){
-                    jQuery.ajax({
-                        type: "POST",
-                        url: '/estabelecimento/add-painel-carrinho-produto',
-                        data: { 
-                            produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
-                            idProduto: $("#add-produto-carrinho-idProduto").val(),
-                            quantidade: $("#add-produto-carrinho-quantidade").val(),
-                            observacao: $("#add-produto-carrinho-observacao").val(),
-                            uuid4Client: localStorage.getItem('uuid4Cliente')
-                        },
-                        success: function (response) {
-                            spinngLoading(false)
-                            if(response == 200){
-                                Swal.fire(
-                                    'Sucesso!',
-                                    `Produto adicionado ao carrinho`,
-                                    'success'
-                                )
-                            }else{
-                                Swal.fire(
-                                    'Ops...',
-                                    `Ocorreu um erro.\n Caso persista informe o suporte!`,
-                                    'error'
-                                )
-                            }
-                        }
-                    }); 
-                }
             }
+
+            if($(`input:checkbox`).length-1 == i){
+                jQuery.ajax({
+                    type: "POST",
+                    url: '/estabelecimento/add-painel-carrinho-produto',
+                    data: { 
+                        produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
+                        idProduto: $("#add-produto-carrinho-idProduto").val(),
+                        quantidade: $("#add-produto-carrinho-quantidade").val(),
+                        observacao: $("#add-produto-carrinho-observacao").val(),
+                        uuid4Client: localStorage.getItem('uuid4Cliente')
+                    },
+                    success: function (response) {
+                        spinngLoading(false)
+                        if(response == 200){
+                            Swal.fire(
+                                'Sucesso!',
+                                `Produto adicionado ao carrinho`,
+                                'success'
+                            )
+                        }else{
+                            Swal.fire(
+                                'Ops...',
+                                `Ocorreu um erro.\n Caso persista informe o suporte!`,
+                                'error'
+                            )
+                        }
+                    }
+                }); 
+            }
+            
         })
     })
 
