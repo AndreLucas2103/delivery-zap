@@ -157,10 +157,16 @@
                 </form>
 
                 <form action="" method="post" id="form-add-painel-carrinho-produto-2">
-
-                    <div class="form-floating mb-3">
-                        <input type="number" class="form-control" min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
-                        <label for="add-produto-carrinho-quantidade">Quantidade</label>
+                    <div class="row">
+                        <div class="col">
+                            <p>R$ 120, 00</p>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating mb-3">
+                                <input type="number" class="form-control" min="0" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
+                                <label for="add-produto-carrinho-quantidade">Quantidade</label>
+                            </div>
+                        </div>
                     </div>
 
                     <div class="form-floating">
@@ -179,8 +185,6 @@
 
 <script>
 
-    
-
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
@@ -190,7 +194,6 @@
             url: '/estabelecimento/ajax-get-painel-produto',
             data: { idProduto: button.getAttribute('data-bs-id') },
             success: function (response) {
-                console.log(response)
 
                 $('#modal-add-opcoes-modelo-opcoesLabel').text(response.nome)
                 $('#add-produto-nome').text(response.nome)
@@ -212,7 +215,7 @@
                     $('#add-adicionais').append(`
                         <tr>
                             <td>
-                                <input type="checkbox" name="adicionais" value='{"nome": "${element.idAdicional.nome}", "num": "1"}'> ${element.idAdicional.nome}</input>
+                                <label> <input type="checkbox" name="adicionais" value='{"tipo": "adicional", "nome": "${element.idAdicional.nome}", "valor": "${element.idAdicional.valor}"}' /> ${element.idAdicional.nome} </label>
                             </td>
                             <td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
                         </tr>
@@ -222,15 +225,13 @@
 
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()
-
                 response.opcao.forEach(element => {
                     
                     if(element.vinculoProduto == true){
                         var opcoes_opcoes = ""
                         
                         element.opcoesProduto.forEach(opcoes => {
-                            console.log(opcoes)
-                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -255,7 +256,7 @@
                         element.multiplaEscolha == true ? multiplaEscolha = "checkbox" : multiplaEscolha = "radio"
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input type="${multiplaEscolha}" name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input type="${multiplaEscolha}", "nomeOpcao": "${element.nome}", name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -293,6 +294,7 @@
     }
     
     $('#button-submit-add-produto-carrinho').click(() => {
+        spinngLoading(true)
         event.preventDefault()
         $("input:checkbox").each(function (i, elementDiv) {
             if(elementDiv.getAttribute('onclick')){
@@ -308,7 +310,6 @@
                 }
             }else{
                 if($(`input:checkbox`).length-1 == i){
-                    console.log('passou')
                     jQuery.ajax({
                         type: "POST",
                         url: '/estabelecimento/add-painel-carrinho-produto',
@@ -319,6 +320,22 @@
                             observacao: $("#add-produto-carrinho-observacao").val(),
                             uuid4Client: localStorage.getItem('uuid4Cliente')
                         },
+                        success: function (response) {
+                            spinngLoading(false)
+                            if(response == 200){
+                                Swal.fire(
+                                    'Sucesso!',
+                                    `Produto adicionado ao carrinho`,
+                                    'success'
+                                )
+                            }else{
+                                Swal.fire(
+                                    'Ops...',
+                                    `Ocorreu um erro.\n Caso persista informe o suporte!`,
+                                    'error'
+                                )
+                            }
+                        }
                     }); 
                 }
             }
@@ -345,9 +362,9 @@ function uuidv4() {
 }
 
 if(!localStorage.getItem('uuid4Cliente')){
-    localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4()+uuidv4()+uuidv4());
+    localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4());
 }else{
-    console.log(localStorage.getItem('uuid4Cliente'))
+    
 }
 
 

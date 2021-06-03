@@ -1,3 +1,4 @@
+const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
 
@@ -12,10 +13,12 @@ const Carrinho = new Schema({
         valor: Number,
         promocao: Boolean,
 
-        opcoes: [{
-            opcao: String,
+        opcao: [{
             nome: String,
-            valor: Number
+            opcoes: [{
+                nome: String,
+                valor: Number 
+            }]
         }],
 
         adicionais: [{
@@ -30,10 +33,11 @@ const Carrinho = new Schema({
 
         quantidade: Number,
         observacao: String,
-        valorProduto: Number,
+        valorTotal: Number,
     }],
 
     uuid4Client: String,
+    valorTotal: Number,
 
     idEstabelecimento: {
         type: Schema.Types.ObjectId,
