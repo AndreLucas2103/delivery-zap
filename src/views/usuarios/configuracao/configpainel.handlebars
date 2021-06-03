@@ -134,48 +134,58 @@
                         </div>
                     </div>
 
-                    <div class="col-xl-4">
-                        <center><label>Pré-visualização:</label></center>
+                    <div class="col-xl-4 text-center">
+                        <label>Pré-visualização:</label>
                         <div class="smartphone" style="background:{{estabelecimento.painel.colorFundo}};"
                             id="backcolor">
                             <div class="container-md capa-image-sm mt-2" id="img2">
                                 <center>
-                                    <div style="border-radius: 25px;border-color:white">
+                                    <div>
                                         <br>
                                         <img src="/usuario/assets/img/favicon/logoApp.png"
                                             class="rounded-circle rounded border logo-image" id="img1">
                                     </div>
                             </div>
                             <br>
-                            <center>
-                                <div class="status-icon">
-                                    <span style="color: white;">Aberto</span>
-                                </div>
-                                <div>
-                                    <span
-                                        style="font-weight: bold;font-size:18px;color:{{estabelecimento.painel.colorFonte}};"
-                                        id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span>
-                                </div>
+                            <div style="margin-top: 3px;font-size: 16px;" class="rb">
+                                <span style="font-weight: bold;color:{{estabelecimento.painel.colorFonte}};"
+                                    id="nomeEstabelecimento">{{estabelecimento.nomePainel}}</span>
+                            </div>
+                            <div style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb">
                                 <i class="fas fa-map-marker-alt text-danger"></i>
-                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size:12px;"
-                                    id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
-                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size:12px;"
-                                    id="numeroEstabelecimento"> -
-                                    {{estabelecimento.endereco.numero}}</span>
-                                <span style="color:{{estabelecimento.painel.colorFonte}};font-size:12px;"
-                                    id="bairroEstabelecimento"> -
-                                    {{estabelecimento.endereco.bairro}}</span>
-                                <span id="localidadeEstabelecimento"
-                                    style="color:{{estabelecimento.painel.colorFonte}};font-size:12px;"> /
-                                    {{estabelecimento.endereco.localidade}}</span>
-                            </center>
+                                <span id="enderecoEstabelecimento">{{estabelecimento.endereco.logradouro}}</span>
+                                <span id="numeroEstabelecimento"> - {{estabelecimento.endereco.numero}}</span>
+                                <span id="bairroEstabelecimento"> - {{estabelecimento.endereco.bairro}}</span>
+                                <span id="localidadeEstabelecimento"> / {{estabelecimento.endereco.localidade}}</span>
+
+                                <p id="statustext" class="status-text rb"
+                                    style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
+                                        style="font-size: 12px;color:green"></i> Aberto</p>
+                                <center>
+                                    <hr class="w-25">
+                                </center>
+
+                                <span id="categoria" class="categoria-sm">Pizzas</span>
+                                <div class="scrolling-wrapper">
+                                <div class="produto ml-2">
+                                    <h2 class="produto-image"></h2>
+                                    <p class="produto-text"></p>
+                                    <p class="produto-value"></p>
+                                </div>
+                                <div class="produto ml-2">
+                                    <h2 class="produto-image"></h2>
+                                    <p class="produto-text"></p>
+                                    <p class="produto-value"></p>
+                                </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
         </div>
     </div>
 </div>
-</div>
+
 
 
 <script>
@@ -195,6 +205,8 @@
             $("#numeroEstabelecimento").css("color", inputColor2.value);
             $("#bairroEstabelecimento").css("color", inputColor2.value);
             $("#localidadeEstabelecimento").css("color", inputColor2.value);
+            $("#statustext").css("color", inputColor2.value);
+            $("#categoria").css("color", inputColor2.value);
         }
         inputNome.oninput = function () {
             $("#nomeEstabelecimento").text(inputNome.value);

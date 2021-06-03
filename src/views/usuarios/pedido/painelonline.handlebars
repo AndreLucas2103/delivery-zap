@@ -1,22 +1,19 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
-
+<body style="background:{{estabelecimento.painel.colorFundo}};">
 <header>
     <div class="container-md capa-painel mt-2">
         <center>
-            <div style="border-radius: 25px;border-color:white">
+            <div>
                 <br>
                 <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border logo-painel">
-            </div>
-            <div class="status-icon">
-                <span style="color: white;">Aberto</span>
             </div>
     </div>
     </center>
     <br>
 </header>
 
-<body style="background:{{estabelecimento.painel.colorFundo}};"></body>
-<br>
+</body>
+
 <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento" id="nomeEstabelecimento">
     {{estabelecimento.nomePainel}}</h1><br>
 
@@ -35,12 +32,12 @@
 </div>
 
 <center style="color:{{estabelecimento.painel.colorFonte}};">
-
+ <p class="status-text mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle" style="font-size: 12px;color:green"></i> Aberto</p>
     <hr class="w-25 text-center">
     <br><br>
 
     {{#each produtos}}
-    <h1 class="categoria">{{categoriaProdutos.nome}}</h1>
+    <span class="categoria">{{categoriaProdutos.nome}}</span>
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
             {{#each produtos}}
@@ -182,7 +179,7 @@
         </div>
     </div>
 </div>
-
+</body>
 <script>
 
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
