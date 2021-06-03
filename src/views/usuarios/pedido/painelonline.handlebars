@@ -231,7 +231,7 @@
                         var opcoes_opcoes = ""
                         
                         element.opcoesProduto.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
