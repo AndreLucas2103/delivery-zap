@@ -373,9 +373,9 @@ router.post('/add-produto', async (req, res) => { // adicionar produto
                 identificaouuidv4: req.user.identificaouuidv4
             }
         
-            new Produto(addProduto).save().then(() => {
+            new Produto(addProduto).save().then((produto) => {
                 req.flash('success_msg', 'Produto adicionado')
-                res.redirect('back')
+                res.redirect('/produto/perfil?produto='+produto._id)
             }).catch(err => {
                 console.log(err)
             })
