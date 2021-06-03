@@ -298,18 +298,14 @@
         event.preventDefault()
 
         $("input:checkbox").each(function (i, elementDiv) {
-            if(elementDiv.getAttribute('onclick')){
-                if ($(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length == Number(elementDiv.getAttribute('data-bs-dividendo'))) {
-                    
-                }else{
-                    Swal.fire(
-                        'Esqueceu de algo?',
-                        `Selecione ${elementDiv.getAttribute('data-bs-dividendo')} opcões em ${elementDiv.getAttribute('data-bs-nome')}`,
-                        'warning'
-                    )
-                    spinngLoading(false)
-                    return false
-                }
+            if(elementDiv.getAttribute('onclick') && $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length != Number(elementDiv.getAttribute('data-bs-dividendo'))){
+                Swal.fire(
+                    'Esqueceu de algo?',
+                    `Selecione ${elementDiv.getAttribute('data-bs-dividendo')} opcões em ${elementDiv.getAttribute('data-bs-nome')}`,
+                    'warning'
+                )
+                spinngLoading(false)
+                return false
             }
 
             if($(`input:checkbox`).length-1 == i){
