@@ -80,11 +80,10 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
 
         let adicionais = []
         let opcoes = []
+
         req.body.produto.forEach(element => {
             let dadosElement = JSON.parse(element.value)
-            console.log(dadosElement.valor)
             if(dadosElement.tipo === "opcao"){
-                
                 valorTotal += Number(dadosElement.valor)
                 opcoes.push(dadosElement)
             }else if(dadosElement.tipo === "adicional"){
@@ -97,8 +96,9 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
             if (!c.has(nomeOpcao)) c.set(nomeOpcao, {nome,opcoes: []});
             c.get(nomeOpcao).opcoes.push({nome: nome, valor: valor});
             return c;
-
         }, new Map()).values()];
+
+        console.log(grupoOpcoes)
 
         if(carrinho){
             pushProduto = {

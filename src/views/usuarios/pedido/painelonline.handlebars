@@ -256,7 +256,7 @@
                         element.multiplaEscolha == true ? multiplaEscolha = "checkbox" : multiplaEscolha = "radio"
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input type="${multiplaEscolha}", "nomeOpcao": "${element.nome}", name="opcao-${element._id}" value='{"nome": "${opcoes.nome}"}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input type="${multiplaEscolha}" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.nome}", "valor": ${opcoes.valor}}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
