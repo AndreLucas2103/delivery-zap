@@ -25,7 +25,7 @@ router.get('/:urlPainel', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let produtos = await Produto.aggregate([
-            {$match: {idEstabelecimento: estabelecimento._id}},
+            {$match: {$and: [{idEstabelecimento: estabelecimento._id}, {statusAtivo: true}]}},
             {
                 $group:{
                     _id: '$idCategoriaProduto', 

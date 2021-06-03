@@ -75,6 +75,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
                         {
                             $push: {
                                 'estabelecimentosVinculados': { 'idEstabelecimento': ObjectId(element) },
+                                'estabelecimentosSelecionados': { 'idEstabelecimento': ObjectId(element) },
                             }
                         }
                     ).then(() => {
@@ -111,16 +112,19 @@ router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
         Usuario.updateOne( // defino que o estabelecimento é valor zerado e depois ocorre o forEach adicionando todos os estabelecimentos
             {_id: req.body.idUsuario},
             { $set: 
-                {'estabelecimentosVinculados': [], 'primeiroNome': req.body.primeiroNome, 'nomeCompleto': req.body.nomeCompleto, 'statusAtivo': statusAtivo, 
+                {'estabelecimentosVinculados': [], 'estabelecimentosSelecionados': [], 'primeiroNome': req.body.primeiroNome, 'nomeCompleto': req.body.nomeCompleto, 'statusAtivo': statusAtivo, 
                 'eTipoAdmin': eTipoAdmin, 'email': req.body.email, 'cpf': req.body.cpf}
-                 
+            
             }
         ).then(() => {
             arrayEstabelecimentos.forEach(element => {
                 Usuario.updateOne(
                     {_id: req.body.idUsuario},
                     { $push: 
-                        {'estabelecimentosVinculados': {'idEstabelecimento': ObjectId(element)}}
+                        {'estabelecimentosVinculados': {'idEstabelecimento': ObjectId(element)},
+                        'estabelecimentosSelecionados': { 'idEstabelecimento': ObjectId(element)}
+                    },
+                        
                     }
                 ).then(() => {
                     

@@ -196,6 +196,8 @@
             data: { idProduto: button.getAttribute('data-bs-id') },
             success: function (response) {
 
+                $('#add-produto-carrinho-quantidade').val(1)
+
                 $('#modal-add-opcoes-modelo-opcoesLabel').text(response.nome)
                 $('#add-produto-nome').text(response.nome)
                 $('#add-produto-carrinho-idProduto').val(response._id)
@@ -341,6 +343,7 @@
                         uuid4Client: localStorage.getItem('uuid4Cliente')
                     },
                     success: function (response) {
+                        $('#modal-pedido-ajax-produto').modal('hide')
                         spinngLoading(false)
                         if(response == 200){
                             Swal.fire(
@@ -373,6 +376,7 @@
                     uuid4Client: localStorage.getItem('uuid4Cliente')
                 },
                 success: function (response) {
+                    $('#modal-pedido-ajax-produto').modal('hide')
                     spinngLoading(false)
                     if(response == 200){
                         Swal.fire(
