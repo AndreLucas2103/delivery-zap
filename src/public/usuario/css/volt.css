@@ -44073,34 +44073,35 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
     background-repeat: no-repeat;
     background-size: contain;
     position: relative;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
+    box-shadow: 0px 4px 10px rgba(0, 0, 0, 8);
 }
 
 .logo-image {
     width: 80px;
     height: 80px;
     background-repeat: no-repeat;
-    top: 55px;
+    top: 60px;
     background-size: contain;
     position: relative;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.637);
-}
-
-.status-sm {
-    background-color:green;
-    width: 80px;
-    border-radius:20px;
-    margin-top:-16px;
-    position:relative;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .capa-image-sm {
-    width: 100%;
+    width: 95%;
     height: 140px;
+    border: none;
+    border-radius: 20px;
     background-size: 100% 100%;
     background-image: url(/usuario/assets/img/favicon/capaApp.png);
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 0.39);
 
+}
+
+.status-icon {
+    background-color: green;
+    width: 100px;
+    border-radius: 8px;
+    margin-top: 5px;
+    position: relative;
 }
 
 .label-avatar {
