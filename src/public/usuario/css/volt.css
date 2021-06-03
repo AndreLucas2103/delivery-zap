@@ -44073,7 +44073,7 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
     background-repeat: no-repeat;
     background-size: contain;
     position: relative;
-    box-shadow: 0px 4px 10px rgba(0, 0, 0, 8);
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
 }
 
 .logo-image {
@@ -44090,18 +44090,51 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
     width: 95%;
     height: 140px;
     border: none;
-    border-radius: 20px;
+    border-radius: 15px;
     background-size: 100% 100%;
     background-image: url(/usuario/assets/img/favicon/capaApp.png);
 
 }
 
-.status-icon {
-    background-color: green;
-    width: 100px;
-    border-radius: 8px;
-    margin-top: 5px;
+.rb{
+font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+}
+
+.endereco{
+    margin-top: -4px;
+    font-size: 11px;
+    font-weight:bold;
+}
+
+.categoria-sm {
+    font-weight: bold;
+    font-size: 25px;
+    text-align: center;
     position: relative;
+}
+
+.status-text {
+    font-size:13px;
+}
+
+/*---Produto---*/
+
+.scrolling-wrapper {
+    margin-top: 12px;
+    height: 146px;
+    overflow-x: hidden;
+    overflow-y: hidden;
+    white-space: nowrap;
+    display: block;
+}
+
+.produto {
+    width: 55%;
+    height: 170px;
+    display: inline-block;
+    border: none;
+    background-color: white;
+    border-radius: 15px;
 }
 
 .label-avatar {
@@ -44119,8 +44152,9 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 
 .file-input label {
     position: relative;
-    width: 225px;
+    width: 200px;
     height: 50px;
+    top:-5px;
     border-radius: 8px;
     background: rgba(36, 46, 64);
     display: flex;
@@ -44153,6 +44187,7 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 
 .color-circle {
     border-radius: 100%;
+    margin-top:-5px;
     height: 40px;
     width: 40px;
     border: none;
