@@ -339,6 +339,36 @@
             }
             
         })
+
+        if($(`input:checkbox`).length === 0){
+            jQuery.ajax({
+                type: "POST",
+                url: '/estabelecimento/add-painel-carrinho-produto',
+                data: { 
+                    produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
+                    idProduto: $("#add-produto-carrinho-idProduto").val(),
+                    quantidade: $("#add-produto-carrinho-quantidade").val(),
+                    observacao: $("#add-produto-carrinho-observacao").val(),
+                    uuid4Client: localStorage.getItem('uuid4Cliente')
+                },
+                success: function (response) {
+                    spinngLoading(false)
+                    if(response == 200){
+                        Swal.fire(
+                            'Sucesso!',
+                            `Produto adicionado ao carrinho`,
+                            'success'
+                        )
+                    }else{
+                        Swal.fire(
+                            'Ops...',
+                            `Ocorreu um erro.\n Caso persista informe o suporte!`,
+                            'error'
+                        )
+                    }
+                }
+            }); 
+        }
     })
 
     $('#form-add-painel-carrinho-produto-1').submit((e) => {
@@ -354,17 +384,17 @@
 
 <script>
 
-function uuidv4() {
-    return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
-        (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-    );
-}
+    function uuidv4() { // gerador de uuidv4
+        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
 
-if(!localStorage.getItem('uuid4Cliente')){
-    localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4());
-}else{
-    
-}
+    if(!localStorage.getItem('uuid4Cliente')){ // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
+        localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4());
+    }else{
+        
+    }
 
 
 

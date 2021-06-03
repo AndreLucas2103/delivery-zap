@@ -77,30 +77,34 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
         let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': uuid4Client}, {'idEstabelecimento': produto.idEstabelecimento}]})
 
         let valorTotal = produto.valor
-
         let adicionais = []
         let opcoes = []
 
-        req.body.produto.forEach(element => {
-            let dadosElement = JSON.parse(element.value)
-            if(dadosElement.tipo === "opcao"){
-                valorTotal += Number(dadosElement.valor)
-                opcoes.push(dadosElement)
-            }else if(dadosElement.tipo === "adicional"){
-                valorTotal += Number(dadosElement.valor)
-                adicionais.push(dadosElement)
-            }
-        })
+        if(req.body.produto){
+            req.body.produto.forEach(element => {
+                let dadosElement = JSON.parse(element.value)
+                if(dadosElement.tipo === "opcao"){
+                    valorTotal += Number(dadosElement.valor)
+                    opcoes.push(dadosElement)
+                }else if(dadosElement.tipo === "adicional"){
+                    valorTotal += Number(dadosElement.valor)
+                    adicionais.push(dadosElement)
+                }
+            })
+        }
+        
+        if(opcoes != []){
+            var grupoOpcoes = [...opcoes.reduce((c, {nomeOpcao,nome, valor}) => {
+                if (!c.has(nomeOpcao)) c.set(nomeOpcao, {nome,opcoes: []});
+                c.get(nomeOpcao).opcoes.push({nome: nome, valor: valor});
+                return c;
+            }, new Map()).values()];
+        }
 
-        var grupoOpcoes = [...opcoes.reduce((c, {nomeOpcao,nome, valor}) => {
-            if (!c.has(nomeOpcao)) c.set(nomeOpcao, {nome,opcoes: []});
-            c.get(nomeOpcao).opcoes.push({nome: nome, valor: valor});
-            return c;
-        }, new Map()).values()];
-
-        console.log(grupoOpcoes)
 
         if(carrinho){
+            let valorTotalCarrinho = carrinho.valorTotal + valorTotal*quantidade
+
             pushProduto = {
                 idProduto: produto._id,
                 nome: produto.nome,
@@ -119,11 +123,13 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
             Carrinho.updateOne(
                 {_id: carrinho._id},
                 {
-                    $push: {'produtos': pushProduto}
+                    $push: {'produtos': pushProduto},
+                    $set: {'valorTotal': valorTotalCarrinho}
                 }
             ).then(() => {
                 res.json(200)
             }).catch(err => {
+                console.log(err)
                 res.json(201)
             })
         }else{
@@ -144,7 +150,8 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
 
                 },
                 uuid4Client: uuid4Client,
-                idEstabelecimento: produto.idEstabelecimento
+                idEstabelecimento: produto.idEstabelecimento,
+                valorTotal: valorTotal*quantidade
             }
             new Carrinho(addCarrinho).save().then((newCarrinho) => {
                 res.json(200)
