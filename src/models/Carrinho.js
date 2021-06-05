@@ -14,7 +14,7 @@ const Carrinho = new Schema({
         promocao: Boolean,
 
         opcao: [{
-            nome: String,
+            nomeOpcao: String,
             opcoes: [{
                 nome: String,
                 valor: Number 

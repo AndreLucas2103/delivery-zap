@@ -65,7 +65,6 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
     }
 })
 
-
 router.post('/add-painel-carrinho-produto', async (req, res) => {
     try {
         let {idProduto, observacao, quantidade, uuid4Client} = req.body
@@ -92,14 +91,17 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
                 }
             })
         }
+
+        console.log(opcoes)
         
         if(opcoes != []){
-            var grupoOpcoes = [...opcoes.reduce((c, {nomeOpcao,nome, valor}) => {
-                if (!c.has(nomeOpcao)) c.set(nomeOpcao, {nome,opcoes: []});
+            var grupoOpcoes = [...opcoes.reduce((c, {nomeOpcao, nome, valor}) => {
+                if (!c.has(nomeOpcao)) c.set(nomeOpcao, {nomeOpcao ,opcoes: []});
                 c.get(nomeOpcao).opcoes.push({nome: nome, valor: valor});
                 return c;
             }, new Map()).values()];
         }
+        console.log(grupoOpcoes)
 
 
         if(carrinho){
@@ -163,6 +165,16 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
     } catch (err) {
         console.log(err)
     }
+})
+
+router.post('/ajax-get-carrinho-painel', (req, res) => {
+    console.log(req.body)
+
+    req.params.tipo == "capa" ? tipo = {'img.capa': {name:'asdasd'}} :  tipo = {'img.painel': {name:'asdasd'}} 
+
+    Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).lean().then(carrinho => {
+        res.json(carrinho)
+    })
 })
 
 module.exports = router;

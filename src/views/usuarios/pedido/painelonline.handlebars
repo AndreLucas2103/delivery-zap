@@ -97,7 +97,7 @@
     </script>
 
     <br><br><br>
-    <a class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
+    <a class="carrinho" data-bs-toggle="modal" data-bs-target="#modal-carrinho-ajax" ><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
 </center>
 
@@ -181,10 +181,87 @@
         </div>
     </div>
 </div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="modal-carrinho-ajax" tabindex="-1" aria-labelledby="modal-carrinho-ajaxLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                
+                <span id="carrinho-ajax-produto">
+                    
+                </span>
+
+                <button type="button" class="btn btn-primary btn-sm">Finalizar pedido</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
 </body>
 <script>
-    
+    var modalCarrinho = document.getElementById('modal-carrinho-ajax')
+    modalCarrinho.addEventListener('show.bs.modal', function (event){
+        var button = event.relatedTarget
 
+        $('#carrinho-ajax-produto').empty()
+        jQuery.ajax({
+            type: "POST",
+            url: '/estabelecimento/ajax-get-carrinho-painel',
+            data: { idEstabelecimento: '{{estabelecimento._id}}', uuid4Client: localStorage.getItem('uuid4Cliente') },
+            success: function(response) {
+                console.log(response)
+                response.produtos.forEach(element => {
+                    $('#carrinho-ajax-produto').append(`
+                        <div class="card bg-light border-light" style="width: 100%; height: 100%">
+                            <div class="card-body">
+                                <div class="row">
+                                    <div class="col-lg-4 text-center mt-2">
+                                        <img src="/usuario/assets/img/favicon/logoApp.png" class="mx-auto"
+                                            style="object-fit: contain; width: 100pxx; height: 100px;">
+                                    </div>
+                                    <div class="col-lg-8 mt-2">
+                                        <p>Nome: ${element.nome}</p>
+                                        <p>Valor: ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</p>
+                                        <p id="carrinho-opcao-${element._id}"></p>
+                                        <p id="carrinho-adicionais-${element._id}">Adicionais: </p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    `)
+
+                    element.opcao.forEach(opcao => {
+                        $(`#carrinho-opcao-${element._id}`).append(`
+                            <span id="carrinho-opcao-opcoes-${opcao._id}">${opcao.nomeOpcao}: </span>
+                        `)
+
+                        opcao.opcoes.forEach(opcoes => {
+                            $(`#carrinho-opcao-opcoes-${opcao._id}`).append(`
+                                <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${opcoes.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</button>
+                            `)
+                        })
+                    })
+
+                    element.adicionais.length == 0 ? $(`#carrinho-adicionais-${element._id}`).hide() : $(`#carrinho-adicionais-${element._id}`).show()
+                    
+                    element.adicionais.forEach(adicional => {
+                        $(`#carrinho-adicionais-${element._id}`).append(`
+                            <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${adicional.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(adicional.valor)}</button>
+                        `)
+                    })
+
+                })
+
+            }   
+        })
+    })
+    
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
@@ -399,18 +476,16 @@
     $('#form-add-painel-carrinho-produto-1').submit((e) => {
         event.preventDefault()
     })
-</script>
 
+
+
+</script>
 
 
 {{>_msg}}
 
 
-
 <script>
-
-    
-
     function uuidv4() { // gerador de uuidv4
         return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -422,7 +497,6 @@
     }else{
         
     }
-
 
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
