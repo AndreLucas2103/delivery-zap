@@ -170,8 +170,6 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
 router.post('/ajax-get-carrinho-painel', (req, res) => {
     console.log(req.body)
 
-    req.params.tipo == "capa" ? tipo = {'img.capa': {name:'asdasd'}} :  tipo = {'img.painel': {name:'asdasd'}} 
-
     Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).lean().then(carrinho => {
         res.json(carrinho)
     })
