@@ -305,7 +305,7 @@ router.get("/posts", async (req, res) => {
 let upload = multer(multerConfig.uploadEstabelecimento).single('file')
 
 router.post("/posts/:teste",  async (req, res) => {
-    upload(req, res, function (err) {
+    upload(req, res, async function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
             if(teste == 'Error: Invalid file type.'){
