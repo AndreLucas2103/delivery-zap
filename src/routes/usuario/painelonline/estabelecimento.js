@@ -29,7 +29,7 @@ router.get('/:urlPainel', async (req, res)=>{
             {
                 $group:{
                     _id: '$idCategoriaProduto', 
-                    produtos: {$push: {_id:"$_id", nome: '$nome', valor: '$valor'}},
+                    produtos: {$push: {_id:"$_id", nome: '$nome', valor: '$valor', img:'$img.foto.url' }},
                 }
             },
             {
@@ -43,6 +43,8 @@ router.get('/:urlPainel', async (req, res)=>{
             },
             {$unwind: '$categoriaProdutos'},
         ])
+
+        console.log(produtos[0])
 
         res.render('usuarios/pedido/painelonline', {
             estabelecimento: estabelecimento,
