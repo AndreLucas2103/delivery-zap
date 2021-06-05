@@ -278,5 +278,7 @@ router.get('/bloqueado', (req, res) => {
     res.render('usuarios/usuario/bloqueado')
 })
 
+
+
 module.exports = router;
 

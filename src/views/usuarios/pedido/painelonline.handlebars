@@ -1,16 +1,18 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
+
 <body style="background:{{estabelecimento.painel.colorFundo}};">
-<header>
-    <div class="container-md capa-painel mt-2">
-        <center>
-            <div>
-                <br>
-                <img src="/usuario/assets/img/favicon/logoApp.png" class="rounded-circle rounded border logo-painel">
-            </div>
-    </div>
-    </center>
-    <br>
-</header>
+    <header>
+        <div class="container-md capa-painel mt-2">
+            <center>
+                <div>
+                    <br>
+                    <img src="/usuario/assets/img/favicon/logoApp.png"
+                        class="rounded-circle rounded border logo-painel">
+                </div>
+        </div>
+        </center>
+        <br>
+    </header>
 
 </body>
 
@@ -32,8 +34,12 @@
 </div>
 
 <center style="color:{{estabelecimento.painel.colorFonte}};">
- <p class="status-text mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle" style="font-size: 12px;color:green"></i> Aberto</p>
+    <p class="status-text mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
+            style="font-size: 12px;color:green"></i> Aberto</p>
     <hr class="w-25 text-center">
+    <input class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}}"><button
+        class="search-button ml-3" style="border-color:{{estabelecimento.painel.colorFonte}};"><i
+            class="fas fa-search"></i></button>
     <br><br>
 
     {{#each produtos}}
@@ -110,7 +116,8 @@
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                <form action="/pedido/add-painel-carrinho-produto" method="post" id="form-add-painel-carrinho-produto-1">
+                <form action="/pedido/add-painel-carrinho-produto" method="post"
+                    id="form-add-painel-carrinho-produto-1">
                     <div class="card bg-light border-light" style="width: 100%; height: 100%">
                         <div class="card-body">
                             <div class="row">
@@ -128,7 +135,8 @@
                         </div>
                     </div>
 
-                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-ingredientes">
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
+                        id="card-add-ingredientes">
                         <div class="card-body">
                             <h6 class="d-block">Ingredientes:</h6>
                             <span id="add-ingredientes"></span>
@@ -137,7 +145,8 @@
 
                     <span id="add-opcoes"></span>
 
-                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%" id="card-add-adicionais">
+                    <div class="card bg-light border-light mt-2" style="width: 100%; height: 100%"
+                        id="card-add-adicionais">
                         <div class="card-body">
                             <table class="table">
                                 <thead>
@@ -158,25 +167,31 @@
                         <div class="col">
                             <input type="number" id="input-calc-valor-total" readonly hidden>
                             <input type="number" id="input-calc-valor-total-produto-valor" readonly hidden>
-                            <div class="mt-3" style="margin-left: 10px;">Total: <span style="font-size: 25px;" class="text-primary" id="add-carrinho-valor-total"></span></div>
+                            <div class="mt-3" style="margin-left: 10px;">Total: <span style="font-size: 25px;"
+                                    class="text-primary" id="add-carrinho-valor-total"></span></div>
                         </div>
                         <div class="col">
                             <div class="form-floating mb-3">
-                                <input type="number" class="form-control" min="1" onkeyup="calcValorClick()" onkeydown="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
+                                <input type="number" class="form-control" min="1" onkeyup="calcValorClick()"
+                                    onkeydown="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                                    value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-"
+                                    required>
                                 <label for="add-produto-carrinho-quantidade">Quantidade</label>
                             </div>
                         </div>
                     </div>
 
                     <div class="form-floating">
-                        <textarea class="form-control" placeholder="-" id="add-produto-carrinho-observacao" name="observacao" style="height: 100px"></textarea>
+                        <textarea class="form-control" placeholder="-" id="add-produto-carrinho-observacao"
+                            name="observacao" style="height: 100px"></textarea>
                         <label for="add-produto-carrinho-observacao">Observação</label>
                     </div>
 
                     <input type="text" id="add-produto-carrinho-idProduto" name="idProduto" hidden readonly>
                 </form>
 
-                <button type="submit" class="btn btn-primary btn-sm mt-2" id="button-submit-add-produto-carrinho">Adicionar</button>
+                <button type="submit" class="btn btn-primary btn-sm mt-2"
+                    id="button-submit-add-produto-carrinho">Adicionar</button>
             </div>
         </div>
     </div>
@@ -205,6 +220,7 @@
 
 </body>
 <script>
+<<<<<<< HEAD
     var modalCarrinho = document.getElementById('modal-carrinho-ajax')
     modalCarrinho.addEventListener('show.bs.modal', function (event){
         var button = event.relatedTarget
@@ -247,6 +263,9 @@
                             `)
                         })
                     })
+=======
+
+>>>>>>> 471cdce231323c61b045ef4dcb462e3fd00e3e92
 
                     element.adicionais.length == 0 ? $(`#carrinho-adicionais-${element._id}`).hide() : $(`#carrinho-adicionais-${element._id}`).show()
                     
@@ -265,7 +284,7 @@
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
-        
+
         var button = event.relatedTarget
         jQuery.ajax({
             type: "POST",
@@ -308,12 +327,12 @@
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()
                 response.opcao.forEach(element => {
-                    
-                    if(element.vinculoProduto == true){
+
+                    if (element.vinculoProduto == true) {
                         var opcoes_opcoes = ""
-                        
+
                         element.opcoesProduto.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input class="calc-valor-total"  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor/element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor/element.dividendo)}</td> </tr>`
+                            opcoes_opcoes += `<tr> <td> <label><input class="calc-valor-total"  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor / element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor / element.dividendo)}</td> </tr>`
                         })
 
                         $('#add-opcoes').append(`
@@ -334,7 +353,7 @@
                                 </div>
                             </div>
                         `)
-                    }else{
+                    } else {
                         element.multiplaEscolha == false ? multiplaEscolha = `onclick="inputCheckBoxOption('${element._id}', 1)"` : multiplaEscolha = `onclick="calcValorClick()"`
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
@@ -367,30 +386,30 @@
         });
     })
 
-    function inputCheckBoxOption(optionClass, num){
+    function inputCheckBoxOption(optionClass, num) {
         let quantidade = Number($("#add-produto-carrinho-quantidade").val())
         let valorTotal = Number($('#input-calc-valor-total-produto-valor').val())
         $(`input[name="opcao-${optionClass}"]`).on('change', function (e) {
             if ($(`input[name="opcao-${optionClass}"]:checked`).length > num) {
                 $(this).prop('checked', false);
-            }else{
-                $(`input[class="calc-valor-total"]:checked`).each(function (i, elementDiv){
-                    valorTotal += (JSON.parse(elementDiv.value).valor) 
+            } else {
+                $(`input[class="calc-valor-total"]:checked`).each(function (i, elementDiv) {
+                    valorTotal += (JSON.parse(elementDiv.value).valor)
                 })
             }
-            $('#input-calc-valor-total').val(valorTotal*quantidade)
-            $('#add-carrinho-valor-total').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valorTotal*quantidade))
+            $('#input-calc-valor-total').val(valorTotal * quantidade)
+            $('#add-carrinho-valor-total').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valorTotal * quantidade))
         });
     }
 
     function calcValorClick() {
         let quantidade = Number($("#add-produto-carrinho-quantidade").val())
         let valorTotal = Number($('#input-calc-valor-total-produto-valor').val())
-        $(`input[class="calc-valor-total"]:checked`).each(function (i, elementDiv){
-            valorTotal += (JSON.parse(elementDiv.value).valor) 
+        $(`input[class="calc-valor-total"]:checked`).each(function (i, elementDiv) {
+            valorTotal += (JSON.parse(elementDiv.value).valor)
         })
-        $('#input-calc-valor-total').val(valorTotal*quantidade)
-        $('#add-carrinho-valor-total').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valorTotal*quantidade))
+        $('#input-calc-valor-total').val(valorTotal * quantidade)
+        $('#add-carrinho-valor-total').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valorTotal * quantidade))
     }
 
     $('#button-submit-add-produto-carrinho').click(() => {
@@ -398,7 +417,7 @@
         event.preventDefault()
 
         $("input:checkbox").each(function (i, elementDiv) {
-            if(elementDiv.getAttribute('onclick') && $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length != Number(elementDiv.getAttribute('data-bs-dividendo'))){
+            if (elementDiv.getAttribute('onclick') && $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length != Number(elementDiv.getAttribute('data-bs-dividendo'))) {
                 Swal.fire(
                     'Esqueceu de algo?',
                     `Selecione ${elementDiv.getAttribute('data-bs-dividendo')} opcões em ${elementDiv.getAttribute('data-bs-nome')}`,
@@ -408,11 +427,11 @@
                 return false
             }
 
-            if($(`input:checkbox`).length-1 == i){
+            if ($(`input:checkbox`).length - 1 == i) {
                 jQuery.ajax({
                     type: "POST",
                     url: '/estabelecimento/add-painel-carrinho-produto',
-                    data: { 
+                    data: {
                         produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
                         idProduto: $("#add-produto-carrinho-idProduto").val(),
                         quantidade: $("#add-produto-carrinho-quantidade").val(),
@@ -422,13 +441,13 @@
                     success: function (response) {
                         $('#modal-pedido-ajax-produto').modal('hide')
                         spinngLoading(false)
-                        if(response == 200){
+                        if (response == 200) {
                             Swal.fire(
                                 'Sucesso!',
                                 `Produto adicionado ao carrinho`,
                                 'success'
                             )
-                        }else{
+                        } else {
                             Swal.fire(
                                 'Ops...',
                                 `Ocorreu um erro.\n Caso persista informe o suporte!`,
@@ -436,16 +455,16 @@
                             )
                         }
                     }
-                }); 
+                });
             }
-            
+
         })
 
-        if($(`input:checkbox`).length === 0){
+        if ($(`input:checkbox`).length === 0) {
             jQuery.ajax({
                 type: "POST",
                 url: '/estabelecimento/add-painel-carrinho-produto',
-                data: { 
+                data: {
                     produto: $("#form-add-painel-carrinho-produto-1").serializeArray(),
                     idProduto: $("#add-produto-carrinho-idProduto").val(),
                     quantidade: $("#add-produto-carrinho-quantidade").val(),
@@ -455,13 +474,13 @@
                 success: function (response) {
                     $('#modal-pedido-ajax-produto').modal('hide')
                     spinngLoading(false)
-                    if(response == 200){
+                    if (response == 200) {
                         Swal.fire(
                             'Sucesso!',
                             `Produto adicionado ao carrinho`,
                             'success'
                         )
-                    }else{
+                    } else {
                         Swal.fire(
                             'Ops...',
                             `Ocorreu um erro.\n Caso persista informe o suporte!`,
@@ -469,7 +488,7 @@
                         )
                     }
                 }
-            }); 
+            });
         }
     })
 
@@ -484,18 +503,22 @@
 
 {{>_msg}}
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> 471cdce231323c61b045ef4dcb462e3fd00e3e92
 
 <script>
     function uuidv4() { // gerador de uuidv4
-        return ([1e7]+-1e3+-4e3+-8e3+-1e11).replace(/[018]/g, c =>
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
         );
     }
 
-    if(!localStorage.getItem('uuid4Cliente')){ // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
-        localStorage.setItem('uuid4Cliente', Date.now()+"-"+uuidv4()+uuidv4()+uuidv4());
-    }else{
-        
+    if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
+        localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
+    } else {
+
     }
 
     function clickscrollright(idCategoria) {

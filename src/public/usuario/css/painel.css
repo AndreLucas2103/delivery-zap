@@ -232,6 +232,30 @@
     }
 }
 
+.search{
+    margin-top: -10px;
+    text-align: center;
+    border-width:1px;
+    width: 220px;
+    height: 25px;
+    border-radius: 10px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
+
+.search-button{
+    margin-left: 0.25rem;
+    border-radius:5px;
+    font-size: 13px;
+    font-weight:bold;
+    border-width:1px;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+    
+}
+
+.search:focus{
+    outline: none;
+}
+
 @media (min-width: 900px) {
     .card {
         margin-top: 12px;

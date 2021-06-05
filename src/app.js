@@ -1,3 +1,5 @@
+require("dotenv").config();
+
 // ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
 const handlebars = require('express-handlebars')
@@ -7,14 +9,25 @@ const app = express()
 const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport")
+const morgan = require("morgan");
 require("./config/auth")(passport)
-const Handlebars = require('handlebars');
+const Handlebars = require('handlebars')
 const moment = require('moment')
+const cors = require("cors");
 
 
 
 
 // ----- Middleware -----------------------------------------------------------------------------------------------------------------------
+app.use(cors());
+app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use(morgan("dev"));
+app.use(
+  "/files",
+  express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+);
+
 app.use(session({
     secret: "hotpedidos",
     resave: true,
@@ -164,6 +177,7 @@ const usuarioProduto = require("./routes/usuario/produto/produto")
 const usuarioProdutoModelo = require("./routes/usuario/produto/modelo")
 const usuarioPedido= require("./routes/usuario/pedido/pedido")
 const usuarioPainel= require("./routes/usuario/painelonline/estabelecimento")
+
 
 
     // Configuracoes do usuario

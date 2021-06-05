@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
+const multer = require('multer')
+const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 
@@ -127,13 +129,13 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                     estabelecimento.telefone = req.body.telefone
 
 
-                    estabelecimento.save().then(() => {
-                        req.flash('success_msg', 'Estabelecimento editado')
-                        res.redirect('back')
-                    }).catch(err => {
-                        req.flash('error_msg', 'Ocorreu um erro')
-                        res.redirect('back')
-                    })
+                estabelecimento.save().then(() => {
+                    req.flash('success_msg', 'Estabelecimento editado')
+                    res.redirect('back')
+                }).catch(err => {
+                    req.flash('error_msg', 'Ocorreu um erro')
+                    res.redirect('back')
+                })
             } else {
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
@@ -266,7 +268,7 @@ router.get('/painel/:idPainel', eAdmin, async (req, res) => {
 
 router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabelecimento
     Estabelecimento.findById({ _id: req.body.idPainel }).then(estabelecimento => {
-     if (estabelecimento) {
+        if (estabelecimento) {
             estabelecimento.nomePainel = req.body.nome,
 
                 estabelecimento.endereco.logradouro = req.body.logradouro,
@@ -291,6 +293,54 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
     })
 
 })
+
+
+router.get("/posts", async (req, res) => {
+    const posts = await Estabelecimento.find();
+
+    return res.json(posts);
+});
+
+
+let upload = multer(multerConfig.uploadEstabelecimento).single('file')
+
+router.post("/posts/:teste",  async (req, res) => {
+    upload(req, res, function (err) {
+        if (err) {
+            let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
+            if(teste == 'Error: Invalid file type.'){
+                req.flash('error_msg', 'Formato de arquivo não suportado')
+                res.redirect('back')
+                return
+            }else{
+                req.flash('error_msg', 'Arquivo muito grande! Deve possui no máximo 250 MB')
+                res.redirect('back')
+                return
+            }
+        }
+
+        const { originalname: name, size, key, location: url = "" } = req.file;
+        const post = await Estabelecimento.create({
+            name,
+            size,
+            key,
+            url
+        });
+
+        return res.json(post);
+    })
+    
+});
+
+
+router.delete("/posts/:id", async (req, res) => {
+    const post = await Estabelecimento.findById(req.params.id);
+
+    await post.remove();
+
+    return res.send();
+});
+
 
 module.exports = router;
 
