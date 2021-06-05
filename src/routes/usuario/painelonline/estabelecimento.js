@@ -47,7 +47,7 @@ router.get('/:urlPainel', async (req, res)=>{
         res.render('usuarios/pedido/painelonline', {
             estabelecimento: estabelecimento,
             produtos: produtos,
-            teste: JSON.stringify(produtos),
+            horariosFuncionamento: JSON.stringify(estabelecimento.horarioFuncionamento),
         })
     } catch (err) {
         console.log(err)
@@ -168,11 +168,37 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
 })
 
 router.post('/ajax-get-carrinho-painel', (req, res) => {
-    console.log(req.body)
-
     Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).lean().then(carrinho => {
         res.json(carrinho)
     })
 })
 
+router.post('/delete-carrinho-painel', async (req, res) => {
+    try {
+        let carrinho = await Carrinho.aggregate([
+            {$match: {'_id':  ObjectId(req.body.idCarrinho)}},
+            { $unwind : "$produtos" },
+            { $match : {
+                "produtos._id": ObjectId(req.body.idCarrinhoProduto)
+            }}
+        ])
+        
+        Carrinho.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
+            {'_id': req.body.idCarrinho},
+            { 
+                $pull: {'produtos': {_id: ObjectId(req.body.idCarrinhoProduto)}},
+                $inc: {"valorTotal": -carrinho[0].produtos.valorTotal}
+            }, 
+            
+        ).then(() => {
+            req.flash('success_msg', 'Adicional removido')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        }) 
+
+    } catch (err) {
+        console.log(err)
+    }
+})
 module.exports = router;

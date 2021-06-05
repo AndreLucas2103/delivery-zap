@@ -211,12 +211,14 @@
                     
                 </span>
 
-                <button type="button" class="btn btn-primary btn-sm">Finalizar pedido</button>
+                <div class="mt-3 float-end" style="margin-left: 10px;">Total: <span style="font-size: 25px;"
+                    class="text-primary" id="carrinho-valor-total"></span></div>
+
+                <button type="button" class="btn btn-primary btn-sm mt-4">Finalizar pedido</button>
             </div>
         </div>
     </div>
 </div>
-
 
 </body>
 <script>
@@ -230,7 +232,7 @@
             url: '/estabelecimento/ajax-get-carrinho-painel',
             data: { idEstabelecimento: '{{estabelecimento._id}}', uuid4Client: localStorage.getItem('uuid4Cliente') },
             success: function(response) {
-                console.log(response)
+                $("#carrinho-valor-total").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
                 response.produtos.forEach(element => {
                     $('#carrinho-ajax-produto').append(`
                         <div class="card bg-light border-light" style="width: 100%; height: 100%">
@@ -242,18 +244,24 @@
                                     </div>
                                     <div class="col-lg-8 mt-2">
                                         <p>Nome: ${element.nome}</p>
-                                        <p>Valor: ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</p>
+                                        <p>Valor: ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valorTotal)}</p>
                                         <p id="carrinho-opcao-${element._id}"></p>
                                         <p id="carrinho-adicionais-${element._id}">Adicionais: </p>
+                                        <p id="carrinho-observacao-${element._id}"> </p>
+                                        <p id="carrinho-quantidade-${element._id}"> </p>
                                     </div>
                                 </div>
+                                <form action="/estabelecimento/delete-carrinho-painel" method="post">
+                                    <input name="idCarrinho" value="${response._id}" hidden readonly/>
+                                    <button class="btn btn-light btn-sm float-start text-danger" name="idCarrinhoProduto" value="${element._id}">Remover</button>
+                                </form>
                             </div>
                         </div>
                     `)
 
                     element.opcao.forEach(opcao => {
                         $(`#carrinho-opcao-${element._id}`).append(`
-                            <span id="carrinho-opcao-opcoes-${opcao._id}">${opcao.nomeOpcao}: </span>
+                            <span id="carrinho-opcao-opcoes-${opcao._id}" class="d-block">${opcao.nomeOpcao}: </span>
                         `)
 
                         opcao.opcoes.forEach(opcoes => {
@@ -270,7 +278,10 @@
                             <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${adicional.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(adicional.valor)}</button>
                         `)
                     })
-
+                    
+                    element.observacao ? $(`#carrinho-observacao-${element._id}`).text(`Observação: ${element.observacao}`) : 
+                    
+                    $(`#carrinho-quantidade-${element._id}`).text(`Quantidade: ${element.quantidade}`)
                 })
 
             }   
@@ -501,6 +512,8 @@
 
 
 <script>
+    console.log({{{ horariosFuncionamento }}})
+
     function uuidv4() { // gerador de uuidv4
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
