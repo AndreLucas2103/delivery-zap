@@ -1,6 +1,8 @@
 const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
+const multer = require('multer')
+const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 
@@ -22,7 +24,6 @@ require("../../../models/ModeloOpcao")
 const ModeloOpcao = mongoose.model("modeloOpcoes")
 require("../../../models/ModeloAdicional")
 const ModeloAdicional = mongoose.model("modeloAdicionais")
-
 
 
 // -----------  PRODUTOS ------------------------------------------------------------------------------------------
@@ -760,6 +761,49 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
         console.log(err)
     })
 })
+
+let upload = multer(multerConfig.uploadProduto).single('file')
+
+router.post("/upload-produto/:idEstabelecimento",  async (req, res) => {
+    upload(req, res, async function (err) {
+        if (err) {
+            let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
+            if(teste == 'Error: Invalid file type.'){
+                req.flash('error_msg', 'Formato de arquivo não suportado')
+                res.redirect('back')
+                return
+            }else{
+                req.flash('error_msg', 'Arquivo muito grande! Deve possui no máximo 2 MB')
+                res.redirect('back')
+                return
+            }
+        }
+        const { originalname: name, size, key, location: url = "" } = req.file;
+        const post = await Produto.updateOne(
+            {_id: req.params.idEstabelecimento},
+            $set = {
+                'img.foto': {  name, size, key, url },
+            }
+        ).then(() => {
+            req.flash('success_msg', 'Foto editada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+
+        return res.json(post);
+    })
+    
+});
+
+
+router.delete("/delete/:id", async (req, res) => {
+    const post = await Produto.findById(req.params.id);
+
+    await post.remove();
+
+    return res.send();
+});
 
 
 module.exports = router;

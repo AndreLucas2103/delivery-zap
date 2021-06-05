@@ -5,21 +5,24 @@ const aws = require("aws-sdk");
 const multerS3 = require("multer-s3");
 
 const storageTypes = {
-  local: multer.diskStorage({
-    destination: (req, file, cb) => {
-      cb(null, path.resolve(__dirname, "..", "..", "tmp", "uploads"));
-    },
-    filename: (req, file, cb) => {
+
+  s3Produto: multerS3({
+    s3: new aws.S3(),
+    bucket: process.env.BUCKET_NAME,
+    contentType: multerS3.AUTO_CONTENT_TYPE,
+    acl: "public-read",
+    key: (req, file, cb) => {
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
-
-        file.key = `${hash.toString("hex")}-${file.originalname}`;
-
-        cb(null, file.key);
+  
+        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/produtos/${hash.toString("hex")}-${file.originalname}`;
+  
+        cb(null, fileName);
       });
     }
   }),
-  s3: multerS3({
+
+  s3Estabelecimento: multerS3({
     s3: new aws.S3(),
     bucket: process.env.BUCKET_NAME,
     contentType: multerS3.AUTO_CONTENT_TYPE,
@@ -28,7 +31,7 @@ const storageTypes = {
       crypto.randomBytes(16, (err, hash) => {
         if (err) cb(err);
 
-        const fileName = `${req.params.teste}/${hash.toString("hex")}-${file.originalname}`;
+        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/painel/${hash.toString("hex")}-${file.originalname}`;
 
         cb(null, fileName);
       });
@@ -38,7 +41,7 @@ const storageTypes = {
 
 module.exports.uploadEstabelecimento = {
   dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),
-  storage: storageTypes["s3"],
+  storage: storageTypes["s3Estabelecimento"],
   limits: {
     fileSize: 2 * 1024 * 1024
   },
@@ -56,4 +59,26 @@ module.exports.uploadEstabelecimento = {
       cb(new Error("Invalid file type."));
     }
   }
-};
+}
+
+module.exports.uploadProduto = {
+dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),
+storage: storageTypes["s3Produto"],
+limits: {
+  fileSize: 2 * 1024 * 1024
+},
+fileFilter: (req, file, cb) => {
+  const allowedMimes = [
+    "image/jpeg",
+    "image/pjpeg",
+    "image/png",
+    "image/gif"
+  ];
+
+  if (allowedMimes.includes(file.mimetype)) {
+    cb(null, true);
+  } else {
+    cb(new Error("Invalid file type."));
+  }
+}
+}

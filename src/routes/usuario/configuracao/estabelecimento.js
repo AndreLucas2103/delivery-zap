@@ -295,16 +295,9 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
 })
 
 
-router.get("/posts", async (req, res) => {
-    const posts = await Estabelecimento.find();
-
-    return res.json(posts);
-});
-
-
 let upload = multer(multerConfig.uploadEstabelecimento).single('file')
 
-router.post("/posts/:teste",  async (req, res) => {
+router.post("/upload/:idEstabelecimento",  async (req, res) => {
     upload(req, res, async function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
@@ -313,19 +306,27 @@ router.post("/posts/:teste",  async (req, res) => {
                 res.redirect('back')
                 return
             }else{
-                req.flash('error_msg', 'Arquivo muito grande! Deve possui no máximo 250 MB')
+                req.flash('error_msg', 'Arquivo muito grande! Deve possui no máximo 2 MB')
                 res.redirect('back')
                 return
             }
         }
-
         const { originalname: name, size, key, location: url = "" } = req.file;
-        const post = await Estabelecimento.create({
-            name,
-            size,
-            key,
-            url
-        });
+        const post = await Estabelecimento.updateOne(
+            {_id: req.params.idEstabelecimento},
+            req.body.tipo == "capa" ? 
+            $set = {
+                'img.capa': {  name, size, key, url },
+            }:
+            $set = {
+                'img.logo': {  name, size, key, url },
+            }
+        ).then(() => {
+            req.flash('success_msg', 'Foto editada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
 
         return res.json(post);
     })
@@ -333,7 +334,7 @@ router.post("/posts/:teste",  async (req, res) => {
 });
 
 
-router.delete("/posts/:id", async (req, res) => {
+router.delete("/delete/:id", async (req, res) => {
     const post = await Estabelecimento.findById(req.params.id);
 
     await post.remove();
