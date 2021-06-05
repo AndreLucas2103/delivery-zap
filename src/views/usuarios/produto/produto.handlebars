@@ -47,7 +47,20 @@
             <div class="card border-light text-center p-0">
                 <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
                 <div class="card-body pb-5">
-                    <img src="/img/perfil-avatar/svg/{{usuario.perfilAvatar}}.svg" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+                    <img src="{{produto.img.foto.url}}" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+                      <form method="POST" id="upload-produto"
+                                    action="/produto/upload-produto/{{produto._id}}" enctype="multipart/form-data">
+                                    <label class="upload-produto" for="file01">
+                                                <i class="fas fa-camera"></i>
+                                            </label>
+                                    <input type="text" name="tipo" value="capa" hidden>
+                                    <input type="file" id="file01" name="file" class="file" hidden>
+                                </form>
+                                <script>
+                                    $('#file01').change(() => {
+                                        $('#upload-produto').submit()
+                                    })
+                                </script>
                     <button type="button" class="btn btn-secondary btn-sm mb-4  " data-bs-toggle="modal" data-bs-target="#modal-edit-produto">Editar Produto</button>
                     <h4 class="">{{produto.nome}}</h4>
                     <h5 class="valorFormatar">{{produto.valor}}</h5>

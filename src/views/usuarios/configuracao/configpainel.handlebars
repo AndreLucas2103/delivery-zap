@@ -29,18 +29,20 @@
                                     <div class="col-md">
                                         <div style="border-radius: 25px;border-color:white">
                                             <br>
-                                            <img src="/usuario/assets/img/favicon/logoApp.png"
+                                            <img src="{{estabelecimento.img.logo.url}}"
                                                 class="rounded-circle rounded border logo-image-st" id="imgst">
                                         </div>
                                     </div>
-                                    <div class="col-md mt-5 mr-9">
-                                        <div>
-                                            <h6>Link para pedidos:</h6>
-                                            <a href="/estabelecimento/{{estabelecimento.url}}" target="_blank" id="url"
-                                                name="url"
-                                                style="color: #5A7FFF;">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a>
+                                    <center>
+                                        <div class="col-md">
+                                            <div>
+                                                <h6>Link para pedidos:</h6>
+                                                <a href="/estabelecimento/{{estabelecimento.url}}" target="_blank"
+                                                    id="url" name="url"
+                                                    style="color: #5A7FFF;">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </center>
                                 </div>
                                 <br> <br>
                                 <div class="row g-2">
@@ -87,10 +89,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <div class="file-input">
-                                            <input type="file" id="file" onchange="readURL(this);" class="file">
-                                            <input type="text" name="base64TipoDocumento1" id="base64TipoDocumento1"
-                                                hidden>
-                                            <label for="file">
+                                            <label for="file01">
                                                 Selecionar
                                             </label>
                                         </div>
@@ -110,10 +109,7 @@
                                     </div>
                                     <div class="col-md-5">
                                         <div class="file-input">
-                                            <input type="file" id="file-capa" onchange="readURL(this);" class="file">
-                                            <input type="text" name="base64TipoDocumento2" id="base64TipoDocumento2"
-                                                hidden>
-                                            <label for="file-capa">
+                                            <label for="file02">
                                                 Selecionar
                                             </label>
                                         </div>
@@ -133,16 +129,15 @@
                             </form>
                         </div>
                     </div>
-
                     <div class="col-xl-4 text-center">
                         <label>Pré-visualização:</label>
                         <div class="smartphone" style="background:{{estabelecimento.painel.colorFundo}};"
                             id="backcolor">
-                            <div class="container-md capa-image-sm mt-2" id="img2">
+                            <div class="container-md capa-image-sm mt-2" style="background-image: url({{estabelecimento.img.capa.url}});" id="img2">
                                 <center>
                                     <div>
                                         <br>
-                                        <img src="/usuario/assets/img/favicon/logoApp.png"
+                                        <img src="{{estabelecimento.img.logo.url}}"
                                             class="rounded-circle rounded border logo-image" id="img1">
                                     </div>
                             </div>
@@ -164,7 +159,9 @@
                                 <center>
                                     <hr class="w-25">
                                 </center>
-                                <input class="search-sm rb" style="border-color:{{estabelecimento.painel.colorFonte}}"><button class="search-button ml-1"
+                                <input class="search-sm rb"
+                                    style="border-color:{{estabelecimento.painel.colorFonte}}"><button
+                                    class="search-button ml-1"
                                     style="border-color:{{estabelecimento.painel.colorFonte}};"><i
                                         class="fas fa-search"></i></button>
                             </div>
@@ -174,6 +171,29 @@
         </div>
     </div>
 </div>
+
+<form method="POST" id="file01-upload" action="/configuracao/upload/{{estabelecimento._id}}"
+    enctype="multipart/form-data">
+    <input type="text" name="tipo" value="logo" hidden>
+    <input type="file" id="file01" name="file" class="file" hidden>
+</form>
+<script>
+    $('#file01').change(() => {
+        $('#file01-upload').submit()
+    })
+</script>
+
+<form method="POST" id="file02-upload" action="/configuracao/upload/{{estabelecimento._id}}"
+    enctype="multipart/form-data">
+    <input type="text" name="tipo" value="capa" hidden>
+    <input type="file" id="file02" name="file" class="file" hidden>
+</form>
+<script>
+    $('#file02').change(() => {
+        $('#file02-upload').submit()
+          res.send('/configuracao/delete/{{estabelecimento._id}}')
+    })
+</script>
 
 <script>
     window.onload = function () {
@@ -206,26 +226,6 @@
         }
         inputBairro.oninput = function () {
             $("#bairroEstabelecimento").text(" - " + inputBairro.value);
-        }
-    }
-</script>
-
-<script>
-    function readURL(input) {
-        if (input.files && input.files[0]) {
-            console.log(input.id)
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                if (input.id == "file") {
-                    $('#img1').attr('src', e.target.result);
-                    $('#imgst').attr('src', e.target.result);
-                    $('#base64TipoDocumento1').val(e.target.result);
-                } else if (input.id == "file-capa") {
-                    $('#img2').css('background-image', 'url(' + e.target.result + ')');
-                    $('#base64TipoDocumento2').val(e.target.result);
-                }
-            };
-            reader.readAsDataURL(input.files[0]);
         }
     }
 </script>
