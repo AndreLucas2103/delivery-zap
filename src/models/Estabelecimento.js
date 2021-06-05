@@ -1,6 +1,11 @@
 const { ObjectId } = require("bson");
 const mongoose = require("mongoose");
 const Schema = mongoose.Schema;
+const aws = require("aws-sdk");
+const fs = require("fs");
+const path = require("path");
+const { promisify } = require("util");
+
 
 /*
     
@@ -8,7 +13,7 @@ const Schema = mongoose.Schema;
 
 const Estabelecimento = new Schema({
     nome: String,
-    nomePainel:String,
+    nomePainel: String,
     url: String,
     endereco: {
         logradouro: String,
@@ -20,7 +25,7 @@ const Estabelecimento = new Schema({
     },
     cnpj: String,
     telefone: String,
-    
+
 
     horarioFuncionamento: [{
         dia: String,
@@ -29,6 +34,12 @@ const Estabelecimento = new Schema({
     }],
 
     img: {
+        logo: {
+            name: String,
+            size: Number,
+            key: String,
+            url: String
+        },
         capa: {
             name: String,
             size: Number,
@@ -38,13 +49,13 @@ const Estabelecimento = new Schema({
     },
 
     painel: {
-        colorFundo:{
+        colorFundo: {
             type: String,
-            default : "#FFFFFF"
+            default: "#FFFFFF"
         },
-        colorFonte:{
+        colorFonte: {
             type: String,
-            default : "#000000"
+            default: "#000000"
         },
     },
 
@@ -66,7 +77,7 @@ const Estabelecimento = new Schema({
             cep: String
         }]
     },
-    
+
 
     idUsuarioMaster: {
         type: Schema.Types.ObjectId,
@@ -78,6 +89,36 @@ const Estabelecimento = new Schema({
         default: true
     }
 
-},{ timestamps: true})
+}, { timestamps: true })
+
+const s3 = new aws.S3();
+
+Estabelecimento.pre("save", function() {
+    if (!this.url) {
+      this.url = `${process.env.APP_URL}/files/${this.key}`;
+    }
+  });
+  
+  Estabelecimento.pre("remove", function() {
+    if (process.env.STORAGE_TYPE === "s3") {
+      return s3
+        .deleteObject({
+          Bucket: process.env.BUCKET_NAME,
+          Key: this.key
+        })
+        .promise()
+        .then(response => {
+          console.log(response.status);
+        })
+        .catch(response => {
+          console.log(response.status);
+        });
+    } else {
+      return promisify(fs.unlink)(
+        path.resolve(__dirname, "..", "..", "tmp", "uploads", this.key)
+      );
+    }
+  })
+  
 
 mongoose.model("estabelecimentos", Estabelecimento)
