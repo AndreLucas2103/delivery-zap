@@ -766,7 +766,6 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
 let upload = multer(multerConfig.uploadProduto).single('file')
 
 router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) => {
-    console.log(req.params)
     upload(req, res, async function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
@@ -781,9 +780,7 @@ router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) =
             }
         }
         const { originalname: name, size, key, location: url = "" } = req.file;
-        await sharp(req.file)
-        .resize(120, 96)
-        const post = await Produto.updateOne(
+        Produto.updateOne(
             {_id: req.params.idProduto},
             $set = {
                 'img.foto': {  name, size, key, url },
@@ -795,7 +792,6 @@ router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) =
             console.log(err)
         })
 
-        return res.json(post);
     })
     
 });
