@@ -49,11 +49,10 @@
                 <div class="card-body pb-5">
                     <img src="{{produto.img.foto.url}}" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
                       <form method="POST" id="upload-produto"
-                                    action="/produto/upload-produto/{{produto._id}}" enctype="multipart/form-data">
+                                    action="/produto/upload-produto/{{produto._id}}/{{produto.idEstabelecimento._id}}" enctype="multipart/form-data">
                                     <label class="upload-produto" for="file01">
                                                 <i class="fas fa-camera"></i>
                                             </label>
-                                    <input type="text" name="tipo" value="capa" hidden>
                                     <input type="file" id="file01" name="file" class="file" hidden>
                                 </form>
                                 <script>

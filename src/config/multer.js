@@ -1,5 +1,6 @@
 const multer = require("multer");
 const path = require("path");
+const { ObjectId } = require('bson')
 const crypto = require("crypto");
 const aws = require("aws-sdk");
 const multerS3 = require("multer-s3");
@@ -12,13 +13,11 @@ const storageTypes = {
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: (req, file, cb) => {
-      crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err);
-  
-        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/produtos/${hash.toString("hex")}-${file.originalname}`;
+
+        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/produtos/${req.params.idProduto} - Produto`;
   
         cb(null, fileName);
-      });
+  
     }
   }),
 
@@ -28,13 +27,11 @@ const storageTypes = {
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: (req, file, cb) => {
-      crypto.randomBytes(16, (err, hash) => {
-        if (err) cb(err);
-
-        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/painel/${hash.toString("hex")}-${file.originalname}`;
+     
+        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/painel/${req.params.idEstabelecimento}-${req.body.tipo}`;
 
         cb(null, fileName);
-      });
+      
     }
   })
 };
@@ -52,6 +49,7 @@ module.exports.uploadEstabelecimento = {
       "image/png",
       "image/gif"
     ];
+    
 
     if (allowedMimes.includes(file.mimetype)) {
       cb(null, true);
@@ -60,6 +58,7 @@ module.exports.uploadEstabelecimento = {
     }
   }
 }
+
 
 module.exports.uploadProduto = {
 dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),

@@ -2,6 +2,7 @@ const express = require('express')
 const router = express.Router()
 const mongoose = require("mongoose")
 const multer = require('multer')
+const sharp = require("sharp");
 const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
@@ -764,7 +765,8 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
 
 let upload = multer(multerConfig.uploadProduto).single('file')
 
-router.post("/upload-produto/:idEstabelecimento",  async (req, res) => {
+router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) => {
+    console.log(req.params)
     upload(req, res, async function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
@@ -779,8 +781,10 @@ router.post("/upload-produto/:idEstabelecimento",  async (req, res) => {
             }
         }
         const { originalname: name, size, key, location: url = "" } = req.file;
+        await sharp(req.file)
+        .resize(120, 96)
         const post = await Produto.updateOne(
-            {_id: req.params.idEstabelecimento},
+            {_id: req.params.idProduto},
             $set = {
                 'img.foto': {  name, size, key, url },
             }
