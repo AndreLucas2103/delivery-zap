@@ -297,8 +297,8 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
 
 let upload = multer(multerConfig.uploadEstabelecimento).single('file')
 
-router.post("/upload/:idEstabelecimento",  async (req, res) => {
-    upload(req, res, async function (err) {
+router.post("/upload/:idEstabelecimento", (req, res) => {
+    upload(req, res, function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
             if(teste == 'Error: Invalid file type.'){
@@ -307,12 +307,12 @@ router.post("/upload/:idEstabelecimento",  async (req, res) => {
                 return
             }else{
                 req.flash('error_msg', 'Arquivo muito grande! Deve possui no máximo 2 MB')
-                res.redirect('back')
+                res.redirect('/configuracao/painel/'+req.params.idEstabelecimento)
                 return
             }
         }
         const { originalname: name, size, key, location: url = "" } = req.file;
-        const post = await Estabelecimento.updateOne(
+        Estabelecimento.updateOne(
             {_id: req.params.idEstabelecimento},
             req.body.tipo == "capa" ? 
             $set = {
@@ -328,18 +328,8 @@ router.post("/upload/:idEstabelecimento",  async (req, res) => {
             console.log(err)
         })
 
-        return res.json(post);
     })
     
-});
-
-
-router.delete("/delete/:id", async (req, res) => {
-    const post = await Estabelecimento.findById(req.params.id);
-
-    await post.remove();
-
-    return res.send();
 });
 
 

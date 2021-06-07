@@ -765,8 +765,8 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
 
 let upload = multer(multerConfig.uploadProduto).single('file')
 
-router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) => {
-    upload(req, res, async function (err) {
+router.post("/upload-produto/:idProduto/:idEstabelecimento",  (req, res) => {
+    upload(req, res, function (err) {
         if (err) {
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
             if(teste == 'Error: Invalid file type.'){
@@ -787,22 +787,13 @@ router.post("/upload-produto/:idProduto/:idEstabelecimento",  async (req, res) =
             }
         ).then(() => {
             req.flash('success_msg', 'Foto editada')
-            res.redirect('back')
+            res.redirect('/produto/perfil?produto='+req.params.idProduto)
         }).catch(err => {
             console.log(err)
         })
 
     })
     
-});
-
-
-router.delete("/delete/:id", async (req, res) => {
-    const post = await Produto.findById(req.params.id);
-
-    await post.remove();
-
-    return res.send();
 });
 
 
