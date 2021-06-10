@@ -16,25 +16,25 @@
 
 </body>
 
-<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento" id="nomeEstabelecimento">
+<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb" id="nomeEstabelecimento">
     {{estabelecimento.nomePainel}}</h1><br>
 
 <div style="margin-top: -35px;">
     <center>
         <i class="fas fa-map-marker-alt text-danger"></i>
-        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco" id="enderecoEstabelecimento">
+        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="enderecoEstabelecimento">
             {{estabelecimento.endereco.logradouro}}</h1>
-        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco" id="numeroEstabelecimento"> -
+        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="numeroEstabelecimento"> -
             {{estabelecimento.endereco.numero}}</span>
-            <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco" id="bairroEstabelecimento"> -
+            <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="bairroEstabelecimento"> -
                 {{estabelecimento.endereco.bairro}}</h1>
-            <h1 id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};" class="endereco"> /
+            <h1 id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb"> /
                 {{estabelecimento.endereco.localidade}}</h1>
     </center>
 </div>
 
 <center style="color:{{estabelecimento.painel.colorFonte}};">
-    <p class="status-text mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
+    <p class="status-text rb mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
             style="font-size: 12px;color:green"></i> Aberto</p>
     <hr class="w-25 text-center">
     <input class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}}"><button
@@ -43,15 +43,15 @@
     <br><br>
 
     {{#each produtos}}
-    <span class="categoria">{{categoriaProdutos.nome}}</span>
+    <span class="categoria rb">{{categoriaProdutos.nome}}</span>
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
             {{#each produtos}}
             <div class="card card-style-produto" data-bs-nome="{{nome}}">
                 <img class="card-image" src="{{img}}"></h2>
-                <p class="card-text">{{nome}}</p>
-                <p class="card-value valorFormatar">{{valor}}</p>
-                <button class="button-adicionar" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
+                <p class="card-text rb">{{nome}}</p>
+                <p class="card-value valorFormatar rb">{{valor}}</p>
+                <button class="button-adicionar rb" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
