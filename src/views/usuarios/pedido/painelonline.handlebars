@@ -104,16 +104,7 @@
 
     <br><br><br>
     <a class="carrinho" data-bs-toggle="modal" data-bs-target="#modal-carrinho-ajax" ><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
-    
-    <form action="/estabelecimento/{{estabelecimento.url}}/checkout" method="get">
-        <button class="finalizar" style="border: 0px;"><i class="fas fa-check" style="font-size: 20px;"></i></button>
-        <input type="text" name="uuid4Client" id="checkout-pedido-uuid4Client" hidden readonly />
-        
-        <script>
-            $('#checkout-pedido-uuid4Client').val(localStorage.getItem('uuid4Cliente'))
-        </script>
-    </form>
-    
+    <a class="finalizar"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i></a>
 </center>
 
 
