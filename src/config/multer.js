@@ -13,11 +13,13 @@ const storageTypes = {
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: (req, file, cb) => {
+      crypto.randomBytes(16, (err, hash) => {
+        if (err) cb(err);
 
-        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/produtos/${req.params.idProduto} - Produto`;
-  
-        cb(null, fileName);
-  
+        file.key = `Estabelecimentos/${req.params.idEstabelecimento}/produtos/${hash.toString("hex")}-${file.originalname}`;
+        
+        cb(null, file.key);
+      });
     }
   }),
 
@@ -27,17 +29,18 @@ const storageTypes = {
     contentType: multerS3.AUTO_CONTENT_TYPE,
     acl: "public-read",
     key: (req, file, cb) => {
-     
-        const fileName = `Estabelecimentos/${req.params.idEstabelecimento}/painel/${req.params.idEstabelecimento}-${req.body.tipo}`;
+      crypto.randomBytes(16, (err, hash) => {
+        if (err) cb(err);
 
-        cb(null, fileName);
-      
+        file.key = `Estabelecimentos/${req.params.idEstabelecimento}/painel/${hash.toString("hex")}-${file.originalname}`;
+        
+        cb(null, file.key);
+      });
     }
   })
 };
 
 module.exports.uploadEstabelecimento = {
-  dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),
   storage: storageTypes["s3Estabelecimento"],
   limits: {
     fileSize: 2 * 1024 * 1024
@@ -61,7 +64,6 @@ module.exports.uploadEstabelecimento = {
 
 
 module.exports.uploadProduto = {
-dest: path.resolve(__dirname, "..", "..", "tmp", "uploads"),
 storage: storageTypes["s3Produto"],
 limits: {
   fileSize: 2 * 1024 * 1024
