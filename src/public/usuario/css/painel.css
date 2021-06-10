@@ -5,7 +5,7 @@
         border: none;
         background-repeat: no-repeat;
         border-radius: 20px;
-        background-size: 100%;
+        background-size: 100% 100%;
         background-image: url(/usuario/assets/img/favicon/capaApp.png);
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
     }
@@ -23,21 +23,18 @@
     }
 
     .status-text {
-        font-size:15px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        font-size:13px;
     
     }
 
     .estabelecimento {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
         margin-top: 10px;
-        font-size: 23px;
+        font-size: 20px;
         text-align: center;
     }
 
     .endereco {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
         font-size: 13px;
         display: inline;
@@ -91,21 +88,21 @@
 
 @media (min-width: 900px) {
     .capa-painel {
-        width: 70%;
-        height: 400px;
+        width: 60%;
+        height: 275px;
         border: none;
+        background-repeat: no-repeat;
         border-radius: 20px;
-        background-size: 100%;
+        background-size: 100% 100%;
         background-image: url(/usuario/assets/img/favicon/capaApp.png);
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
     }
 
     .logo-painel {
-        width: 100px;
-        height: 100px;
+        width: 150px;
+        height: 150px;
         background-repeat: no-repeat;
-        top: 100px;
-        bottom: 50px;
+        top: 150px;
         background-size: contain;
         position: relative;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
@@ -120,15 +117,13 @@
     }
 
     .estabelecimento {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 30px;
         font-size: 20px;
         text-align: center;
     }
 
     .endereco {
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-weight: bold;
         font-size: 13px;
         display: inline;
@@ -178,6 +173,30 @@
 }
 
 @media (max-width: 900px) {
+    .search{
+        margin-top: -10px;
+        text-align: center;
+        border-width:1px;
+        width: 220px;
+        height: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .search-button{
+        margin-left: 0.25rem;
+        border-radius:5px;
+        font-size: 18px;
+        font-weight:bold;
+        border-width:1px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+        
+    }
+    
+    .search:focus{
+        outline: none;
+    }
+
     .card {
         margin-top: 10px;
         border: none;
@@ -194,7 +213,6 @@
         border-radius: 10px;
         width: 145px;
         height: 36px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         position: relative;
@@ -214,7 +232,6 @@
 
     .card-text {
         color: #000000;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
@@ -225,7 +242,6 @@
     .card-value {
         color: #F0A431;
         margin-top: -10px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 16px;
@@ -233,31 +249,32 @@
     }
 }
 
-.search{
-    margin-top: -10px;
-    text-align: center;
-    border-width:1px;
-    width: 220px;
-    height: 30px;
-    border-radius: 10px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.search-button{
-    margin-left: 0.25rem;
-    border-radius:5px;
-    font-size: 18px;
-    font-weight:bold;
-    border-width:1px;
-    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-    
-}
-
-.search:focus{
-    outline: none;
-}
 
 @media (min-width: 900px) {
+    .search{
+        margin-top: -10px;
+        text-align: center;
+        border-width:1px;
+        width: 300px;
+        height: 30px;
+        border-radius: 10px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+    }
+    
+    .search-button{
+        margin-left: 0.25rem;
+        border-radius:5px;
+        font-size: 18px;
+        font-weight:bold;
+        border-width:1px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+        
+    }
+
+    .search:focus{
+        outline: none;
+    }
+
     .card {
         margin-top: 12px;
         border: none;
@@ -274,7 +291,6 @@
         border-radius: 12px;
         width: 145px;
         height: 36px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         position: relative;
@@ -294,7 +310,6 @@
 
     .card-text {
         color: #000000;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size: 19.2px;
@@ -305,7 +320,6 @@
     .card-value {
         color: #F0A431;
         margin-top: -8px;
-        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
         font-style: normal;
         font-weight: bold;
         font-size:  19.2px;
@@ -342,11 +356,14 @@
 }
 
 .categoria {
-    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-weight: bold;
     font-size: 30px;
     text-align: center;
     position: relative;
+}
+
+.rb{
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
 }
 
 .button-adicionar:active {
