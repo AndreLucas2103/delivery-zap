@@ -152,6 +152,8 @@
     <br><br><br>
     
     <div class="row ">
+        
+        {{!-- Usuarios START  --}}
         <div class="col-12 col-lg-6 mb-4 ">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
@@ -181,8 +183,9 @@
                 
             </div>
         </div>
+        {{!-- Usuarios END  --}}
         
-
+        {{!-- Horarios START  --}}
         <div class="col-12 col-lg-6 mb-4">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
@@ -266,8 +269,71 @@
             </div>
         </div>
         <!-- Modal add horarios END-->
+        {{!-- Horarios END  --}}
 
 
+        <div class="col-12 col-lg-6 mb-4 ">
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">Configurações Pedido</h2>
+                </div>
+                <div class="card-body">
+
+
+                    <form action="/configuracao/edit-estabelecimento-configPedido" method="post">
+                        
+                        <input type="text" name="meioPagamento" id="add-meioPagamento" placeholder="Meios de pagamentos">
+                        <span style="font-size: x-small;">* Meios para Pagamento no recebimento</span>
+                        <script>
+                            var tagAddMeioPagamento = document.querySelector('input[id=add-meioPagamento]')
+                            var tagifyAddMeioPagamento = new Tagify(tagAddMeioPagamento, {
+                                whitelist: [ {valor:'dinheiro', value: 'Dinheiro'},{valor:'cartaoCredito', value: 'Cartão Crédito'},{valor:'cartaoDebito', value: 'Cartão Débito'},{valor:'pix', value: 'PIX'}],
+                                editTags: false,
+                                enforceWhitelist: true,
+                                dropdown: {
+                                    position: "input",
+                                    maxItems: Infinity,
+                                    closeOnSelect : false,
+                                    enabled : 0 // always opens dropdown when input gets focus
+                                },
+                            })
+                            tagifyAddMeioPagamento.addTags([{{#each estabelecimento.configPedidos.meioPagamento}} {value: '{{nome}}' },  {{/each}}])
+                        </script>
+
+                        <hr>
+
+                        <div class="form-floating mb-3 ">
+                            <input type="number" class="form-control" name="taxaEntrega" value="{{estabelecimento.configPedidos.taxaEntrega}}" step=".01" id="taxaEntrega" placeholder="-">
+                            <label for="taxaEntrega">Taxa entrega (R$)</label>
+                            <span style="font-size: x-small;">* Coloque 0 se não cobrar pela entrega</span>
+                        </div>
+
+                        <hr>
+
+                        <input type="text" name="cepsDisponiveis" id="add-cepsDisponiveis" placeholder="Ceps para entregas">
+                        <span style="font-size: x-small;">* Coloque com pontuação adequada. Ex: 37145-000</span>
+                        <script>
+                            var tagAddCepsDisponiveis = document.querySelector('input[id=add-cepsDisponiveis]')
+                            var tagifyAddCepsDisponiveis = new Tagify(tagAddCepsDisponiveis, {
+                                dropdown: {
+                                    position: "input",
+                                    maxItems: Infinity,
+                                    closeOnSelect : false,
+                                    enabled : 0 // always opens dropdown when input gets focus
+                                },
+                            })
+                            tagifyAddCepsDisponiveis.addTags([{{#each estabelecimento.configPedidos.cepsDisponiveis}} '{{cep}}', {{/each}}])
+                        </script>
+
+                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
+                        <button type="submit" class="btn btn-dark btn-sm d-block mt-4">Salvar</button>
+
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        {{!-- Integracoes START  --}}
         <div class="col-12 col-lg-6 mb-4 ">
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
@@ -302,6 +368,8 @@
                 </div>
             </div>
         </div>
+        {{!-- Integracoes END  --}}
+        
 
     </div>
 

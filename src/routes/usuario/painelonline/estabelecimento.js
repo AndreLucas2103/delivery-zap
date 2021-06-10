@@ -21,6 +21,19 @@ const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/Carrinho")
 const Carrinho = mongoose.model("carrinhos")
 
+
+router.get('/:urlPainel/checkout', async (req, res) => {
+    let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
+    let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': req.query.uuid4Client}, {'idEstabelecimento': estabelecimento._id}]})
+        .populate('produtos.idProduto').lean()
+
+
+    res.render('usuarios/pedido/checkout', {
+        estabelecimento: estabelecimento,
+        carrinho: carrinho
+    })
+})
+
 router.get('/:urlPainel', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
@@ -203,4 +216,6 @@ router.post('/delete-carrinho-painel', async (req, res) => {
         console.log(err)
     }
 })
+
+
 module.exports = router;

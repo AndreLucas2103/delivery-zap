@@ -8,7 +8,10 @@ const Schema = mongoose.Schema;
 
 const Carrinho = new Schema({
     produtos: [{
-        idProduto: ObjectId,
+        idProduto: {
+            type: Schema.Types.ObjectId,
+            ref: "produtos",
+        },
         nome: String,
         valor: Number,
         promocao: Boolean,

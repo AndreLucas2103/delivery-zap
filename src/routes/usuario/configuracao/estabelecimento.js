@@ -32,6 +32,54 @@ router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { 
     }
 })
 
+router.post('/edit-estabelecimento-configPedido', (req, res) => {
+    if(req.body.cepsDisponiveis == "" || req.body.meioPagamento == ""){
+        req.flash('error_msg', 'Insira pelo menos 1 Meio de pagamento ou 1 CEP')
+        return res.redirect('back')
+    }
+
+    let arraycepsDisponiveis = JSON.parse(req.body.cepsDisponiveis)
+    let arraymeioPagamento = JSON.parse(req.body.meioPagamento)
+    console.log(arraycepsDisponiveis)
+
+    Estabelecimento.updateOne(
+        {_id: req.body.idEstabelecimento},
+        {$set: {"configPedidos.meioPagamento": [], "configPedidos.cepsDisponiveis": [], 'configPedidos.taxaEntrega': req.body.taxaEntrega}}
+    ).then(estabelecimento => {
+        arraymeioPagamento.forEach(element => {
+            Estabelecimento.updateOne( 
+                {_id: req.body.idEstabelecimento},
+                {
+                    $push: {
+                        'configPedidos.meioPagamento': { nome : element.value, tipo: element.valor },
+                    }
+                }
+            ).catch(err => {
+                console.log(err)
+            })
+        })
+
+        arraycepsDisponiveis.forEach(element => {
+            Estabelecimento.updateOne( 
+                {_id: req.body.idEstabelecimento},
+                {
+                    $push: {
+                        'configPedidos.cepsDisponiveis': { cep : element.value },
+                    }
+                }
+            ).catch(err => {
+                console.log(err)
+            })
+        })
+
+        req.flash('success_msg', 'Configuração Pedido editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+
+})
+
 router.post('/add-horario-estabelecimento', async (req, res) => { // adicionar os horarios no estabelecimento
     try {
         let addHorario = {

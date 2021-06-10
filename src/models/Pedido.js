@@ -24,7 +24,6 @@ const Schema = mongoose.Schema;
         credit_card = Pagamento por cartão de crédito.
         debit_card = Pagamento por cartão de débito.
         prepaid_card = Pagamento por cartão pré-pago.
-
     }
 */
 
@@ -70,10 +69,8 @@ const Pedido = new Schema({
             cidade: String,
             cep: String,
             numero: String,
-            estado: String
         },
 
-        telefoneWhatsApp: String,
         telefone: String,
 
         taxaEntrega: Number,
@@ -81,59 +78,68 @@ const Pedido = new Schema({
 
     valorTotal: Number,
 
+    pagamento: {
+        tipo: String,
+        forma: String,
+        trocoPara: Number
+    },
+
     uuid4Client: String,
 
-    idEstabelecimento: {
-        type: Schema.Types.ObjectId,
-        ref: "estabelecimentos",
-    },
 
     cancelado: Boolean,
     finalizado: Boolean,
+
+    infoTransacao: {
+        operadoraPagamento: {
+            type: String,
+        },
+        idTransacaoOperadora: {
+            type: String
+        },
+
+        metodoPagamento: {
+            type: String,
+        },
+        tipoPagamento: {
+            type: String,
+        },
+
+        situacao: {
+            type: String
+        },
+        situacaoDetalhada: {
+            type: String
+        },
+    
+        dataPagamento: {
+            type: Date
+        },
+        dataCancelamento: {
+            type: Date
+        },
+        pedidoPago: {
+            type: Boolean,
+            default: false
+        },
+        pedidoCancelado: {
+            type: Boolean,
+            default: false
+        },
+    },
+
+    observacao: {
+        type: String
+    },
 
     dataCriacao: {
         type: Date,
         required: true
     },
-    
-    operadoraPagamento: {
-        type: String,
-        required:true
-    },
 
-    metodoPagamento: {
-        type: String,
-    },
-    tipoPagamento: {
-        type: String,
-    },
-    situacao: {
-        type: String
-    },
-    situacaoDetalhada: {
-        type: String
-    },
-    idTransacaoOperadora: {
-        type: String
-    },
-
-    dataPagamento: {
-        type: Date
-    },
-    dataCancelamento: {
-        type: Date
-    },
-    pedidoCancelado: {
-        type: Boolean,
-        default: false
-    },
-    pedidoPago: {
-        type: Boolean,
-        default: false
-    },
-
-    observacao: {
-        type: String
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
     },
 
     statusAtivo: {
