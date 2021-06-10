@@ -104,7 +104,16 @@
 
     <br><br><br>
     <a class="carrinho" data-bs-toggle="modal" data-bs-target="#modal-carrinho-ajax" ><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
-    <a class="finalizar"><i class="fas fa-check" style="font-size: 20px;"></i></a>
+    
+    <form action="/estabelecimento/{{estabelecimento.url}}/checkout" method="get">
+        <button class="finalizar" style="border: 0px;"><i class="fas fa-check" style="font-size: 20px;"></i></button>
+        <input type="text" name="uuid4Client" id="checkout-pedido-uuid4Client" hidden readonly />
+        
+        <script>
+            $('#checkout-pedido-uuid4Client').val(localStorage.getItem('uuid4Cliente'))
+        </script>
+    </form>
+    
 </center>
 
 
@@ -173,7 +182,7 @@
                         <div class="col">
                             <div class="form-floating mb-3">
                                 <input type="number" class="form-control" min="1" onkeyup="calcValorClick()"
-                                    onkeydown="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                                    onkeydown="calcValorClick()" onchange="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
                                     value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-"
                                     required>
                                 <label for="add-produto-carrinho-quantidade">Quantidade</label>

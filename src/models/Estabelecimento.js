@@ -71,8 +71,15 @@ const Estabelecimento = new Schema({
         },
     },
 
-    entrega: {
-        taxaEntrega: Number,
+    configPedidos: {
+        meioPagamento: [{
+          nome: String,
+          tipo: String
+        }],
+        taxaEntrega: {
+          type: Number,
+          default: 0
+        },
         cepsDisponiveis: [{
             cep: String
         }]
