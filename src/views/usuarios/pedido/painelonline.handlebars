@@ -107,7 +107,7 @@
     <a class="finalizar"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i></a>
 </center>
 
-
+{{!-- Modal adicionar produto ao carrinho START --}}
 <div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel"
     aria-hidden="true">
     <div class="modal-dialog">
@@ -196,9 +196,9 @@
         </div>
     </div>
 </div>
+{{!-- Modal adicionar produto ao carrinho END --}}
 
-
-<!-- Modal -->
+<!-- Modal ver carrinho START -->
 <div class="modal fade" id="modal-carrinho-ajax" tabindex="-1" aria-labelledby="modal-carrinho-ajaxLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -219,6 +219,7 @@
         </div>
     </div>
 </div>
+<!-- Modal ver carrinho END -->
 
 </body>
 <script>
@@ -235,22 +236,53 @@
                 $("#carrinho-valor-total").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
                 response.produtos.forEach(element => {
                     $('#carrinho-ajax-produto').append(`
-                        <div class="card bg-light border-light" style="width: 100%; height: 100%">
+
+                        <div class="card bg-light border-light text-center" style="width: 100%; height: 100%">
                             <div class="card-body">
                                 <div class="row">
-                                    <div class="col-lg-4 text-center mt-2">
+                                    <div class="col-lg-2 mt-2">
                                         <img src="/usuario/assets/img/favicon/logoApp.png" class="mx-auto"
-                                            style="object-fit: contain; width: 100pxx; height: 100px;">
+                                            style="object-fit: contain; width: 80pxx; height: 80px;">
                                     </div>
-                                    <div class="col-lg-8 mt-2">
-                                        <p>Nome: ${element.nome}</p>
-                                        <p>Valor: ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valorTotal)}</p>
-                                        <p id="carrinho-opcao-${element._id}"></p>
-                                        <p id="carrinho-adicionais-${element._id}">Adicionais: </p>
-                                        <p id="carrinho-observacao-${element._id}"> </p>
-                                        <p id="carrinho-quantidade-${element._id}"> </p>
-                                    </div>
+
+                                    <div class="col-lg-10 mt-2">
+                                        <p>${element.nome}</p>
+                                        <p>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valorTotal)}</p>
+                                        <button class="btn btn-white btn-sm text-primary"  type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${element._id}">Detalhar</button>                                    </div>
                                 </div>
+                                
+                                
+                                <div class="collapse mt-2" id="collapse-${element._id}">
+                                    <table class="table">
+                                        <thead>
+                                            <tr>
+                                            <th scope="col"></th>
+                                            <th scope="col"></th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="carrinho-${element._id}">
+                                        </tbody>
+                                        <tbody id="carrinho-adicionais-${element._id}">
+                                            <tr>
+                                                <td>Adicionais</td>
+                                                <td id="carrinho-adicionais-element-${element._id}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Quantidade</td>
+                                                <td id="carrinho-quantidade-${element._id}"></td>
+                                            </tr>
+                                            <tr>
+                                                <td>Valor Produto (Unit.)</td>
+                                                <td id="carrinho-adicionais-element-${element._id}">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Observação</td>
+                                                <td id="carrinho-observacao-${element._id}"></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+
                                 <form action="/estabelecimento/delete-carrinho-painel" method="post">
                                     <input name="idCarrinho" value="${response._id}" hidden readonly/>
                                     <button class="btn btn-light btn-sm float-start text-danger" name="idCarrinhoProduto" value="${element._id}">Remover</button>
@@ -260,8 +292,11 @@
                     `)
 
                     element.opcao.forEach(opcao => {
-                        $(`#carrinho-opcao-${element._id}`).append(`
-                            <span id="carrinho-opcao-opcoes-${opcao._id}" class="d-block">${opcao.nomeOpcao}: </span>
+                        $(`#carrinho-${element._id}`).append(`
+                            <tr>
+                                <td>${opcao.nomeOpcao}</td>
+                                <td id="carrinho-opcao-opcoes-${opcao._id}"></td>
+                            </tr>
                         `)
 
                         opcao.opcoes.forEach(opcoes => {
@@ -272,13 +307,12 @@
                     })
 
                     element.adicionais.length == 0 ? $(`#carrinho-adicionais-${element._id}`).hide() : $(`#carrinho-adicionais-${element._id}`).show()
-                    
                     element.adicionais.forEach(adicional => {
-                        $(`#carrinho-adicionais-${element._id}`).append(`
+                        $(`#carrinho-adicionais-element-${element._id}`).append(`
                             <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${adicional.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(adicional.valor)}</button>
                         `)
                     })
-                    
+
                     element.observacao ? $(`#carrinho-observacao-${element._id}`).text(`Observação: ${element.observacao}`) : 
                     
                     $(`#carrinho-quantidade-${element._id}`).text(`Quantidade: ${element.quantidade}`)

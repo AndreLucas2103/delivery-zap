@@ -122,9 +122,9 @@
                     <label class="form-check-label" for="entrega">Entrega</label>
                 </div>
 
-                <form action="/estabelecimento/{{estabelecimento.url}}/checkout/finalizar" method="post">
-                    <span id="escolha-entrega-retirada"></span>
+                <form action="/estabelecimento/checkou/finalizar" method="post">
 
+                    <span id="escolha-entrega-retirada"></span>
                     <div class="row">
                         <div class="form-floating mb-3 col-lg-4">
                             <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-">
@@ -221,7 +221,7 @@
                             if(e.target.value == "mercadoPago"){
                                 $('#metodo-pagamento').empty()
                                 $('#metodo-pagamento').append(`
-                                    <button class="btn btn-success mt-4 w-50 float-end" type="submit" >Continuar</button>
+                                    <button class="btn btn-success mt-4 w-50 float-end" type="submit" name="formaPagamento" value="mercadoPago">Continuar</button>
                                 `)
                             }else if(e.target.value == "pagarRecebimento"){
                                 $('#metodo-pagamento').empty()
@@ -239,7 +239,7 @@
                                         <div class="mb-3 col-lg-4 " id="select-meio-pagamento"></div>
                                     </div>
 
-                                    <button class="btn btn-success mt-2 w-50 float-end" type="submit" name="formaPagamento">Finalizar</button>
+                                    <button class="btn btn-success mt-2 w-50 float-end" type="submit" name="formaPagamento" value="pagarRecebimento">Finalizar</button>
                                 `)
                             }
                         })
@@ -259,6 +259,7 @@
 
                     </script>
                     
+                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
                 </form>
             </div>
         </div>
