@@ -29,15 +29,20 @@ const Schema = mongoose.Schema;
 
 const Pedido = new Schema({
     produtos: [{
-        idProduto: ObjectId,
+        idProduto: {
+            type: Schema.Types.ObjectId,
+            ref: "produtos",
+        },
         nome: String,
         valor: Number,
         promocao: Boolean,
 
-        opcoes: [{
-            opcao: String,
-            nome: String,
-            valor: Number
+        opcao: [{
+            nomeOpcao: String,
+            opcoes: [{
+                nome: String,
+                valor: Number 
+            }]
         }],
 
         adicionais: [{
@@ -52,13 +57,13 @@ const Pedido = new Schema({
 
         quantidade: Number,
         observacao: String,
-        valorProduto: Number
+        valorTotal: Number,
     }],
 
-    retirarLocal: Boolean,
-    entrega: Boolean,
+    tipoEntrega: String,
 
     infoEntrega: {
+        nomeCliente: String,
         idEntregador: {
             type: Schema.Types.ObjectId,
             ref: "entregadores",
@@ -72,7 +77,6 @@ const Pedido = new Schema({
         },
 
         telefone: String,
-
         taxaEntrega: Number,
     },
 
@@ -83,9 +87,6 @@ const Pedido = new Schema({
         forma: String,
         trocoPara: Number
     },
-
-    uuid4Client: String,
-
 
     cancelado: Boolean,
     finalizado: Boolean,
@@ -137,6 +138,7 @@ const Pedido = new Schema({
         required: true
     },
 
+    uuid4Client: String,
     idEstabelecimento: {
         type: Schema.Types.ObjectId,
         ref: "estabelecimentos",
