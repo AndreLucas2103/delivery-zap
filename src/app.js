@@ -1,4 +1,4 @@
-require("dotenv").config();
+﻿require("dotenv").config();
 
 // ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
@@ -205,7 +205,7 @@ app.get('/teste', async (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 3000
+const PORT = 80
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })

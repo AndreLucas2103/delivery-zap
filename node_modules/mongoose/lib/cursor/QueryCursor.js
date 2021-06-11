@@ -8,6 +8,7 @@ const Readable = require('stream').Readable;
 const promiseOrCallback = require('../helpers/promiseOrCallback');
 const eachAsync = require('../helpers/cursor/eachAsync');
 const helpers = require('../queryhelpers');
+const immediate = require('../helpers/immediate');
 const util = require('util');
 
 /**
@@ -57,8 +58,12 @@ function QueryCursor(query, options) {
     }
     model.collection.find(query._conditions, this.options, function(err, cursor) {
       if (_this._error) {
-        cursor.close(function() {});
+        if (cursor != null) {
+          cursor.close(function() {});
+        }
+        _this.emit('cursor', null);
         _this.listeners('error').length > 0 && _this.emit('error', _this._error);
+        return;
       }
       if (err) {
         return _this.emit('error', err);
@@ -344,7 +349,7 @@ function _next(ctx, cb) {
   }
 
   if (ctx._error) {
-    return process.nextTick(function() {
+    return immediate(function() {
       callback(ctx._error);
     });
   }
@@ -389,7 +394,10 @@ function _next(ctx, cb) {
       });
     }
   } else {
-    ctx.once('cursor', function() {
+    ctx.once('cursor', function(cursor) {
+      if (cursor == null) {
+        return;
+      }
       _next(ctx, cb);
     });
   }
@@ -470,7 +478,10 @@ function _waitForCursor(ctx, cb) {
   if (ctx.cursor) {
     return cb();
   }
-  ctx.once('cursor', function() {
+  ctx.once('cursor', function(cursor) {
+    if (cursor == null) {
+      return;
+    }
     cb();
   });
 }

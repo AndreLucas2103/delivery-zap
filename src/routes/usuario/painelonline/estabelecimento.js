@@ -3,6 +3,9 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
+const { v4: uuidv4 } = require('uuid');
+const MercadoPago = require('mercadopago');
+    
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -20,18 +23,348 @@ require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/Carrinho")
 const Carrinho = mongoose.model("carrinhos")
+require("../../../models/Pedido")
+const Pedido = mongoose.model("pedidos")
 
 
-router.get('/:urlPainel/checkout', async (req, res) => {
-    let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-    let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': req.query.uuid4Client}, {'idEstabelecimento': estabelecimento._id}]})
-        .populate('produtos.idProduto').lean()
 
 
-    res.render('usuarios/pedido/checkout', {
-        estabelecimento: estabelecimento,
-        carrinho: carrinho
-    })
+router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) => {
+    let id = req.query.id
+    let topic = req.query.topic
+
+    console.log('Esse é o ID da cobrança no Mercado Pago: ---------------------------------------------------------------------------------')
+    console.log(req.query)
+    
+    setTimeout(() => {
+        let fitro = {
+            "order.id": id
+        }
+
+        MercadoPago.payment.search({ // realizo a consulta na base de dados do mercado pago
+            qs: fitro
+        }).then(dados => {
+            let pagamento = dados.body.results[0]; // passo somente um valor para a variavel
+            if(pagamento != undefined){
+
+                console.log(pagamento)
+
+                if(topic == "payment"){
+                    
+                    if(pagamento.status == "approved"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+                            pedido.dataPagamento = moment(pagamento.date_approved).subtract(3, 'hours').format()
+                            pedido.pedidoPago = true
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+                            pedido.dataCancelamento = moment(pagamento.date_last_updated).subtract(3, 'hours').format()
+                            pedido.pedidoCancelado = true
+                            pedido.pedidoPago = false
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status, 'statuAtivo': false}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+    
+                            pedido.dataCancelamento = null
+                            pedido.pedidoCancelado = false
+                            pedido.dataPagamento = null
+                            pedido.pedidoPago = false
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else{
+                        console.log('OCorreu um erro eu acho né')
+                    }
+                    
+
+                }else if(topic == "merchant_order"){
+
+                    if(pagamento.status == "approved"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+                            pedido.dataPagamento = moment(pagamento.date_approved).subtract(3, 'hours').format()
+                            pedido.pedidoPago = true
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+                            pedido.dataCancelamento = moment(pagamento.date_last_updated).subtract(3, 'hours').format()
+                            pedido.pedidoCancelado = true
+                            
+                            pedido.dataPagamento = null
+                            pedido.pedidoPago = false
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status, 'statuAtivo': false}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
+                        Pedido.findOne({identificacaoPedido: pagamento.external_reference}).then(pedido => {
+                            pedido.situacao = pagamento.status
+                            pedido.situacaoDetalhada = pagamento.status_detail
+                            pedido.metodoPagamento = pagamento.payment_method_id
+                            pedido.tipoPagamento = pagamento.payment_type_id
+                            pedido.idTransacaoOperadora = pagamento.id
+    
+                            pedido.dataCancelamento = null
+                            pedido.pedidoCancelado = false
+                            pedido.dataPagamento = null
+                            pedido.pedidoPago = false
+                            
+                            pedido.save().then(pedidoUpdate => {
+                                Compra.updateMany({identificacaoPedido: pedidoUpdate.identificacaoPedido}, {
+                                    $set: {'situacao': pagamento.status}
+                                }).then(() => {
+                                    console.log('*\nPedido recebido e alterado \n*')
+                                }).catch(err => {
+                                    console.log(err)
+                                })
+                            }).catch(err => {
+                                console.log(err)
+                            })
+    
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                    }else{
+                        console.log('OCorreu um erro eu acho né')
+                    }
+
+                }else{
+                    console.log('Ocorreu algum problema nisso aqui, favor verificar!')
+                }
+                
+            }else{
+                console.log('Pagamento não existe!')
+            }
+        }).catch(err => {
+            console.log(err)
+        })
+    }, 20000)
+
+    res.send('OK')
+})
+
+
+router.post('/checkout/finalizar', async (req, res) => {
+    try {
+
+        let {uuid4Client, idEstabelecimento, nomeCliente, pagamentoTipoSelecionado, formaPagamento, trocoPara, observacao, rua, bairro, cidade, cep, numero, telefone, entrega, retirarLocal} = req.body
+        console.log(req.body)
+        let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
+        let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': uuid4Client}, {'idEstabelecimento': idEstabelecimento}]})
+        
+        let tipoEntrega
+        retirarLocal == "true" ? tipoEntrega = "retirarEstabelecimento" : tipoEntrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "naoSelecionado"
+        retirarLocal == "true" ? taxaEntregaPedido = 0 : taxaEntregaPedido = estabelecimento.configPedidos.taxaEntrega
+        
+
+        if(pagamentoTipoSelecionado == "pagarRecebimento"){
+            addPedido = {
+                produtos: carrinho.produtos,
+                tipoEntrega: tipoEntrega,
+                infoEntrega: {
+                    nomeCliente: nomeCliente,
+                    endereco: {
+                        rua: rua,
+                        bairro: bairro,
+                        cidade: cidade,
+                        cep: cep,
+                        numero: numero,
+                    },
+    
+                    telefone: telefone,
+                    taxaEntrega: taxaEntregaPedido
+                },
+    
+                pagamento: {
+                    tipo: pagamentoTipoSelecionado,
+                    forma: formaPagamento,
+                    trocoPara: trocoPara
+                },
+    
+                uuid4Client: uuid4Client,
+                idEstabelecimento: idEstabelecimento,
+                observacao: observacao,
+
+                valorTotal: carrinho.valorTotal,
+                dataCriacao: new Date()
+            }
+        }else if(pagamentoTipoSelecionado == "mercadoPago"){
+            addPedido = {
+                produtos: carrinho.produtos,
+                tipoEntrega: tipoEntrega,
+                infoEntrega: {
+                    nomeCliente: nomeCliente,
+                    endereco: {
+                        rua: rua,
+                        bairro: bairro,
+                        cidade: cidade,
+                        cep: cep,
+                        numero: numero,
+                    },
+    
+                    telefone: telefone,
+                    taxaEntrega: taxaEntregaPedido
+                },
+    
+                pagamento: {
+                    tipo: pagamentoTipoSelecionado,
+                },
+
+                infoTransacao: {
+                    operadoraPagamento: pagamentoTipoSelecionado,
+                    idTransacaoOperadora: Date.now()+"-"+uuidv4()+uuidv4()+uuidv4()
+                },
+    
+                uuid4Client: uuid4Client,
+                idEstabelecimento: idEstabelecimento,
+                observacao: observacao,
+
+                valorTotal: carrinho.valorTotal,
+                dataCriacao: new Date()
+            }
+            
+        }
+
+        Pedido(addPedido).save().then(async(pedido) => {
+            try {
+                
+                if(pagamentoTipoSelecionado == "pagarRecebimento"){
+                    req.flash('success_msg', 'Pedido Finalizado')
+                    return res.redirect('back')
+                }else if(pagamentoTipoSelecionado == "mercadoPago"){
+                    console.log(pedido)
+                    let itensPedidos = ""
+                    pedido.produtos.forEach(element => {
+                        itensPedidos += `| ${element.nome} (Qtd: ${element.quantidade}) |`
+                    })
+                    let dados = {
+                        items:  [
+                            {
+                                id: pedido.infoTransacao.idTransacaoOperadora,
+                                title: itensPedidos,
+                                quantity: 1,
+                                currency_id: "BRL",
+                                unit_price: parseFloat(pedido.valorTotal)
+                            },
+                        ],
+                        
+                        external_reference: pedido.infoTransacao.idTransacaoOperadora
+                    }
+
+                    MercadoPago.configure({
+                        sandbox: false,
+                        access_token: estabelecimento.integracao.mercadoPago.acessToken
+                    });
+
+                    var pagameto = await MercadoPago.preferences.create(dados) // crio os dados para pagamento e coloco dentro da variavel
+                    return res.redirect(pagameto.body.init_point)
+                }
+                
+            } catch (err) {
+                console.log(err)
+            }
+
+        }).catch(err => {
+            console.log(err)
+        })
+
+    } catch (err) {
+        console.log(err)
+    }
 })
 
 router.get('/:urlPainel', async (req, res)=>{
@@ -57,7 +390,6 @@ router.get('/:urlPainel', async (req, res)=>{
             {$unwind: '$categoriaProdutos'},
         ])
 
-        console.log(produtos[0])
 
         res.render('usuarios/pedido/painelonline', {
             estabelecimento: estabelecimento,
@@ -183,7 +515,7 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
 })
 
 router.post('/ajax-get-carrinho-painel', (req, res) => {
-    Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).lean().then(carrinho => {
+    Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).populate('produtos.idProduto').lean().then(carrinho => {
         res.json(carrinho)
     })
 })
@@ -206,7 +538,7 @@ router.post('/delete-carrinho-painel', async (req, res) => {
             }, 
             
         ).then(() => {
-            req.flash('success_msg', 'Adicional removido')
+            req.flash('success_msg', 'Produto removido')
             res.redirect('back')
         }).catch(err => {
             console.log(err)
