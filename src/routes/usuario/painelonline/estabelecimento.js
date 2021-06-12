@@ -35,6 +35,7 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
 
     console.log('Esse é o ID da cobrança no Mercado Pago: ---------------------------------------------------------------------------------')
     console.log(req.query)
+
     
     setTimeout(() => {
         let fitro = {
@@ -217,7 +218,6 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
 
 router.post('/checkout/finalizar', async (req, res) => {
     try {
-
         let {uuid4Client, idEstabelecimento, nomeCliente, pagamentoTipoSelecionado, formaPagamento, trocoPara, observacao, rua, bairro, cidade, cep, numero, telefone, entrega, retirarLocal} = req.body
         console.log(req.body)
         let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
@@ -227,7 +227,7 @@ router.post('/checkout/finalizar', async (req, res) => {
         retirarLocal == "true" ? tipoEntrega = "retirarEstabelecimento" : tipoEntrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "naoSelecionado"
         retirarLocal == "true" ? taxaEntregaPedido = 0 : taxaEntregaPedido = estabelecimento.configPedidos.taxaEntrega
         
-        let identificacaoPedido = Date.now()+"-"+uuidv4()+uuidv4()+uuidv4()
+        let identificacaoPedido = Date.now()+"-"+estabelecimento._id+"-"+uuidv4()+uuidv4()
 
         if(pagamentoTipoSelecionado == "pagarRecebimento"){
             addPedido = {
@@ -530,99 +530,111 @@ router.post('/delete-carrinho-painel', async (req, res) => {
 })
 
 
-router.get('/teste/:identificacaoPedido', (req, res) => {
+router.get('/teste/:identificacaoPedido', async (req, res) => {
+    try {
+        console.log(req.params.identificacaoPedido.split("-", 2)[1])
+        let estabelecimento = await Estabelecimento.findById({_id: req.params.identificacaoPedido.split("-", 2)[1]})
 
-    let fitro = {
-        "external_reference": req.params.identificacaoPedido
-    }
+        let fitro = {
+            "external_reference": req.params.identificacaoPedido
+        }
 
-    MercadoPago.payment.search({
-        qs: fitro
-    }).then(dados => {
-        let pagamento = dados.body.results[0]; // passo somente um valor para a variavel
-            if(pagamento != undefined){
+        MercadoPago.configure({
+            sandbox: false,
+            access_token: estabelecimento.integracao.mercadoPago.acessToken
+        });
 
-                if(pagamento.status == "approved"){
-                    Pedido.updateOne(
-                        {"identificacaoPedido": pagamento.external_reference},
-                        {
-                            $set: {
-                                "infoTransacao": {
-                                    situacao: pagamento.status,
-                                    situacaoDetalhada: pagamento.status_detail,
-                                    metodoPagamento: pagamento.payment_method_id,
-                                    tipoPagamento: pagamento.payment_type_id,
-                                    idTransacaoOperadora: pagamento.id,
-                                    dataPagamento: pagamento.date_approved,
-                                    pedidoPago: true
+        MercadoPago.payment.search({
+            qs: fitro
+        }).then(dados => {
+            let pagamento = dados.body.results[0]; // passo somente um valor para a variavel
+                if(pagamento != undefined){
+
+                    if(pagamento.status == "approved"){
+                        Pedido.updateOne(
+                            {"identificacaoPedido": pagamento.external_reference},
+                            {
+                                $set: {
+                                    "infoTransacao": {
+                                        situacao: pagamento.status,
+                                        situacaoDetalhada: pagamento.status_detail,
+                                        metodoPagamento: pagamento.payment_method_id,
+                                        tipoPagamento: pagamento.payment_type_id,
+                                        idTransacaoOperadora: pagamento.id,
+                                        dataPagamento: pagamento.date_approved,
+                                        pedidoPago: true
+                                    }
                                 }
                             }
-                        }
-                    ).then(() => {
-                        console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
-                    }).catch(err => {
-                        console.log(err)
-                    })
+                        ).then(() => {
+                            console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
+                        }).catch(err => {
+                            console.log(err)
+                        })
 
-                }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
-                    Pedido.updateOne(
-                        {"identificacaoPedido": pagamento.external_reference},
-                        {
-                            $set: {
-                                "infoTransacao": {
-                                    situacao: pagamento.status,
-                                    situacaoDetalhada:pagamento.status_detail,
-                                    metodoPagamento: pagamento.payment_method_id,
-                                    tipoPagamento: pagamento.payment_type_id,
-                                    idTransacaoOperadora: pagamento.id,
-                                    dataCancelamento: pagamento.date_last_updated,
-                                    pedidoCancelado: true,
-                                    pedidoPago: false,
+                    }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
+                        Pedido.updateOne(
+                            {"identificacaoPedido": pagamento.external_reference},
+                            {
+                                $set: {
+                                    "infoTransacao": {
+                                        situacao: pagamento.status,
+                                        situacaoDetalhada:pagamento.status_detail,
+                                        metodoPagamento: pagamento.payment_method_id,
+                                        tipoPagamento: pagamento.payment_type_id,
+                                        idTransacaoOperadora: pagamento.id,
+                                        dataCancelamento: pagamento.date_last_updated,
+                                        pedidoCancelado: true,
+                                        pedidoPago: false,
+                                    }
                                 }
                             }
-                        }
-                    ).then(() => {
-                        console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
-                    }).catch(err => {
-                        console.log(err)
-                    })
-                    
-                }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
-                    Pedido.updateOne(
-                        {"identificacaoPedido": pagamento.external_reference},
-                        {
-                            $set: {
-                                "infoTransacao": {
-                                    situacao: pagamento.status,
-                                    situacaoDetalhada: pagamento.status_detail,
-                                    metodoPagamento: pagamento.payment_method_id,
-                                    tipoPagamento: pagamento.payment_type_id,
-                                    idTransacaoOperadora: pagamento.id,
-            
-                                    dataCancelamento: null,
-                                    pedidoCancelado: false,
-                                    dataPagamento: null,
-                                    pedidoPago: false
+                        ).then(() => {
+                            console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
+                        }).catch(err => {
+                            console.log(err)
+                        })
+                        
+                    }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
+                        Pedido.updateOne(
+                            {"identificacaoPedido": pagamento.external_reference},
+                            {
+                                $set: {
+                                    "infoTransacao": {
+                                        situacao: pagamento.status,
+                                        situacaoDetalhada: pagamento.status_detail,
+                                        metodoPagamento: pagamento.payment_method_id,
+                                        tipoPagamento: pagamento.payment_type_id,
+                                        idTransacaoOperadora: pagamento.id,
+                
+                                        dataCancelamento: null,
+                                        pedidoCancelado: false,
+                                        dataPagamento: null,
+                                        pedidoPago: false
+                                    }
                                 }
                             }
-                        }
-                    ).then(() => {
-                        console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
-                    }).catch(err => {
-                        console.log(err)
-                    })
+                        ).then(() => {
+                            console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
+                        }).catch(err => {
+                            console.log(err)
+                        })
+
+                    }else{
+                        console.log('OCorreu um erro eu acho né')
+                    }
 
                 }else{
-                    console.log('OCorreu um erro eu acho né')
+                    console.log('Pagamento não existe!')
                 }
 
-            }else{
-                console.log('Pagamento não existe!')
-            }
-            
-    }).catch(err => {
-        console.log(err)
-    })
+        }).catch(err => {
+            console.log(err)
+        })
+
+    } catch (err) {
+        console.log(err)    
+    }
 })
 
 
