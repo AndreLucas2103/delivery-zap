@@ -202,10 +202,9 @@ app.get('/teste', async (req, res) => {
     res.render('teste')
 })
 
-
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80
+const PORT = 3000
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
