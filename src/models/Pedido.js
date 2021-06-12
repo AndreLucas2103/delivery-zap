@@ -28,6 +28,7 @@ const Schema = mongoose.Schema;
 */
 
 const Pedido = new Schema({
+    identificacaoPedido: String,
     produtos: [{
         idProduto: {
             type: Schema.Types.ObjectId,
@@ -98,6 +99,7 @@ const Pedido = new Schema({
         idTransacaoOperadora: {
             type: String
         },
+        idPedidoTransacaoOperadora: String,
 
         metodoPagamento: {
             type: String,
