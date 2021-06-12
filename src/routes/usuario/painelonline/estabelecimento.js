@@ -331,6 +331,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                     });
 
                     var pagameto = await MercadoPago.preferences.create(dados) // crio os dados para pagamento e coloco dentro da variavel
+                    console.log(pagameto)
                     return res.redirect(pagameto.body.init_point)
                 }
                 
