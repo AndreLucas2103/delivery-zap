@@ -311,18 +311,18 @@ router.post('/checkout/finalizar', async (req, res) => {
                     pedido.produtos.forEach(element => {
                         itensPedidos += `| ${element.nome} (Qtd: ${element.quantidade}) |`
                     })
+                    console.log(pedido)
                     let dados = {
                         items:  [
                             {
-                                id: pedido.infoTransacao.idTransacaoOperadora,
+                                id: pedido.infoTransacao.idPedidoTransacaoOperadora,
                                 title: itensPedidos,
                                 quantity: 1,
                                 currency_id: "BRL",
                                 unit_price: parseFloat(pedido.valorTotal)
                             },
                         ],
-                        
-                        external_reference: pedido.infoTransacao.idTransacaoOperadora
+                        external_reference: pedido.infoTransacao.idPedidoTransacaoOperadora
                     }
 
                     MercadoPago.configure({
@@ -331,7 +331,6 @@ router.post('/checkout/finalizar', async (req, res) => {
                     });
 
                     var pagameto = await MercadoPago.preferences.create(dados) // crio os dados para pagamento e coloco dentro da variavel
-                    console.log(pagameto)
                     return res.redirect(pagameto.body.init_point)
                 }
                 
