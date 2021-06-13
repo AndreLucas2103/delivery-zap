@@ -1,0 +1,111 @@
+{
+    "metadata": {},
+    "corporation_id": null,
+    "operation_type": "regular_payment",
+    "point_of_interaction": {},
+    "fee_details": [],
+    "notification_url": null,
+    "date_approved": null,
+    "money_release_schema": null,
+    "payer": {
+        "entity_type": null,
+        "identification": {},
+        "phone": {},
+        "operator_id": null,
+        "last_name": null,
+        "id": "586141283",
+        "type": "guest",
+        "first_name": null,
+        "email": null
+    },
+    "transaction_details": {
+        "total_paid_amount": 1,
+        "acquirer_reference": null,
+        "installment_amount": 1,
+        "financial_institution": null,
+        "net_received_amount": 0,
+        "overpaid_amount": 0,
+        "external_resource_url": null,
+        "payable_deferral_period": null,
+        "payment_method_reference_id": null
+    },
+    "statement_descriptor": "MERCADOPAGO*ANDRE",
+    "call_for_authorize_id": null,
+    "installments": 1,
+    "pos_id": null,
+    "external_reference": "1623541904903-60a1368deaa13a02685d91fa-f3ee356f-e8ab-4980-a6f8-25ab9c8f4704475d01ef-c1c7-40fd-b6ec-94ac7764830b",
+    "date_of_expiration": null,
+    "charges_details": [],
+    "id": 15333060926,
+    "payment_type_id": "credit_card",
+    "order": {
+        "id": "2804302922",
+        "type": "mercadopago"
+    },
+    "counter_currency": null,
+    "brand_id": null,
+    "status_detail": "cc_rejected_bad_filled_card_number",
+    "differential_pricing_id": null,
+    "additional_info": {
+        "ip_address": "179.106.85.241",
+        "nsu_processadora": null,
+        "available_balance": null,
+        "items": [
+            {
+                "quantity": "1",
+                "category_id": null,
+                "picture_url": null,
+                "description": null,
+                "id": "1623541904903-60a1368deaa13a02685d91fa-f3ee356f-e8ab-4980-a6f8-25ab9c8f4704475d01ef-c1c7-40fd-b6ec-94ac7764830b",
+                "title": "| Pizza Portuguesa (Qtd: 1) |",
+                "unit_price": "1.0"
+            }
+        ]
+    },
+    "live_mode": true,
+    "marketplace_owner": null,
+    "card": {
+        "first_six_digits": "550209",
+        "expiration_year": 2028,
+        "date_created": "2021-06-12T19:52:34.000-04:00",
+        "expiration_month": 9,
+        "id": null,
+        "cardholder": {
+            "identification": {
+                "number": "14250181650",
+                "type": "CPF"
+            },
+            "name": "Andre Lucas"
+        },
+        "last_four_digits": "7838",
+        "date_last_updated": "2021-06-12T19:52:34.000-04:00"
+    },
+    "integrator_id": null,
+    "status": "rejected",
+    "transaction_amount_refunded": 0,
+    "transaction_amount": 1,
+    "description": "| Pizza Portuguesa (Qtd: 1) |",
+    "money_release_date": null,
+    "merchant_number": null,
+    "refunds": [],
+    "authorization_code": null,
+    "captured": true,
+    "collector_id": 305351061,
+    "merchant_account_id": null,
+    "taxes_amount": 0,
+    "date_last_updated": "2021-06-12T19:52:35.000-04:00",
+    "coupon_amount": 0,
+    "store_id": null,
+    "date_created": "2021-06-12T19:52:34.000-04:00",
+    "acquirer_reconciliation": [],
+    "sponsor_id": null,
+    "shipping_amount": 0,
+    "issuer_id": "12518",
+    "payment_method_id": "master",
+    "binary_mode": false,
+    "platform_id": null,
+    "deduction_schema": "PROACTIVE_2",
+    "processing_mode": "aggregator",
+    "currency_id": "BRL",
+    "shipping_cost": 0
+}

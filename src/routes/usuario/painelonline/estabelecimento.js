@@ -629,6 +629,8 @@ router.get('/teste/:identificacaoPedido', async (req, res) => {
                     console.log('Pagamento não existe!')
                 }
 
+                res.json(pagamento)
+
         }).catch(err => {
             console.log(err)
         })
