@@ -87,7 +87,8 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
                                         dataCancelamento: pagamento.date_last_updated,
                                         pedidoCancelado: true,
                                         pedidoPago: false,
-                                    }
+                                    },
+                                    "cancelado": true
                                 }
                             }
                         ).then(() => {
@@ -162,7 +163,8 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
                                         dataCancelamento: pagamento.date_last_updated,
                                         pedidoCancelado: true,
                                         pedidoPago: false,
-                                    }
+                                    },
+                                    "cancelado": true
                                 }
                             }
                         ).then(() => {
@@ -224,7 +226,7 @@ router.post('/checkout/finalizar', async (req, res) => {
         let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': uuid4Client}, {'idEstabelecimento': idEstabelecimento}]})
         
         let tipoEntrega
-        retirarLocal == "true" ? tipoEntrega = "retirarEstabelecimento" : tipoEntrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "naoSelecionado"
+        retirarLocal == "true" ? tipoEntrega = "retirarEstabelecimento" : entrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "retirarEstabelecimento"
         retirarLocal == "true" ? taxaEntregaPedido = 0 : taxaEntregaPedido = estabelecimento.configPedidos.taxaEntrega
         
         let identificacaoPedido = Date.now()+"-"+estabelecimento._id+"-"+uuidv4()+uuidv4()
@@ -296,7 +298,6 @@ router.post('/checkout/finalizar', async (req, res) => {
                 valorTotal: carrinho.valorTotal,
                 dataCriacao: new Date()
             }
-            
         }
 
         Pedido(addPedido).save().then(async(pedido) => {
@@ -534,10 +535,10 @@ router.post('/delete-carrinho-painel', async (req, res) => {
 router.get('/teste/:identificacaoPedido', async (req, res) => {
     try {
         console.log(req.params.identificacaoPedido.split("-", 2)[1])
-        let estabelecimento = await Estabelecimento.findById({_id: req.params.identificacaoPedido.split("-", 2)[1]})
+        let estabelecimento = await Estabelecimento.findById({_id: "60a1368deaa13a02685d91fa"/* req.params.identificacaoPedido.split("-", 2)[1] */})
 
         let fitro = {
-            "external_reference": req.params.identificacaoPedido
+            "order.id": "2804302922"
         }
 
         MercadoPago.configure({
@@ -587,7 +588,8 @@ router.get('/teste/:identificacaoPedido', async (req, res) => {
                                         dataCancelamento: pagamento.date_last_updated,
                                         pedidoCancelado: true,
                                         pedidoPago: false,
-                                    }
+                                    },
+                                    "cancelado": true
                                 }
                             }
                         ).then(() => {

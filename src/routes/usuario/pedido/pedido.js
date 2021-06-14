@@ -18,11 +18,26 @@ require("../../../models/Produto")
 const Produto = mongoose.model("produtos")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("../../../models/Pedido")
+const Pedido = mongoose.model("pedidos")
+require("../../../models/Entregador")
+const Entregador = mongoose.model("entregadores")
 
-router.get('/pedidos', (req, res) => {
-    res.render('usuarios/pedido/pedidos', {})
+router.get('/pedidos', async (req, res) => {
+    try {
+
+        /* let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) */
+        
+        let pedidos = await Pedido.find({}).lean().populate('idEstabelecimento')
+        let entregadores = await Entregador.find().lean()
+        
+        res.render('usuarios/pedido/pedidos', {pedidos: pedidos, entregadores: entregadores})
+
+    } catch (err) {
+        console.log(err)
+    }
 })
-
 
 
 module.exports = router
