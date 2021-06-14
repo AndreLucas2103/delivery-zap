@@ -17,6 +17,11 @@ const CategoriaProduto = new Schema({
     statusAtivo: {
         type: Boolean,
         default: true
+    },
+
+    corBotao: {
+        type: String,
+        default: "#F0A431"
     }
 
 },{ timestamps: true})

@@ -746,7 +746,7 @@ router.post('/add-categoria-produtos', async (req, res) => { //
             req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
         } else {
-            new CategoriaProduto({ nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento }).save().then((categoria) => {
+            new CategoriaProduto({ nome: req.body.nome, idEstabelecimento: req.body.idEstabelecimento, corBotao: req.body.botao}).save().then((categoria) => {
                 req.flash('success_msg', 'Categoria adicionada')
                 res.redirect('back')
             })
@@ -770,7 +770,7 @@ router.post('/edit-categoria-produtos', async (req, res) => { // rota para edita
                 { _id: req.body.idCategoriaProduto },
                 {
                     $set:
-                        { 'nome': req.body.nome, 'statusAtivo': statusAtivo }
+                        { 'nome': req.body.nome, 'corBotao':req.body.botao, 'statusAtivo': statusAtivo }
                 }
             ).then(() => {
                 req.flash('success_msg', 'Categoria editada')
