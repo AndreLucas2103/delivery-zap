@@ -44227,6 +44227,27 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 
 }
 
+.color-circle-ct {
+    border-radius: 100%;
+    margin-top:-5px;
+    height: 35px;
+    width: 35px;
+    border: none;
+    border-color: black;
+    outline: none;
+
+}
+
+.color-circle-ct::-webkit-color-swatch-wrapper {
+    padding: 0;
+}
+
+.color-circle-ct::-webkit-color-swatch {
+    border-radius: 20px;
+    border-color: black;
+    border-radius: 100%;
+}
+
 .color-circle::-webkit-color-swatch-wrapper {
     padding: 0;
 }

@@ -59,6 +59,16 @@
                         <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-">
                         <label for="edit-nome" class="ml-2">Nome</label>
                     </div>
+                     <hr>
+                     <div class="row">
+                    <div class="col-md-2 ml-4 mt-3">
+                        <h6>Cor do botão:</h6>                
+                    </div>
+                    <div class="col md-2 mr-5">
+                        <input type="color" class="color-circle-ct mt-2 mr-2" id="edit-botao" name="botao"> 
+                    </div>
+                    </div>
+                    <hr>
 
                     <div id="ajax-estabelecimento" class="mt-4"></div>
 
@@ -94,6 +104,7 @@
                 data: {idCategoriaProduto: recipient},
                 success: function(response) {
                     $('#edit-nome').val(response.nome)
+                    $('#edit-botao').val(response.corBotao)
                     $('#edit-idCategoriaProduto').val(response._id)
                     $('#edit-idEstabelecimento').val(response.idEstabelecimento._id)
                     $(`#edit-statusAtivo`).prop('checked', response.statusAtivo)
@@ -117,7 +128,16 @@
                         <input type="text" class="form-control" id="nome" name="nome" placeholder="-">
                         <label for="nome" class="ml-2">Nome</label>
                     </div>
-
+                    <hr>
+                     <div class="row">
+                    <div class="col-md-2 ml-4 mt-3">
+                        <h6>Cor do botão:</h6>                
+                    </div>
+                    <div class="col md-2 mr-5">
+                        <input type="color" class="color-circle-ct mt-2 mr-2" value="#F0A431" id="botao" name="botao"> 
+                    </div>
+                    </div>
+                    <hr>
                     <div class="row mt-4 ml-2">
                         <h5>Estabelecimentos</h5>
                         {{#each usuarioLogado.estabelecimentosSelecionados}}
