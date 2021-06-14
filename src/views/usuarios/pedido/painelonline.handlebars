@@ -43,6 +43,7 @@
     <br><br>
 
     {{#each produtos}}
+
     <span class="categoria rb">{{categoriaProdutos.nome}}</span>
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">
@@ -51,7 +52,7 @@
                 <img class="card-image" src="{{img}}"></h2>
                 <p class="card-text rb">{{nome}}</p>
                 <p class="card-value valorFormatar rb">{{valor}}</p>
-                <button class="button-adicionar rb" style="background-color:{{categoriaProdutos.corBotao}}" data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
+                <button class="button-adicionar rb" style="background-color:{{../categoriaProdutos.corBotao}}"  data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
