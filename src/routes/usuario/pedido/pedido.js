@@ -54,8 +54,8 @@ router.get('/pedidos', async (req, res) => {
 
         conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'infoEntrega.nomeCliente': { '$regex': conteudo, '$options': "i" } }, { 'infoEntrega.telefone': { '$regex': conteudo, '$options': "i" } }]}
         
-        dataInicio ? find_dataInicio = moment(dataInicio).format(): find_dataInicio = moment().subtract(7, 'd').format()
-        dataFim ? find_dataFim = moment(dataFim).format() : find_dataFim = moment().format()
+        dataInicio ? find_dataInicio = moment(dataInicio).utcOffset('+00:00').format(): find_dataInicio = moment().utcOffset('+00:00').subtract(7, 'd').format()
+        dataFim ? find_dataFim = moment(dataFim).utcOffset('+00:00').format() : find_dataFim = moment().utcOffset('+00:00').format()
         
         let pedidos = await Pedido.find({
             $and: [
@@ -75,8 +75,8 @@ router.get('/pedidos', async (req, res) => {
 
 
             conteudo: req.query.conteudo,
-            dataInicio: moment(find_dataInicio).utcOffset(userTimeZone).format('YYYY-MM-DDTHH:mm'),
-            dataFim: moment(find_dataFim).utcOffset(userTimeZone).format('YYYY-MM-DDTHH:mm'),
+            dataInicio: moment(find_dataInicio).format('YYYY-MM-DDTHH:mm'),
+            dataFim: moment(find_dataFim).format('YYYY-MM-DDTHH:mm'),
             pagamentoTipo: req.query.pagamentoTipo,
             pagamentoForma: req.query.pagamentoForma,
             entregador: req.query.entregador,
