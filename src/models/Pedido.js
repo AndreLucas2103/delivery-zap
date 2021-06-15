@@ -87,7 +87,10 @@ const Pedido = new Schema({
         tipo: String,
         forma: String,
         trocoPara: Number,
-        pago: Boolean
+        pago: {
+            type: Boolean,
+            default: false
+        }
     },
 
     cancelado: {

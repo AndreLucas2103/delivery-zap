@@ -29,12 +29,12 @@
                             <input type="text" class="form-control" name="conteudo" id="filtro-conteudo" value="{{conteudo}}">
                         </div>
                         <div class="col-sm-4 mt-2">
-                            <label for="floatingInputValue">Data Inicio</label>
-                            <input type="datetime-local" class="form-control" name="dataInicio" id="floatingInputValue" value="{{dataInicio}}" required>
+                            <label for="filtro-dataInicio">Data Inicio</label>
+                            <input type="datetime-local" class="form-control" name="dataInicio" id="filtro-dataInicio" value="{{dataInicio}}" required>
                         </div>
                         <div class="col-sm-4 mt-2">
-                            <label for="floatingInputValue">Data Fim</label>
-                            <input type="datetime-local" class="form-control" name="dataFim" id="floatingInputValue" value="{{dataFim}}" required>
+                            <label for="filtro-dataFim">Data Fim</label>
+                            <input type="datetime-local" class="form-control" name="dataFim" id="filtro-dataFim" value="{{dataFim}}" required>
                         </div>
                         <hr class="mt-4">
                         <div class="col-sm-3 mt-2">
@@ -52,6 +52,10 @@
                         <div class="col-sm-3 mt-2">
                             <input name="tipoEntrega" class="" id="filtro-pedido-tipoEntrega"  placeholder="Tipo entrega" value="{{tipoEntrega}}">
                         </div>
+                        <div class="col-sm-3 mt-2">
+                            <input name="pagamento" class="" id="filtro-pedido-pagamento"  placeholder="Pagamento" value="{{pagamento}}">
+                        </div>
+                        
 
                     </div>
 
@@ -106,6 +110,15 @@
                         },
                     })
 
+                    let tagifyFiltroPagamento = new Tagify(document.querySelector('input[id=filtro-pedido-pagamento]'), {
+                        whitelist: ['Pago', 'Cancelado', 'Aguardando'],
+                        editTags: false,
+                        dropdown: {
+                            maxItems: Infinity,
+                            enabled : 0 // always opens dropdown when input gets focus
+                        },
+                    })
+
                 </script>
             </div>
         </div>
@@ -134,9 +147,22 @@
                         {{#each pedidos}}
                         <!-- Item -->
                         <tr>
-                            <td><a href="/pedido/pedido?pedido='{{_id}}'" target="blank"><i class="fas fa-external-link-square-alt"></i></a></td>
+                            <td>
+                                <button class="btn btn-white btn-sm" type="button" id="dropdown-options-{{_id}}" data-bs-toggle="dropdown" >
+                                    <i class="fas fa-ellipsis-v"></i>
+                                </button>
+                                <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{_id}}">
+                                    <li class="mx-3"><a href="/pedido/pedido?pedido='{{_id}}'"><i class="fas fa-eye"></i> Ver</a></li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li class="mx-3"><i class="fas fa-check-circle text-success"></i> Finalizar</li>
+                                    <li><hr class="dropdown-divider"></li>
+                                    <li class="mx-3"><i class="fas fa-times-circle text-danger"></i> Cancelar</li>
+                                </ul>
+                            </td>
                             <td><span class="text-primary font-weight-bold">{{infoEntrega.nomeCliente}}</span> </td>
-                            <td><span class="text-primary font-weight-bold">{{infoEntrega.telefone}}</span> </td>
+                            <td>
+                                <span class="text-primary font-weight-bold">{{infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{infoEntrega.telefone}}" data-bs-nome="{{infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </span> 
+                            </td>
                             <td>{{dataFormatTimeZone ../usuarioLogado.timeZone dataCriacao "DD/MM/YYYY HH:mm"}}</td>
                             <td class="valorFormatar">{{valorTotal}}</td>
                             <td>{{pagamento.tipo}}
@@ -187,6 +213,52 @@
                     </tbody>
                 </table>
             </div>
+
+            <!-- Modal Envio WhatsApp -->
+            <div class="modal fade" id="modal-send-msg-WhatsApp" tabindex="-1" aria-labelledby="modal-send-msg-WhatsAppLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="h6 modal-title">Enviar Mensagem WhatsApp</h2>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Nome: <span id="send-whatsapp-nome"></span></p>
+                        <p>Telefone: <span id="send-whatsapp-telefone"></span></p>
+                        <textarea id="send-whatsapp-msg" class="form-control" rows="4"></textarea>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-sm btn-primary" id="button-send-whatsapp-msg">Enviar</button>
+                        <button type="button" class="btn btn-link text-danger ml-auto" data-bs-dismiss="modal">Fechar</button>
+                    </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                var modalSendMsgWhatsApp = document.getElementById('modal-send-msg-WhatsApp')
+                modalSendMsgWhatsApp.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget
+                    $('#send-whatsapp-nome').text(button.getAttribute('data-bs-nome'))
+                    $('#send-whatsapp-telefone').text(button.getAttribute('data-bs-telefone'))
+                    $('#send-whatsapp-msg').val('')
+                })
+
+                $('#button-send-whatsapp-msg').click(() => {
+                    let number = $('#send-whatsapp-telefone').text()
+                    let text = $('#send-whatsapp-msg').val()
+                    window.open(`
+                        https://wa.me/${number.replace(/[^0-9]/g,'')}?text=${text}
+                    `, '_blank');
+                    
+                    $('#modal-send-msg-WhatsApp').modal('hide')
+                })
+            </script>
+
+
+
         </div>
     </div>
 
