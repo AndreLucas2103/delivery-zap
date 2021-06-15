@@ -31,7 +31,10 @@ router.get('/pedidos', async (req, res) => {
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
         
         let {conteudo, dataInicio, dataFim} = req.query
-        let userTimeZone = req.user.timeZone.substr(1, 2)
+        
+        /* req.user.timeZone.substr(1, 2) */
+        let userTimeZone = req.user.timeZone
+
         // verifico se existe algum valor antes de transformar em um object e depois mapear, retonar apenas o valor desejado de cada objeto dentro de um array, caso não tenha eu passo {} na pesquisa
         req.query.pagamentoTipo ? find_pagamentoTipo = {'pagamento.tipo': JSON.parse(req.query.pagamentoTipo).map(a => a.value)} : find_pagamentoTipo = {}
         req.query.pagamentoForma ? find_pagamentoForma = {'pagamento.forma': JSON.parse(req.query.pagamentoForma).map(a => a.value)} : find_pagamentoForma = {}
@@ -51,8 +54,8 @@ router.get('/pedidos', async (req, res) => {
 
         conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'infoEntrega.nomeCliente': { '$regex': conteudo, '$options': "i" } }, { 'infoEntrega.telefone': { '$regex': conteudo, '$options': "i" } }]}
         
-        dataInicio ? find_dataInicio = moment(dataInicio).add(userTimeZone, 'H').format(): find_dataInicio = moment().add(userTimeZone, 'H').subtract(7, 'd').format()
-        dataFim ? find_dataFim = moment(dataFim).add(userTimeZone, 'H').format() : find_dataFim = moment().add(userTimeZone, 'H').format()
+        dataInicio ? find_dataInicio = moment(dataInicio).format(): find_dataInicio = moment().subtract(7, 'd').format()
+        dataFim ? find_dataFim = moment(dataFim).format() : find_dataFim = moment().format()
         
         let pedidos = await Pedido.find({
             $and: [
@@ -64,6 +67,7 @@ router.get('/pedidos', async (req, res) => {
         }).lean().populate('idEstabelecimento')
         let entregadores = await Entregador.find({'estabelecimentos.idEstabelecimento': userEstabelecimentos}).populate('estabelecimentos.idEstabelecimento').lean()
 
+        console.log("dataFimMoment: "+find_dataFim)
         
         res.render('usuarios/pedido/pedidos', {
             pedidos: pedidos,
@@ -71,8 +75,8 @@ router.get('/pedidos', async (req, res) => {
 
 
             conteudo: req.query.conteudo,
-            dataInicio: moment(find_dataInicio).subtract(userTimeZone, 'h').format('YYYY-MM-DDTHH:mm'),
-            dataFim: moment(find_dataFim).subtract(userTimeZone, 'h').format('YYYY-MM-DDTHH:mm'),
+            dataInicio: moment(find_dataInicio).format('YYYY-MM-DDTHH:mm'),
+            dataFim: moment(find_dataFim).format('YYYY-MM-DDTHH:mm'),
             pagamentoTipo: req.query.pagamentoTipo,
             pagamentoForma: req.query.pagamentoForma,
             entregador: req.query.entregador,
