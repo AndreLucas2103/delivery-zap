@@ -75,8 +75,8 @@ router.get('/pedidos', async (req, res) => {
 
 
             conteudo: req.query.conteudo,
-            dataInicio: moment(find_dataInicio).format('YYYY-MM-DDTHH:mm'),
-            dataFim: moment(find_dataFim).format('YYYY-MM-DDTHH:mm'),
+            dataInicio: moment(find_dataInicio).utcOffset(userTimeZone).format('YYYY-MM-DDTHH:mm'),
+            dataFim: moment(find_dataFim).utcOffset(userTimeZone).format('YYYY-MM-DDTHH:mm'),
             pagamentoTipo: req.query.pagamentoTipo,
             pagamentoForma: req.query.pagamentoForma,
             entregador: req.query.entregador,
