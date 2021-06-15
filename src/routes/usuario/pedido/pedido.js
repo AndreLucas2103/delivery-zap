@@ -51,7 +51,7 @@ router.get('/pedidos', async (req, res) => {
 
         conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'infoEntrega.nomeCliente': { '$regex': conteudo, '$options': "i" } }, { 'infoEntrega.telefone': { '$regex': conteudo, '$options': "i" } }]}
         
-        dataInicio ? find_dataInicio = moment(dataInicio).add(userTimeZone, 'H').format(): find_dataInicio = moment().add(userTimeZone, 'H').subtract(7, 'd').format()
+        dataInicio ? find_dataInicio = moment(dataInicio).format(): find_dataInicio = moment().subtract(7, 'd').format()
         dataFim ? find_dataFim = moment(dataFim).add(userTimeZone, 'H').format() : find_dataFim = moment().add(userTimeZone, 'H').format()
         
         console.log(find_dataInicio)
