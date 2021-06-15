@@ -51,10 +51,16 @@ router.get('/pedidos', async (req, res) => {
 
         conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'infoEntrega.nomeCliente': { '$regex': conteudo, '$options': "i" } }, { 'infoEntrega.telefone': { '$regex': conteudo, '$options': "i" } }]}
         
-        dataInicio ? find_dataInicio = moment(dataInicio).format(): find_dataInicio = moment().subtract(7, 'd').format()
+        dataInicio ? find_dataInicio = moment(dataInicio).utc.format(): find_dataInicio = moment().subtract(7, 'd').format()
         dataFim ? find_dataFim = moment(dataFim).add(userTimeZone, 'H').format() : find_dataFim = moment().add(userTimeZone, 'H').format()
         
-        console.log(find_dataInicio)
+        
+        console.log("data:"+dataInicio)
+        console.log("data Inicio:"+find_dataInicio)
+        console.log("data front:"+moment(find_dataInicio).subtract(userTimeZone, 'h').format('YYYY-MM-DDTHH:mm'))
+
+
+
         let pedidos = await Pedido.find({
             $and: [
                 find_conteudo, find_pagamentoTipo, find_pagamentoForma, find_entregador, find_tipoEntrega,
@@ -69,7 +75,6 @@ router.get('/pedidos', async (req, res) => {
         res.render('usuarios/pedido/pedidos', {
             pedidos: pedidos,
             entregadores: entregadores,
-
 
             conteudo: req.query.conteudo,
             dataInicio: moment(find_dataInicio).subtract(userTimeZone, 'h').format('YYYY-MM-DDTHH:mm'),
