@@ -30,30 +30,28 @@
                         </div>
                         <div class="col-sm-4 mt-2">
                             <label for="floatingInputValue">Data Inicio</label>
-                            <input type="datetime-local" class="form-control" name="" id="floatingInputValue" >
+                            <input type="datetime-local" class="form-control" name="dataInicio" id="floatingInputValue" value="{{dataInicio}}" required>
                         </div>
                         <div class="col-sm-4 mt-2">
                             <label for="floatingInputValue">Data Fim</label>
-                            <input type="datetime-local" class="form-control" name="" id="floatingInputValue" >
+                            <input type="datetime-local" class="form-control" name="dataFim" id="floatingInputValue" value="{{dataFim}}" required>
                         </div>
-                        
+                        <hr class="mt-4">
                         <div class="col-sm-3 mt-2">
-                            <input name="pagamentoTipo" class="" id="filtro-pedido-pagamento-tipo" placeholder="Tipo pagamento" value="{{idCategorias}}">
-                        </div>
-                        <div class="col-sm-3 mt-2">
-                            <input name="pagamentoForma" class="" id="filtro-pedido-pagamento-forma" placeholder="Forma pagamento" value="{{idCategorias}}">
+                            <input name="pagamentoTipo" class="" id="filtro-pedido-pagamento-tipo" placeholder="Tipo pagamento" value="{{pagamentoTipo}}">
                         </div>
                         <div class="col-sm-3 mt-2">
-                            <input name="situacao" class="" id="filtro-pedido-situacao" placeholder="Situacao" value="{{idCategorias}}">
+                            <input name="pagamentoForma" class="" id="filtro-pedido-pagamento-forma" placeholder="Forma pagamento" value="{{pagamentoForma}}">
                         </div>
                         <div class="col-sm-3 mt-2">
-                            <input name="entregador" class="" id="filtro-pedido-entregador" placeholder="Entregador" value="{{idCategorias}}">
+                            <input name="situacao" class="" id="filtro-pedido-situacao" placeholder="Situacao" value="{{situacao}}">
                         </div>
                         <div class="col-sm-3 mt-2">
-                            <input name="tipoEntrega" class="" id="filtro-pedido-tipoEntrega" placeholder="Tipo entrega" value="{{idCategorias}}">
+                            <input name="entregador" class="" id="filtro-pedido-entregador" placeholder="Entregador" value="{{entregador}}">
                         </div>
-
-                        
+                        <div class="col-sm-3 mt-2">
+                            <input name="tipoEntrega" class="" id="filtro-pedido-tipoEntrega"  placeholder="Tipo entrega" value="{{tipoEntrega}}">
+                        </div>
 
                     </div>
 
@@ -82,7 +80,7 @@
                     })
 
                     let tagifyFiltroSituacao = new Tagify(document.querySelector('input[id=filtro-pedido-situacao]'), {
-                        whitelist: ['Cancelado', 'Finalizado'],
+                        whitelist: ['Cancelado', 'Finalizado', 'Aguardando'],
                         editTags: false,
                         dropdown: {
                             maxItems: Infinity,
@@ -91,7 +89,7 @@
                     })
 
                     let tagifyFiltroTipoEntrega = new Tagify(document.querySelector('input[id=filtro-pedido-tipoEntrega]'), {
-                        whitelist: ['retirarEstabelecimento', 'Finalizado'],
+                        whitelist: ['retirarEstabelecimento', 'entrega'],
                         editTags: false,
                         dropdown: {
                             maxItems: Infinity,
@@ -100,7 +98,7 @@
                     })
 
                     let tagifyFiltroEntregador = new Tagify(document.querySelector('input[id=filtro-pedido-entregador]'), {
-                        whitelist: [{{#each entregadores}} {'idEntregador': '{{_id}}', value: '{{nome}}' },  {{/each}}],
+                        whitelist: [ {{#each entregadores}} {'idEntregador': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
                         editTags: false,
                         dropdown: {
                             maxItems: Infinity,
@@ -204,7 +202,6 @@
         $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
     })
 </script>
-
 
 {{>usuario/_rodape}}
 

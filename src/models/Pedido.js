@@ -90,8 +90,14 @@ const Pedido = new Schema({
         pago: Boolean
     },
 
-    cancelado: Boolean,
-    finalizado: Boolean,
+    cancelado: {
+        type: Boolean,
+        default: false
+    },
+    finalizado: {
+        type: Boolean,
+        default: false
+    },
 
     infoTransacao: {
         operadoraPagamento: {
