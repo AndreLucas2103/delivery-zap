@@ -7,43 +7,18 @@ const { eAdmin } = require("../../../helpers/eAdmin")
 
 require("../../../models/Entregador")
 const Entregador = mongoose.model("entregadores")
-require("../../../models/Usuario")
-const Usuario = mongoose.model("usuarios")
+require("../../../models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
 
 router.get('/entregadores',eAdmin, async (req, res) => {
     try {
-        let usuario = await Usuario.aggregate([
-            { $match: { _id: req.user._id} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentosVinculados.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentosVinculados"
-                    }
-            }
-        ])
-
         let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-        usuario[0].estabelecimentosVinculados.forEach(element => { // alterar para usuario logado
-            userEstabelecimentos.push(element._id) // voltar para idEstabelecimento
-        })
+        let entregador = await Entregador.find({"estabelecimentos.idEstabelecimento" : userEstabelecimentos }).populate('estabelecimentos.idEstabelecimento').lean()
+        let estabelecimentos = await Estabelecimento.find({"idUsuarioMaster" : req.user.idUsuarioMaster }).populate('idUsuarioMaster').lean()
 
-        let entregadores = await Entregador.aggregate([
-            {$match:  {"estabelecimentos.idEstabelecimento": {$in: userEstabelecimentos}} },
-            {
-                $lookup:
-                    {
-                        from: "estabelecimentos",
-                        localField: "estabelecimentos.idEstabelecimento",
-                        foreignField: "_id",
-                        as: "estabelecimentos"
-                    }
-            }
-        ])
-        res.render('usuarios/entregador/entregadores', {usuario: usuario[0], entregadores: entregadores})
+        res.render('usuarios/entregador/entregadores', {entregador: entregador, estabelecimentos: estabelecimentos})
        
 
     } catch (err) {
