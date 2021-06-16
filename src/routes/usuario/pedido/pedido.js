@@ -151,14 +151,15 @@ router.get('/teste', (req, res) => {
             dataCriacao: new Date()
         }
         for (let i = 0; i < 1000; i++) {
-            Pedido(pedido).save().then(() => {
+            Pedido.insertMany([
+                pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,
+                pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,
+
+            ]).then(() => {
                 console.log(i)
                 if(i == 999){
                     return res.redirect('/pedido/teste')
                 }
-            }).catch(err => {
-                console.log(err)
-                return
             })
         } 
 })
