@@ -325,7 +325,7 @@
     }
 
     .carrinho {
-        width: 125px;
+        width: 150px;
         height: 50px;
         background: #081C15;
         display: flex;
@@ -339,7 +339,7 @@
     }
 
     .finalizar {
-        width: 125px;
+        width: 150px;
         height: 50px;
         background: #081C15;
         display: flex;

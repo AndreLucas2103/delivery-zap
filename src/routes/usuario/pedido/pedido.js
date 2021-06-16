@@ -145,7 +145,7 @@ router.get('/teste', (req, res) => {
             ],
             tipoEntrega: 'retirarEstabelecimento',
             uuid4Client: '1622679808676-35c000a9-1492-4d41-99dc-1d8ad0251a614fa616ad-3b78-46d0-bc3b-07230ff0eb35709b9f77-64f5-4400-9948-8ce84fd14fcd',
-            idEstabelecimento: "60a1368deaa13a02685d91fa",
+            idEstabelecimento: "60a13699df46330c28432b78",
             observacao: '',
             valorTotal: 44.00000000000014,
             dataCriacao: new Date()
