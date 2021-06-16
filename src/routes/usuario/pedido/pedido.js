@@ -153,7 +153,6 @@ router.get('/teste', (req, res) => {
         for (let i = 0; i < 1000; i++) {
             Pedido.insertMany([
                 pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,
-                pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,pedido, pedido,pedido, pedido, pedido,
 
             ]).then(() => {
                 console.log(i)
