@@ -22,7 +22,7 @@
 
         <div class="collapse mb-4" id="collapseExample">
             <div class="card card-body">
-                <form method="get">
+                <form method="get" id="form-filtro-1">
                     <div class="row">
                         <div class="col-sm-4 mt-2">
                             <label for="filtro-conteudo">Nome Cliente / Telefone</label>
@@ -56,8 +56,9 @@
                             <input name="pagamento" class="" id="filtro-pedido-pagamento"  placeholder="Pagamento" value="{{pagamento}}">
                         </div>
                         
-
                     </div>
+
+                    <input type="text" name="limit" id="filtro-pedido-limit" value="{{pagination.limitPage}}" hidden readonly>
 
                     <button class="btn btn-dark btn-sm mt-2" type="submit">Filtrar</button>
                     {{#if filtroExist}}<a href="/produto/produtos" class="btn btn-white btn-sm mt-2 text-danger">Limpar filtro</a>{{else}}{{/if}}
@@ -212,6 +213,59 @@
 
                     </tbody>
                 </table>
+            </div>
+            <div class="mt-4">
+
+                <div class="dropdown">
+                <button class="btn btn-white btn-sm float-end" type="button" id="dropdown-limit-list" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-limit-list">
+                    <div class="text-center">Registro por página</div>
+                    <div>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="10">10</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="20">20</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="50">50</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="100">100</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 mr-1 click-paginate" value="200">200</button>
+                    </div>
+                </ul>
+                </div>
+                <span class="float-end mt-1 mr-4">{{pagination.startPage}} a {{pagination.endPage}} de {{pagination.totalPage}}</span>
+
+                <nav class="page-pagination">
+                    <ul class="pagination pagination-sm">
+                    {{#paginate pagination type="first"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">«</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="middle" limit="5"}}
+                        <li {{#if active}}class="page-item active current" {{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">{{n}}</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="last"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">»</a></li>
+                    {{/paginate}}
+                    </ul>
+                </nav>
+
+                <script>
+                    let filtro1 = $('#form-filtro-1').serialize()
+                    let limit = "limit="+10
+
+                    $('.click-paginate').click(function (e) {
+                        event.preventDefault()
+                        if(e.target.classList[0] == "buttonClickLimit"){
+                            $('#filtro-pedido-limit').val(e.target.value)
+                            $('#form-filtro-1').submit()
+                        }else{
+                            $(this).attr('href').slice(1)
+                            paginate = $(this).attr('href').slice(1);
+                            location.href = `?${paginate}&${filtro1}` ;
+                        }
+                    });
+                </script>
+
             </div>
 
             <!-- Modal Envio WhatsApp -->
