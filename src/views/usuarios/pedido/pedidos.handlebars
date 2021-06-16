@@ -250,7 +250,7 @@
                     let number = $('#send-whatsapp-telefone').text()
                     let text = $('#send-whatsapp-msg').val()
                     window.open(`
-                        https://wa.me/${number.replace(/[^0-9]/g,'')}?text=${text}
+                        https://wa.me/55${number.replace(/[^0-9]/g,'')}?text=${text}
                     `, '_blank');
                     
                     $('#modal-send-msg-WhatsApp').modal('hide')
