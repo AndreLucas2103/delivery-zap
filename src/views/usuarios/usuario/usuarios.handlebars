@@ -26,7 +26,7 @@
                             <div class="card-body">
 
                                 <ul class="list-group list-group-flush list my--3">
-                                    {{#each usuarios.usuariosVinculados}}
+                                    {{#each usuarios}}
                                     <li class="list-group-item px-0" {{#if statusAtivo}}  {{else}} style="filter: grayscale(100%);" {{/if}}>
                                         <div class="row align-items-center">
                                             <div class="col-auto">
@@ -122,7 +122,7 @@
                                     <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
-                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        {{#each estabelecimentos}}
                                         <div class="form-check form-switch col-6">
                                             <br><input class="form-check-input" type="checkbox"
                                                 name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
@@ -198,7 +198,7 @@
                                     <input type="hidden" name="estabelecimento[]" value="{{estabelecimento._id}}">
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
-                                        {{#each usuarios.estabelecimentosVinculados}}
+                                        {{#each estabelecimentos}}
                                         <div class="form-check form-switch col-6">
                                             <br><input class="form-check-input" type="checkbox"
                                                 name="estabelecimentos[]" id="edit-usuario{{_id}}" value="{{_id}}">

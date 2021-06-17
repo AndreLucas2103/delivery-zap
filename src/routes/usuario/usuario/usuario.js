@@ -7,32 +7,19 @@ const { eAdmin } = require("../../../helpers/eAdmin")
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
+require("../../../models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
 
 
 router.get('/usuarios',eAdmin, async (req, res) => {
     try {
-        let usuarios = await Usuario.aggregate([
-            { $match: { _id: req.user._id } },
-            {
-                $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosVinculados.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosVinculados"
-                }
-            },
-            {
-                $lookup:
-                {
-                    from: "usuarios",
-                    localField: "estabelecimentosVinculados._id",
-                    foreignField: "estabelecimentosVinculados.idEstabelecimento",
-                    as: "usuariosVinculados"
-                }
-            },
-        ])
-        res.render('usuarios/usuario/usuarios', { usuarios: usuarios[0] })
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
+        let usuarios = await Usuario.find({"estabelecimentosVinculados.idEstabelecimento" : userEstabelecimentos }).populate('estabelecimentosVinculados.idEstabelecimento').lean()
+        let estabelecimentos = await Estabelecimento.find({"idUsuarioMaster" : req.user.idUsuarioMaster }).populate('idUsuarioMaster').lean()
+
+        res.render('usuarios/usuario/usuarios', { usuarios: usuarios, estabelecimentos: estabelecimentos })
 
     } catch (err) {
         console.log(err)
@@ -55,7 +42,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
         statusAtivo: true,
         eTipoAdmin: eTipoAdmin,
         perfilAvatar: 'cashier',
-        idUsuarioMaster: req.user._id,
+        idUsuarioMaster: req.user.idUsuarioMaster,
         identificaouuidv4: req.user.identificaouuidv4
 
     })
