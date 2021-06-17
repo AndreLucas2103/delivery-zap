@@ -1,0 +1,85 @@
+{{>usuario/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<main class="content">
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
+                <div class="card-body ">
+                    <span class="d-block">Nome: {{pedido.infoEntrega.nomeCliente}} </span>
+                    <span class="d-block">Telefone: {{pedido.infoEntrega.telefone}}</span>
+                    <span class="d-block">Tipo Entrega: {{pedido.tipoEntrega}}</span>
+                    <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> {{pedido.idEstabelecimento.nome}}</span>
+                    
+                    <hr>
+                    <span class="d-block">Produtos:</span>
+                    {{#each pedido.produtos}}
+                        <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
+                            <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
+                        </button>
+                            <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
+                                {{#if opcao}}
+                                    {{#each opcao}}
+                                        <span class="my-1 d-block">{{nomeOpcao}}: 
+                                            {{#each opcoes}}
+                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                            {{/each}}
+                                        </span>
+                                    {{/each}}
+                                {{/if}}
+                                
+                                {{#if adicionais}}
+                                    <span class="my-1">Adicionais: 
+                                        {{#each adicionais}}
+                                            <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                        {{/each}}
+                                    </span>
+                                {{/if}}
+
+                                {{#if observacao}}
+                                    <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
+                                {{/if}}
+                                
+                                <span class="d-block">Qtd: {{quantidade}}</span>
+                                <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
+                            </div>
+                    {{/each}}
+                    <hr>
+                        <span class="d-block">Taxa Entrega: <span class="valorFormatar">{{pedido.infoEntrega.taxaEntrega}}</span></span>
+                        <span class="d-block">Total pedido: <span class="valorFormatar">{{pedido.valorTotal}}</span></span>
+                        <hr>
+                        {{#if pedido.infoEntrega.endereco.rua}}<span class="d-block">Rua: {{pedido.infoEntrega.endereco.rua}}</span>{{/if}}
+                        {{#if pedido.infoEntrega.endereco.bairro}}<span class="d-block">Bairro: {{pedido.infoEntrega.endereco.bairro}}</span>{{/if}}
+                        {{#if pedido.infoEntrega.endereco.cidade}}<span class="d-block">Cidade: {{pedido.infoEntrega.endereco.cidade}}</span>{{/if}}
+                        {{#if pedido.infoEntrega.endereco.cep}}<span class="d-block">CEP: {{pedido.infoEntrega.endereco.cep}}</span>{{/if}}
+                        {{#if pedido.infoEntrega.endereco.numero}}<span class="d-block">Número: {{pedido.infoEntrega.endereco.numero}}</span>{{/if}}
+                </div>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+</div>
+</div>
+</div>
+
+<script>
+
+    
+
+
+
+    $(".valorFormatar").each(function (item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+</script>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

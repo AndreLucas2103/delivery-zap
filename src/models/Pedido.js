@@ -25,6 +25,15 @@ const Schema = mongoose.Schema;
         debit_card = Pagamento por cartão de débito.
         prepaid_card = Pagamento por cartão pré-pago.
     }
+
+    situacao Produto: {
+        canceled: cancelado
+        waiting: aguardando
+        production: produção
+        concluded: concluido
+        delivery: entrega
+        finished: finalizado
+    }
 */
 
 const Pedido = new Schema({
@@ -62,6 +71,7 @@ const Pedido = new Schema({
     }],
 
     tipoEntrega: String,
+    situacao: String,
 
     infoEntrega: {
         nomeCliente: String,
@@ -91,15 +101,6 @@ const Pedido = new Schema({
             type: Boolean,
             default: false
         }
-    },
-
-    cancelado: {
-        type: Boolean,
-        default: false
-    },
-    finalizado: {
-        type: Boolean,
-        default: false
     },
 
     infoTransacao: {

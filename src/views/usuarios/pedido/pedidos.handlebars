@@ -27,6 +27,7 @@
                         <div class="col-sm-4 mt-2">
                             <label for="filtro-conteudo">Nome Cliente / Telefone</label>
                             <input type="text" class="form-control" name="conteudo" id="filtro-conteudo" value="{{conteudo}}">
+                            <span style="font-size: x-small;">* Se for telefone, digite apenas o número. Ex: 99988-1623</span>
                         </div>
                         <div class="col-sm-4 mt-2">
                             <label for="filtro-dataInicio">Data Inicio</label>
@@ -85,7 +86,7 @@
                     })
 
                     let tagifyFiltroSituacao = new Tagify(document.querySelector('input[id=filtro-pedido-situacao]'), {
-                        whitelist: ['Cancelado', 'Finalizado', 'Aguardando'],
+                        whitelist: ['Cancelado', 'Finalizado', 'Aguardando', 'Produção', 'Concluido', 'Entrega'],
                         editTags: false,
                         dropdown: {
                             maxItems: Infinity,
@@ -153,11 +154,23 @@
                                     <i class="fas fa-ellipsis-v"></i>
                                 </button>
                                 <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{_id}}">
-                                    <li class="mx-3"><a href="/pedido/pedido?pedido='{{_id}}'"><i class="fas fa-eye"></i> Ver</a></li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li class="mx-3"><i class="fas fa-check-circle text-success"></i> Finalizar</li>
-                                    <li><hr class="dropdown-divider"></li>
-                                    <li class="mx-3"><i class="fas fa-times-circle text-danger"></i> Cancelar</li>
+                                    <li class="mx-3"><a class="btn btn-sm" href="/pedido/pedido?pedido='{{_id}}'"><i class="fas fa-eye"></i> Ver</a></li>
+                                    
+                                    <form action="/pedido/edit-pedidos-situacao" method="post">
+                                        <input type="text" name="idPedido" value="{{_id}}" hidden readonly>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="waiting"><i class="fas fa-clock"></i> Aguardando</button></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="production"><i class="fas fa-spinner text-warning"></i> Produção</button></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="concluded"><i class="fas fa-check text-success"></i> Concluido</button></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="delivery"><i class="fas fa-truck"></i> Entrega</button></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="canceled"><i class="fas fa-times-circle text-danger"></i> Cancelar</button></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li class="mx-3"><button class="btn btn-sm" name="situacao" value="finished"><i class="fas fa-check-circle text-success"></i> Finalizar</button></li>
+                                    </form>
                                 </ul>
                             </td>
                             <td><span class="text-primary font-weight-bold">{{infoEntrega.nomeCliente}}</span> </td>
@@ -180,17 +193,7 @@
                                 {{/if}}
                             </td>
                             <td>{{tipoEntrega}}</td>
-                            <td>
-                                {{#if cancelado}}
-                                    <i class="fas fa-times-circle text-danger"></i> Cancelado
-                                {{else}}
-                                    {{#if finalizado}}
-                                        <i class="fas fa-check-circle text-success"></i> Finalizado
-                                    {{else}}
-                                        <i class="fas fa-clock"></i> Aguardando
-                                    {{/if}}
-                                {{/if}}
-                            </td>
+                            <td class="format-pedido-situacao">{{situacao}}</td>
                             <td>
                                 {{#if pagamento.pago}}
                                     <i class="fas fa-check-circle text-success"></i> PAGO
@@ -326,6 +329,32 @@
     $(".valorFormatar").each(function (item) {
         let textFormat = $(this).text()
         $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+
+    $(".format-pedido-situacao").each(function (item) {
+        let textFormat = $(this).text()
+        switch (textFormat) {
+            case 'canceled':
+                $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
+                break;
+            case 'waiting':
+                $(this).html('<i class="fas fa-clock"></i> Aguardando')
+                break;
+            case 'production':
+                $(this).html('<i class="fas fa-spinner text-warning"></i> Produção')
+                break;
+            case 'concluded':
+                $(this).html('<i class="fas fa-check text-success"></i> Concluido')
+                break;
+            case 'delivery':
+                $(this).html('<i class="fas fa-truck"></i> Entrega')
+                break;
+            case 'finished':
+                $(this).html('<i class="fas fa-check-circle text-success"></i> Finalizado')
+                break;
+            default:
+                $(this).html('err')
+        }
     })
 </script>
 

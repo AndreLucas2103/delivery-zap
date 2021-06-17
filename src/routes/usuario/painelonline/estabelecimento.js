@@ -87,8 +87,7 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
                                         dataCancelamento: pagamento.date_last_updated,
                                         pedidoCancelado: true,
                                         pedidoPago: false,
-                                    },
-                                    "cancelado": true
+                                    }
                                 }
                             }
                         ).then(() => {
@@ -164,7 +163,6 @@ router.post('/IPN-eaabeb21-0dd7-4ba8-bb61-0e2d89b0f0db-hotPedidos', (req,res) =>
                                         pedidoCancelado: true,
                                         pedidoPago: false,
                                     },
-                                    "cancelado": true
                                 }
                             }
                         ).then(() => {
@@ -236,6 +234,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                 identificacaoPedido: identificacaoPedido,
                 produtos: carrinho.produtos,
                 tipoEntrega: tipoEntrega,
+                situacao: 'waiting',
                 infoEntrega: {
                     nomeCliente: nomeCliente,
                     endereco: {
@@ -267,6 +266,7 @@ router.post('/checkout/finalizar', async (req, res) => {
             addPedido = {
                 identificacaoPedido: identificacaoPedido,
                 produtos: carrinho.produtos,
+                situacao: 'waiting',
                 tipoEntrega: tipoEntrega,
                 infoEntrega: {
                     nomeCliente: nomeCliente,
