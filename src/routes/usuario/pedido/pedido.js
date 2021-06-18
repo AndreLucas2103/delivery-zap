@@ -30,6 +30,8 @@ router.get('/comandas', async (req, res) => {
     res.render('usuarios/pedido/comandas', {pedido: pedido})
 })
 
+
+
 router.get('/pedidos', async (req, res) => {
     try {
         let userEstabelecimentos = []
@@ -92,7 +94,7 @@ router.get('/pedidos', async (req, res) => {
         paginate ? find_paginate = Number(paginate) : find_paginate = 1
         let skip = find_limit * (find_paginate-1)
 
-        let pedidos = await Pedido.find(query).sort({'dataCriacao': -1}).skip(skip).limit(find_limit).lean().populate('idEstabelecimento')
+        let pedidos = await Pedido.find(query).sort({'updatedAt': -1}).skip(skip).limit(find_limit).lean().populate('idEstabelecimento').allowDiskUse()
         let entregadores = await Entregador.find({'estabelecimentos.idEstabelecimento': userEstabelecimentos}).populate('estabelecimentos.idEstabelecimento').lean()
 
         res.render('usuarios/pedido/pedidos', {
@@ -112,7 +114,7 @@ router.get('/pedidos', async (req, res) => {
             pagination: {
                 // api handlebars paginate
                 page: find_paginate,
-                pageCount: totalPage/find_limit,
+                pageCount: Math.ceil(totalPage/find_limit),
 
                 totalPage: totalPage,
                 limitPage: find_limit,
@@ -125,8 +127,6 @@ router.get('/pedidos', async (req, res) => {
         console.log(err)
     }
 })
-
-
 
 router.post('/ajax-comadas-producao', async (req, res) => {
     let pedidos = await Pedido.find({
