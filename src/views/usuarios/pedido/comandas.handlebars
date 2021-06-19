@@ -1,5 +1,3 @@
-<script src="/js/scripts.js"></script>
-
 {{>usuario/_top-css}}
 
 <div class="container-fluid bg-soft">
@@ -21,12 +19,11 @@
 
         setInterval(() => {
             ajaxUpdateComanda()
-        }, 30000)
+        }, 15000)
 
         let comandas = []
         
         function ajaxUpdateComanda() {
-            spinngLoading(true)
             jQuery.ajax({
                 type: "POST",
                 url: '/pedido/ajax-comadas-producao',
@@ -155,7 +152,6 @@
                     })
 
                     console.log(comandas)
-                    spinngLoading(false)
                 }
             });
         }
