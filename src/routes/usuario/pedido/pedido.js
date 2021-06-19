@@ -126,12 +126,12 @@ router.get('/pedidos', async (req, res) => {
 })
 
 router.post('/ajax-comadas-producao', async (req, res) => {
-    //let userEstabelecimentos = []
-    //req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
+    let userEstabelecimentos = []
+    req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
 
     let pedidos = await Pedido.find({$and: [
         {'situacao': 'production'},
-        // {'idEstabelecimento': userEstabelecimentos}
+        {'idEstabelecimento': userEstabelecimentos}
     ]}).sort({'updateAt': -1}).populate('idEstabelecimento').lean()
 
     res.json(pedidos)

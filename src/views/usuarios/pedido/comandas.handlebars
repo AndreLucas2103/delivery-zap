@@ -1,3 +1,5 @@
+<script src="/js/scripts.js"></script>
+
 {{>usuario/_top-css}}
 
 <div class="container-fluid bg-soft">
@@ -7,22 +9,24 @@
 
 <main class="content">
     <div class="row" id="ajax-comandas">
-            
     </div>
 
-
     <script>
+
         function formatValor(valor) {
             return new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valor)
         } 
 
+        onload = ajaxUpdateComanda()
+
         setInterval(() => {
             ajaxUpdateComanda()
-        }, 5000)
+        }, 30000)
 
         let comandas = []
         
         function ajaxUpdateComanda() {
+            spinngLoading(true)
             jQuery.ajax({
                 type: "POST",
                 url: '/pedido/ajax-comadas-producao',
@@ -33,7 +37,6 @@
                         if(response.findIndex(pedido => pedido._id == comanda ) == -1){
                             $(`#pedido-${comanda}`).remove()
                             comandas.splice(index, 1)
-                            console.log('remover: '+index)
                         }
                     })
 
@@ -45,6 +48,9 @@
                                 <div class="col-lg-3" id="pedido-${pedido._id}">
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
                                         <div class="card-body ">
+                                            <span class="float-end">
+                                                <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
+                                            </span>
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
@@ -149,12 +155,36 @@
                     })
 
                     console.log(comandas)
-                    
-                    
+                    spinngLoading(false)
                 }
             });
         }
         
+        function clickButtonConcluirComanda (status, idPedido) {
+            jQuery.ajax({
+                type: "POST",
+                url: '/pedido/edit-pedidos-situacao',
+                data: {idPedido: idPedido, situacao: status},
+                success: function(response) {
+                    ajaxUpdateComanda()
+                    Swal.fire({
+                        toast: true,
+                        title: 'Pedido alterado',
+                        position: 'top-right',
+                        background: "#20853b",
+                        showConfirmButton: false,
+                        showCloseButton: true,
+                        timer: 5000,
+                        timerProgressBar: true,
+                        customClass: {
+                            title: 'font-title-notificacao',                              
+                        }
+                    })
+
+                }
+            })
+        }
+
     </script>
 
 </main>
@@ -166,13 +196,6 @@
 <script>
 
     
-
-
-
-    $(".valorFormatar").each(function (item) {
-        let textFormat = $(this).text()
-        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
-    })
 </script>
 
 {{>usuario/_rodape}}
