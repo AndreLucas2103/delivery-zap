@@ -82,7 +82,7 @@
                                     <hr>
                                     <h5>Estabelecimentos</h5>
                                     <div class="row mt-4 ml-2">
-                                        {{#each estabelecimentos}}
+                                        {{#each usuarioLogado.estabelecimentosVinculados}}
                                         <div class="form-check form-switch col-6">
                                             <br><input class="form-check-input" type="checkbox"
                                                 name="estabelecimentos[]" id="edit-categoria{{_id}}" value="{{_id}}">
@@ -127,14 +127,15 @@
                                     </div>
                                     <hr>
                                     <h5>Estabelecimentos</h5>
-                                    <div class="row mt-4 ml-2">
-                                        {{#each estabelecimentos}}
+                                    <div class="row mt-4 ml-2" >
+                                        {{#each usuarioLogado.estabelecimentosVinculados}}
                                         <div class="form-check form-switch col-6">
                                             <input class="form-check-input" type="checkbox"
                                                 name="estabelecimentos[]" id="edit-entregador{{_id}}" value="{{_id}}">
                                             <label class="form-check-label" for="{{_id}}">{{nome}}</label>
                                         </div>
                                         {{/each}}
+                                        <span id="estabelecimento-vinculado-entregador"></span>
 
                                         <input type="text" name="idEntregador" id="edit-idEntregador" hidden readonly>
                                     </div>
@@ -167,15 +168,23 @@
                             url: '/entregador/ajax-get-entregadores',
                             data: { idEntregador: recipient },
                             success: function (response) {
-                                console.log(response)
+                                let estabelecimentosVinculados = [{{#each usuarioLogado.estabelecimentosVinculados}} "{{_id}}", {{/each}}]
+
                                 $('#edit-idEntregador').val(response._id)
                                 $('#edit-nome').val(response.nome)
                                 $('#edit-observacoes').val(response.observacao)
                                 $('#edit-statusAtivo').prop('checked', response.statusAtivo)
-
-                                response.estabelecimentos.forEach(element => {
-                                    $(`#edit-entregador${element.idEstabelecimento}`).prop('checked', true)
+                                
+                                response.estabelecimentos.forEach(element => { 
+                                    if(estabelecimentosVinculados.indexOf(element.idEstabelecimento._id) == -1){
+                                        $('#estabelecimento-vinculado-entregador').append(`
+                                            <input type="checkbox" name="estabelecimentos[]" value="${element.idEstabelecimento._id}" checked hidden>
+                                        `) 
+                                    }else{
+                                        $(`#edit-entregador${element.idEstabelecimento._id}`).prop('checked', true)
+                                    }
                                 })
+
                             }
                         });
                     })

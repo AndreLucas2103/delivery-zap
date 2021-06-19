@@ -12,7 +12,10 @@ const Entregador = new Schema({
     perfilAvatar: String,
 
     estabelecimentos: [{
-        idEstabelecimento: ObjectId
+        idEstabelecimento: {
+            type: Schema.Types.ObjectId,
+            ref: "estabelecimentos",
+        }
     }],
     
     statusAtivo: {

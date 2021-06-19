@@ -19,7 +19,6 @@ router.get('/entregadores',eAdmin, async (req, res) => {
         let estabelecimentos = await Estabelecimento.find({"idUsuarioMaster" : req.user.idUsuarioMaster }).populate('idUsuarioMaster').lean()
 
         res.render('usuarios/entregador/entregadores', {entregador: entregador, estabelecimentos: estabelecimentos})
-       
 
     } catch (err) {
         console.log(err)
@@ -94,11 +93,10 @@ router.post("/edit-entregador", (req, res) => {//Rota editar novo usuário.
 })
 
 router.post('/ajax-get-entregadores', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
-    Entregador.findById({_id: req.body.idEntregador}).lean().then(entregador => {
+    Entregador.findById({_id: req.body.idEntregador}).populate('estabelecimentos.idEstabelecimento').lean().then(entregador => {
+        console.log(entregador)
         res.json(entregador)
     })
 })
-
-   
 
 module.exports = router
