@@ -6,61 +6,156 @@
 {{>usuario/_menu}}
 
 <main class="content">
-    <div class="row">
-        <div class="col-lg-3">
-            <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
-                <div class="card-body ">
-                    <span class="d-block">Nome: {{pedido.infoEntrega.nomeCliente}} </span>
-                    <span class="d-block">Telefone: {{pedido.infoEntrega.telefone}}</span>
-                    <span class="d-block">Tipo Entrega: {{pedido.tipoEntrega}}</span>
-                    <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> {{pedido.idEstabelecimento.nome}}</span>
-                    
-                    <hr>
-                    <span class="d-block">Produtos:</span>
-                    {{#each pedido.produtos}}
-                        <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
-                            <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
-                        </button>
-                            <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
-                                {{#if opcao}}
-                                    {{#each opcao}}
-                                        <span class="my-1 d-block">{{nomeOpcao}}: 
-                                            {{#each opcoes}}
-                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                            {{/each}}
-                                        </span>
-                                    {{/each}}
-                                {{/if}}
-                                
-                                {{#if adicionais}}
-                                    <span class="my-1">Adicionais: 
-                                        {{#each adicionais}}
-                                            <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                        {{/each}}
-                                    </span>
-                                {{/if}}
-
-                                {{#if observacao}}
-                                    <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
-                                {{/if}}
-                                
-                                <span class="d-block">Qtd: {{quantidade}}</span>
-                                <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
-                            </div>
-                    {{/each}}
-                    <hr>
-                        <span class="d-block">Taxa Entrega: <span class="valorFormatar">{{pedido.infoEntrega.taxaEntrega}}</span></span>
-                        <span class="d-block">Total pedido: <span class="valorFormatar">{{pedido.valorTotal}}</span></span>
-                        <hr>
-                        {{#if pedido.infoEntrega.endereco.rua}}<span class="d-block">Rua: {{pedido.infoEntrega.endereco.rua}}</span>{{/if}}
-                        {{#if pedido.infoEntrega.endereco.bairro}}<span class="d-block">Bairro: {{pedido.infoEntrega.endereco.bairro}}</span>{{/if}}
-                        {{#if pedido.infoEntrega.endereco.cidade}}<span class="d-block">Cidade: {{pedido.infoEntrega.endereco.cidade}}</span>{{/if}}
-                        {{#if pedido.infoEntrega.endereco.cep}}<span class="d-block">CEP: {{pedido.infoEntrega.endereco.cep}}</span>{{/if}}
-                        {{#if pedido.infoEntrega.endereco.numero}}<span class="d-block">Número: {{pedido.infoEntrega.endereco.numero}}</span>{{/if}}
-                </div>
-            </div>
-        </div>
+    <div class="row" id="ajax-comandas">
+            
     </div>
+
+
+    <script>
+        function formatValor(valor) {
+            return new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valor)
+        } 
+
+        setInterval(() => {
+            ajaxUpdateComanda()
+        }, 5000)
+
+        let comandas = []
+        
+        function ajaxUpdateComanda() {
+            jQuery.ajax({
+                type: "POST",
+                url: '/pedido/ajax-comadas-producao',
+                success: function(response) {
+                    console.log(comandas)
+
+                    comandas.forEach((comanda, index) => {
+                        if(response.findIndex(pedido => pedido._id == comanda ) == -1){
+                            $(`#pedido-${comanda}`).remove()
+                            comandas.splice(index, 1)
+                            console.log('remover: '+index)
+                        }
+                    })
+
+                    response.forEach((pedido, index) => {
+                        if(comandas.findIndex(element => element == pedido._id ) == -1){
+                            comandas.push(pedido._id)
+                            console.log('adicionar: ')
+                            $("#ajax-comandas").append(`
+                                <div class="col-lg-3" id="pedido-${pedido._id}">
+                                    <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
+                                        <div class="card-body ">
+                                            <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
+                                            <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
+                                            <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
+                                            <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
+                                            
+                                            <hr>
+                                            <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>
+                                            
+                                            {{#each pedido.produtos}}
+                                                <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
+                                                    <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
+                                                </button>
+                                                <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
+                                                    {{#if opcao}}
+                                                        {{#each opcao}}
+                                                            <span class="my-1 d-block">{{nomeOpcao}}: 
+                                                                {{#each opcoes}}
+                                                                    <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                                                {{/each}}
+                                                            </span>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                    
+                                                    {{#if adicionais}}
+                                                        <span class="my-1">Adicionais: 
+                                                            {{#each adicionais}}
+                                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                                            {{/each}}
+                                                        </span>
+                                                    {{/if}}
+
+                                                    {{#if observacao}}
+                                                        <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
+                                                    {{/if}}
+                                                    
+                                                    <span class="d-block">Qtd: {{quantidade}}</span>
+                                                    <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
+                                                </div>
+                                            {{/each}}
+
+                                            <hr>
+                                                <span class="d-block">Taxa Entrega:${formatValor(pedido.infoEntrega.taxaEntrega)}</span>
+                                                <span class="d-block">Total pedido: ${formatValor(pedido.valorTotal)}</span>
+                                                <hr id="append-endereco-${pedido._id}">
+                                                
+                                                {{#if pedido.infoEntrega.endereco.rua}}<span class="d-block">Rua: {{pedido.infoEntrega.endereco.rua}}</span>{{/if}}
+                                                {{#if pedido.infoEntrega.endereco.bairro}}<span class="d-block">Bairro: {{pedido.infoEntrega.endereco.bairro}}</span>{{/if}}
+                                                {{#if pedido.infoEntrega.endereco.cidade}}<span class="d-block">Cidade: {{pedido.infoEntrega.endereco.cidade}}</span>{{/if}}
+                                                {{#if pedido.infoEntrega.endereco.cep}}<span class="d-block">CEP: {{pedido.infoEntrega.endereco.cep}}</span>{{/if}}
+                                                {{#if pedido.infoEntrega.endereco.numero}}<span class="d-block">Número:</span>{{/if}}
+                                        </div>
+                                    </div>
+                                </div>
+                            `)
+
+                            if(pedido.produtos.endereco){
+                                $(`#append-endereco-${pedido._id}`).append(`
+                                    <span class="d-block">Rua: ${pedido.infoEntrega.endereco.rua}</span>
+                                    <span class="d-block">Bairro: ${pedido.infoEntrega.endereco.bairro}</span>
+                                    <span class="d-block">Cidade: ${pedido.infoEntrega.endereco.cidade}</span>
+                                    <span class="d-block">CEP: ${pedido.infoEntrega.endereco.cep}</span>
+                                    <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
+                                `)
+                            }
+                            
+                            pedido.produtos.forEach(produto => {
+                                $(`#pedido-produtos-${pedido._id}`).append(`
+                                    <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
+                                        <i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
+                                    </button>
+                                    <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-${produto._id}">
+                                        
+                                        <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-opcao"></span>
+
+                                        <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-adicionais">Adicionais: </span>
+                                        
+                                        ${produto.observacao ? `<span class="d-block" class="my-1">Obeservação: ${produto.observacao} </span>` : `` }
+                                        
+                                        
+                                        <span class="d-block">Qtd: ${produto.quantidade}</span>
+                                        <span class="d-block">Total: <span class="valorFormatar">${formatValor(produto.valorTotal)}</span></span>
+                                    </div>
+                                    
+                                `)
+
+                                produto.opcao.forEach(opcao => {
+                                    $(`#pedido-${pedido._id}-produto-${produto._id}-opcao`).append(`
+                                        <span class="my-1 d-block" id="pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes">${opcao.nomeOpcao}: </span>
+                                    `)
+
+                                    opcao.opcoes.forEach( opcoes => {
+                                        $(`#pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes`).append(`
+                                            <span>${opcoes.nome} - ${formatValor(opcoes.valor)};</span>
+                                        `)
+                                    })
+                                })
+
+                                produto.adicionais.length == 0 ? $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).remove() : produto.adicionais.forEach(adiconal => { $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).append(` <span>${adiconal.nome} - ${formatValor(adiconal.valor)};</span>`)})
+                            })
+
+                        }
+                    })
+
+                    console.log(comandas)
+                    
+                    
+                }
+            });
+        }
+        
+    </script>
 
 </main>
 

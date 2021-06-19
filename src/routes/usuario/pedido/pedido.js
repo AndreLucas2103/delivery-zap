@@ -26,11 +26,8 @@ const Entregador = mongoose.model("entregadores")
 
 
 router.get('/comandas', async (req, res) => {
-    let pedido = await Pedido.findOne().sort({'createdAt': -1}).lean().populate('idEstabelecimento')
-    res.render('usuarios/pedido/comandas', {pedido: pedido})
+    res.render('usuarios/pedido/comandas')
 })
-
-
 
 router.get('/pedidos', async (req, res) => {
     try {
@@ -129,11 +126,15 @@ router.get('/pedidos', async (req, res) => {
 })
 
 router.post('/ajax-comadas-producao', async (req, res) => {
-    let pedidos = await Pedido.find({
-        $and: [
-            {'situacao': 'production'}
-        ]
-    }).lean()
+    //let userEstabelecimentos = []
+    //req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
+
+    let pedidos = await Pedido.find({$and: [
+        {'situacao': 'production'},
+        // {'idEstabelecimento': userEstabelecimentos}
+    ]}).sort({'updateAt': -1}).populate('idEstabelecimento').lean()
+
+    res.json(pedidos)
 })
 
 router.post('/edit-pedidos-situacao', (req, res) => {
