@@ -35,9 +35,11 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
 
         let estabelecimento = await Estabelecimento.findOne({$and: [
             {'integracao.mercadoPago.publickey': req.params.publickey},
-            {'testadoAtivo': true},
-            {'statusAtivo': true}
+            {'integracao.mercadoPago.testadoAtivo': true},
+            {'integracao.mercadoPago.statusAtivo': true}
         ]})
+
+        console.log(estabelecimento)
 
         if(!estabelecimento){
             return res.send('404') 
