@@ -360,6 +360,11 @@
                         </div>
                     </div>
 
+                    {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
+                        <label for="ipn">IPN URL</label>
+                        <input type="text" id="ipn"  class="form-control mb-2" value="https://hotpedidos.com/estabelecimento/IPN-mercadoPago-hotPedidos/{{estabelecimento.integracao.mercadoPago.acessToken}}" readonly>
+                    {{/if}}
+
                     <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
                     <button type="submit" class="btn btn-dark btn-sm">Salvar</button>
 
