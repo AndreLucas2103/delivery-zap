@@ -48,6 +48,7 @@
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
                                                  <button type="button" onclick="clickPrint('${pedido._id}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
+                                            <div id="comanda-${pedido._id}">
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
@@ -85,6 +86,7 @@
                                                     
                                                     <span class="d-block">Qtd: {{quantidade}}</span>
                                                     <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
+                                                </div>
                                                 </div>
                                             {{/each}}
 
@@ -188,7 +190,7 @@
     <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
     <script type="text/javascript">
        function clickPrint(printerid) {
-            var divContents = $(`#pedido-${printerid}`).html();
+            var divContents = $(`#comanda-${printerid}`).html();
             var printWindow = window.open('', '', 'height=800,width=800');
             printWindow.document.write('</head><body style="height:100%;width:58mm;">');
             printWindow.document.write(divContents);
