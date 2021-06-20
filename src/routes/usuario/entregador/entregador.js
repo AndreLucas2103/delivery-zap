@@ -96,6 +96,7 @@ router.post('/ajax-get-entregadores', (req, res) => { // consulto pela rota  "/p
     Entregador.findById({_id: req.body.idEntregador}).populate('estabelecimentos.idEstabelecimento').lean().then(entregador => {
         console.log(entregador)
         res.json(entregador)
+        console.log(13)
     })
 })
 
