@@ -46,9 +46,9 @@
                                         <div class="card-body ">
                                             <span class="float-end">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
-                                                 <button type="button" onclick="printContent('comanda-${pedido._id}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
+                                                 <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
-                                            <div id="comanda-${pedido._id}" >
+                                            <div id="comanda-${pedido._id}">
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
@@ -187,12 +187,16 @@
                 </script>
 
                 <script>
-                    function printContent(el) {
-                        var restorepage = document.body.innerHTML;
-                        var printcontent = document.getElementById(el).innerHTML;
-                        document.body.innerHTML = printcontent;
+                    function printContent(el, el2) {
+                        $(`#comanda-${el}`).addClass("printable pagebreak");
+                        $(`#comanda-${el}`).css("width", el2);
                         window.print();
-                        document.body.innerHTML = restorepage;
+
+                        window.close()
+                        $(`#comanda-${el}`).css("width", "");
+                        $(`#comanda-${el}`).removeClass("printable pagebreak");
+
+
                     }
                 </script>
                 </script>
