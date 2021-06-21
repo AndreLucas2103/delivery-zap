@@ -192,7 +192,7 @@
                         arr.push(printerid + ',' + bobina);
                         var divContents = document.getElementById(`comanda-${printerid}`).innerHTML;
                         var printWindow = window.open('', '', 'height=800,width=800');
-                        printWindow.document.write(`</head><body style="height:auto;width:${bobina};">`);
+                        printWindow.document.write(`</head><body style="height:auto;width:${bobina};margin:0;">`);
                         printWindow.document.write(divContents);
                         printWindow.document.write('</body></html>');
                         printWindow.document.close();
