@@ -46,7 +46,7 @@
                                         <div class="card-body ">
                                             <span class="float-end">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
-                                                 <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
+                                                 <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
                                             <div id="comanda-${pedido._id}">
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
@@ -187,13 +187,15 @@
                 </script>
 
                 <script>
-                    function printContent(el, el2) {
+                    function printContent(el, el2, el3) {
                         $(`#comanda-${el}`).addClass("printable pagebreak");
                         $(`#comanda-${el}`).css("width", el2);
+                        $(`#comanda-${el}`).css("font-size", el3);
                         window.print();
 
                         window.close()
                         $(`#comanda-${el}`).css("width", "");
+                        $(`#comanda-${el}`).css("font-size", "");
                         $(`#comanda-${el}`).removeClass("printable pagebreak");
 
 
