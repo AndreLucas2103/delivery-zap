@@ -48,7 +48,7 @@
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
                                                  <button type="button" onclick="clickPrint('${pedido._id}','${pedido.idEstabelecimento.impressora.bobina}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
-                                            <div id="comanda-${pedido._id}" >
+                                            <div id="comanda-${pedido._id}" style="break-after:page" >
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
@@ -192,7 +192,7 @@
                         arr.push(printerid + ',' + bobina);
                         var divContents = document.getElementById(`comanda-${printerid}`).innerHTML;
                         var printWindow = window.open('', '', 'height=800,width=800');
-                        printWindow.document.write(`</head><body class="pagebreak" style="height:auto;width:${bobina};">`);
+                        printWindow.document.write(`</head><body  style="height:auto;width:${bobina};">`);
                         printWindow.document.write(divContents);
                         printWindow.document.write('</body></html>');
                         printWindow.document.close();
