@@ -43,7 +43,7 @@
                                         $("#ajax-comandas").append(`
                                 <div class="col-lg-3" id="pedido-${pedido._id}">
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
-                                        <div class="card-body " style="font-size:${pedido.idEstabelecimento.impressora.fonte};">
+                                        <div class="card-body ">
                                             <span class="float-end">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
                                                  <button type="button" onclick="clickPrint('${pedido._id}','${pedido.idEstabelecimento.impressora.bobina}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
@@ -187,11 +187,12 @@
                 </script>
 
                 <script>
-        
                     function clickPrint(printerid, bobina) {
-                        var divContents = $(`#comanda-${printerid}`).html();
+                        var arr = [];
+                        arr.push(printerid + ',' + bobina);
+                        var divContents = document.getElementById(`comanda-${printerid}`).innerHTML;
                         var printWindow = window.open('', '', 'height=800,width=800');
-                        printWindow.document.write(`</head><body style="width:${bobina};">`);
+                        printWindow.document.write(`</head><body style="height:auto;width:${bobina};">`);
                         printWindow.document.write(divContents);
                         printWindow.document.write('</body></html>');
                         printWindow.document.close();
