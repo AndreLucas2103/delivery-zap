@@ -1,46 +1,55 @@
 {{>usuario/_top-css}}
 <div class="container-fluid bg-soft">
-<div class="row">
-<div class="col-12">
-{{>usuario/_menu}}
-    
-<main class="content">
-    <div class="row" id="ajax-comandas">
-    </div>
+    <div class="row">
+        <div class="col-12">
+            {{>usuario/_menu}}
 
-    <script>
+            <main class="content">
+                <div class="row" id="ajax-comandas">
+                </div>
 
-        function formatValor(valor) {
-            return new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valor)
-        } 
+                <script>
 
-        onload = ajaxUpdateComanda()
+                    function formatValor(valor) {
+                        return new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valor)
+                    }
 
-        setInterval(() => {
-            ajaxUpdateComanda()
-        }, 15000)
+                    onload = ajaxUpdateComanda()
 
-        let comandas = []
-        
-        function ajaxUpdateComanda() {
-            jQuery.ajax({
-                type: "POST",
-                url: '/pedido/ajax-comadas-producao',
-                success: function(response) {
-                    console.log(comandas)
+                    setInterval(() => {
+                        ajaxUpdateComanda()
+                    }, 15000)
 
-                    comandas.forEach((comanda, index) => {
-                        if(response.findIndex(pedido => pedido._id == comanda ) == -1){
-                            $(`#pedido-${comanda}`).remove()
-                            comandas.splice(index, 1)
-                        }
-                    })
+                    let comandas = []
 
-                    response.forEach((pedido, index) => {
-                        if(comandas.findIndex(element => element == pedido._id ) == -1){
-                            comandas.push(pedido._id)
-                            console.log('adicionar: ')
-                            $("#ajax-comandas").append(`
+                    function ajaxUpdateComanda() {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '/pedido/ajax-comadas-producao',
+                            success: function (response) {
+                                console.log(comandas)
+
+                                comandas.forEach((comanda, index) => {
+                                    if (response.findIndex(pedido => pedido._id == comanda) == -1) {
+                                        $(`#pedido-${comanda}`).remove()
+                                        comandas.splice(index, 1)
+                                    }
+                                })
+
+                                response.forEach((pedido, index) => {
+                                    if (comandas.findIndex(element => element == pedido._id) == -1) {
+                                        comandas.push(pedido._id)
+                                        console.log('adicionar: ')
+                                        $("#ajax-comandas").append(`
+                                        <div id="comanda-${pedido._id}" style="font-size:${pedido.idEstabelecimento.impressora.fonte};" hidden>
+                                            <div class="card-body" style="width:${pedido.idEstabelecimento.impressora.bobina};">
+                                                <div class="text center">
+                                           <span>${pedido.idEstabelecimento.nomePainel}</span><br>
+                                           <span>${pedido.idEstabelecimento.endereco.logradouro}-${pedido.idEstabelecimento.endereco.numero}-${pedido.idEstabelecimento.endereco.bairro}/${pedido.idEstabelecimento.endereco.localidade}</span><br>
+                                           <span>${pedido.idEstabelecimento.telefone}</span>
+                                           </div>
+                                           </div>
+                                            </div>
                                 <div class="col-lg-3" id="pedido-${pedido._id}">
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
                                         <div class="card-body ">
@@ -48,12 +57,11 @@
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
                                                  <button type="button" onclick="clickPrint('${pedido._id}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
-                                            <div id="comanda-${pedido._id}">
+                                            <div >
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
                                             <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
-                                            
                                             <hr>
                                             <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>
                                             
@@ -87,7 +95,7 @@
                                                     <span class="d-block">Qtd: {{quantidade}}</span>
                                                     <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
                                                 </div>
-                                                </div>
+                                                
                                             {{/each}}
 
                                             <hr>
@@ -105,18 +113,18 @@
                                 </div>
                             `)
 
-                            if(pedido.produtos.endereco){
-                                $(`#append-endereco-${pedido._id}`).append(`
+                                        if (pedido.produtos.endereco) {
+                                            $(`#append-endereco-${pedido._id}`).append(`
                                     <span class="d-block">Rua: ${pedido.infoEntrega.endereco.rua}</span>
                                     <span class="d-block">Bairro: ${pedido.infoEntrega.endereco.bairro}</span>
                                     <span class="d-block">Cidade: ${pedido.infoEntrega.endereco.cidade}</span>
                                     <span class="d-block">CEP: ${pedido.infoEntrega.endereco.cep}</span>
                                     <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
                                 `)
-                            }
-                            
-                            pedido.produtos.forEach(produto => {
-                                $(`#pedido-produtos-${pedido._id}`).append(`
+                                        }
+
+                                        pedido.produtos.forEach(produto => {
+                                            $(`#pedido-produtos-${pedido._id}`).append(`
                                     <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
                                         <i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
                                     </button>
@@ -126,7 +134,7 @@
 
                                         <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-adicionais">Adicionais: </span>
                                         
-                                        ${produto.observacao ? `<span class="d-block" class="my-1">Obeservação: ${produto.observacao} </span>` : `` }
+                                        ${produto.observacao ? `<span class="d-block" class="my-1">Obeservação: ${produto.observacao} </span>` : ``}
                                         
                                         
                                         <span class="d-block">Qtd: ${produto.quantidade}</span>
@@ -135,80 +143,81 @@
                                     
                                 `)
 
-                                produto.opcao.forEach(opcao => {
-                                    $(`#pedido-${pedido._id}-produto-${produto._id}-opcao`).append(`
+                                            produto.opcao.forEach(opcao => {
+                                                $(`#pedido-${pedido._id}-produto-${produto._id}-opcao`).append(`
                                         <span class="my-1 d-block" id="pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes">${opcao.nomeOpcao}: </span>
                                     `)
 
-                                    opcao.opcoes.forEach( opcoes => {
-                                        $(`#pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes`).append(`
+                                                opcao.opcoes.forEach(opcoes => {
+                                                    $(`#pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes`).append(`
                                             <span>${opcoes.nome} - ${formatValor(opcoes.valor)};</span>
                                         `)
-                                    })
+                                                })
+                                            })
+
+                                            produto.adicionais.length == 0 ? $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).remove() : produto.adicionais.forEach(adiconal => { $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).append(` <span>${adiconal.nome} - ${formatValor(adiconal.valor)};</span>`) })
+                                        })
+
+                                    }
                                 })
 
-                                produto.adicionais.length == 0 ? $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).remove() : produto.adicionais.forEach(adiconal => { $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).append(` <span>${adiconal.nome} - ${formatValor(adiconal.valor)};</span>`)})
-                            })
+                                console.log(comandas)
+                            }
+                        });
+                    }
 
-                        }
-                    })
 
-                    console.log(comandas)
-                }
-            });
-        }
 
-        
-        
-        function clickButtonConcluirComanda (status, idPedido) {
-            jQuery.ajax({
-                type: "POST",
-                url: '/pedido/edit-pedidos-situacao',
-                data: {idPedido: idPedido, situacao: status},
-                success: function(response) {
-                    ajaxUpdateComanda()
-                    Swal.fire({
-                        toast: true,
-                        title: 'Pedido alterado',
-                        position: 'top-right',
-                        background: "#20853b",
-                        showConfirmButton: false,
-                        showCloseButton: true,
-                        timer: 5000,
-                        timerProgressBar: true,
-                        customClass: {
-                            title: 'font-title-notificacao',                              
-                        }
-                    })
+                    function clickButtonConcluirComanda(status, idPedido) {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '/pedido/edit-pedidos-situacao',
+                            data: { idPedido: idPedido, situacao: status },
+                            success: function (response) {
+                                ajaxUpdateComanda()
+                                Swal.fire({
+                                    toast: true,
+                                    title: 'Pedido alterado',
+                                    position: 'top-right',
+                                    background: "#20853b",
+                                    showConfirmButton: false,
+                                    showCloseButton: true,
+                                    timer: 5000,
+                                    timerProgressBar: true,
+                                    customClass: {
+                                        title: 'font-title-notificacao',
+                                    }
+                                })
 
-                }
-            })
-        }
+                            }
+                        })
+                    }
 
-    </script>
+                </script>
 
-    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.8.3/jquery.min.js"></script>
-    <script type="text/javascript">
-       function clickPrint(printerid) {
-            var divContents = $(`#comanda-${printerid}`).html();
-            var printWindow = window.open('', '', 'height=800,width=800');
-            printWindow.document.write('</head><body style="height:100%;width:58mm;">');
-            printWindow.document.write(divContents);
-            printWindow.document.write('</body></html>');
-            printWindow.document.close();
-            printWindow.print();
-        }
-    </script>
+                <script>
 
-</main>
+                    function clickPrint(printerid, bobina, fonte) {
+                        var printContents = document.getElementById(`comanda-${printerid}`).innerHTML;
+                        var originalContents = document.body.innerHTML;
 
-</div>
-</div>
+                        document.body.innerHTML = printContents;
+
+                        window.print();
+
+                        document.body.innerHTML = originalContents;
+                    }
+                </script>
+
+            </main>
+
+        </div>
+    </div>
 </div>
 
 <script>
 
-    
+
 </script>
 
 {{>usuario/_rodape}}

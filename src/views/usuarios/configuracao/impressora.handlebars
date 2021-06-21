@@ -1,0 +1,115 @@
+{{>usuario/_top-css}}
+
+<link rel="stylesheet" href="/js/tagify/tagify.css">
+<script src="/js/tagify//jQuery.tagify.min.js"></script>
+
+<div class="container-fluid bg-soft">
+    <div class="row">
+        <div class="col-12">
+            {{>usuario/_menu}}
+
+            <main class="content">
+                <div class="">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                            <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                            <li class="breadcrumb-item"><a>Configurações</a></li>
+                            <li class="breadcrumb-item">Impressora</a></li>
+                        </ol>
+                    </nav>
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-6 mb-4">
+                        <div class="card border-light shadow-sm">
+                            <div class="card-header border-bottom border-light d-flex justify-content-between">
+                                <h2 class="h5 mb-0">Impressora</h2>
+                            </div>
+                            <div class="card-body">
+                                <form method="POST" action="/impressora/edit-impressora">
+                                <div class="float-end mr-7">
+                                 <h5>Configuração de impressão:</h5>
+                                 <h8>Tamanho da bobina:</h8>
+                                    <select style="width: 120px;" class="form-select form-select-sm " name="bobina" id="valueBobina">
+                                        <option selected value="52mm">52mm</option>
+                                        <option value="58mm">58mm</option>
+                                        <option value="80mm">80mm</option>
+                                    </select>
+                                    <h8>Tamanho da fonte:</h8>
+                                    <select style="width: 120px;" class="form-select form-select-sm" name="fonte" id="valueFonte">
+                                        <option selected value="14px">14px</option>
+                                        <option value="16px">16px</option>
+                                        <option value="18px">18px</option>
+                                    </select><br>
+                                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
+
+                                    <button type="submit" class="btn btn-primary btn mb-3" style="width: 120px;">Salvar</button>
+                                    </form>
+                                    </div>
+                                <div id="sizeBobina" style="width: {{estabelecimento.impressora.bobina}};">                               
+                                    <div id="sizeFonte" class="card shadow-sm border-light justify-content-between"
+                                        style="font-size: {{estabelecimento.impressora.fonte}};background-color:rgb(255, 237, 189);" >
+                                        <div class="card-body">
+
+                                            <span class="d-block">Nome: João da Silva </span>
+                                            <span class="d-block">Telefone: 35 9999-99999</span>
+                                            <span class="d-block">Tipo Entrega: Delivery</span>
+                                            <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i>Meu
+                                                Estabelecimento<span>
+
+                                                    <hr>
+                                                    <span class="d-block">Produtos:</span>
+
+                                                    <button class="btn btn-sm my-2 d-block"
+                                                        style="background-color:rgb(252, 223, 145)" type="button">
+                                                        <i class="fas fa-list"></i> X-Salada - <span
+                                                            class="valorFormatar">10</span>
+                                                    </button>
+                                                    <div class="collapse show " style="font-weight: 900;">
+                                                        <span class="my-1">Adicionais:
+                                                            <span>Catupiry - <span>R$ 1,00 /<span>Cebola -
+                                                                        <span>R$ 1,00</span></span></span>
+                                                            </span>
+                                                            <span class="d-block" class="my-1">Obeservação: Caprichar na
+                                                                maionese!</span>
+                                                            <span class="d-block">Qtd: 1</span>
+                                                            <span class="d-block">Total: <span class="valorFormatar">R$
+                                                                    12,00</span></span>
+                                                    </div>
+                                                    <hr>
+                                                    <span class="d-block">Taxa Entrega:R$ 2,00</span>
+                                                    <span class="d-block">Total pedido:R$ 14,00</span>
+                                                    <hr>
+                                                    <span class="d-block">Endereco:</span>
+                                                    <span class="d-block">Rua: Guarani - 365</span>
+                                                    <span class="d-block">Bairro: Centro</span>
+                                                    <span class="d-block">Cidade: Alterosa</span>
+                                                    <span class="d-block">CEP:37145-000</span>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </main>
+
+            <script>
+        window.onload = function () {
+        var sizeBobina1 = document.querySelector('#valueBobina');
+        var sizeBobina2 = document.querySelector('#valueFonte');     
+        sizeBobina1.oninput = function () {
+            $("#sizeBobina").width(sizeBobina1.value);
+        }
+        sizeBobina2.oninput = function () {
+            $( "#sizeFonte" ).css( "font-size", sizeBobina2.value)
+        }    
+        }
+        $("#valueBobina").val('{{estabelecimento.impressora.bobina}}').change();
+        $("#valueFonte").val('{{estabelecimento.impressora.fonte}}').change();
+            </script>
+
+            {{>usuario/_rodape}}
+
+            {{>_msg}}
