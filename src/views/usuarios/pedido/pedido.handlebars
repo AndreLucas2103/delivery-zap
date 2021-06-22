@@ -1,0 +1,443 @@
+{{>usuario/_top-css}}
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<main class="content">
+
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/pedidos">Pedidos</a></li>
+                <li class="breadcrumb-item"><a>Pedido</a></li>
+                <li class="breadcrumb-item"><a>ID Pedido: {{pedido._id}}</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-8">
+            <div class="card">
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 rounded">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="border-0">#</th>
+                                    <th class="border-0">Dados</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td>Data Criação</td>
+                                    <td>{{dataFormatTimeZone usuarioLogado.timeZone pedido.dataCriacao "DD/MM/YYYY HH:mm"}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Produtos</td>
+                                    <td>
+                                        <button class="btn btn-white btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">
+                                            Exibir
+                                        </button>
+                                        <div class="collapse" id="collapseExample">
+                                            {{#each pedido.produtos}}
+                                                <div class="card card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
+                                                    <div class="card-body">
+                                                        {{nome}} - <span class="valorFormatar">{{valor}}</span>
+                                                        {{#each opcao}}
+                                                            <span class="d-block">
+                                                                <span>{{nomeOpcao}}: </span>
+                                                                {{#each opcoes}}
+                                                                    {{nome}} - <span class="valorFormatar">{{valor}}</span>;
+                                                                {{/each}}
+                                                            </span>
+                                                        {{/each}}
+
+                                                        {{#if adicionais}}
+                                                            <span class="d-block">Adicionais: 
+                                                                {{#each adicionais}}
+                                                                    {{nome}} - <span class="valorFormatar">{{valor}}</span>
+                                                                {{/each}}
+                                                            </span>
+                                                        {{/if}}
+
+                                                        <span class="d-block">Quantidade: {{quantidade}}</span>
+                                                        <span class="d-block">Obeservação: {{observacao}}</span>
+                                                        <span class="d-block">Valor Total: <span class="valorFormatar">{{valor}}</span></span>
+
+                                                    </div>
+                                                </div>
+                                            {{/each}}
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Identificação</td>
+                                    <td>
+                                        <button class="btn btn-white btn-sm button-click-copy" data-bs-buttonCopy="pedido-identificacao"><i class="fas fa-copy"></i> Copiar</button>
+                                        <input style="position: absolute; z-index: -999; opacity: 0;" readonly type="text" id="button-copy-pedido-identificacao" value="{{pedido.identificacaoPedido}}">
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Tipo Entrega</td>
+                                    <td>{{pedido.tipoEntrega}}
+                                        <span>
+                                            <button class="btn btn-white btn-sm" type="button" id="dropdown-edit-pedido-tipoEntrega-{{pedido._id}}" data-bs-toggle="dropdown" >
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-edit-pedido-tipoEntrega-{{pedido._id}}">
+                                                <form action="/pedido/edit-pedidos" method="post">
+                                                    <input type="text" name="idPedido" value="{{pedido._id}}" hidden readonly>
+                                                    <input type="text" name="dados" value="tipoEntrega" hidden readonly>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="valor" value="retirarEstabelecimento">Retirar Estabelecimento</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="valor" value="entrega">Entrega</button></li>
+                                                </form>
+                                            </ul>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Situação</td>
+                                    <td>
+                                        <span class="format-pedido-situacao">{{pedido.situacao}}</span>
+                                        <span>
+                                            <button class="btn btn-white btn-sm" type="button" id="dropdown-options-{{pedido._id}}" data-bs-toggle="dropdown" >
+                                                <i class="fas fa-ellipsis-v"></i>
+                                            </button>
+                                            <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{pedido._id}}">
+                                                <form action="/pedido/edit-pedidos-situacao" method="post">
+                                                    <input type="text" name="idPedido" value="{{pedido._id}}" hidden readonly>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="waiting"><i class="fas fa-clock"></i> Aguardando</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="production"><i class="fas fa-spinner text-warning"></i> Produção</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="concluded"><i class="fas fa-check text-success"></i> Concluido</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="delivery"><i class="fas fa-truck"></i> Entrega</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="canceled"><i class="fas fa-times-circle text-danger"></i> Cancelar</button></li>
+                                                    <li><hr class="dropdown-divider"></li>
+                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="finished"><i class="fas fa-check-circle text-success"></i> Finalizar</button></li>
+                                                </form>
+                                            </ul>
+                                        </span>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Dados Entrega</td>
+                                    <td>
+                                        <button class="btn btn-white btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfoEntrega">Exibir</button>
+                                        <div class="collapse" id="collapseInfoEntrega">
+                                            <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Nome</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="nomeCliente" value="{{pedido.infoEntrega.nomeCliente}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Telefone</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="telefone" value="{{pedido.infoEntrega.telefone}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Rua</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="rua" value="{{pedido.infoEntrega.rua}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Numero</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="numero" value="{{pedido.infoEntrega.numero}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Bairro</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="bairro" value="{{pedido.infoEntrega.bairro}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cidade</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="cidade" value="{{pedido.infoEntrega.cidade}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>CEP</td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="cep" value="{{pedido.infoEntrega.cep}}"> </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Entregador</td>
+                                                    <td>{{pedido.infoEntrega.idEntregador.nome}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Taxa Entrega</td>
+                                                    <td class="valorFormatar">{{pedido.infoEntrega.taxaEntrega}}</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Valor Total </td>
+                                    <td class="valorFormatar">{{pedido.valorTotal}}</td>
+                                </tr>
+                                <tr>
+                                    <td>Observação do Pedido</td>
+                                    <td><input type="text" class="form-control form-control-sm" name="observacao" value="{{pedido.observacao}}"></td>
+                                </tr>
+                                
+                                <tr>
+                                    <td>Estabelecimento</td>
+                                    <td>{{pedido.idEstabelecimento.nome}}</td>
+                                </tr>
+
+                                <tr>
+                                    <td>Pagamento (Pagar no Recebimento)</td>
+                                    <td>
+                                        <button class="btn btn-white btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapsePagamentoNoRecebimento">Exibir</button>
+                                        <div class="collapse" id="collapsePagamentoNoRecebimento">
+                                            <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Tipo</td>
+                                                    <td>
+                                                        <select class="form-select form-select-sm" name="pagamento_tipo" id="edit-pedido-pagamento_tipo">
+                                                            <option value=""></option>
+                                                            <option value="pagarRecebimento">Pagar no recebimento</option>
+                                                            <option value="mercadoPago">Mercado Pago</option>
+                                                        </select>
+                                                    </td>
+                                                    <script>
+                                                        $('#edit-pedido-pagamento_tipo option[value="{{pedido.pagamento.tipo}}"]').attr("selected", "selected");
+                                                    </script>
+                                                </tr>
+                                                <tr>
+                                                    <td>Forma</td>
+                                                    <td>
+                                                        <select class="form-select form-select-sm" name="pagamento_forma" id="edit-pedido-pagamento_forma">
+                                                            <option value=""></option>
+                                                            <option value="cartaoCredito">Cartão Crédito</option>
+                                                            <option value="cartaoDebito">Cartão Débito</option>
+                                                            <option value="pix">PIX</option>
+                                                            <option value="dinheiro">Dinheiro</option>
+                                                        </select>
+                                                    </td>
+                                                    <script>
+                                                        $('#edit-pedido-pagamento_forma option[value="{{pedido.pagamento.forma}}"]').attr("selected", "selected");
+                                                    </script>
+                                                </tr>
+                                                <tr>
+                                                    <td>Troco Para</td>
+                                                    <td>R$<input type="number" class="form-control form-control-sm" name="pagamento_trocoPara" step="0.01" value="{{pedido.pagamento.trocoPara}}"></td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pago</td>
+                                                    <td>{{{formatTrueFalse pedido.pagamento.pago}}}</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+
+                                <tr>
+                                    <td>Informações Transação (Operadora) </td>
+                                    <td>
+                                        <button class="btn btn-white btn-sm" type="button" data-bs-toggle="collapse" data-bs-target="#collapseInfoTransacao">Exibir</button>
+                                        <div class="collapse" id="collapseInfoTransacao">
+                                            <table class="table">
+                                            <tbody>
+                                                <tr>
+                                                    <td>Operadora Pagamento</td>
+                                                    <td>{{pedido.infoTransacao.operadoraPagamento}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ID Transação Operadora</td>
+                                                    <td>{{pedido.infoTransacao.idTransacaoOperadora}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>ID Pedido Transação Operadora</td>
+                                                    <td>{{pedido.infoTransacao.idPedidoTransacaoOperadora}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Método Pagamento</td>
+                                                    <td>{{pedido.infoTransacao.metodoPagamento}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Tipo Pagamento</td>
+                                                    <td>{{pedido.infoTransacao.tipoPagamento}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Situação</td>
+                                                    <td>{{pedido.infoTransacao.situacao}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Situação Detalhada</td>
+                                                    <td>{{pedido.infoTransacao.situacaoDetalhada}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Data Pagamento</td>
+                                                    <td>{{dataFormatTimeZone usuarioLogado.timeZone pedido.infoTransacao.dataPagamento "DD/MM/YYYY HH:mm"}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Data Cancelamento</td>
+                                                    <td>{{dataFormatTimeZone usuarioLogado.timeZone pedido.infoTransacao.dataCancelamento "DD/MM/YYYY HH:mm"}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Pago</td>
+                                                    <td>{{{formatTrueFalse pedido.infoTransacao.pedidoPago}}}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Cancelado</td>
+                                                    <td>{{{formatTrueFalse pedido.infoTransacao.pedidoCancelado}}}</td>
+                                                </tr>
+                                            </tbody>
+                                            </table>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+
+                        </table>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-4">
+            <div class="card">
+                <div class="card-body">
+                    <span>
+                        {{#if pedido.pagamento.pago}}
+                            <i class="fas fa-check-circle text-success"></i> PAGO
+                        {{else}}
+                            {{#if pedido.infoTransacao.pedidoPago}}
+                                <i class="fas fa-check-circle text-success"></i> PAGO
+                            {{else}}
+                                {{#if pedido.infoTransacao.pedidoCancelado}}
+                                    <i class="fas fa-times-circle text-danger"></i> CANCELADO
+                                {{else}}
+                                    <i class="fas fa-clock"></i> Aguardando
+                                {{/if}}
+                            {{/if}}
+                        {{/if}}
+                    </span>
+                    
+                    <span class="text-primary font-weight-bold d-block mt-2">Nome Cliente{{pedido.infoEntrega.nomeCliente}}</span>
+                    <span class="text-primary font-weight-bold d-block">Telfone: {{pedido.infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{pedido.infoEntrega.telefone}}" data-bs-nome="{{pedido.infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </span> 
+
+                    <button class="btn btn-primary btn-sm mt-4">Editar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+
+    <!-- Modal Envio WhatsApp -->
+    <div class="modal fade" id="modal-send-msg-WhatsApp" tabindex="-1" aria-labelledby="modal-send-msg-WhatsAppLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="h6 modal-title">Enviar Mensagem WhatsApp</h2>
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <p>Nome: <span id="send-whatsapp-nome"></span></p>
+                <p>Telefone: <span id="send-whatsapp-telefone"></span></p>
+                <textarea id="send-whatsapp-msg" class="form-control" rows="4"></textarea>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-sm btn-primary" id="button-send-whatsapp-msg">Enviar</button>
+                <button type="button" class="btn btn-link text-danger ml-auto" data-bs-dismiss="modal">Fechar</button>
+            </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        var modalSendMsgWhatsApp = document.getElementById('modal-send-msg-WhatsApp')
+        modalSendMsgWhatsApp.addEventListener('show.bs.modal', function (event) {
+            var button = event.relatedTarget
+            $('#send-whatsapp-nome').text(button.getAttribute('data-bs-nome'))
+            $('#send-whatsapp-telefone').text(button.getAttribute('data-bs-telefone'))
+            $('#send-whatsapp-msg').val('')
+        })
+
+        $('#button-send-whatsapp-msg').click(() => {
+            let number = $('#send-whatsapp-telefone').text()
+            let text = $('#send-whatsapp-msg').val()
+            window.open(`
+                https://wa.me/55${number.replace(/[^0-9]/g,'')}?text=${text}
+            `, '_blank');
+            
+            $('#modal-send-msg-WhatsApp').modal('hide')
+        })
+    </script>
+
+    <script>
+        $(".valorFormatar").each(function (item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        })
+
+        $('.button-click-copy').click(function(event){
+            let copyText = document.getElementById(`button-copy-${event.target.dataset.bsButtoncopy}`);
+            copyText.select();
+            document.execCommand('copy');
+
+            Swal.fire({
+                toast: true,
+                title: 'Copiado',
+                position: 'top-right',
+                background: "#20853b",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        });
+
+        $(".format-pedido-situacao").each(function (item) {
+            let textFormat = $(this).text()
+            switch (textFormat) {
+                case 'canceled':
+                    $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
+                    break;
+                case 'waiting':
+                    $(this).html('<i class="fas fa-clock"></i> Aguardando')
+                    break;
+                case 'production':
+                    $(this).html('<i class="fas fa-spinner text-warning"></i> Produção')
+                    break;
+                case 'concluded':
+                    $(this).html('<i class="fas fa-check text-success"></i> Concluido')
+                    break;
+                case 'delivery':
+                    $(this).html('<i class="fas fa-truck"></i> Entrega')
+                    break;
+                case 'finished':
+                    $(this).html('<i class="fas fa-check-circle text-success"></i> Finalizado')
+                    break;
+                default:
+                    $(this).html('err')
+            }
+        })
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}
