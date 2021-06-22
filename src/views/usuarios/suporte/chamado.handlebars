@@ -1,0 +1,110 @@
+{{>usuario/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/suporte">Suporte</a></li>
+                <li class="breadcrumb-item"><a >Chamado</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <span class="h4 mb-4">{{chamado.titulo}}</span>
+
+                {{#each chamado.mensagens}}
+                    <div class="row mb-2">
+                        <div class="col-sm-1">
+                            <img class="user-avatar md-avatar mt-2" src="/img/perfil-avatar/svg/{{#if idEmissor}}{{idEmissor.perfilAvatar}}{{else}}{{idAdmEmissor.perfilAvatar}}{{/if}}.svg">
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="card card-body">
+                                <span class=""><strong style="color: rgb(63, 63, 252);">{{#if idEmissor}}{{idEmissor.primeiroNome}}{{else}}{{idAdmEmissor.primeiroNome}}{{/if}}</strong>  <span class="float-end"  style="font-size: x-small;">{{dataFormatTimeZone ./usuarioLogado.timeZone data "DD/MM/YYYY HH:mm"}}</span> </span>
+                                <pre class="mt-4">{{conteudo}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+
+                <div class="row mb-2">
+                    <div class="col-sm-1">
+                        <img class="user-avatar md-avatar mt-2" src="/img/perfil-avatar/svg/{{usuarioLogado.perfilAvatar}}.svg">
+                    </div>
+                    <div class="col-sm-11">
+                        <form action="/suporte/add-chamado-mensagem" method="post">
+                            <input type="text" name="idChamado" value="{{chamado._id}}" hidden readonly>
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="-" name="conteudo" id="enviarMensagem" style="height: 250px"></textarea>
+                                <label for="enviarMensagem">Digite o conteúdo</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card border-light text-center p-0">
+                        <span class="mt-4">Responsável</span>
+                        <div>
+                            <img class="user-avatar md-avatar mt-2 d-inline" src="/img/perfil-avatar/svg/{{chamado.idAdmEmissor.perfilAvatar}}.svg">
+                            <span class="d-inline">{{chamado.idAdmEmissor.primeiroNome}}asd</span>
+                        </div>
+                        <span class="d-block mt-4">Situação</span>
+                        <span class="d-block format-chamado-situacao">{{chamado.situacao}}</span>
+                        <span class="d-block mt-4">Estabelecimento</span>
+                        <span class="d-block mb-4"><i class="fas fa-map-marker-alt text-danger"></i> {{chamado.idEstabelecimento.nome}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+    <script>
+        $(".format-chamado-situacao").each(function (item) {
+            let textFormat = $(this).text()
+            switch (textFormat) {
+                case 'waiting':
+                    $(this).html('<i class="fas fa-clock" style="font-size: large"></i>  <span style="font-size: large">Aguardando</span>')
+                    break;
+                case 'progress':
+                    $(this).html('<i class="fas fa-comment-alt" style="font-size: large"></i> <span style="font-size: large">Andamento</span>')
+                    break;
+                case 'finished':
+                    $(this).html('<i class="fas fa-check-circle text-success" style="font-size: large"></i> <span style="font-size: large">Finalizado</span>')
+                    break;
+                default:
+                    $(this).html('err')
+            }
+        })
+    </script>
+    
+
+</main>
+
+</div>
+</div>
+</div>
+
+
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

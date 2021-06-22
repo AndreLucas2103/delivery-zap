@@ -1,0 +1,115 @@
+{{>usuario/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/suporte">Suporte</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row  text-center">
+        <div class="card card-body col-sm-3 m-2">
+            <i class="fas fa-comments" style="font-size: 70px;"></i>
+            <button class="btn btn-light btn-sm mt-4" data-bs-toggle="modal" data-bs-target="#add-chamado">Novo Chamado</button>
+
+            <div class="modal fade" id="add-chamado" tabindex="-1" aria-labelledby="add-chamadoLabel" aria-hidden="true">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="add-chamadoLabel">Abrir chamado</h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <form action="/suporte/add-chamado" method="post">
+                            <div class="row ml-2">
+                                {{#each usuarioLogado.estabelecimentosSelecionados}}
+                                    <div class="form-check form-switch col-lg-6">
+                                        <input class="form-check-input" name="idEstabelecimento" type="radio" id="estabelecimento-{{_id}}" value="{{_id}}" required>
+                                        <label class="form-check-label" for="estabelecimento-{{_id}}">{{nome}}</label>
+                                    </div>
+                                {{/each}}
+                            </div>
+                            <div class="form-floating mt-2">
+                                <input type="text" class="form-control" name="titulo" id="add-chamado-titulo" placeholder="-">
+                                <label for="add-chamado-titulo">Título</label>
+                            </div>
+
+                            <div class="form-floating mt-2">
+                                <textarea name="conteudo" id="add-chamado-conteudo" class="form-control" style="height: 200px"></textarea>
+                                <label for="add-chamado-titulo">Conteudo</label>
+                            </div>
+
+                            <button class="btn btn-primary btn-sm mt-4 float-start" type="submit" >Enviar</button>
+                            <button class="btn btn-white btn-sm mt-4 text-danger float-end" type="button" data-bs-dismiss="modal" >Cancelar</button>
+                        </form>
+                    </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card card-body col-sm-3 m-2">
+            <i class="fas fa-sync-alt" style="font-size: 70px;"></i>
+            <button class="btn btn-light btn-sm mt-4">Ver atualizações</button>
+        </div>
+        <div class="card card-body col-sm-3 m-2">
+            <i class="fas fa-star" style="font-size: 70px;"></i>
+            <button class="btn btn-light btn-sm mt-4">Sugestões (Em breve)</button>
+        </div>
+    </div>
+
+    {{#each chamados}}
+    <div class="card card-body my-2">
+        <div class="row">
+            <div class="col-sm-6 mt-3">
+                <a href="/suporte/chamado?chamado={{_id}}" class="">{{titulo}}</a>
+            </div>
+            <div class="col-sm-3 my-2">
+                <img class="user-avatar md-avatar d-inline"  src="/img/perfil-avatar/svg/{{idUsuarioRequisitante.perfilAvatar}}.svg">
+                <span class="d-inline ml-2">{{idUsuarioRequisitante.primeiroNome}}</span>
+            </div>
+            <div class="col-sm-3 my-2">
+                <span class="format-chamado-situacao">{{situacao}}</span>
+            </div>
+        </div>
+    </div>
+    {{/each}}
+
+    <script>
+        $(".format-chamado-situacao").each(function (item) {
+            let textFormat = $(this).text()
+            switch (textFormat) {
+                case 'waiting':
+                    $(this).html('<i class="fas fa-clock" style="font-size: large"></i>  <span style="font-size: large">Aguardando</span>')
+                    break;
+                case 'progress':
+                    $(this).html('<i class="fas fa-comment-alt" style="font-size: large"></i> <span style="font-size: large">Andamento</span>')
+                    break;
+                case 'finished':
+                    $(this).html('<i class="fas fa-check-circle text-success" style="font-size: large"></i> <span style="font-size: large">Finalizado</span>')
+                    break;
+                default:
+                    $(this).html('err')
+            }
+        })
+    </script>
+    
+
+</main>
+
+</div>
+</div>
+</div>
+
+
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

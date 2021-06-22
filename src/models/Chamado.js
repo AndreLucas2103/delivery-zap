@@ -4,9 +4,14 @@ const Schema = mongoose.Schema;
 
 /*
     situacao: {
-        andamento: chamado está em andamento ou ainda falta respondido
-        aguardando: chamado está aguardando o requisitante
-        resolvido: chamado foi resolvido
+        waiting: aguardando
+        progress: andamento
+        finished: finalizado
+    }
+    prioridade: {
+        alta: urgente o chamado
+        normal: comuns
+        baixa: sugestoes futuras geralmente
     }
 */
 
@@ -17,22 +22,32 @@ const Chamado = new Schema({
     },
     idAdministracaoResponsavel: {
         type: Schema.Types.ObjectId,
-        ref: "usuarios",
+        ref: "admUsuario",
+    },
+    idEstabelecimento: {
+        type: Schema.Types.ObjectId,
+        ref: "estabelecimentos",
     },
     
+    titulo: String,
     mensagens: [{
         conteudo: String,
-        data: String,
-        ladoMensagem: String,
+        data: Date,
+        
         idEmissor: {
             type: Schema.Types.ObjectId,
             ref: "usuarios",
+        },
+        idAdmEmissor: {
+            type: Schema.Types.ObjectId,
+            ref: "admUsuarios",
         },
     }],
 
     observacao: String,
 
     situacao: String,
+    prioridade: String,
     
     statusAtivo: {
         type: Boolean,

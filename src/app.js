@@ -1,4 +1,5 @@
 ﻿require("dotenv").config();
+require("./helpers/handlebars-helpers")
 
 // ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
@@ -9,12 +10,10 @@ const app = express()
 const session = require("express-session")
 const flash = require("connect-flash")
 const passport = require("passport")
-const morgan = require("morgan");
-require("./config/auth")(passport)
-const Handlebars = require('handlebars')
-const moment = require('moment')
-const cors = require("cors");
 
+require("./config/auth")(passport)
+
+const cors = require("cors");
 
 
 // ----- Middleware -----------------------------------------------------------------------------------------------------------------------
@@ -23,8 +22,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 //app.use(morgan("dev"));
 app.use(
-  "/files",
-  express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+    "/files",
+    express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
 );
 
 app.use(session({
@@ -99,18 +98,6 @@ app.set('view engine', 'handlebars')
 app.set('views', 'src/views/')
 
 
-const paginate = require('handlebars-paginate');
-Handlebars.registerHelper('paginate', paginate);
-
-// register new function
-Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, format) {
-    userTimeZone ? timeZone = userTimeZone : timeZone = "-03:00";
-    format ? formtMoment = format : formtMoment = "";
-
-    //{{dataFormatTimeZone usuarioLogado.timeZone data ""}}
-    return moment(new Date(data)).utcOffset(timeZone).format(formtMoment);
-});
-
 
 // ----- Banco de dados -----------------------------------------------------------------------------------------------------------------------
 
@@ -124,7 +111,6 @@ const mongoose = require("mongoose")
     // Para se conectar ao mongodb Compass utilize: mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/test
 //url de destino para a base de dados localhost:
     //- mongodb://localhost/delzap
-
 
 mongoose.Promise = global.Promise;
 mongoose.connect("mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.net/myFirstDatabase?retryWrites=true&w=majority", {
@@ -177,8 +163,7 @@ const usuarioProdutoModelo = require("./routes/usuario/produto/modelo")
 const usuarioPedido= require("./routes/usuario/pedido/pedido")
 const usuarioImpressora= require("./routes/usuario/configuracao/impressora")
 const usuarioPainel= require("./routes/usuario/painelonline/estabelecimento")
-
-
+const usuarioSuporte = require("./routes/usuario/suporte/suporte")
 
     // Configuracoes do usuario
     const usuarioEstabelecimento = require("./routes/usuario/configuracao/estabelecimento")
@@ -192,11 +177,22 @@ app.use('/produto', usuarioProdutoModelo)
 app.use('/pedido', usuarioPedido)
 app.use('/impressora', usuarioImpressora)
 app.use('/estabelecimento', usuarioPainel)
-
+app.use('/suporte', usuarioSuporte)
 
 
     // Configuracoes do usuario
     app.use('/configuracao', usuarioEstabelecimento)
+
+
+// Rotas para ADMINISTRACAO
+
+const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecimento")
+const adminChamado = require("./routes/admin/chamado/chamado")
+
+    app.use('/admin/administrativo', adminEstabelecimento)
+    app.use('/admin/administrativo', adminChamado)
+
+
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------

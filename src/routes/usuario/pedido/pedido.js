@@ -125,6 +125,18 @@ router.get('/pedidos', async (req, res) => {
     }
 })
 
+router.get('/pedido', async (req, res) => {
+    try {
+        let pedido = await Pedido.findById({_id: req.query.pedido}).populate('idEstabelecimento').lean()
+
+        res.render('usuarios/pedido/pedido', {
+            pedido: pedido
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.post('/ajax-comadas-producao', async (req, res) => {
     let userEstabelecimentos = []
     req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
