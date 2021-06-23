@@ -21,37 +21,63 @@
 
     <div style="height:100%;background:white;">
         <br>
+        
+        {{#if carrinho.produtos}}
+            <form action="/estabelecimento/delete-carrinho-painel" method="post">
+            <input type="text" name="idCarrinho" value="{{carrinho._id}}" hidden readonly>
+                {{#each carrinho.produtos}}
+                    <img class="img-carrinho" src="{{idProduto.img.foto.url}}">
+                    <h1 class="rb " style="font-size: 16px;font-weight:bold;margin-left:100px;margin-top:-50px; cursor: pointer;"  data-bs-toggle="collapse" data-bs-target="#collapse-carrinho-{{_id}}">{{nome}}</h1>
+                    <h1 class="rb mb-2" style="font-size: 12px;margin-left:100px;"><span class="valorFormatar">{{valorTotal}}</span> - Qtd: {{quantidade}}</h1>
+                        <button class="btn btn-light btn-sm float-end text-danger" style="margin-right:20px;margin-top:-50px;" name="idCarrinhoProduto" value="{{_id}}"><i class="fas fa-times"></i></button>
+                    
+                    <div class="collapse mx-4 mt-4" id="collapse-carrinho-{{_id}}">
+                        <table class="table">
+                            <tbody>
+                                {{#each opcao}}
+                                    <tr>
+                                        <td>{{nomeOpcao}}</td>
+                                        <td>
+                                            {{#each opcoes}}
+                                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
+                                            {{/each}}
+                                        </td>
+                                    </tr>
+                                {{/each}}
 
-        {{#each carrinho.produtos}}
-            <img class="img-carrinho" src="https://uploadhotpedidos.s3.sa-east-1.amazonaws.com/Estabelecimentos/60a13699df46330c28432b78/produtos/60bc06c0eb783817a8c8d4ff%20-%20Produto">
-            <h1 class="rb " style="font-size: 16px;font-weight:bold;margin-left:100px;margin-top:-50px"  data-bs-toggle="collapse" data-bs-target="#collapseExample" aria-expanded="false" aria-controls="collapseExample">Pizza Grande 4 queijos</h1>
-            <h1 class="rb mb-2" style="font-size: 12px;margin-left:100px;">R$ 10,00 - Qtd: 1</h1>
-            <button class="btn btn-light btn-sm float-end text-danger" style="margin-right:20px;margin-top:-50px;" name="idCarrinhoProduto" value="${element._id}"><i class="fas fa-times"></i></button>
-            
-            <div class="collapse mx-4 mt-4" id="collapseExample">
-                {{#each opcao}}
-                    <span class="d-block">
-                        <span>{{nomeOpcao}}: </span>
-                        {{#each opcoes}}
-                            {{nome}} - <span class="valorFormatar">{{valor}}</span>;
-                        {{/each}}
-                    </span>
+                                {{#if adicionais}}
+                                    <tr>
+                                        <td>Adicionais</td>
+                                        <td>
+                                            {{#each adicionais}}
+                                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
+                                            {{/each}}
+                                        </td>
+                                    </tr>
+                                {{/if}}
+
+                                {{#if observacao}}
+                                <tr>
+                                    <td>Obeservação</td>
+                                    <td>{{observacao}}</td>
+                                </tr>
+                                {{/if}}
+                                
+                            </tbody>
+                        </table>
+
+                        
+                        
+
+                    </div>
+
+                    <center><hr style="width: 90%;"></center>
                 {{/each}}
-
-                {{#if adicionais}}
-                    <span class="d-block">Adicionais: 
-                        {{#each adicionais}}
-                            {{nome}} - <span class="valorFormatar">{{valor}}</span>
-                        {{/each}}
-                    </span>
-                {{/if}}
-
-                <span class="d-block">Obeservação: {{observacao}}</span>
-                <span class="d-block">Valor Total: <span class="valorFormatar">{{valor}}</span></span>
-            </div>
-
-            <center><hr style="width: 90%;"></center>
-        {{/each}}
+            </form>
+        {{else}}
+            <div class="text-center display-6 mx-4">Nenhum produto adicionado ao carrinho</div><br>
+        {{/if}}
+        
     </div>
 
 </div>
@@ -62,3 +88,11 @@
     <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>
     <a href="/estabelecimento/{{estabelecimento.url}}/finalizar/"><button class="proximo">Próximo »</button></a>
     </div>
+
+
+    <script>
+        $(".valorFormatar").each(function (item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        })
+    </script>

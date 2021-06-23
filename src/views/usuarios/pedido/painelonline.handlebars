@@ -108,10 +108,10 @@
     <br><br><br>
     
     <div class="background-pedidos">
-        <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
-    <button class="carrinho"><i class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
-    </form>
-    <button class="pedidos"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus Pedidos</button>
+        <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
+            <button class="carrinho" type="submit" name="uuid4Client" id="uuid4Client-carrinho"><i class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
+        </form>
+        <button class="pedidos"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus Pedidos</button>
     </div>
 </center>
 
@@ -714,8 +714,6 @@
         event.preventDefault()
     })
 
-
-
 </script>
 
 
@@ -733,9 +731,10 @@
 
     if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
         localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
-    } else {
-
+        $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
     }
+    
+    $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
 
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
