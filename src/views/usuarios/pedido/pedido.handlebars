@@ -29,7 +29,9 @@
                                     <th class="border-0">Dados</th>
                                 </tr>
                             </thead>
+                            <form action="/pedido/edit-pedido" method="post" id="form-edit-pedido">
                             <tbody>
+                                <input type="text" name="idPedido" value="{{pedido._id}}" hidden readonly>
                                 <tr>
                                     <td>Data Criação</td>
                                     <td>{{dataFormatTimeZone usuarioLogado.timeZone pedido.dataCriacao "DD/MM/YYYY HH:mm"}}</td>
@@ -82,49 +84,30 @@
                                 </tr>
                                 <tr>
                                     <td>Tipo Entrega</td>
-                                    <td>{{pedido.tipoEntrega}}
-                                        <span>
-                                            <button class="btn btn-white btn-sm" type="button" id="dropdown-edit-pedido-tipoEntrega-{{pedido._id}}" data-bs-toggle="dropdown" >
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-edit-pedido-tipoEntrega-{{pedido._id}}">
-                                                <form action="/pedido/edit-pedidos" method="post">
-                                                    <input type="text" name="idPedido" value="{{pedido._id}}" hidden readonly>
-                                                    <input type="text" name="dados" value="tipoEntrega" hidden readonly>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="valor" value="retirarEstabelecimento">Retirar Estabelecimento</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="valor" value="entrega">Entrega</button></li>
-                                                </form>
-                                            </ul>
-                                        </span>
+                                    <td>
+                                        <select class="form-select form-select-sm" name="tipoEntrega" id="edit-pedido-tipoEntrega">
+                                                <option value="retirarEstabelecimento">Retirar Estabelecimento</option>
+                                                <option value="entrega">Entrega</option>
+                                        </select>
+                                        <script>
+                                            $('#edit-pedido-tipoEntrega option[value="{{pedido.tipoEntrega}}"]').attr("selected", "selected");
+                                        </script>
                                     </td>
                                 </tr>
                                 <tr>
                                     <td>Situação</td>
                                     <td>
-                                        <span class="format-pedido-situacao">{{pedido.situacao}}</span>
-                                        <span>
-                                            <button class="btn btn-white btn-sm" type="button" id="dropdown-options-{{pedido._id}}" data-bs-toggle="dropdown" >
-                                                <i class="fas fa-ellipsis-v"></i>
-                                            </button>
-                                            <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{pedido._id}}">
-                                                <form action="/pedido/edit-pedidos-situacao" method="post">
-                                                    <input type="text" name="idPedido" value="{{pedido._id}}" hidden readonly>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="waiting"><i class="fas fa-clock"></i> Aguardando</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="production"><i class="fas fa-spinner text-warning"></i> Produção</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="concluded"><i class="fas fa-check text-success"></i> Concluido</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="delivery"><i class="fas fa-truck"></i> Entrega</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="canceled"><i class="fas fa-times-circle text-danger"></i> Cancelar</button></li>
-                                                    <li><hr class="dropdown-divider"></li>
-                                                    <li class="mx-3"><button class="btn btn-sm" name="situacao" value="finished"><i class="fas fa-check-circle text-success"></i> Finalizar</button></li>
-                                                </form>
-                                            </ul>
-                                        </span>
+                                        <select class="form-select form-select-sm" name="situacao" id="edit-pedido-situacao">
+                                                <option value="waiting">Aguardando</option>
+                                                <option value="production">Produção</option>
+                                                <option value="concluded">Concluido</option>
+                                                <option value="delivery">Entrega</option>
+                                                <option value="canceled">Cancelado</option>
+                                                <option value="finished">Finalizado</option>
+                                        </select>
+                                        <script>
+                                            $('#edit-pedido-situacao option[value="{{pedido.situacao}}"]').attr("selected", "selected");
+                                        </script>
                                     </td>
                                 </tr>
 
@@ -145,23 +128,23 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Rua</td>
-                                                    <td> <input type="text" class="form-control form-control-sm" name="rua" value="{{pedido.infoEntrega.rua}}"> </td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="rua" value="{{pedido.infoEntrega.endereco.rua}}"> </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Numero</td>
-                                                    <td> <input type="text" class="form-control form-control-sm" name="numero" value="{{pedido.infoEntrega.numero}}"> </td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="numero" value="{{pedido.infoEntrega.endereco.numero}}"> </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Bairro</td>
-                                                    <td> <input type="text" class="form-control form-control-sm" name="bairro" value="{{pedido.infoEntrega.bairro}}"> </td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="bairro" value="{{pedido.infoEntrega.endereco.bairro}}"> </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Cidade</td>
-                                                    <td> <input type="text" class="form-control form-control-sm" name="cidade" value="{{pedido.infoEntrega.cidade}}"> </td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="cidade" value="{{pedido.infoEntrega.endereco.cidade}}"> </td>
                                                 </tr>
                                                 <tr>
                                                     <td>CEP</td>
-                                                    <td> <input type="text" class="form-control form-control-sm" name="cep" value="{{pedido.infoEntrega.cep}}"> </td>
+                                                    <td> <input type="text" class="form-control form-control-sm" name="cep" value="{{pedido.infoEntrega.endereco.cep}}"> </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Entregador</td>
@@ -181,9 +164,10 @@
                                     <td>Valor Total </td>
                                     <td class="valorFormatar">{{pedido.valorTotal}}</td>
                                 </tr>
+                                
                                 <tr>
                                     <td>Observação do Pedido</td>
-                                    <td><input type="text" class="form-control form-control-sm" name="observacao" value="{{pedido.observacao}}"></td>
+                                    <td> <input type="text" class="form-control form-control-sm" name="observacao" value="{{pedido.observacao}}"/> </td>
                                 </tr>
                                 
                                 <tr>
@@ -232,7 +216,15 @@
                                                 </tr>
                                                 <tr>
                                                     <td>Pago</td>
-                                                    <td>{{{formatTrueFalse pedido.pagamento.pago}}}</td>
+                                                    <td>
+                                                        <select class="form-select form-select-sm" name="pagamento_pago" id="edit-pedido-pagamento_pago">
+                                                            <option value="true">Sim</option>
+                                                            <option value="false">Não</option>
+                                                        </select>
+                                                    </td>
+                                                    <script>
+                                                        $('#edit-pedido-pagamento_pago option[value="{{pedido.pagamento.pago}}"]').attr("selected", "selected");
+                                                    </script>
                                                 </tr>
                                             </tbody>
                                             </table>
@@ -257,7 +249,10 @@
                                                 </tr>
                                                 <tr>
                                                     <td>ID Pedido Transação Operadora</td>
-                                                    <td>{{pedido.infoTransacao.idPedidoTransacaoOperadora}}</td>
+                                                    <td>
+                                                        <button class="btn btn-white btn-sm button-click-copy" data-bs-buttonCopy="pedido-idPedidoTransacaoOperadora"><i class="fas fa-copy"></i> Copiar</button>
+                                                        <input style="position: absolute; z-index: -999; opacity: 0;" readonly type="text" id="button-copy-pedido-idPedidoTransacaoOperadora" value="{{pedido.infoTransacao.idPedidoTransacaoOperadora}}">
+                                                    </td>
                                                 </tr>
                                                 <tr>
                                                     <td>Método Pagamento</td>
@@ -297,8 +292,29 @@
                                     </td>
                                 </tr>
                             </tbody>
+                            </form>
 
                         </table>
+                        <button class="btn btn-primary btn-sm mt-4" id="button-edit-pedido-submit">Salvar</button>
+
+                        <script>
+                            $('#button-edit-pedido-submit').click(() => {
+                                Swal.fire({
+                                    title: 'Confirmar alteração?',
+                                    text: "Os dados do pedido serão alterados!",
+                                    icon: 'warning',
+                                    showCancelButton: true,
+                                    confirmButtonColor: '#3085d6',
+                                    cancelButtonColor: '#d33',
+                                    confirmButtonText: 'Sim, alterar!',
+                                    cancelButtonText: "Cancelar"
+                                }).then((result) => {
+                                if (result.isConfirmed) {
+                                    $("#form-edit-pedido").submit()
+                                }
+                                })
+                            })
+                        </script>
                     </div>
 
                 </div>
@@ -308,26 +324,49 @@
         <div class="col-lg-4">
             <div class="card">
                 <div class="card-body">
-                    <span>
-                        {{#if pedido.pagamento.pago}}
-                            <i class="fas fa-check-circle text-success"></i> PAGO
-                        {{else}}
-                            {{#if pedido.infoTransacao.pedidoPago}}
-                                <i class="fas fa-check-circle text-success"></i> PAGO
-                            {{else}}
-                                {{#if pedido.infoTransacao.pedidoCancelado}}
-                                    <i class="fas fa-times-circle text-danger"></i> CANCELADO
-                                {{else}}
-                                    <i class="fas fa-clock"></i> Aguardando
-                                {{/if}}
-                            {{/if}}
-                        {{/if}}
-                    </span>
-                    
-                    <span class="text-primary font-weight-bold d-block mt-2">Nome Cliente{{pedido.infoEntrega.nomeCliente}}</span>
-                    <span class="text-primary font-weight-bold d-block">Telfone: {{pedido.infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{pedido.infoEntrega.telefone}}" data-bs-nome="{{pedido.infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </span> 
+                    <div class="display-5 text-center">Dados Rápidos</div>
+                    <table class="table">
+                        <tbody>
+                            <tr>
+                                <td>Pagamento</td>
+                                <td>
+                                    <span>
+                                        {{#if pedido.pagamento.pago}}
+                                            <i class="fas fa-check-circle text-success"></i> PAGO
+                                        {{else}}
+                                            {{#if pedido.infoTransacao.pedidoPago}}
+                                                <i class="fas fa-check-circle text-success"></i> PAGO
+                                            {{else}}
+                                                {{#if pedido.infoTransacao.pedidoCancelado}}
+                                                    <i class="fas fa-times-circle text-danger"></i> CANCELADO
+                                                {{else}}
+                                                    <i class="fas fa-clock"></i> Aguardando
+                                                {{/if}}
+                                            {{/if}}
+                                        {{/if}}
+                                    </span>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>Situação Pedido</td>
+                                <td class="format-pedido-situacao">{{pedido.situacao}}</td>
+                            </tr>
+                            <tr>
+                                <td>Nome Cliente</td>
+                                <td>{{pedido.infoEntrega.nomeCliente}}</td>
+                            </tr>
+                            <tr>
+                                <td>Telefone</td>
+                                <td> {{pedido.infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{pedido.infoEntrega.telefone}}" data-bs-nome="{{pedido.infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </td>
+                            </tr>
+                        </tbody>
+                    </table>
 
-                    <button class="btn btn-primary btn-sm mt-4">Editar</button>
+                    {{#if pedido.infoTransacao.idTransacaoOperadora}}
+                        <form action="/pedido/search-pedido-mercadoPago" method="post">
+                            <button class="btn btn-primary btn-sm mt-4" type="submit" name="identificacaoPedido" value="{{pedido.identificacaoPedido}}">Recarregar Mercado Pago</button>
+                        </form>
+                    {{/if}}
                 </div>
             </div>
         </div>
@@ -430,6 +469,7 @@
                     $(this).html('err')
             }
         })
+
     </script>
 
 </main>

@@ -4,6 +4,8 @@ const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 const moment = require('moment')
+const MercadoPago = require('mercadopago');
+
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -137,6 +139,40 @@ router.get('/pedido', async (req, res) => {
     }
 })
 
+router.post('/edit-pedido', (req, res) => {
+    let {idPedido, tipoEntrega, situacao, nomeCliente, telefone, rua, bairro, cidade, cep, numero, observacao, pagamento_tipo, pagamento_forma, pagamento_trocoPara, pagamento_pago } = req.body
+
+    Pedido.updateOne(
+        {'_id': idPedido},
+        {'$set': {
+            'tipoEntrega': tipoEntrega,
+            'situacao': situacao,
+            
+            'infoEntrega.nomeCliente': nomeCliente,
+            'infoEntrega.telefone': telefone,
+
+            'infoEntrega.endereco.rua': rua,
+            'infoEntrega.endereco.bairro': bairro,
+            'infoEntrega.endereco.cidade': cidade,
+            'infoEntrega.endereco.cep': cep,
+            'infoEntrega.endereco.numero': numero,
+
+            'pagamento.tipo': pagamento_tipo,
+            'pagamento.forma': pagamento_forma,
+            'pagamento.trocoPara': pagamento_trocoPara,
+            'pagamento.pago': pagamento_pago,
+
+            'observacao': observacao,
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Pedido alterado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+
+})
+
 router.post('/ajax-comadas-producao', async (req, res) => {
     let userEstabelecimentos = []
     req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
@@ -159,6 +195,112 @@ router.post('/edit-pedidos-situacao', (req, res) => {
     }).catch(err => {
         console.log(err)
     })
+})
+
+router.post('/search-pedido-mercadoPago', async (req, res) => {
+    try {
+        let estabelecimento = await Estabelecimento.findById({_id: req.body.identificacaoPedido.split("-", 2)[1]})
+
+        MercadoPago.configure({
+            access_token: estabelecimento.integracao.mercadoPago.acessToken
+        });
+
+        var filters = {
+            external_reference: req.body.identificacaoPedido
+        };
+        
+        MercadoPago.payment.search({ // realizo a consulta na base de dados do mercado pago
+            qs: filters
+        }).then(dados => {
+            let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
+
+            if(pagamento != undefined){
+                if(pagamento.status == "approved"){
+                    Pedido.updateOne(
+                        {"identificacaoPedido": pagamento.external_reference},
+                        {
+                            $set: {
+                                "infoTransacao": {
+                                    situacao: pagamento.status,
+                                    situacaoDetalhada: pagamento.status_detail,
+                                    metodoPagamento: pagamento.payment_method_id,
+                                    tipoPagamento: pagamento.payment_type_id,
+                                    idTransacaoOperadora: pagamento.id,
+                                    dataPagamento: pagamento.date_approved,
+                                    pedidoPago: true,
+                                    pedidoCancelado: false
+                                }
+                            }
+                        }
+                    ).then(() => {
+                        console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
+                    }).catch(err => {
+                        console.log(err)
+                    })
+
+                }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
+                    Pedido.updateOne(
+                        {"identificacaoPedido": pagamento.external_reference},
+                        {
+                            $set: {
+                                "infoTransacao": {
+                                    situacao: pagamento.status,
+                                    situacaoDetalhada:pagamento.status_detail,
+                                    metodoPagamento: pagamento.payment_method_id,
+                                    tipoPagamento: pagamento.payment_type_id,
+                                    idTransacaoOperadora: pagamento.id,
+                                    dataCancelamento: pagamento.date_last_updated,
+                                    pedidoCancelado: true,
+                                    pedidoPago: false,
+                                }
+                            }
+                        }
+                    ).then(() => {
+                        console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
+                    }).catch(err => {
+                        console.log(err)
+                    })
+                    
+                }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
+                    Pedido.updateOne(
+                        {"identificacaoPedido": pagamento.external_reference},
+                        {
+                            $set: {
+                                "infoTransacao": {
+                                    situacao: pagamento.status,
+                                    situacaoDetalhada: pagamento.status_detail,
+                                    metodoPagamento: pagamento.payment_method_id,
+                                    tipoPagamento: pagamento.payment_type_id,
+                                    idTransacaoOperadora: pagamento.id,
+                                    pedidoCancelado: false,
+                                    pedidoPago: false
+                                }
+                            }
+                        }
+                    ).then(() => {
+                        console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
+                    }).catch(err => {
+                        console.log(err)
+                    })
+
+                }else{
+                    console.log('OCorreu um erro eu acho né')
+                }
+
+                res.redirect('back')
+
+            }else{
+                req.flash('error_msg', 'Pagamento não existe')
+                res.redirect('back')
+            }
+
+        }).catch(err => {
+            console.log(err)
+        })
+
+    } catch (err) {
+        console.log(err)    
+    }
 })
 
 module.exports = router
