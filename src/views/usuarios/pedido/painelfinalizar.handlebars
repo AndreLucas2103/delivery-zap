@@ -20,8 +20,19 @@
 <div class="container-md max-container">
 
     <div style="height:100%;background:white;">
-        
-    
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="retirar" name="retirar">
+            <label class="form-check-label" for="retirar">Retira no local</label>
+        </div>
+        <div class="form-check form-switch">
+            <input class="form-check-input" type="checkbox" id="entrega" name="entrega">
+            <label class="form-check-label" for="entrega">Entrega</label>
+        </div>
+
+        <div>
+            
+        </div>
+
     </div>
 
 </div>
@@ -31,4 +42,4 @@
 <div class="background-pedidos">
     <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="voltar">« Voltar</button></a>
     <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="proximo">Próximo »</button></a>
-    </div>
+</div>
