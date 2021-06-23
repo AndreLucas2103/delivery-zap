@@ -20,21 +20,79 @@
 <div class="container-md max-container">
 
     <div style="height:100%;background:white;">
-        <div class="form-check form-switch" style="font-size: large;">
+        <br>
+        <div class="form-check form-switch select-desk">
             <input class="form-check-input" type="checkbox" id="retirar" name="retirar">
             <label class="form-check-label" for="retirar">Retira no local</label>
         </div>
-        <div class="form-check form-switch">
+        <div class="form-check form-switch select-desk" style="font-size:20px">
             <input class="form-check-input" type="checkbox" id="entrega" name="entrega">
             <label class="form-check-label" for="entrega">Entrega</label>
         </div>
 
-        <div>
+        <div id="entrega">
+             <div class="row g-2" style="margin-top:50px;">
+                    <div class="col-md">
+                        <div class="form-floating center-block" style="width: 95%;">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="0" required>
+                            <label for="email">Seu Nome *</label>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-floating center-block rb" style="width: 95%;">
+                            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18" required>
+                            <label for="cpf">Celular *</label>
+                        </div>
+
+                    </div>
+                    </div>
+
+                <div class="row g-2" style="margin-top:5px;">
+                <div class="col-md ">
+                    <div class="form-floating center-block " style="width: 50%;">
+                        <input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" placeholder="0"
+                            required>
+                        <label for="nomeCompleto">CEP*</label>
+                    </div>
+                </div>
+                </div>
+                <div class="row g-2" style="margin-top:5px;">
+                    <div class="col-md">
+                        <div class="form-floating center-block" style="width: 95%;">
+                            <input type="email" class="form-control" id="email" name="email" placeholder="0" required>
+                            <label for="email">Endereço*</label>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-floating center-block rb" style="width: 95%;">
+                            <input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18" required>
+                            <label for="cpf">Número*</label>
+                        </div>
+
+                    </div>
+                    </div>
+                    <div class="row g-2">
+                        <div class="col-md center-block rb" style="width:95%">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="senha" name="senha" placeholder="0"
+                                    required>
+                                <label for="celcomercial">Bairro*</label>
+                            </div>
+                        </div>
+                        <div class="col-md center-block rb" style="width:95%">
+                            <div class="form-floating">
+                                <input type="text" class="form-control" id="senha" name="senha" placeholder="0"
+                                    required>
+                                <label for="celcomercial">Cidade*</label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
 
         </div>
 
     </div>
-
 </div>
 
 <br><br><br><br>
