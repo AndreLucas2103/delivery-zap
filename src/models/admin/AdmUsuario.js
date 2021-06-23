@@ -11,9 +11,15 @@ const Usuario = new Schema({
     email: String,
     senha: String,
     cpf: String,
-    perfilAvatar: String,
+    perfilAvatar: {
+        type: String,
+        default: "admin"
+    },
 
-    administracao: true,
+    administracao: {
+        type: Boolean,
+        default: true
+    },
 
     timeZone: {
         type: String,

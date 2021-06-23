@@ -188,9 +188,11 @@ app.use('/suporte', usuarioSuporte)
 
 const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecimento")
 const adminChamado = require("./routes/admin/chamado/chamado")
+const adminUsuario = require("./routes/admin/usuario/usuario")
 
     app.use('/admin/administrativo', adminEstabelecimento)
     app.use('/admin/administrativo', adminChamado)
+    app.use('/admin/usuario', adminUsuario)
 
 
 
