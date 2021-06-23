@@ -5,7 +5,7 @@ const Schema = mongoose.Schema;
 /*
 */
 
-const Usuario = new Schema({
+const Usuarioadm = new Schema({
     primeiroNome: String,
     nomeCompleto: String,
     email: String,
@@ -13,7 +13,10 @@ const Usuario = new Schema({
     cpf: String,
     perfilAvatar: String,
 
-    administracao: true,
+    administracao: {
+        type: Boolean,
+        default: true
+    },
 
     timeZone: {
         type: String,
@@ -27,4 +30,4 @@ const Usuario = new Schema({
 
 },{ timestamps: true})
 
-mongoose.model("admUsuarios", Usuario)
+mongoose.model("admUsuarios", Usuarioadm)

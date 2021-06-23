@@ -146,6 +146,10 @@ app.get('/login', (req, res) => {
     res.render('usuarios/acesso/login')
 })
 
+app.get('/loginadm', (req, res) => {
+    res.render('admin/login/login')
+})
+
 app.get('/registro', (req, res) => {
     res.render('usuarios/acesso/registro')
 })
@@ -185,10 +189,11 @@ app.use('/suporte', usuarioSuporte)
 
 
 // Rotas para ADMINISTRACAO
-
+const admUsuario = require("./routes/admin/acessos/acessos")
 const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecimento")
 const adminChamado = require("./routes/admin/chamado/chamado")
 
+    app.use('/admin/administrativo', admUsuario)
     app.use('/admin/administrativo', adminEstabelecimento)
     app.use('/admin/administrativo', adminChamado)
 
@@ -203,7 +208,7 @@ app.get('/teste', async (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80
+const PORT = 3000
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
