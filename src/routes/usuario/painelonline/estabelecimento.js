@@ -397,30 +397,25 @@ router.get('/:urlPainel', async (req, res)=>{
 router.get('/:urlPainel/carrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-        let produtos = await Produto.aggregate([
-            {$match: {$and: [{idEstabelecimento: estabelecimento._id}, {statusAtivo: true}]}},
-            {
-                $group:{
-                    _id: '$idCategoriaProduto', 
-                    produtos: {$push: {_id:"$_id", nome: '$nome', valor: '$valor', img:'$img.foto.url' }},
-                }
-            },
-            {
-                $lookup:
-                    {
-                        from: "categoriaprodutos",
-                        localField: "_id",
-                        foreignField: "_id",
-                        as: "categoriaProdutos"
-                    },
-            },
-            {$unwind: '$categoriaProdutos'},
-        ])
+        
         
         res.render('usuarios/pedido/painelcarrinho', {
             estabelecimento: estabelecimento,
-            produtos: produtos,
-            horariosFuncionamento: JSON.stringify(estabelecimento.horarioFuncionamento),
+            
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get('/:urlPainel/finalizar', async (req, res)=>{
+    try {
+        let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
+        
+        
+        res.render('usuarios/pedido/painelfinalizar', {
+            estabelecimento: estabelecimento,
+            
         })
     } catch (err) {
         console.log(err)

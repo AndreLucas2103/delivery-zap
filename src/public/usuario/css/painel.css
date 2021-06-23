@@ -57,18 +57,32 @@
         visibility: hidden;
     }
 
-    .carrinho {
-        width: 100px;
-        height: 50px;
-        background: #081C15;
+    .background-pedidos {
+        width: 100%;
+        height: 70px;
+        background: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff !important;
+        position: fixed;
+        bottom: 0px;
+        box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .carrinho {
+        width: 150px;
+        height: 50px;
+        background: #27AE60;
+        display: flex;
+        border:none;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
         position: fixed;
         bottom: 10px;
-        left: 30px;
-        border-radius: 20px;
+        left: 10px;
+        border-radius: 2px;
+        text-decoration:none; 
     }
     
     .img-carrinho{
@@ -78,18 +92,56 @@
         height: 60px;
     }
 
-    .finalizar {
-        width: 100px;
+    .pedidos {
+        width: 150px;
         height: 50px;
-        background: #081C15;
+        background: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff !important;
+        color: #219653;
         position: fixed;
         bottom: 10px;
-        right: 30px;
-        border-radius: 20px;
+        right: 10px;
+        border: 1px solid #219653;
+        box-sizing: border-box;
+        border-radius: 2px;
+        text-decoration:none; 
+    }
+
+    .voltar {
+        width: 150px;
+        height: 50px;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #219653;
+        position: fixed;
+        bottom: 10px;
+        left: 10px;
+        border: 1px solid #219653;
+        box-sizing: border-box;
+        border-radius: 2px;
+        text-decoration:none; 
+    }
+
+    
+
+    .proximo {
+        width: 150px;
+        height: 50px;
+        background: #27AE60;
+        display: flex;
+        border:none;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        position: fixed;
+        bottom: 10px;
+        right: 10px;
+        border-radius: 2px;
+        text-decoration:none; 
     }
 }
 
@@ -331,32 +383,97 @@
         line-height: 22.8px;
     }
 
-    .carrinho {
-        width: 150px;
-        height: 50px;
-        background: #081C15;
+    .background-pedidos {
+        width: 100%;
+        height: 70px;
+        background: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff !important;
+        position: fixed;
+        bottom: 0px;
+        box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .carrinho {
+        width: 250px;
+        height: 50px;
+        background: #27AE60;
+        display: flex;
+        border:none;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
         position: fixed;
         bottom: 10px;
         left: 300px;
-        border-radius: 20px;
+        pointer-events: none;
+        text-decoration:none; 
     }
 
-    .finalizar {
-        width: 150px;
+    .img-carrinho{
+        width: 66px;
+        margin-left: 26px;
+        margin-top:5px;
+        height: 68px;
+    }
+
+    .pedidos {
+        width: 250px;
         height: 50px;
-        background: #081C15;
+        background: #fff;
         display: flex;
         justify-content: center;
         align-items: center;
-        color: #fff !important;
+        color: #219653;
         position: fixed;
         bottom: 10px;
         right: 300px;
         border-radius: 20px;
+        border: 1px solid #219653;
+        box-sizing: border-box;
+        border-radius: 2px;
+        text-decoration:none; 
+        pointer-events: none;
+    }
+    
+    .voltar{
+        width: 250px;
+        height: 50px;
+        background: #fff;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        color: #219653;
+        position: fixed;
+        bottom: 10px;
+        left: 300px;
+        border-radius: 20px;
+        border: 1px solid #219653;
+        box-sizing: border-box;
+        border-radius: 2px;
+        text-decoration:none; 
+        pointer-events: none;
+
+    }
+    .proximo {
+        width: 250px;
+        height: 50px;
+        background: #27AE60;
+        display: flex;
+        border:none;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        position: fixed;
+        bottom: 10px;
+        right: 300px;
+        pointer-events: none;
+        text-decoration:none; 
+    }
+
+    .max-container {
+       width:50%;
     }
 }
 
@@ -384,9 +501,19 @@
     filter: brightness(50%)
 }
 
-.finalizar:active {
+.pedido:active {
     filter: brightness(50%)
 }
+
+
+.proximo:active {
+    filter: brightness(50%)
+}
+
+.voltar:active {
+    filter: brightness(50%)
+}
+
 
 .myDivToPrint {
     background-color: white;

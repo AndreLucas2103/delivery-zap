@@ -17,8 +17,9 @@
 <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb" id="nomeEstabelecimento">
     Carrinho</h1>
 
-<div class="container-md">
-    <div style="height: 100%;background:white;">
+<div class="container-md max-container">
+
+    <div style="height:100%;background:white;">
         <br>
         <img class="img-carrinho"
             src="https://uploadhotpedidos.s3.sa-east-1.amazonaws.com/Estabelecimentos/60a13699df46330c28432b78/produtos/60bc06c0eb783817a8c8d4ff%20-%20Produto">
@@ -42,3 +43,10 @@
     </div>
 
 </div>
+
+<br><br><br><br>
+
+<div class="background-pedidos">
+    <a href="/estabelecimento/{{estabelecimento.url}}"><button class="voltar">« Voltar</button></a>
+    <a href="/estabelecimento/{{estabelecimento.url}}/finalizar/"><button class="proximo">Próximo »</button></a>
+    </div>
