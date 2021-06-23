@@ -675,7 +675,7 @@
                 <form action="/produto/edit-produto" method="post">
                     <div class="row">
                         <div class="form-floating col">
-                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" value="{{produto.nome}}" required>
+                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" maxlength="30" value="{{produto.nome}}" required>
                             <label for="edit-nome" class="ml-2">Nome *</label>
                         </div>
                         <div class="form-floating col-6">

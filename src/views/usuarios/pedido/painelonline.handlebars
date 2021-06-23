@@ -22,14 +22,16 @@
 <div style="margin-top: -35px;">
     <center>
         <i class="fas fa-map-marker-alt text-danger"></i>
-        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="enderecoEstabelecimento">
+        <a style="color:{{estabelecimento.painel.colorFonte}};">
+        <h1 class="endereco rb" id="enderecoEstabelecimento">
             {{estabelecimento.endereco.logradouro}}</h1>
-        <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="numeroEstabelecimento"> -
+        <h1 class="endereco rb" id="numeroEstabelecimento"> -
             {{estabelecimento.endereco.numero}}</span>
-            <h1 style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb" id="bairroEstabelecimento"> -
+            <h1 class="endereco rb" id="bairroEstabelecimento"> -
                 {{estabelecimento.endereco.bairro}}</h1>
-            <h1 id="localidadeEstabelecimento" style="color:{{estabelecimento.painel.colorFonte}};" class="endereco rb"> /
+            <h1 id="localidadeEstabelecimento" class="endereco rb"> /
                 {{estabelecimento.endereco.localidade}}</h1>
+                </a>
     </center>
 </div>
 
@@ -104,7 +106,7 @@
     </script>
 
     <br><br><br>
-    <a class="carrinho" data-bs-toggle="modal" data-bs-target="#modal-carrinho-ajax" ><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
+    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/" class="carrinho"><i class="fas fa-cart-plus" style="font-size: 20px;"></i></a>
     <a class="finalizar"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i></a>
 </center>
 
