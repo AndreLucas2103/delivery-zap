@@ -108,7 +108,9 @@
     <br><br><br>
     
     <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="carrinho"><i class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button></a>
+        <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
+    <button class="carrinho"><i class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
+    </form>
     <button class="pedidos"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus Pedidos</button>
     </div>
 </center>
