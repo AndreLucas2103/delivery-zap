@@ -74,6 +74,29 @@
                     <center><hr style="width: 90%;"></center>
                 {{/each}}
             </form>
+
+            <p style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb " id="nomeEstabelecimento">Resumo da compra</p>
+            <table class="table text-center">
+                <tbody>
+                    <tr>
+                        <td>Sub-total</td>
+                        <td class="valorFormatar">{{carrinho.valorTotal}}</td>
+                    </tr>
+                    <tr class="border-dark">
+                        <td>Entrega</td>
+                        <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>
+                    </tr>
+                    <tr>
+                        <td>Total</td>
+                        <td id="valor-total-pedido"></td>
+                        <script>
+                            $('#valor-total-pedido').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{carrinho.valorTotal}}')+Number('{{estabelecimento.configPedidos.taxaEntrega}}') ))
+                        </script>
+                    </tr>
+                </tbody>
+            </table>
+
+
         {{else}}
             <div class="text-center display-6 mx-4">Nenhum produto adicionado ao carrinho</div><br>
         {{/if}}

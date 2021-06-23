@@ -267,7 +267,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                 idEstabelecimento: idEstabelecimento,
                 observacao: observacao,
 
-                valorTotal: carrinho.valorTotal,
+                valorTotal: carrinho.valorTotal+taxaEntregaPedido,
                 dataCriacao: new Date()
             }
         }else if(pagamentoTipoSelecionado == "mercadoPago"){
@@ -303,7 +303,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                 idEstabelecimento: idEstabelecimento,
                 observacao: observacao,
 
-                valorTotal: carrinho.valorTotal,
+                valorTotal: carrinho.valorTotal+carrinho.valorTotal+taxaEntregaPedido,
                 dataCriacao: new Date()
             }
         }
@@ -331,7 +331,16 @@ router.post('/checkout/finalizar', async (req, res) => {
                                 unit_price: parseFloat(pedido.valorTotal)
                             },
                         ],
-                        external_reference: pedido.infoTransacao.idPedidoTransacaoOperadora
+                        external_reference: pedido.infoTransacao.idPedidoTransacaoOperadora,
+
+                        "payment_methods": {
+                            "excluded_payment_types": [
+                                {"id": "ticket"},
+                                {"id": "digital_wallet"},
+                                {"id": "digital_currency"},
+                            ],
+                            "installments": 1
+                        }
                     }
 
                     MercadoPago.configure({
