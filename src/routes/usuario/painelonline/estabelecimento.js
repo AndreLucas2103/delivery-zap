@@ -390,11 +390,11 @@ router.get('/:urlPainel', async (req, res)=>{
     }
 })
 
-router.post('/:urlPainel/carrinho', async (req, res)=>{
+router.get('/:urlPainel/carrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-        let carrinho = await Carrinho.findOne({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.body.uuid4Client}]}).populate('produtos.idProduto').lean()
-        
+        let carrinho = await Carrinho.findOne({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).populate('produtos.idProduto').lean()
+
         res.render('usuarios/pedido/painelcarrinho', {
             estabelecimento: estabelecimento,
             carrinho: carrinho
