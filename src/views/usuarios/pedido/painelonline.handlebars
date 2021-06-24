@@ -39,9 +39,8 @@
     <p class="status-text rb mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
             style="font-size: 12px;color:green"></i> Aberto</p>
     <hr class="w-25 text-center">
-    <input class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}}"><button
-        class="search-button ml-3" style="border-color:{{estabelecimento.painel.colorFonte}};"><i
-            class="fas fa-search"></i></button>
+    <input class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}};background: url(assets/img/star.png) no-repeat scroll 7px 7px;
+padding-left:30px;" >
     <br><br>
 
     {{#each produtos}}
@@ -84,7 +83,7 @@
                 })
             }
         })
-        //Aumenta o card caso alterar a resolução caso a resolução seja menor ou mair que 900px
+        //Ajustar o card em troca instantânea de tela "F12"
         document.body.onresize = function () {
             if (document.body.clientWidth < 900) {
                 $(".card-style-produto").each(function (i, elementDiv) {

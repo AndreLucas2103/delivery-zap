@@ -238,20 +238,10 @@
         margin-top: -10px;
         text-align: center;
         border-width:1px;
-        width: 220px;
-        height: 30px;
-        border-radius: 10px;
+        width: 300px;
+        height: 50px;
+        border-radius: 90px;
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-    }
-    
-    .search-button{
-        margin-left: 0.25rem;
-        border-radius:5px;
-        font-size: 18px;
-        font-weight:bold;
-        border-width:1px;
-        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
-        
     }
     
     .search:focus{

@@ -2,15 +2,14 @@ const localStrategy = require("passport-local").Strategy
 const mongoose = require("mongoose")
 const bcrypt = require("bcryptjs")
 
-
-// Model de usuário
-require("../models/Usuario")
-const Usuario = mongoose.model("usuarios")
+// Model de usuário administrador
+require("../models/admin/AdmUsuario")
+const Usuarioadm = mongoose.model("admUsuarios")
 
 
 module.exports = function(passport){
     passport.use(new localStrategy({usernameField: "email", passwordField: "senha"}, (email, senha, done) => {
-        Usuario.findOne({email: email}).lean().then((usuario) => {
+        Usuarioadm.findOne({email: email}).lean().then((usuario) => {
             if(!usuario){
                 return done(null, false,{message: "E-mail não cadastrado."})
             }
@@ -39,12 +38,9 @@ module.exports = function(passport){
 
 
     passport.deserializeUser((id, done) => {
-        Usuario.findById(id, (err, usuario) => {
+        Usuarioadm.findById(id, (err, usuario) => {
             done(err, usuario)
         })
     })
 
 }
-
-
-
