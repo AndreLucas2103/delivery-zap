@@ -9,6 +9,8 @@ require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("../../../models/admin/AdmUsuario")
+const Usuarioadm = mongoose.model("admUsuarios")
 
 
 router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
@@ -116,15 +118,26 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
     }
 })
 
-
 router.post("/login", (req, res, next) => {
     Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
         if (!usuario || usuario.eTipoAdmin == false) {
-            passport.authenticate("local", {
-                successRedirect: "/pedido/pedidos",
-                failureRedirect: "/login",
-                failureFlash: true
-            })(req, res, next)
+
+            Usuarioadm.findOne({'email': req.body.email}).then((admUser) => {
+                if(admUser){
+                    passport.authenticate("local", {
+                        successRedirect: "/admin/administrativo/estabelecimentos",
+                        failureRedirect: "/login",
+                        failureFlash: true
+                    })(req, res, next)
+                }else{
+                    passport.authenticate("local", {
+                        successRedirect: "/pedido/pedidos",
+                        failureRedirect: "/login",
+                        failureFlash: true
+                    })(req, res, next)
+                }
+            })
+            
         } else {
             passport.authenticate("local", {
                 successRedirect: "/dashboard",
@@ -134,12 +147,11 @@ router.post("/login", (req, res, next) => {
         }
     })
 })
-router.get("/logout", (req, res) => {
 
+router.get("/logout", (req, res) => {
     req.logout()
     req.flash("success_msg", "Deslogado com sucesso!")
     res.redirect("/login")
-
 })
 
 module.exports = router;
