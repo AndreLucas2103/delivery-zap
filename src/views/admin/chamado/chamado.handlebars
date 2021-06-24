@@ -9,9 +9,9 @@
     <div class="">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
-                <li class="breadcrumb-item"><a href="/suporte">Suporte</a></li>
-                <li class="breadcrumb-item"><a >Chamado</a></li>
+                <li class="breadcrumb-item"><a href="/admin"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/admin/administrativo/chamados">Chamados</a></li>
+                <li class="breadcrumb-item"><a >ID Chamado: {{chamado._id}}</a></li>
             </ol>
         </nav>
     </div>
@@ -61,8 +61,8 @@
                 <div class="col-12 mb-4">
                     <div class="card border-light text-center p-0">
                         <form action="/admin/administrativo/edit-chamado" method="post">
-                            <span class="mt-4">Responsável</span>
                             <center>
+                                <div class="mt-4">Responsável</div>
                                 <select class="form-select form-select-sm w-50 mt-2 mb-2" name="idResponsavel" id="edit-chamado-responsavel">
                                     {{#each usuarios}}
                                         <option value="{{_id}}">{{primeiroNome}}</option>
