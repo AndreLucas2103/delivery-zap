@@ -1,0 +1,57 @@
+<link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
+
+<body style="background:{{estabelecimento.painel.colorFundo}};">
+    <header>
+        <div class="container-md capa-painel mt-2" style="background-image: url({{estabelecimento.img.capa.url}})">
+            <center>
+                <div>
+                    <br>
+                    <img src="{{estabelecimento.img.logo.url}}" class="rounded-circle rounded border logo-painel">
+                </div>
+        </div>
+        </center>
+        <br>
+    </header>
+
+</body>
+<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb" id="nomeEstabelecimento">
+    Endereço</h1>
+
+<div class="container-md max-container" id="container-end">
+
+    <div style="height:100%;background:white;">
+        <br>
+        <center>
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="retirar"
+                style="border-radius:0px;width:250px;height: 50px;background:#27AE60;">
+            <input class="form-check-input" type="radio" name="flexRadioDefault" id="entregar"
+                style="border-radius:0px;width:250px;height: 50px;background:#27AE60;margin-top:30px;" checked>
+        </center>
+
+        
+
+</div>
+
+
+<br><br><br><br>
+
+<div class="background-pedidos">
+    <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="voltar">« Voltar</button></a>
+    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="proximo">Enviar pedido</button></a>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $("#retirar").toggleClass("filter-gray");
+
+        $("#retirar").change(function () {
+            $("#retirar").removeClass("filter-gray");
+            $("#entregar").toggleClass("filter-gray");
+        })
+
+        $("#entregar").change(function () {
+            $("#entregar").removeClass("filter-gray");
+            $("#retirar").toggleClass("filter-gray");
+        })
+    })
+</script>
