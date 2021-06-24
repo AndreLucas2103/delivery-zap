@@ -193,15 +193,15 @@ app.use('/suporte', usuarioSuporte)
 
 
 // Rotas para ADMINISTRACAO
+const adminDashboard = require("./routes/admin/dashboard/dashboard")
 const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecimento")
 const adminChamado = require("./routes/admin/chamado/chamado")
 const adminUsuario = require("./routes/admin/usuario/usuario")
 
+    app.use('/admin', adminDashboard)
     app.use('/admin/administrativo', adminEstabelecimento)
     app.use('/admin/administrativo', adminChamado)
     app.use('/admin/usuario', adminUsuario)
-
-
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------

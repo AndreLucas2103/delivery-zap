@@ -5,6 +5,8 @@ const { ObjectId } = require('bson')
 
 require("../../../models/Chamado")
 const Chamado = mongoose.model("chamados")
+require("../../../models/admin/AdmUsuario")
+const AdmUsuario = mongoose.model("admusuarios")
 
 router.get('/chamados', async (req, res) => {
     try {
@@ -19,10 +21,13 @@ router.get('/chamados', async (req, res) => {
             $and: [find_conteudo]
         }
 
-        let chamados = await Chamado.find(query).lean()
+        let chamados = await Chamado.find(query).populate('idUsuarioRequisitante idAdministracaoResponsavel idEstabelecimento').lean()
         let totalPage = await Chamado.countDocuments(query)
 
+        
+
         res.render('admin/chamado/chamados', {
+            chamados: chamados,
             pagination: {
                 page: find_paginate,
                 pageCount: Math.ceil(totalPage/find_limit),
@@ -36,6 +41,45 @@ router.get('/chamados', async (req, res) => {
     } catch (err) {
         console.log(err)
     }
+})
+
+router.get('/chamado', async (req, res) => {
+    let usuarios = await AdmUsuario.find().lean()
+    let chamado = await Chamado.findById({'_id': req.query.chamado}).populate('idUsuarioRequisitante idAdministracaoResponsavel idEstabelecimento mensagens.idEmissor mensagens.idAdmEmissor').lean().lean()
+    
+    res.render('admin/chamado/chamado', {
+        chamado: chamado,
+        usuarios: usuarios
+    })
+})
+
+router.post('/edit-chamado', (req, res) => {
+    Chamado.updateOne(
+        {'_id': req.body.idChamado},
+        {'$set': {
+            idAdministracaoResponsavel: req.body.idResponsavel,
+            observacao: req.body.observacao,
+            situacao: req.body.situacao,
+            prioridade: req.body.prioridade
+        }}
+    ).then(() => {
+        req.flash('success_msg', 'Chamado editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/add-chamado-mensagem', (req, res) => {
+    Chamado.updateOne(
+        {'_id': req.body.idChamado},
+        {$push: {'mensagens': {'conteudo': req.body.conteudo, 'data': new Date(), 'idAdmEmissor': req.user._id}}}
+    ).then(() => {
+        req.flash('success_msg', "Mensagem enviada")
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
 })
 
 module.exports = router

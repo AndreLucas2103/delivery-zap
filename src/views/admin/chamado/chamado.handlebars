@@ -1,0 +1,119 @@
+{{>admin/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>admin/_menu}}
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/suporte">Suporte</a></li>
+                <li class="breadcrumb-item"><a >Chamado</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="row">
+        <div class="col-12 col-xl-8">
+            <div class="card card-body bg-white border-light shadow-sm mb-4">
+                <span class="d-block mb-2"><i class="fas fa-map-marker-alt text-danger"></i> {{chamado.idEstabelecimento.nome}}</span>
+                <span class="h4 mb-4">{{chamado.titulo}}</span>
+
+                {{#each chamado.mensagens}}
+                    <div class="row mb-2">
+                        <div class="col-sm-1">
+                            <img class="user-avatar md-avatar mt-2" src="/img/perfil-avatar/svg/{{#if idEmissor}}{{idEmissor.perfilAvatar}}{{else}}{{idAdmEmissor.perfilAvatar}}{{/if}}.svg">
+                        </div>
+                        <div class="col-sm-11">
+                            <div class="card card-body">
+                                <span class=""><strong style="color: rgb(63, 63, 252);">{{#if idEmissor}}{{idEmissor.primeiroNome}}{{else}}{{idAdmEmissor.primeiroNome}}{{/if}}</strong>  <span class="float-end"  style="font-size: x-small;">{{dataFormatTimeZone ./usuarioLogado.timeZone data "DD/MM/YYYY HH:mm"}}</span> </span>
+                                <pre class="mt-4">{{conteudo}}</pre>
+                            </div>
+                        </div>
+                    </div>
+                {{/each}}
+
+                <div class="row mb-2">
+                    <div class="col-sm-1">
+                        <img class="user-avatar md-avatar mt-2" src="/img/perfil-avatar/svg/{{usuarioLogado.perfilAvatar}}.svg">
+                    </div>
+                    <div class="col-sm-11">
+                        <form action="/admin/administrativo/add-chamado-mensagem" method="post">
+                            <input type="text" name="idChamado" value="{{chamado._id}}" hidden readonly>
+                            <div class="form-floating">
+                                <textarea class="form-control" placeholder="-" name="conteudo" id="enviarMensagem" style="height: 250px"></textarea>
+                                <label for="enviarMensagem">Digite o conteúdo</label>
+                            </div>
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar</button>
+                        </form>
+                    </div>
+                </div>
+                
+
+            </div>
+        </div>
+
+        <div class="col-12 col-xl-4">
+            <div class="row">
+                <div class="col-12 mb-4">
+                    <div class="card border-light text-center p-0">
+                        <form action="/admin/administrativo/edit-chamado" method="post">
+                            <span class="mt-4">Responsável</span>
+                            <center>
+                                <select class="form-select form-select-sm w-50 mt-2 mb-2" name="idResponsavel" id="edit-chamado-responsavel">
+                                    {{#each usuarios}}
+                                        <option value="{{_id}}">{{primeiroNome}}</option>
+                                    {{/each}}
+                                </select>
+
+                                <span>Situação</span>
+                                <select class="form-select form-select-sm w-50 mt-1 mb-2" name="situacao" id="edit-chamado-situacao">
+                                    <option value="waiting">Aguardando</option>
+                                    <option value="progress">Andamento</option>
+                                    <option value="finished">Finalizado</option>
+                                </select>
+
+                                <span>Prioridade</span>
+                                <select class="form-select form-select-sm w-50 mt-1 " name="prioridade" id="edit-chamado-prioridade">
+                                    <option value="baixa">Baixa</option>
+                                    <option value="normal">Normal</option>
+                                    <option value="alta">Alta</option>
+                                </select>
+
+                                <script>
+                                    $('#edit-chamado-responsavel option[value="{{chamado.idAdministracaoResponsavel._id}}"]').attr("selected", "selected");
+                                    $('#edit-chamado-situacao option[value="{{chamado.situacao}}"]').attr("selected", "selected");
+                                    $('#edit-chamado-prioridade option[value="{{chamado.prioridade}}"]').attr("selected", "selected");
+                                </script>
+                            </center>
+
+                            <div class="form-floating mx-4 my-3">
+                                <textarea class="form-control" placeholder="-" name="observacao" id="edit-chamado-observacao">{{chamado.observacao}}</textarea>
+                                <label for="edit-chamado-observacao">Observação</label>
+                            </div>
+
+                            <input type="text" name="idChamado" value="{{chamado._id}}" hidden readonly>
+
+                            <button class="btn btn-primary btn-sm mb-2" type="submit">Salvar</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</main>
+
+</div>
+</div>
+</div>
+
+
+
+{{>admin/_rodape}}
+
+{{>_msg}}

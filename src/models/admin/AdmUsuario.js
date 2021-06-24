@@ -33,4 +33,4 @@ const Usuarioadm = new Schema({
 
 },{ timestamps: true})
 
-mongoose.model("admUsuarios", Usuarioadm)
+mongoose.model("admusuarios", Usuarioadm)

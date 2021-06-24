@@ -10,7 +10,7 @@ const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/admin/AdmUsuario")
-const Usuarioadm = mongoose.model("admUsuarios")
+const Usuarioadm = mongoose.model("admusuarios")
 
 
 router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
@@ -125,7 +125,7 @@ router.post("/login", (req, res, next) => {
             Usuarioadm.findOne({'email': req.body.email}).then((admUser) => {
                 if(admUser){
                     passport.authenticate("local", {
-                        successRedirect: "/admin/administrativo/estabelecimentos",
+                        successRedirect: "/admin",
                         failureRedirect: "/login",
                         failureFlash: true
                     })(req, res, next)
@@ -137,7 +137,7 @@ router.post("/login", (req, res, next) => {
                     })(req, res, next)
                 }
             })
-            
+
         } else {
             passport.authenticate("local", {
                 successRedirect: "/dashboard",

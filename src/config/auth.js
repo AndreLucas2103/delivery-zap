@@ -8,7 +8,7 @@ require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 
 require("../models/admin/AdmUsuario")
-const Usuarioadm = mongoose.model("admUsuarios")
+const Usuarioadm = mongoose.model("admusuarios")
 
 
 module.exports = function(passport){

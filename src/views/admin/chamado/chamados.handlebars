@@ -9,7 +9,7 @@
     <div class="">
         <nav aria-label="breadcrumb">
             <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
-                <li class="breadcrumb-item"><a href="/admin/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/admin"><span class="fas fa-home"></span></a></li>
                 <li class="breadcrumb-item"><a>Administrativo</a></li>
                 <li class="breadcrumb-item"><a href="/admin/administrativo/chamados">Chamados</a></li>
             </ol>
@@ -26,11 +26,10 @@
                 <form method="get" id="form-filtro-1">
                     <div class="form-floating mb-3">
                         <input type="text" class="form-control" name="conteudo" id="find-conteudo" placeholder="-">
-                        <label for="find-conteudo">Nome / CEP / Localidade / UF </label>
+                        <label for="find-conteudo">Conteudo</label>
                     </div>
 
                     <input type="text" name="limit" id="filtro-chamados-limit" value="{{pagination.limitPage}}" hidden readonly> 
-                    
                     <button class="btn btn-primary btn-sm d-block mt-2" type="submit">Filtrar</button>
                 </form>
             </div>
@@ -48,25 +47,21 @@
                             <th class="border-0">Titulo</th>
                             <th class="border-0">Requisitante</th>
                             <th class="border-0">Responsável</th>
-                            <th class="border-0">Estabelecimento</th>
                             <th class="border-0">Situação</th>
                             <th class="border-0">Prioridade</th>
-                            <th class="border-0">Criado em</th>
                             <th class="border-0">Editado em</th>
                         </tr>
                     </thead>
                     <tbody>
                         {{#each chamados}}
                         <tr>
-                            <td><a href="/admin/estabelecimento?idEstabelecimento={{_id}}"><i class="fas fa-external-link-square-alt"></i></a></td>
-                            <td>{{nome}}</td>
-                            <td>{{telefone}}</td>
-                            <td>{{idUsuarioMaster.nomeCompleto}}</td>
-                            <td>{{endereco.cep}}</td>
-                            <td>{{endereco.localidade}}</td>
-                            <td>{{endereco.uf}}</td>
-                            <td>{{{formatTrueFalse statusAtivo}}}</td>
-                            <td>{{dataFormatTimeZone "-03:00" createdAt "DD/MM/YYYY HH:mm"}}</td>
+                            <td><a href="/admin/administrativo/chamado?chamado={{_id}}"><i class="fas fa-external-link-square-alt"></i></a></td>
+                            <td>{{titulo}}</td>
+                            <td>{{idUsuarioRequisitante.primeiroNome}} - {{idEstabelecimento.nome}}</td>
+                            <td>{{idAdministracaoResponsavel}}</td>
+                            <td>{{situacao}}</td>
+                            <td>{{prioridade}}</td>
+                            <td>{{dataFormatTimeZone "-03:00" updatedAt "DD/MM/YYYY HH:mm"}}</td>
                         </tr>
                         {{/each}}
 

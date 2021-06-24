@@ -22,7 +22,7 @@ const Chamado = new Schema({
     },
     idAdministracaoResponsavel: {
         type: Schema.Types.ObjectId,
-        ref: "admUsuario",
+        ref: "admusuarios",
     },
     idEstabelecimento: {
         type: Schema.Types.ObjectId,
@@ -40,7 +40,7 @@ const Chamado = new Schema({
         },
         idAdmEmissor: {
             type: Schema.Types.ObjectId,
-            ref: "admUsuarios",
+            ref: "admusuarios",
         },
     }],
 

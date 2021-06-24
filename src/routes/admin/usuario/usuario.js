@@ -6,7 +6,7 @@ const bcryptjs = require("bcryptjs")
 
 
 require("../../../models/admin/AdmUsuario")
-const AdmUsuario = mongoose.model("admUsuarios")
+const AdmUsuario = mongoose.model("admusuarios")
 
 router.get('/admusuarios', async (req, res) => {
     try {
