@@ -6,8 +6,7 @@
             <center>
                 <div>
                     <br>
-                    <img src="{{estabelecimento.img.logo.url}}"
-                        class="rounded-circle rounded border logo-painel">
+                    <img src="{{estabelecimento.img.logo.url}}" class="rounded-circle rounded border logo-painel">
                 </div>
         </div>
         </center>
@@ -23,15 +22,15 @@
     <center>
         <i class="fas fa-map-marker-alt text-danger"></i>
         <a style="color:{{estabelecimento.painel.colorFonte}};">
-        <h1 class="endereco rb" id="enderecoEstabelecimento">
-            {{estabelecimento.endereco.logradouro}}</h1>
-        <h1 class="endereco rb" id="numeroEstabelecimento"> -
-            {{estabelecimento.endereco.numero}}</span>
-            <h1 class="endereco rb" id="bairroEstabelecimento"> -
-                {{estabelecimento.endereco.bairro}}</h1>
-            <h1 id="localidadeEstabelecimento" class="endereco rb"> /
-                {{estabelecimento.endereco.localidade}}</h1>
-                </a>
+            <h1 class="endereco rb" id="enderecoEstabelecimento">
+                {{estabelecimento.endereco.logradouro}}</h1>
+            <h1 class="endereco rb" id="numeroEstabelecimento"> -
+                {{estabelecimento.endereco.numero}}</span>
+                <h1 class="endereco rb" id="bairroEstabelecimento"> -
+                    {{estabelecimento.endereco.bairro}}</h1>
+                <h1 id="localidadeEstabelecimento" class="endereco rb"> /
+                    {{estabelecimento.endereco.localidade}}</h1>
+        </a>
     </center>
 </div>
 
@@ -39,8 +38,7 @@
     <p class="status-text rb mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
             style="font-size: 12px;color:green"></i> Aberto</p>
     <hr class="w-25 text-center">
-    <input class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}};background: url(assets/img/star.png) no-repeat scroll 7px 7px;
-padding-left:30px;" >
+    <input type="text" class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}};">
     <br><br>
 
     {{#each produtos}}
@@ -53,7 +51,8 @@ padding-left:30px;" >
                 <img class="card-image" src="{{img}}"></h2>
                 <p class="card-text rb">{{nome}}</p>
                 <p class="card-value valorFormatar rb">{{valor}}</p>
-                <button class="button-adicionar rb" style="background-color:{{../categoriaProdutos.corBotao}}"  data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
+                <button class="button-adicionar rb" style="background-color:{{../categoriaProdutos.corBotao}}"
+                    data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Adicionar</button>
             </div>
             {{/each}}
@@ -105,12 +104,14 @@ padding-left:30px;" >
     </script>
 
     <br><br><br>
-    
+
     <div class="background-pedidos">
         <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
-            <button class="carrinho" type="submit" name="uuid4Client" id="uuid4Client-carrinho"><i class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
+            <button class="carrinho" type="submit" name="uuid4Client" id="uuid4Client-carrinho"><i
+                    class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
         </form>
-        <button class="pedidos"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus Pedidos</button>
+        <button class="pedidos"><i class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus
+            Pedidos</button>
     </div>
 </center>
 
@@ -180,9 +181,9 @@ padding-left:30px;" >
                         <div class="col">
                             <div class="form-floating mb-3">
                                 <input type="number" class="form-control" min="1" onkeyup="calcValorClick()"
-                                    onkeydown="calcValorClick()" onchange="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                                    value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-"
-                                    required>
+                                    onkeydown="calcValorClick()" onchange="calcValorClick()"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1"
+                                    id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
                                 <label for="add-produto-carrinho-quantidade">Quantidade</label>
                             </div>
                         </div>
@@ -206,22 +207,24 @@ padding-left:30px;" >
 {{!-- Modal adicionar produto ao carrinho END --}}
 
 <!-- Modal ver carrinho START -->
-<div class="modal fade" id="modal-carrinho-ajax" tabindex="-1" aria-labelledby="modal-carrinho-ajaxLabel" aria-hidden="true">
+<div class="modal fade" id="modal-carrinho-ajax" tabindex="-1" aria-labelledby="modal-carrinho-ajaxLabel"
+    aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
-                
+
                 <span id="carrinho-ajax-produto">
-                    
+
                 </span>
 
                 <div class="mt-3 float-end" style="margin-left: 10px;">Total: <span style="font-size: 25px;"
-                    class="text-primary" id="carrinho-valor-total"></span></div>
+                        class="text-primary" id="carrinho-valor-total"></span></div>
 
-                <button type="button" class="btn btn-primary btn-sm mt-4"  data-bs-toggle="modal" data-bs-target="#modal-finalizarPedido">Finalizar pedido</button>
+                <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="modal"
+                    data-bs-target="#modal-finalizarPedido">Finalizar pedido</button>
             </div>
         </div>
     </div>
@@ -229,7 +232,8 @@ padding-left:30px;" >
 <!-- Modal ver carrinho END -->
 
 <!-- Modal finalizar pedido START -->
-<div class="modal fade" id="modal-finalizarPedido" tabindex="-1" aria-labelledby="modal-finalizarPedidoLabel" aria-hidden="true">
+<div class="modal fade" id="modal-finalizarPedido" tabindex="-1" aria-labelledby="modal-finalizarPedidoLabel"
+    aria-hidden="true">
     <div class="modal-dialog modal-lg">
         <div class="modal-content">
             <div class="modal-header">
@@ -238,22 +242,25 @@ padding-left:30px;" >
             <div class="modal-body">
                 <form action="/estabelecimento/checkout/finalizar" method="post">
                     <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="retirarLocal" name="retirarLocal" value="true">
+                        <input class="form-check-input" type="checkbox" id="retirarLocal" name="retirarLocal"
+                            value="true">
                         <label class="form-check-label" for="retirarLocal">Retirar no estabelecimento</label>
                     </div>
                     <div class="form-check form-switch mb-4">
-                        <input class="form-check-input" type="checkbox" id="entrega" name="entrega" value="true" >
+                        <input class="form-check-input" type="checkbox" id="entrega" name="entrega" value="true">
                         <label class="form-check-label" for="entrega">Entrega</label>
                     </div>
 
                     <span id="escolha-entrega-retirada"></span>
                     <div class="row">
                         <div class="form-floating mb-3 col-lg-3">
-                            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" placeholder="-" required>
+                            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" placeholder="-"
+                                required>
                             <label for="nomeCliente" style="margin-left: 10px;">Nome</label>
                         </div>
                         <div class="form-floating mb-3 col-lg-3">
-                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-" required>
+                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-"
+                                required>
                             <label for="telefone" style="margin-left: 10px;">Telefone</label>
                         </div>
                         <div class="form-floating  mb-3 col-lg-6">
@@ -269,8 +276,8 @@ padding-left:30px;" >
                             <table class="table">
                                 <thead>
                                     <tr>
-                                    <th scope="col">#</th>
-                                    <th scope="col">Valor</th>
+                                        <th scope="col">#</th>
+                                        <th scope="col">Valor</th>
                                     </tr>
                                 </thead>
                                 <tbody>
@@ -292,15 +299,17 @@ padding-left:30px;" >
 
                         <div class="col-lg-8">
                             <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" id="pagarRecebimento" name="pagamentoTipoSelecionado" value="pagarRecebimento">
+                                <input class="form-check-input" type="radio" id="pagarRecebimento"
+                                    name="pagamentoTipoSelecionado" value="pagarRecebimento">
                                 <label class="form-check-label" for="pagarRecebimento">Pagar no recebimento</label>
                             </div>
 
                             {{#if estabelecimento.integracao.mercadoPago.statusAtivo}}
-                                <div class="form-check form-switch">
-                                    <input class="form-check-input" type="radio" id="mercadoPago" name="pagamentoTipoSelecionado" value="mercadoPago">
-                                    <label class="form-check-label" for="mercadoPago">Mercado Pago</label>
-                                </div>
+                            <div class="form-check form-switch">
+                                <input class="form-check-input" type="radio" id="mercadoPago"
+                                    name="pagamentoTipoSelecionado" value="mercadoPago">
+                                <label class="form-check-label" for="mercadoPago">Mercado Pago</label>
+                            </div>
                             {{/if}}
 
                             <span id="metodo-pagamento"></span>
@@ -308,7 +317,7 @@ padding-left:30px;" >
                     </div>
 
                     <script>
-                        
+
                         $('#entrega').change(() => {
                             $('#retirarLocal').prop('checked', false)
                             $('#escolha-entrega-retirada').empty()
@@ -344,12 +353,12 @@ padding-left:30px;" >
                         })
 
                         $('input:radio[name="pagamentoTipoSelecionado"]').change((e) => {
-                            if(e.target.value == "mercadoPago"){
+                            if (e.target.value == "mercadoPago") {
                                 $('#metodo-pagamento').empty()
                                 $('#metodo-pagamento').append(`
                                     <button class="btn btn-success mt-4 w-50 float-end" type="submit">Continuar</button>
                                 `)
-                            }else if(e.target.value == "pagarRecebimento"){
+                            } else if (e.target.value == "pagarRecebimento") {
                                 $('#metodo-pagamento').empty()
                                 $('#metodo-pagamento').append(`
                                     <div class="row mt-4" >
@@ -370,21 +379,21 @@ padding-left:30px;" >
                             }
                         })
 
-                        function selectMeioPagamento () {
-                            if($('#meioPagamento').val() == "dinheiro"){
+                        function selectMeioPagamento() {
+                            if ($('#meioPagamento').val() == "dinheiro") {
                                 $('#select-meio-pagamento').append(`
                                     <div class="form-floating ">
                                         <input type="number" class="form-control" id="trocoPara" name="trocoPara" placeholder="-" min="0" step="0.01" required>
                                         <label for="trocoPara" style="margin-left: 10px;">Troco para (R$)</label>
                                     </div>
                                 `)
-                            }else{
+                            } else {
                                 $('#select-meio-pagamento').empty()
                             }
                         }
 
                     </script>
-                    
+
                     <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
                     <input type="text" name="uuid4Client" id="checkout-uuid4Client" readonly hidden>
                 </form>
@@ -397,7 +406,7 @@ padding-left:30px;" >
 </body>
 <script>
     var modalCarrinho = document.getElementById('modal-carrinho-ajax')
-    modalCarrinho.addEventListener('show.bs.modal', function (event){
+    modalCarrinho.addEventListener('show.bs.modal', function (event) {
         var button = event.relatedTarget
 
         $('#carrinho-ajax-produto').empty()
@@ -405,11 +414,11 @@ padding-left:30px;" >
             type: "POST",
             url: '/estabelecimento/ajax-get-carrinho-painel',
             data: { idEstabelecimento: '{{estabelecimento._id}}', uuid4Client: localStorage.getItem('uuid4Cliente') },
-            success: function(response) {
+            success: function (response) {
                 $("#checkout-valorTotal-produtos").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
-                $("#checkout-valorTotalPedido").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{estabelecimento.configPedidos.taxaEntrega}}')+response.valorTotal ))
+                $("#checkout-valorTotalPedido").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{estabelecimento.configPedidos.taxaEntrega}}') + response.valorTotal))
                 $("#checkout-uuid4Client").val(localStorage.getItem('uuid4Cliente'))
-                
+
                 $("#carrinho-valor-total").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
                 response.produtos.forEach(element => {
                     $('#carrinho-ajax-produto').append(`
@@ -490,14 +499,14 @@ padding-left:30px;" >
                         `)
                     })
 
-                    element.observacao ? $(`#carrinho-observacao-${element._id}`).text(`Observação: ${element.observacao}`) : 
-                    
-                    $(`#carrinho-quantidade-${element._id}`).text(`Quantidade: ${element.quantidade}`)
+                    element.observacao ? $(`#carrinho-observacao-${element._id}`).text(`Observação: ${element.observacao}`) :
+
+                        $(`#carrinho-quantidade-${element._id}`).text(`Quantidade: ${element.quantidade}`)
                 })
-            }   
+            }
         })
     })
-    
+
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
@@ -732,7 +741,7 @@ padding-left:30px;" >
         localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
         $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
     }
-    
+
     $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
 
     function clickscrollright(idCategoria) {
