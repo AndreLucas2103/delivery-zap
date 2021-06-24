@@ -52,32 +52,36 @@ app.use((req, res, next) => {
 app.use(async function (req, res, next) {
     try {
         if (req.user) {
-            require("./models/Usuario")
-            const Usuario = mongoose.model("usuarios")
+            if(req.user.administracao === true){
+                res.locals.usuarioLogado = req.user.toObject();
+            }else{
+                require("./models/Usuario")
+                const Usuario = mongoose.model("usuarios")
 
-            let usuario = await Usuario.aggregate([
-                { $match: { _id: req.user._id} },
-                {
-                    $lookup:
-                        {
-                            from: "estabelecimentos",
-                            localField: "estabelecimentosVinculados.idEstabelecimento",
-                            foreignField: "_id",
-                            as: "estabelecimentosVinculados"
-                        }
-                },
-                {
-                    $lookup:
-                        {
-                            from: "estabelecimentos",
-                            localField: "estabelecimentosSelecionados.idEstabelecimento",
-                            foreignField: "_id",
-                            as: "estabelecimentosSelecionados"
-                        }
-                }
-            ])
-
-            res.locals.usuarioLogado = usuario[0];
+                let usuario = await Usuario.aggregate([
+                    { $match: { _id: req.user._id} },
+                    {
+                        $lookup:
+                            {
+                                from: "estabelecimentos",
+                                localField: "estabelecimentosVinculados.idEstabelecimento",
+                                foreignField: "_id",
+                                as: "estabelecimentosVinculados"
+                            }
+                    },
+                    {
+                        $lookup:
+                            {
+                                from: "estabelecimentos",
+                                localField: "estabelecimentosSelecionados.idEstabelecimento",
+                                foreignField: "_id",
+                                as: "estabelecimentosSelecionados"
+                            }
+                    }
+                ])
+                res.locals.usuarioLogado = usuario[0];
+            }
+            
         }
         next();
     } catch (err) {
