@@ -460,6 +460,21 @@
         text-decoration:none; 
     }
 
+    .finalizar {
+        width: 500px;
+        height: 50px;
+        background: #27AE60;
+        display: flex;
+        border:none;
+        justify-content: center;
+        align-items: center;
+        color: #fff;
+        bottom: 10px;
+        right: 300px;
+        
+        text-decoration:none; 
+    }
+
     .max-container {
        width:50%;
     }
@@ -512,6 +527,10 @@
     display: block;
     margin-right: auto;
     margin-left: auto;
+  }
+
+  .filter-gray {
+    filter: grayscale(100%);
   }
 
 .myDivToPrint {

@@ -413,12 +413,26 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
     }
 })
 
-router.get('/:urlPainel/finalizar', async (req, res)=>{
+router.get('/:urlPainel/endereco', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         
         
-        res.render('usuarios/pedido/painelfinalizar', {
+        res.render('usuarios/pedido/painelendereco', {
+            estabelecimento: estabelecimento,
+            
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get('/:urlPainel/pagamento', async (req, res)=>{
+    try {
+        let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
+        
+        
+        res.render('usuarios/pedido/painelpagamento', {
             estabelecimento: estabelecimento,
             
         })
