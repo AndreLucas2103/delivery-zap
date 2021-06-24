@@ -22,10 +22,16 @@
     <div style="height:100%;background:white;">
         <br>
         <center>
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="retirar"
-                style="border-radius:0px;width:250px;height: 50px;background:#27AE60;">
-            <input class="form-check-input" type="radio" name="flexRadioDefault" id="entregar"
-                style="border-radius:0px;width:250px;height: 50px;background:#27AE60;margin-top:5px;" checked>
+            <div class="radio-toolbar">
+                <labe>Selecione a forma de entrega</labe>
+                <input type="radio" id="radio1" name="radios" value="">
+                <label for="radio1">Retirar no local</label>
+                <br>
+                <input type="radio" id="radio2" name="radios" value="false" checked>
+                <label for="radio2">Entrega</label>
+
+    
+            </div>
         </center>
 
         <div id="retirarLocal" style="padding-left:5px;padding-right:5px;">
