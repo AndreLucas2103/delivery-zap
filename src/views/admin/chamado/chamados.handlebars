@@ -25,7 +25,7 @@
             <div class="card card-body">
                 <form method="get" id="form-filtro-1">
                     <div class="form-floating mb-3">
-                        <input type="text" class="form-control" name="conteudo" id="find-conteudo" placeholder="-">
+                        <input type="text" class="form-control" name="conteudo" id="find-conteudo" placeholder="-" value="{{conteudo}}">
                         <label for="find-conteudo">Conteudo</label>
                     </div>
 
@@ -59,8 +59,8 @@
                             <td>{{titulo}}</td>
                             <td>{{idUsuarioRequisitante.primeiroNome}} - {{idEstabelecimento.nome}}</td>
                             <td>{{idAdministracaoResponsavel.primeiroNome}}</td>
-                            <td>{{situacao}}</td>
-                            <td>{{prioridade}}</td>
+                            <td class="format-chamado-situacao">{{situacao}}</td>
+                            <td class="format-chamado-prioridade">{{prioridade}}</td>
                             <td>{{dataFormatTimeZone "-03:00" updatedAt "DD/MM/YYYY HH:mm"}}</td>
                         </tr>
                         {{/each}}
@@ -118,6 +118,40 @@
                             location.href = `?${paginate}&${filtro1}` ;
                         }
                     });
+
+                    $(".format-chamado-situacao").each(function (item) {
+                        let textFormat = $(this).text()
+                        switch (textFormat) {
+                            case 'waiting':
+                                $(this).html('<i class="fas fa-clock"></i>  <span >Aguardando</span>')
+                                break;
+                            case 'progress':
+                                $(this).html('<i class="fas fa-comment-alt"></i> <span >Andamento</span>')
+                                break;
+                            case 'finished':
+                                $(this).html('<i class="fas fa-check-circle text-success"></i> <span >Finalizado</span>')
+                                break;
+                            default:
+                                $(this).html('err')
+                        }
+                    })
+
+                    $(".format-chamado-prioridade").each(function (item) {
+                        let textFormat = $(this).text()
+                        switch (textFormat) {
+                            case 'baixa':
+                                $(this).html('<i class="fas fa-circle text-info"></i>  <span >Baixa</span>')
+                                break;
+                            case 'normal':
+                                $(this).html('<i class="fas fa-circle text-warning"></i> <span >Normal</span>')
+                                break;
+                            case 'alta':
+                                $(this).html('<i class="fas fa-circle text-danger"></i> <span >Alta</span>')
+                                break;
+                            default:
+                                $(this).html('err')
+                        }
+                    })
                 </script>
 
             </div>

@@ -16,7 +16,7 @@ router.get('/chamados', async (req, res) => {
         paginate ? find_paginate = Number(paginate) : find_paginate = 1
         let skip = find_limit * (find_paginate-1)
 
-        conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'nome': { '$regex': conteudo.trim(), '$options': "i" } }, { 'endereco.cep': { '$regex': conteudo.trim(), '$options': "i" } }, { 'endereco.uf': { '$regex': conteudo.trim(), '$options': "i" } }, { 'endereco.localidade': { '$regex': conteudo.trim(), '$options': "i" } }]}
+        conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'titulo': { '$regex': conteudo.trim(), '$options': "i" } },{ 'mensagens.conteudo': { '$regex': conteudo.trim(), '$options': "i" } } ]}
         query = {
             $and: [find_conteudo]
         }
@@ -28,6 +28,7 @@ router.get('/chamados', async (req, res) => {
 
         res.render('admin/chamado/chamados', {
             chamados: chamados,
+            conteudo: conteudo,
             pagination: {
                 page: find_paginate,
                 pageCount: Math.ceil(totalPage/find_limit),
@@ -71,9 +72,10 @@ router.post('/edit-chamado', (req, res) => {
 })
 
 router.post('/add-chamado-mensagem', (req, res) => {
+    let conteudo = req.body.conteudo.split('<p>&nbsp;</p>').join('')
     Chamado.updateOne(
         {'_id': req.body.idChamado},
-        {$push: {'mensagens': {'conteudo': req.body.conteudo, 'data': new Date(), 'idAdmEmissor': req.user._id}}}
+        {$push: {'mensagens': {'conteudo': conteudo, 'data': new Date(), 'idAdmEmissor': req.user._id}}}
     ).then(() => {
         req.flash('success_msg', "Mensagem enviada")
         res.redirect('back')
