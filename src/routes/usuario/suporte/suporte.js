@@ -44,9 +44,10 @@ router.post('/add-chamado', (req, res) => {
 })
 
 router.post('/add-chamado-mensagem', (req, res) => {
+    let conteudo = req.body.conteudo.split('<p>&nbsp;</p>').join('')
     Chamado.updateOne(
         {'_id': req.body.idChamado},
-        {$push: {'mensagens': {'conteudo': req.body.conteudo, 'data': new Date(), 'idEmissor': req.user._id}}}
+        {$push: {'mensagens': {'conteudo': conteudo, 'data': new Date(), 'idEmissor': req.user._id}}}
     ).then(() => {
         req.flash('success_msg', "Mensagem enviada")
         res.redirect('back')
@@ -57,7 +58,7 @@ router.post('/add-chamado-mensagem', (req, res) => {
 
 router.get('/chamado', async (req, res) => {
     try {
-        let chamado = await Chamado.findById({'_id': req.query.chamado}).populate('idUsuarioRequisitante idAdministracaoResponsavel idEstabelecimento mensagens.idEmissor ').lean()
+        let chamado = await Chamado.findById({'_id': req.query.chamado}).populate('idUsuarioRequisitante idAdministracaoResponsavel idEstabelecimento mensagens.idEmissor mensagens.idAdmEmissor').lean()
         
         res.render('usuarios/suporte/chamado', {
             chamado: chamado

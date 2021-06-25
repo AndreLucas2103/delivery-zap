@@ -5,6 +5,9 @@
 <div class="col-12">
 {{>usuario/_menu}}
 
+<script src="https://cdn.tiny.cloud/1/nj2uno2lfpuiwjrcz3uazguh49ftjp30bpmm32igkgnms6g4/tinymce/5/tinymce.min.js" referrerpolicy="origin"></script>
+
+
 <main class="content">
     <div class="">
         <nav aria-label="breadcrumb">
@@ -29,7 +32,7 @@
                         <div class="col-sm-11">
                             <div class="card card-body">
                                 <span class=""><strong style="color: rgb(63, 63, 252);">{{#if idEmissor}}{{idEmissor.primeiroNome}}{{else}}{{idAdmEmissor.primeiroNome}}{{/if}}</strong>  <span class="float-end"  style="font-size: x-small;">{{dataFormatTimeZone ./usuarioLogado.timeZone data "DD/MM/YYYY HH:mm"}}</span> </span>
-                                <pre class="mt-4">{{conteudo}}</pre>
+                                <span class="mt-4">{{{conteudo}}}</span>
                             </div>
                         </div>
                     </div>
@@ -42,12 +45,34 @@
                     <div class="col-sm-11">
                         <form action="/suporte/add-chamado-mensagem" method="post">
                             <input type="text" name="idChamado" value="{{chamado._id}}" hidden readonly>
-                            <div class="form-floating">
-                                <textarea class="form-control" placeholder="-" name="conteudo" id="enviarMensagem" style="height: 250px"></textarea>
-                                <label for="enviarMensagem">Digite o conteúdo</label>
-                            </div>
+                            <textarea class="form-control" placeholder="Digite o conteudo" id="enviarMensagem" id="enviarMensagem" style="height: 250px"></textarea>
+                            <input type="text" name="conteudo" id="enviarMensagemHTML" hidden>
                             <button type="submit" class="btn btn-primary btn-sm mt-2">Enviar</button>
                         </form>
+                        <script>
+                            tinymce.init({
+                                selector: '#enviarMensagem',
+                                language: 'pt_BR',
+                                menubar: false,
+                                plugins: [
+                                    'advlist autolink lists link image charmap print preview anchor',
+                                    'searchreplace visualblocks code fullscreen',
+                                    'insertdatetime media table paste code help wordcount'
+                                ],
+                                toolbar: 'undo redo | formatselect | ' +
+                                    'bold italic backcolor | alignleft aligncenter ' +
+                                    'alignright alignjustify | bullist numlist outdent indent | ' +
+                                    'removeformat ',
+                                content_style: 'body { font-family:Helvetica,Arial,sans-serif; font-size:14px }',
+                                setup: function (editor) {
+                                    editor.on('change keyup ', function () {
+                                        var myContent = tinymce.get("enviarMensagem").getContent();
+                                        $('#enviarMensagemHTML').val(myContent)
+                                    });
+                                }
+                            });
+                            
+                        </script>
                     </div>
                 </div>
                 
@@ -61,8 +86,8 @@
                     <div class="card border-light text-center p-0">
                         <span class="mt-4">Responsável</span>
                         <div>
-                            <img class="user-avatar md-avatar mt-2 d-inline" src="/img/perfil-avatar/svg/{{chamado.idAdmEmissor.perfilAvatar}}.svg">
-                            <span class="d-inline">{{chamado.idAdmEmissor.primeiroNome}}asd</span>
+                            <img class="user-avatar md-avatar mt-2 d-inline" src="/img/perfil-avatar/svg/{{chamado.idAdministracaoResponsavel.perfilAvatar}}.svg">
+                            <span class="d-inline">{{chamado.idAdministracaoResponsavel.primeiroNome}}</span>
                         </div>
                         <span class="d-block mt-4">Situação</span>
                         <span class="d-block format-chamado-situacao">{{chamado.situacao}}</span>
