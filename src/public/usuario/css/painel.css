@@ -239,7 +239,7 @@
         border-radius: 20px;
         font-size: 70px;
         position: relative;
-        right: 500px;
+        right: 645px;
         top: -220px;
     }
 
@@ -252,7 +252,7 @@
         border-radius: 20px;
         font-size: 70px;
         position: relative;
-        left: 500px;
+        left: 600px;
         top: -220px;
     }
 }
@@ -470,48 +470,37 @@
         height: 50px;
         background: #fff;
         display: flex;
+        border:none;
         justify-content: center;
         align-items: center;
-        color: #219653;
+        color: #27AE60;
+        margin-right: 20px;
         bottom: 10px;
-        left: 300px;
         border-radius: 20px;
         border: 1px solid #219653;
         box-sizing: border-box;
         border-radius: 2px;
         text-decoration:none; 
-        
 
     }
     .proximo {
         width: 250px;
         height: 50px;
-        background: #27AE60;
+        background: #219653;
         display: flex;
-        border:none;
         justify-content: center;
         align-items: center;
         color: #fff;
         bottom: 10px;
-        right: 300px;
-        
+        margin-left: 20px;
+        border-radius: 20px;
+        border: none;
+        box-sizing: border-box;
+        border-radius: 2px;
         text-decoration:none; 
     }
 
-    .finalizar {
-        width: 500px;
-        height: 50px;
-        background: #27AE60;
-        display: flex;
-        border:none;
-        justify-content: center;
-        align-items: center;
-        color: #fff;
-        bottom: 10px;
-        right: 300px;
-        
-        text-decoration:none; 
-    }
+    
 
     .max-container {
        width:50%;
