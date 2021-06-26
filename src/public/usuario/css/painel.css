@@ -1,7 +1,7 @@
 @media (max-width: 900px) {
     .capa-painel {
         width: 100%;
-        height: 200px;
+        height: 180px;
         border: none;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -28,7 +28,7 @@
 
     .estabelecimento {
         font-weight: bold;
-        margin-top: 10px;
+        margin-top: 25px;
         font-size: 20px;
         text-align: center;
     }
@@ -148,8 +148,8 @@
 
 @media (min-width: 900px) {
     .capa-painel {
-        width: 60%;
-        height: 275px;
+        width: 50%;
+        height: 260px;
         border: none;
         background-repeat: no-repeat;
         background-size: 100% 100%;
@@ -177,7 +177,7 @@
 
     .estabelecimento {
         font-weight: bold;
-        margin-top: 30px;
+        margin-top: 50px;
         font-size: 20px;
         text-align: center;
     }
@@ -533,10 +533,6 @@
     margin-left: auto;
   }
 
-  .filter-gray {
-    filter: grayscale(100%);
-  }
-
   .radio-toolbar input[type="radio"] {
     display: none;
   }
@@ -546,20 +542,17 @@
     width:300px;
     height: 50px;
     background:#bbb;
-    margin-top:5px;
+    margin-top:-10px;
     display: block;
     padding: 10px 11px;
     font-family:-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
     font-size: 20px;
-    font-weight: bold;
-    color: white;
-    cursor: pointer;
-    box-shadow: 0px -4px 20px rgba(0, 0, 0, 0.1);
+    color: rgba(128, 128, 128, 0.671);
   }
   
   .radio-toolbar input[type="radio"]:checked+label {
     background-color: #27AE60;
-    box-shadow: 0px -4px 20px rgba(10, 99, 44, 0.384);
+    color: white;
   }
 
 .myDivToPrint {

@@ -1,104 +1,101 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
-<body style="background:{{estabelecimento.painel.colorFundo}};">
-    <header>
-        <div class="container-md capa-painel mt-2" style="background-image: url({{estabelecimento.img.capa.url}})">
-            <center>
-                <div>
-                    <br>
-                    <img src="{{estabelecimento.img.logo.url}}" class="rounded-circle rounded border logo-painel">
-                </div>
-        </div>
-        </center>
-        <br>
-    </header>
-
-</body>
-<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb " id="nomeEstabelecimento">
-    Carrinho</h1>
-
 <div class="container-md max-container">
 
     <div style="height:100%;background:white;">
         <br>
-        
+
         {{#if carrinho.produtos}}
-            <form action="/estabelecimento/delete-carrinho-painel" method="post">
+        <form action="/estabelecimento/delete-carrinho-painel" method="post">
             <input type="text" name="idCarrinho" value="{{carrinho._id}}" hidden readonly>
-                {{#each carrinho.produtos}}
-                    <img class="img-carrinho" src="{{idProduto.img.foto.url}}">
-                    <h1 class="rb " style="font-size: 16px;font-weight:bold;margin-left:100px;margin-top:-50px; cursor: pointer;"  data-bs-toggle="collapse" data-bs-target="#collapse-carrinho-{{_id}}">{{nome}}</h1>
-                    <h1 class="rb mb-2" style="font-size: 12px;margin-left:100px;"><span class="valorFormatar">{{valorTotal}}</span> - Qtd: {{quantidade}}</h1>
-                        <button class="btn btn-light btn-sm float-end text-danger" style="margin-right:20px;margin-top:-50px;" name="idCarrinhoProduto" value="{{_id}}"><i class="fas fa-times"></i></button>
-                    
-                    <div class="collapse mx-4 mt-4" id="collapse-carrinho-{{_id}}">
-                        <table class="table">
-                            <tbody>
-                                {{#each opcao}}
-                                    <tr>
-                                        <td>{{nomeOpcao}}</td>
-                                        <td>
-                                            {{#each opcoes}}
-                                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
-                                            {{/each}}
-                                        </td>
-                                    </tr>
+            {{#each carrinho.produtos}}
+            <img class="img-carrinho" src="{{idProduto.img.foto.url}}">
+            <h1 class="rb "
+                style="font-size: 16px;font-weight:bold;margin-left:100px;margin-top:-50px; cursor: pointer;"
+                data-bs-toggle="collapse" data-bs-target="#collapse-carrinho-{{_id}}">{{nome}}</h1>
+            <h1 class="rb mb-2" style="font-size: 12px;margin-left:100px;"><span
+                    class="valorFormatar">{{valorTotal}}</span> - Qtd: {{quantidade}}</h1>
+            <button class="btn btn-light btn-sm float-end text-danger" style="margin-right:20px;margin-top:-50px;"
+                name="idCarrinhoProduto" value="{{_id}}"><i class="fas fa-times"></i></button>
+
+            <div class="collapse mx-4 mt-4" id="collapse-carrinho-{{_id}}">
+                <table class="table">
+                    <tbody>
+                        {{#each opcao}}
+                        <tr>
+                            <td>{{nomeOpcao}}</td>
+                            <td>
+                                {{#each opcoes}}
+                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
                                 {{/each}}
+                            </td>
+                        </tr>
+                        {{/each}}
 
-                                {{#if adicionais}}
-                                    <tr>
-                                        <td>Adicionais</td>
-                                        <td>
-                                            {{#each adicionais}}
-                                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
-                                            {{/each}}
-                                        </td>
-                                    </tr>
-                                {{/if}}
+                        {{#if adicionais}}
+                        <tr>
+                            <td>Adicionais</td>
+                            <td>
+                                {{#each adicionais}}
+                                {{nome}} <span class="valorFormatar">{{valor}}</span>;
+                                {{/each}}
+                            </td>
+                        </tr>
+                        {{/if}}
 
-                                {{#if observacao}}
-                                <tr>
-                                    <td>Obeservação</td>
-                                    <td>{{observacao}}</td>
-                                </tr>
-                                {{/if}}
-                                
-                            </tbody>
-                        </table>
+                        {{#if observacao}}
+                        <tr>
+                            <td>Obeservação</td>
+                            <td>{{observacao}}</td>
+                        </tr>
+                        {{/if}}
 
-                                               
-                    </div>
+                    </tbody>
+                </table>
 
-                    <center><hr style="width: 90%;"></center>
-                {{/each}}
-            </form>
 
-            <p style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb " id="nomeEstabelecimento">Resumo da compra</p>
-            <table class="table text-center">
-                <tbody>
-                    <tr>
-                        <td>Sub-total</td>
-                        <td class="valorFormatar">{{carrinho.valorTotal}}</td>
-                    </tr>
-                    <tr class="border-dark">
-                        <td>Entrega</td>
-                        <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>
-                    </tr>
-                    <tr>
-                        <td>Total</td>
-                        <td id="valor-total-pedido"></td>
-                        <script>
-                            $('#valor-total-pedido').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{carrinho.valorTotal}}')+Number('{{estabelecimento.configPedidos.taxaEntrega}}') ))
-                        </script>
-                    </tr>
-                </tbody>
-            </table>
+            </div>
+
+            <center>
+                <hr style="width: 90%;">
+            </center>
+            {{/each}}
+        </form>
+
+        <p style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb " id="nomeEstabelecimento">
+            Resumo da compra</p>
+        <table class="table text-center">
+            <tbody>
+                <tr>
+                    <td>Sub-total</td>
+                    <td class="valorFormatar">{{carrinho.valorTotal}}</td>
+                </tr>
+                <tr class="border-dark">
+                    <td>Entrega</td>
+                    <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>
+                </tr>
+                <tr>
+                    <td>Total</td>
+                    <td id="valor-total-pedido"></td>
+                    <script>
+                        $('#valor-total-pedido').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{carrinho.valorTotal}}') + Number('{{estabelecimento.configPedidos.taxaEntrega}}')))
+                    </script>
+                </tr>
+            </tbody>
+        </table>
 
 
         {{else}}
-            <div class="text-center display-6 mx-4">Nenhum produto adicionado ao carrinho</div><br>
+        <div class="text-center mx-4" style="margin-top: 110px;">
+            <h1 style="color:{{estabelecimento.painel.colorFonte}};margin-bottom:-2px;" class="estabelecimento rb" id="nomeEstabelecimento">
+  Carrinho de compras</h1>
+    <label style="color:{{estabelecimento.painel.colorFonte}};font-size: 14px;margin-top:-2px;margin-bottom: 50px;">Você ainda não selecionou nenhum produto</label>
+  
+            <img id="img-carrinho" style="width: 60%;margin-top:-20px"
+                src="/usuario/assets/img/illustrations/icone-carrinho-vazio.png">
+        </div><br>
         {{/if}}
-        
+
     </div>
 
 </div>
@@ -108,12 +105,12 @@
 <div class="background-pedidos">
     <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>
     <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="proximo">Próximo »</button></a>
-    </div>
+</div>
 
 
-    <script>
-        $(".valorFormatar").each(function (item) {
-            let textFormat = $(this).text()
-            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
-        })
-    </script>
+<script>
+    $(".valorFormatar").each(function (item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+</script>
