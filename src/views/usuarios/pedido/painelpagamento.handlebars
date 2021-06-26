@@ -1,32 +1,31 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
-<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb" id="nomeEstabelecimento">
-    Como deseja pagar?</h1>
+<div style="margin: 150px auto;">
+<h1 style="color:black;" class="estabelecimento rb" >Como deseja pagar?</h1>
 
 <div class="container-md max-container" id="container-end">
 
-    <div style="height:100%;background:white;">
+    <div style="height:100%;background:white">
         <br>
          <center>
-            <div class="radio-toolbar">
-                Selecione a forma de pagamento
-                <input type="radio" id="radio1" name="radios" value="" style="">
-                <label style="margin-top: 20px;" for="radio1">Pagar na entrega</label>
-                <br>
+             <div class="radio-toolbar rb">
+                Selecione a forma de entrega<br>
+                <input type="radio" id="radio1" name="radios" value="">
+                <label style="margin-top: 10px;" for="radio1">Retirar no local</label>
                 <input type="radio" id="radio2" name="radios" value="false" checked>
-                <label for="radio2">Pagamento Online</label>
+                <label  style="margin-top: 10px;" for="radio2">Entrega</label>
 
     
             </div>
         </center>
 </div>
-
-
+</div>
+</div>
 <br><br><br><br>
 
 <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="voltar">« Voltar</button></a>
-    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="proximo">Enviar pedido</button></a>
+    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>    
+    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="proximo">Enviar Pedido</button></a>
 </div>
 
 <script>

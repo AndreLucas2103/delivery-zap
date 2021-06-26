@@ -87,11 +87,11 @@
 
         {{else}}
         <div class="text-center mx-4" style="margin-top: 110px;">
-            <h1 style="color:{{estabelecimento.painel.colorFonte}};margin-bottom:-2px;" class="estabelecimento rb" id="nomeEstabelecimento">
+            <h1 style="color:black" class="estabelecimento rb" id="nomeEstabelecimento">
   Carrinho de compras</h1>
-    <label style="color:{{estabelecimento.painel.colorFonte}};font-size: 14px;margin-top:-2px;margin-bottom: 50px;">Você ainda não selecionou nenhum produto</label>
-  
-            <img id="img-carrinho" style="width: 60%;margin-top:-20px"
+    <label style="color:black;font-size: 14px;margin-top:-2px;margin-bottom: 50px;">Você ainda não selecionou nenhum produto</label>
+  <br>
+            <img id="img-carrinho" class="img-carrinho-compras"
                 src="/usuario/assets/img/illustrations/icone-carrinho-vazio.png">
         </div><br>
         {{/if}}
@@ -104,7 +104,11 @@
 
 <div class="background-pedidos">
     <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>
-    <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="proximo">Próximo »</button></a>
+     {{#if carrinho.produtos}}
+     <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="proximo">Próximo »</button></a>
+     {{else}}
+    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="proximo">Adicionar Produtos</button></a>
+     {{/if}}
 </div>
 
 
