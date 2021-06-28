@@ -1,9 +1,11 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
-
-<h1 style="color:{{estabelecimento.painel.colorFonte}};" class="estabelecimento rb" id="nomeEstabelecimento">
+<div style="color: black;">
+    <h1 class="estabelecimento rb" id="nomeEstabelecimento">
     Como você deseja</h1>
-    <h1 style="color:{{estabelecimento.painel.colorFonte}};margin-top:-10px" class="estabelecimento rb" id="nomeEstabelecimento">
+    <h1 style="margin-top:-10px" class="estabelecimento rb" id="nomeEstabelecimento">
     receber seu pedido?</h1><p>
+</div>
+
 
 <div class="container-md max-container" id="container-end">
 
@@ -12,10 +14,10 @@
             <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">
             <div class="radio-toolbar rb">
                 Selecione a forma de entrega<br>
-                <input type="radio" id="radio1" name="radios" value="">
-                <label style="margin-top: 10px;" for="radio1">Retirar no local</label>
-                <input type="radio" id="radio2" name="radios" value="false" checked>
-                <label  style="margin-top: 10px;" for="radio2">Entrega</label>
+                <input type="radio" id="radioLocal" name="TipoEntrega" value="">
+                <label style="margin-top: 10px;" for="radioLocal">Retirar no local</label>
+                <input type="radio" id="radioEntrega" name="TipoEntrega" value="false" checked>
+                <label  style="margin-top: 5px;" for="radioEntrega">Entrega</label>
 
     
             </div>
@@ -110,8 +112,6 @@
 
 </div>
 
-</div>
-</div>
 
 <br><br><br><br>
 
@@ -121,17 +121,18 @@
 </div>
 
 <script>
-    $(document).ready(function () {
-        $("#retirar").toggleClass("filter-gray");
+    $("#retirarLocal").empty()
+$('#radioLocal').click(function() {
+$("#retirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="nome" name="nome" placeholder="0"><label for="nome">Seu Nome *</label></div></div></div><div class="row g-2" style="margin-top:10px;"><div class="col-md"><div class="form-floating center-block "><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div>')
+$("#entrega").empty()
 
-        $("#retirar").change(function () {
-            $("#retirar").removeClass("filter-gray");
-            $("#entregar").toggleClass("filter-gray");
-        })
+})
 
-        $("#entregar").change(function () {
-            $("#entregar").removeClass("filter-gray");
-            $("#retirar").toggleClass("filter-gray");
-        })
-    })
+$('#radioEntrega').click(function() {
+$("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block "><input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" placeholder="0"required><label for="nomeCompleto">CEP*</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Cidade*</label></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div></div>')
+ $("#retirarLocal").empty()
+})
+
+
+   
 </script>

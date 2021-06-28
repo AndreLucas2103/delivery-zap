@@ -129,7 +129,7 @@
                         <div class="card-body">
                             <div class="row">
                                 <div class="col-lg-4 text-center mt-2">
-                                    <img id="add-img-produto" src="" class="mx-auto"
+                                    <img id="add-img-produto" src="https://uploadhotpedidos.s3.amazonaws.com/Estabelecimentos/60d8ffbc080652305caddca2/produtos/cd4140f648bea7564fb3c73f60538c21-136513663_770619436875206_3744507975690724161_n-1.jpg" class="mx-auto"
                                         style="object-fit: contain; width: 100pxx; height: 100px;">
                                 </div>
                                 <div class="col-lg-8 mt-2">
@@ -532,7 +532,7 @@
                 response.ingredientes.length == 0 ? $('#card-add-ingredientes').hide() : $('#card-add-ingredientes').show()
                 $('#add-ingredientes').empty()
                 response.ingredientes.forEach(element => {
-                    $('#add-ingredientes').append(`<button type="button" class="btn btn-secondary btn-sm m-1" style="font-size: x-small;">${element.nome}</button>`)
+                    $('#add-ingredientes').append(`<label style="font-size:small;">-${element.nome}</label>`)
                 })
 
                 // adicionais
@@ -542,12 +542,13 @@
                     $('#add-adicionais').append(`
                         <tr>
                             <td>
-                                <label> <input type="checkbox" onclick="calcValorClick()" class="calc-valor-total" name="adicionais" value='{"tipo": "adicional", "nome": "${element.idAdicional.nome}", "valor": ${element.idAdicional.valor}}' /> ${element.idAdicional.nome} </label>
+                                <label> <input type="checkbox" onclick="calcValorClick()" class="calc-valor-total" name="adicionais" value='{"tipo": "adicional", "nome": "&nbps${element.idAdicional.nome}", "valor": ${element.idAdicional.valor}}' /> ${element.idAdicional.nome} </label>
                             </td>
                             <td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.idAdicional.valor)}</td>
                         </tr>
                     `)
                 })
+                
 
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()
