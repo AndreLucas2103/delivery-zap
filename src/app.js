@@ -1,5 +1,6 @@
 ﻿require("dotenv").config();
 require("./helpers/handlebars-helpers")
+require('./helpers/schendule')
 
 // ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
@@ -133,6 +134,8 @@ mongoose.connect("mongodb+srv://admin:admin@delivery-zap-teste1.hrbcb.mongodb.ne
     console.log("Erro ao se conectar: " + err)
 })
 
+require("./models/Plano")
+const Plano = mongoose.model("planos")
 
 
 // ----- Public ----------------------------------------------------------------------------------------------------------------------------------
@@ -162,7 +165,11 @@ app.get('/loginadm', (req, res) => {
 })
 
 app.get('/registro', (req, res) => {
-    res.render('usuarios/acesso/registro')
+    Plano.find({'statusAtivo': true}).lean().then(planos => {
+        res.render('usuarios/acesso/registro', {planos: planos})
+    }).catch(err => {
+        console.log(err)
+    })
 })
 
 
@@ -179,6 +186,7 @@ const usuarioPedido= require("./routes/usuario/pedido/pedido")
 const usuarioImpressora= require("./routes/usuario/configuracao/impressora")
 const usuarioPainel= require("./routes/usuario/painelonline/estabelecimento")
 const usuarioSuporte = require("./routes/usuario/suporte/suporte")
+const usuarioFatura = require("./routes/usuario/fatura/fatura")
 
     // Configuracoes do usuario
     const usuarioEstabelecimento = require("./routes/usuario/configuracao/estabelecimento")
@@ -193,6 +201,7 @@ app.use('/pedido', usuarioPedido)
 app.use('/impressora', usuarioImpressora)
 app.use('/estabelecimento', usuarioPainel)
 app.use('/suporte', usuarioSuporte)
+app.use('/fatura', usuarioFatura)
 
 
     // Configuracoes do usuario
@@ -204,11 +213,13 @@ const adminDashboard = require("./routes/admin/dashboard/dashboard")
 const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecimento")
 const adminChamado = require("./routes/admin/chamado/chamado")
 const adminUsuario = require("./routes/admin/usuario/usuario")
+const adminPlano = require("./routes/admin/plano/plano")
 
     app.use('/admin', adminDashboard)
     app.use('/admin/administrativo', adminEstabelecimento)
     app.use('/admin/administrativo', adminChamado)
     app.use('/admin/usuario', adminUsuario)
+    app.use('/admin/administrativo', adminPlano)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
@@ -219,7 +230,7 @@ app.get('/teste', async (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80
+const PORT = 3000
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })

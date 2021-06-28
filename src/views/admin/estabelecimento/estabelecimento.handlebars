@@ -1,0 +1,209 @@
+{{>admin/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>admin/_menu}}
+
+
+
+<main class="content mb-4">
+
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/administrativo/estabelecimentos">Estabelecimentos</a></li>
+                <li class="breadcrumb-item">ID Estabelecimento: {{estabelecimento._id}}</li>
+            </ol>
+        </nav>
+    </div>
+    
+    <div class="row">
+        <!-- infos a esquerda START --> 
+        <div class="col-12 col-xl-4">
+            <div class="card border-light text-center p-0">
+                <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
+                <div class="card-body pb-5">
+                    <img src="{{estabelecimento.img.logo.url}}" class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+
+                    <h4 class="">{{estabelecimento.nome}}</h4>
+                    <h6>URL: <a href="/estabelecimento/{{estabelecimento.url}}">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a></h6>
+                    
+                    <hr>
+                    <span class="d-block">Logradouro: {{estabelecimento.endereco.logradouro}}</span>
+                    <span class="d-block">Bairro: {{estabelecimento.endereco.bairro}}</span>
+                    <span class="d-block">Localidade: {{estabelecimento.endereco.localidade}}</span>
+                    <span class="d-block">CEP: {{estabelecimento.endereco.cep}}</span>
+                    <span class="d-block">Número: {{estabelecimento.endereco.numero}}</span>
+                    <span class="d-block">UF: {{estabelecimento.endereco.uf}}</span>
+                    <hr>
+                    <span class="d-block">CNPJ: {{estabelecimento.cnpj}}</span>
+                    <span class="d-block">Telefone: {{estabelecimento.telefone}}</span>
+                    <span>Usuário Master: <a href="/admin/administrativo/usuario?idUsuario={{estabelecimento.url}}">{{estabelecimento.idUsuarioMaster.primeiroNome}}</a></span>
+                    <hr>
+                    <span class="d-block">Ativo: {{{formatTrueFalse estabelecimento.statusAtivo}}}</span>
+                    
+                </div>
+            </div>
+            
+        </div>
+        <!-- infos a esquerda END --> 
+        
+        
+
+        <!-- infos a direita START --> 
+        <div class="col-12 col-xl-8">
+
+        <ul class="nav nav-pills " id="pills-tab" role="tablist">
+            <li class="nav-item" >
+                <button class="nav-link active"  data-bs-toggle="pill" data-bs-target="#nav-faturas" type="button" role="tab" aria-selected="true">Fatura</button>
+            </li>
+            <li class="nav-item">
+                <button class="nav-link " data-bs-toggle="pill" data-bs-target="#nav-ingredientes" type="button" role="tab" aria-selected="false">Ingredientes</button>
+            </li>
+        </ul>
+        <div class="tab-content">
+            <!-- Faturas START -->
+            <div class="tab-pane fade show active" id="nav-faturas">
+                <div class="card">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-centered table-nowrap mb-0 rounded">
+                                <tbody>
+                                        <tr>
+                                            <td>Plano</td>
+                                            <td>{{estabelecimento.locacao.plano}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Liberado</td>
+                                            <td>{{{formatTrueFalse estabelecimento.locacao.liberado}}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Liberado até</td>
+                                            <td>{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "DD/MM/YYYY"}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dia Vencimento</td>
+                                            <td>{{estabelecimento.locacao.diaVencimento}}</td>
+                                        </tr>
+                                        <tr>
+                                            <td>Valor</td>
+                                            <td>{{estabelecimento.locacao.valor}}</td>
+                                        </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="card mt-2">
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table class="table table-centered table-nowrap mb-0 rounded">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th class="border-0">#</th>
+                                        <th class="border-0">Vencimento</th>
+                                        <th class="border-0">Descrição</th>
+                                        <th class="border-0">Valor</th>
+                                        <th class="border-0">Situação</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {{#each estabelecimento.locacao.faturas}}
+                                        <tr>
+                                            <form action="/admin/administrativo/edit-fatura" method="post">
+                                                <td>
+                                                    <i class="fas fa-pen text-warning" data-bs-toggle="modal" data-bs-target="#edit-cobranca" data-bs-idFatura="{{}}"></i>
+                                                </td>
+                                                <td>
+                                                    {{dataFormatTimeZone usuarioLogado.timeZone vencimento "DD/MM/YYYY"}}
+                                                </td>
+                                                <td>{{descricacao}}</td>
+                                                <td>{{valor}}</td>
+                                                <td class="format-locacao-situacao-cobranca">{{situacao}}</td>
+                                            </form>
+                                        </tr>
+                                    {{/each}}
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- Modal -->
+                        <div class="modal fade" id="edit-cobranca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-cobrancaLabel" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="edit-cobrancaLabel">Modal title</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <script>
+                            var exampleModal = document.getElementById('exampleModal')
+                            exampleModal.addEventListener('show.bs.modal', function (event) {
+                                var button = event.relatedTarget
+                                var recipient = button.getAttribute('data-bs-whatever')
+                                
+                            })
+
+                            $(".format-locacao-situacao-cobranca").each(function (item) {
+                                let textFormat = $(this).text()
+                                switch (textFormat) {
+                                    case 'canceled':
+                                        $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
+                                        break;
+                                    case 'waiting':
+                                        $(this).html('<i class="fas fa-clock"></i> Aguardando')
+                                        break;
+                                    case 'paid':
+                                        $(this).html('<i class="fas fa-check-circle text-success"></i> Pago')
+                                        break;
+                                    default:
+                                        $(this).html('err')
+                                }
+                            })
+                        </script>
+
+
+                    </div>
+                </div>
+            </div>
+            <!-- Faturas END -->
+           
+            <div class="tab-pane fade" id="nav-ingredientes">
+                
+            </div>
+
+        </div>
+            
+            
+
+        </div>
+        <!-- infos a direita END --> 
+        
+    </div>    
+
+    <script> // script para adicionar categorias
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        })
+
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>admin/_rodape}}
+
+{{>_msg}}

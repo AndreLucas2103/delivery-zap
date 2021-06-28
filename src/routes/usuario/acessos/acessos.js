@@ -4,6 +4,7 @@ const mongoose = require("mongoose")
 const bcryptjs = require("bcryptjs")
 const passport = require("passport")
 const { v4: uuidv4 } = require('uuid');
+const moment = require('moment')
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -11,6 +12,8 @@ require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/admin/AdmUsuario")
 const Usuarioadm = mongoose.model("admusuarios")
+require("../../../models/Plano")
+const Plano = mongoose.model("planos")
 
 
 router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
@@ -50,7 +53,11 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                         usuarioMaster: true,
                         statusAtivo: true,
                         perfilAvatar: 'businessman',
-                        identificaouuidv4: uuidv4()
+                        identificaouuidv4: uuidv4(),
+                        freeSystem: {
+                            habilitado: true,
+                            dataFim: moment().add(7, 'days')
+                        },
                     })
                     bcryptjs.genSalt(10, (erro, salt) => {
                         bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
@@ -59,48 +66,55 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                             }
 
                             novoUsuario.senha = hash
-
                             novoUsuario.save().then((usuarioEdit) => {
-
-                                addEstabelecimento = {
-                                    nome: req.body.nome,
-                                    nomePainel: req.body.nome,
-                                    url: req.body.url,
-                                    endereco: {
-                                        logradouro: req.body.logradouro,
-                                        bairro: req.body.bairro,
-                                        localidade: req.body.localidade,
-                                        cep: req.body.cep,
-                                        numero: req.body.numero,
-                                        uf: req.body.uf,
-
-                                    },
-                                    cnpj: req.body.cnpj,
-                                    telefone: req.body.telefone,
-                                    idUsuarioMaster: usuarioEdit._id
-                                }
-                                new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
-                                    editUsuario = {
-                                        idEstabelecimento: estabelecimento._id,
+                                
+                                    addEstabelecimento = {
+                                        nome: req.body.nome,
+                                        nomePainel: req.body.nome,
+                                        url: req.body.url,
+                                        endereco: {
+                                            logradouro: req.body.logradouro,
+                                            bairro: req.body.bairro,
+                                            localidade: req.body.localidade,
+                                            cep: req.body.cep,
+                                            numero: req.body.numero,
+                                            uf: req.body.uf,
+    
+                                        },
+                                        cnpj: req.body.cnpj,
+                                        telefone: req.body.telefone,
+                                        idUsuarioMaster: usuarioEdit._id,
+    
+                                        freeSystem: {
+                                            habilitado: true,
+                                            dataFim: moment().add(7, 'days')
+                                        },
                                     }
-                                    Usuario.updateOne(
-                                        { '_id': usuarioEdit._id },
-                                        {
-                                            $push: { "estabelecimentosVinculados": editUsuario, 'estabelecimentosSelecionados': editUsuario },
-                                            $set: { "idUsuarioMaster": usuarioEdit._id }
+    
+                                    new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
+                                        editUsuario = {
+                                            idEstabelecimento: estabelecimento._id,
                                         }
-                                    ).then(e => {
-                                        console.log('Usuario Criado')
-                                        req.flash('success_msg', 'Cadastro realizado')
-                                        res.redirect('/login')
+                                        Usuario.updateOne(
+                                            { '_id': usuarioEdit._id },
+                                            {
+                                                $push: { "estabelecimentosVinculados": editUsuario, 'estabelecimentosSelecionados': editUsuario },
+                                                $set: { "idUsuarioMaster": usuarioEdit._id }
+                                            }
+                                        ).then(e => {
+                                            console.log('Usuario Criado')
+                                            req.flash('success_msg', 'Cadastro realizado')
+                                            res.redirect('/login')
+                                        }).catch(err => {
+                                            console.log(err)
+                                        })
+    
                                     }).catch(err => {
-                                        console.log(err)
+                                        req.flash('error_msg', 'Ocorreu um erro')
+                                        res.redirect('back')
                                     })
-
-                                }).catch(err => {
-                                    req.flash('error_msg', 'Ocorreu um erro')
-                                    res.redirect('back')
-                                })
+                                
+                                
                             }).catch((err) => {
                                 console.log(err)
                                 req.flash("error_msg", "Ocorreu um erro interno.")

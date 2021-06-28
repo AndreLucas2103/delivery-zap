@@ -8,7 +8,11 @@ const { promisify } = require("util");
 
 
 /*
-    
+  locacao.cobrancas.situacao: {
+    paid: pago,
+    canceled: cancelado
+    waiting: aguardando
+  }
 */
 
 const Estabelecimento = new Schema({
@@ -25,7 +29,6 @@ const Estabelecimento = new Schema({
   },
   cnpj: String,
   telefone: String,
-
 
   horarioFuncionamento: [{
     dia: String,
@@ -96,10 +99,52 @@ const Estabelecimento = new Schema({
     }
   },
 
-
   idUsuarioMaster: {
     type: Schema.Types.ObjectId,
     ref: "usuarios",
+  },
+
+  locacao: {
+    idPlano: {
+      type: Schema.Types.ObjectId,
+      ref: "planos",
+    },
+
+    plano: String,
+    liberado: Boolean,
+    dataLiberado: Date,
+    diaVencimento: Number,
+    valor: Number,
+
+    faturas: [{
+      idPlano: {
+        type: Schema.Types.ObjectId,
+        ref: "planos",
+      },
+      descricao: String,
+      valor: Number,
+      vencimento: Date,
+
+      situacao: String,
+      pago: {
+        type: Boolean,
+        default: false
+      },
+      cancelado: {
+        type: Boolean,
+        default: false
+      },
+
+      dataPagamento: Date,
+      logs: [{
+        descricao: String
+      }]
+    }]
+  },
+
+  freeSystem: {
+    habilitado: Boolean,
+    dataFim: Date
   },
 
   statusAtivo: {

@@ -1,0 +1,67 @@
+{{>usuario/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>usuario/_menu}}
+<main class="content">
+
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a href="/dashboard">Faturas</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div class="card">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">Vencimento</th>
+                            <th class="border-0">Estabelecimento</th>
+                            <th class="border-0">Descrição</th>
+                            <th class="border-0">Valor</th>
+                            <th class="border-0">Situação</th>
+                            <th class="border-0"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each faturas}}
+                            <tr>
+                                <td>{{vencimento}}</td>
+                                <td>{{asd}}</td>
+                                <td>{{descricacao}}</td>
+                                <td>{{valor}}</td>
+                                <td>{{situacao}}</td>
+                                <td>
+                                    a
+                                </td>
+                            </tr>
+                        {{/each}}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+</main>
+
+</div>
+</div>
+</div>
+
+
+<script>
+    $(".valorFormatar").each(function (item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+</script>
+
+{{>usuario/_rodape}}
+
+{{>_msg}}

@@ -5,11 +5,14 @@ const multer = require('multer')
 const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
+const moment = require('moment')
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("../../../models/Plano")
+const Plano = mongoose.model("planos")
 
 router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
@@ -24,6 +27,7 @@ router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { 
                     as: "usuarios"
                 }
             }
+            //{$sort: {cobrancas: ({"score":-1})}}
         ])
 
         res.render('usuarios/configuracao/estabelecimento', { estabelecimento: estabelecimento[0] })
@@ -150,10 +154,11 @@ router.get('/estabelecimentos', eAdmin, async (req, res) => { // Listar todos os
                     as: "usuariosVinculados"
                 }
             },
-
         ])
 
-        res.render('usuarios/configuracao/estabelecimentos', { estabelecimentos: estabelecimentos })
+        let planos = await Plano.find({'statusAtivo': true}).lean()
+
+        res.render('usuarios/configuracao/estabelecimentos', { estabelecimentos: estabelecimentos, planos: planos })
     } catch (err) {
         console.log(err)
     }
@@ -239,49 +244,81 @@ router.post('/edit-estabelecimento-integracao-mercado-pago', (req, res) => {
     }
 })
 
-router.post('/add-estabelecimento', (req, res) => { // adicionar estabelecimento
+router.post('/add-estabelecimento',  (req, res) => { // adicionar estabelecimento
     let user = req.user
     if (user) {
         if (user.usuarioMaster == true) {
-            addEstabelecimento = {
-                nome: req.body.nome,
-                nomePainel: req.body.nome,
-                url: req.body.url,
-                endereco: {
-                    logradouro: req.body.logradouro,
-                    bairro: req.body.bairro,
-                    localidade: req.body.cidade,
-                    cep: req.body.cep,
-                    numero: req.body.numero,
-                    uf: req.body.uf
-                },
-                cnpj: req.body.cnpj,
-                telefone: req.body.telefone,
-                idUsuarioMaster: user._id
-            }
-            new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
-                editUsuario = {
-                    idEstabelecimento: estabelecimento._id,
-                    cnpj: estabelecimento.cnpj,
-                    nome: estabelecimento.nome,
-                    url: estabelecimento.url
-                }
-                Usuario.updateOne(
-                    { '_id': user._id },
-                    {
-                        $push: { "estabelecimentosVinculados": editUsuario }
+            if(user.freeSystem.habilitado == true) {
+                free = {
+                    habilitado: true,
+                    dataFim: user.freeSystem.dataFim
+                } 
+            }else{
+                Plano.findById({'_id': req.body.idPlano}).then(plano => {
+                    addEstabelecimento = {
+                        nome: req.body.nome,
+                        nomePainel: req.body.nome,
+                        url: req.body.url,
+                        endereco: {
+                            logradouro: req.body.logradouro,
+                            bairro: req.body.bairro,
+                            localidade: req.body.cidade,
+                            cep: req.body.cep,
+                            numero: req.body.numero,
+                            uf: req.body.uf
+                        },
+                        cnpj: req.body.cnpj,
+                        telefone: req.body.telefone,
+                        idUsuarioMaster: user._id,
+        
+                        locacao: {
+                            idPlano: plano._id,
+                            plano: plano.nome,
+                            liberado: true,
+                            dataLiberado:  moment(),
+                            diaVencimento: moment().date(),
+                            valor: plano.valor,
+    
+                            faturas: [{
+                                idPlano: plano._id,
+                                descricao: `Fatura ${moment().format("DD/MM/YYYY")} a ${moment().add({months:plano.mesesPeriodicidade}).format("DD/MM/YYYY")}`,
+                                valor: plano.valor,
+                                vencimento: moment(),
+                                situacao: "waiting",
+                                logs: [{
+                                    descricao: 'Mensalidade gerada na criação do estabelecimento'
+                                }]
+                            }]
+                        } 
                     }
-                ).then(e => {
-                    req.flash('success_msg', 'Estabelecimento adicionado')
-                    res.redirect('back')
-                }).catch(err => {
-                    console.log(err)
+                    new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
+                        editUsuario = {
+                            idEstabelecimento: estabelecimento._id,
+                            cnpj: estabelecimento.cnpj,
+                            nome: estabelecimento.nome,
+                            url: estabelecimento.url
+                        }
+                        Usuario.updateOne(
+                            { '_id': user._id },
+                            {
+                                $push: { "estabelecimentosVinculados": editUsuario }
+                            }
+                        ).then(e => {
+                            req.flash('success_msg', 'Estabelecimento adicionado')
+                            res.redirect('back')
+                        }).catch(err => {
+                            console.log(err)
+                        })
+        
+                    }).catch(err => {
+                        req.flash('error_msg', 'Ocorreu um erro')
+                        res.redirect('back')
+                    })
                 })
+            }
 
-            }).catch(err => {
-                req.flash('error_msg', 'Ocorreu um erro')
-                res.redirect('back')
-            })
+            
+            
         } else {
             req.flash('warning_msg', 'Somente usuário MASTER pode adicionar um estabelecimento')
             res.redirect('back')

@@ -1,0 +1,158 @@
+{{>admin/_top-css}}
+
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>admin/_menu}}
+
+
+
+<main class="content">
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/admin/dashboard"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/administrativo/planos">Planos</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
+
+    <div class="row">
+        {{#each planos}}
+        <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
+            <div class="card border-light shadow-sm">
+                <div class="card-header border-bottom border-light d-flex justify-content-between">
+                    <h2 class="h5 mb-0">{{nome}}</h2>
+                    <a class="btn btn-sm btn-secondary" data-bs-toggle="modal" data-bs-target="#modal-edit-ingredientes" data-bs-idPlano="{{_id}}"   data-bs-nome="{{nome}}"  data-bs-valor="{{valor}}"  data-bs-periodicidade="{{periodicidade}}" data-bs-statusAtivo="{{statusAtivo}}"   data-bs-mesesPeriodicidade="{{mesesPeriodicidade}}"  style="height:30px;">Editar</a>
+                </div>
+                <div class="card-body">
+                    <div style="font-size: small;">
+                        <span>Periodicidade: {{periodicidade}} - (Meses: {{mesesPeriodicidade}})</span>
+                        <span>Valor: <span class="valorFormatar">{{valor}}</span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {{/each}}
+    </div>
+
+    <!-- Modal edit ingredientes START -->
+    <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-edit-ingredientesLabel">Editar Plano</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/administrativo/edit-plano" method="post">
+                    <div class="row">
+                        <div class="form-floating col-6 mb-1">
+                            <input type="text" class="form-control" id="edit-nome" name="nome" placeholder="-" required>
+                            <label for="edit-nome" class="ml-2">Nome</label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="Number" class="form-control" id="edit-valor" name="valor" placeholder="-" required>
+                            <label for="edit-valor" class="ml-2">Valor R$</label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="text" class="form-control" id="edit-periodicidade" name="periodicidade" placeholder="-" required>
+                            <label for="edit-periodicidade" class="ml-2">Nome Periodicidade </label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="Number" class="form-control" id="edit-mesesPeriodicidade" name="mesesPeriodicidade" placeholder="-" required>
+                            <label for="edit-mesesPeriodicidade" class="ml-2">Meses Periodicidade</label>
+                        </div>
+                    </div>
+                    
+
+                    <div class="mt-4">
+                        <button type="submit" class="btn btn-primary btn-sm" name="idPlano" id="edit-idPlano">Salvar</button>
+                        <button type="buttton" class="btn btn-white btn-sm "  data-bs-dismiss="modal" aria-label="Close">Cancelar</button>
+                        
+                        <div class="form-check form-switch float-end " style="font-size: small;">
+                            <input class="form-check-input" type="checkbox" name="statusAtivo" id="edit-statusAtivo" value="true">
+                            <label class="form-check-label" for="edit-statusAtivo">Ativo</label>
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal edit ingredientes END -->
+
+    <script>
+        var modalEditIngrediente = document.getElementById('modal-edit-ingredientes')
+        modalEditIngrediente.addEventListener('show.bs.modal', function (event) {
+            $('.form-check-input').prop('checked', false)
+            var button = event.relatedTarget
+            
+            $('#edit-nome').val(button.getAttribute('data-bs-nome'))
+            $('#edit-idPlano').val(button.getAttribute('data-bs-idPlano'))
+            $('#edit-valor').val(button.getAttribute('data-bs-valor'))
+            $('#edit-periodicidade').val(button.getAttribute('data-bs-periodicidade'))
+            $('#edit-mesesPeriodicidade').val(button.getAttribute('data-bs-mesesPeriodicidade'))
+            button.getAttribute('data-bs-statusAtivo') == "true" ? $('#edit-statusAtivo').prop('checked', true) : null
+        })
+    </script>
+
+    <!-- Modal add ingredientes START -->
+    <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-ingredientesLabel">Adicionar Ingredientes</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form action="/admin/administrativo/add-plano" method="post">
+                    <div class="row">
+                        <div class="form-floating col-6 mb-1">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" required>
+                            <label for="nome" class="ml-2">Nome</label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="Number" class="form-control" id="valor" name="valor" placeholder="-" required>
+                            <label for="valor" class="ml-2">Valor R$</label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="text" class="form-control" id="periodicidade" name="periodicidade" placeholder="-" required>
+                            <label for="periodicidade" class="ml-2">Nome Periodicidade </label>
+                        </div>
+                        <div class="form-floating col-6 mb-1">
+                            <input type="Number" class="form-control" id="mesesPeriodicidade" name="mesesPeriodicidade" placeholder="-" required>
+                            <label for="mesesPeriodicidade" class="ml-2">Meses Periodicidade</label>
+                        </div>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary btn-sm mt-4">Adicionar</button>
+                    <button type="button" data-bs-dismiss="modal" aria-label="Close" class="btn btn-light btn-sm mt-4">Cancelar</button>
+                </form>
+            </div>
+            </div>
+        </div>
+    </div>
+    <!-- Modal add ingredientes END -->
+
+    <script> // script para adicionar categorias
+
+        $(".valorFormatar").each(function(item) {
+            let textFormat = $(this).text()
+            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        }) 
+    </script>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>admin/_rodape}}
+
+{{>_msg}}

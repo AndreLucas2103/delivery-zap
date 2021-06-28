@@ -8,6 +8,19 @@ const { eAdmin } = require("../../../helpers/eAdmin")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 
+
+router.get('/estabelecimento', async (req, res) => {
+    try {
+        let estabelecimento = await Estabelecimento.findById({'_id': req.query.idEstabelecimento}).populate('idUsuarioMaster').lean()
+        
+        res.render('admin/estabelecimento/estabelecimento', {
+            estabelecimento: estabelecimento
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.get('/estabelecimentos', async (req, res) => {
     try {
         let {conteudo, limit, paginate} = req.query
@@ -41,5 +54,6 @@ router.get('/estabelecimentos', async (req, res) => {
         console.log(err)
     }
 })
+
 
 module.exports = router

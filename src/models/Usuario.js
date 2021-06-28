@@ -49,6 +49,11 @@ const Usuario = new Schema({
     }],
 
     observacao: String,
+
+    freeSystem: {
+        habilitado: Boolean,
+        dataFim: Date
+    },
     
     statusAtivo: {
         type: Boolean,
