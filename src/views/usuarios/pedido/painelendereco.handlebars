@@ -24,44 +24,7 @@
         </center>
 
         <div id="retirarLocal" style="padding-left:5px;padding-right:5px;">
-            <div class="row g-2" style="margin-top:50px;">
-                <div class="col-md">
-                    <div class="form-floating center-block">
-                        <input type="email" class="form-control" id="nome" name="nome" placeholder="0">
-                        <label for="nome">Seu Nome *</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-2" style="margin-top:10px;">
-                <div class="col-md">
-                    <div class="form-floating center-block ">
-                        <input type="text" class="form-control" id="celular" name="celular" placeholder="0" required>
-                        <label for="celular">Celular *</label>
-                    </div>
-                </div>
-            </div>
-            <div class="row g-2" style="margin-top:5px;">
-                <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"
-                    placeholder="Deixe uma observação aqui..." required></textarea>
-            </div>
-        </div>
-
-        <div id="entrega" style="padding-left:5px;padding-right:5px;">
-            <div class="row g-2" style="margin-top:50px;">
-                <div class="col-md">
-                    <div class="form-floating center-block">
-                        <input type="email" class="form-control" id="email" name="email" placeholder="0" required>
-                        <label for="email">Seu Nome *</label>
-                    </div>
-                </div>
-                <div class="col-md-6">
-                    <div class="form-floating center-block rb">
-                        <input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"
-                            required>
-                        <label for="cpf">Celular *</label>
-                    </div>
-
-                </div>
+            
             </div>
 
             <div class="row g-2" style="margin-top:5px;">
@@ -121,7 +84,7 @@
 </div>
 
 <script>
-    $("#retirarLocal").empty()
+
 $('#radioLocal').click(function() {
 $("#retirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="nome" name="nome" placeholder="0"><label for="nome">Seu Nome *</label></div></div></div><div class="row g-2" style="margin-top:10px;"><div class="col-md"><div class="form-floating center-block "><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div>')
 $("#entrega").empty()
