@@ -158,16 +158,6 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="row mt-4">
-                            <h4>Selecione um plano</h4>
-                            <span>Você terá 7 dias para teste, a fatura será gerada apenas para 7 dias contando hoje</span>
-                            {{#each planos}}
-                            <div class="form-check form-switch col-4">
-                                <input class="form-check-input" type="radio" name="idPlano" value="{{_id}}" required>
-                                <label class="form-check-label" for="flexSwitchCheckDefault">{{nome}} - <span class="valorFormatar">{{valor}}</span></label>
-                            </div>
-                        {{/each}}
-                        </div>
                     </div>
                     <br><button type="button" onclick="Mudarestado2()" class="btn btn-primary btn-lg">«
                         Voltar</button>
