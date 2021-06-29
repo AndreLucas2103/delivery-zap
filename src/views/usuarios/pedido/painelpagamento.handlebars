@@ -1,45 +1,53 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
 <div style="margin: 150px auto;">
-<h1 style="color:black;" class="estabelecimento rb" >Como deseja pagar?</h1>
+    <h1 style="color:black;" class="estabelecimento rb">Como deseja pagar?</h1>
 
-<div class="container-md max-container" id="container-end">
+    <div class="container-md max-container" id="container-end">
 
-    <div style="height:100%;background:white">
-        <br>
-         <center>
-             <div class="radio-toolbar rb">
-                Selecione a forma de pagamento<br>
-                <input type="radio" id="radio1" name="radios" value="" checked>
-                <label style="margin-top: 10px;" for="radio1">Pagar na entrega</label>
-                <input type="radio" id="radio2" name="radios" value="false">
-                <label  style="margin-top: 5px;" for="radio2">Pagamento online</label>
+        <div style="height:100%;background:white">
+            <br>
+            <center>
+                <div class="radio-toolbar rb">
+                    Selecione a forma de pagamento<br>
+                    <input type="radio" id="pgentrega" name="TipoPg" value="">
+                    <label style="margin-top: 10px;" name="TipoPgLabel" for="pgentrega">Pagar na entrega</label>
+                    <div id="formasPg">
 
-    
-            </div>
-        </center>
-</div>
-</div>
+                    </div>
+                    <input type="radio" id="pgOnline" name="TipoPg" value="">
+                    <label style="margin-top: 5px;" name="TipoPgLabel" for="pgOnline">Pagamento online</label>
+                    <div id="formasPgOnline">
+
+                    </div>
+
+
+                </div>
+            </center>
+        </div>
+    </div>
 </div>
 <br><br><br><br>
 
 <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>    
+    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>
     <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="proximo">Enviar Pedido</button></a>
 </div>
 
 <script>
-    $(document).ready(function () {
-        $("#retirar").toggleClass("filter-gray");
+    $('#pgentrega').click(function () {
+        $("#formasPg").append('<input type="radio" name="name="formaPg" class="mt-2  mb-2" id="flexRadioDefault1"><label class="mt-2  mb-2" for="flexRadioDefault1"> Cartão de crédito</label>')
+        $("#formasPgOnline").empty()
+        $("#pgentrega").prop("disabled", true);
+        $("#pgOnline").prop("disabled", false);
 
-        $("#retirar").change(function () {
-            $("#retirar").removeClass("filter-gray");
-            $("#entregar").toggleClass("filter-gray");
-        })
-
-        $("#entregar").change(function () {
-            $("#entregar").removeClass("filter-gray");
-            $("#retirar").toggleClass("filter-gray");
-        })
     })
+
+    $('#pgOnline').click(function () {
+        $("#formasPgOnline").append('<input type="radio" class="mt-2 mb-2" name="name="formaPg"" id="flexRadioDefault1"><label class="mt-2  mb-2" for="flexRadioDefault1"> Cartão de crédito</label><br><input class="mt-2" type="radio" name="name="formaPg"" id="flexRadioDefault2"><label class="mt-2" for="flexRadioDefault2"> PIX</label>')
+        $("#formasPg").empty()
+        $("#pgOnline").prop("disabled", true);
+        $("#pgentrega").prop("disabled", false);
+    })
+
 </script>
