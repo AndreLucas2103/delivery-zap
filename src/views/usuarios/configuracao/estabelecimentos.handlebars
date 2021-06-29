@@ -18,7 +18,7 @@
                         </ol>
                     </nav>
                 </div>
-                 <label id="showMessageBlock"><img src="/usuario/assets/img/favicon/locked.png"> Apenas o usuário "Master" pode adicionar novos estabelecimentos.</label><br>
+                <label id="showMessageBlock"><img src="/usuario/assets/img/favicon/locked.png"> Apenas o usuário "Master" pode adicionar novos estabelecimentos.</label><br>
                 <button type="button" class="btn btn-primary btn-sm mb-4" id="add-estabelecimento"
                     data-bs-toggle="modal" data-bs-target="#modal-adicionar-estabelecimento">+ Adicionar</button>
                 
@@ -183,23 +183,83 @@
                                     class="btn btn-sm btn-secondary">Ver</a>
                             </div>
                             <div class="card-body">
-                                <ul class="list-group list-group-flush list my--3">
-                                    <span>Situação: {{{formatTrueFalse estabelecimentosVinculados.locacao.liberado}}}</span>
-                                    {{#if estabelecimentosVinculados.locacao.liberado}}<span>Liberado até {{dataFormatTimeZone usuarioLogado.timeZone estabelecimentosVinculados.locacao.dataLiberado "DD/MM/YYYY"}}</span>{{/if}}
-                                    <span>Plano: {{estabelecimentosVinculados.locacao.plano}}</span>
-                                    <span>Valor: <span class="valorFormatar">{{estabelecimentosVinculados.locacao.valor}}</span></span>
-                                </ul>
+                                {{#if estabelecimentosVinculados.locacao.plano}}
+                                    <ul class="list-group list-group-flush list my--3">
+                                        <span>Situação: {{{formatTrueFalse estabelecimentosVinculados.locacao.liberado}}}</span>
+                                        {{#if estabelecimentosVinculados.locacao.liberado}}<span>Liberado até {{dataFormatTimeZone usuarioLogado.timeZone estabelecimentosVinculados.locacao.dataLiberado "DD/MM/YYYY"}}</span>{{/if}}
+                                        <span>Plano: {{estabelecimentosVinculados.locacao.plano}}</span>
+                                        <span>Valor: <span class="valorFormatar">{{estabelecimentosVinculados.locacao.valor}}</span></span>
+                                    </ul>
+                                {{else}}
+                                    {{#if estabelecimentosVinculados.freeSystem.habilitado}}
+                                        <h5>Período de testes (até {{dataFormatTimeZone usuarioLogado.timeZone estabelecimentosVinculados.freeSystem.dataFim "DD/MM/YYYY"}})</h5>
+                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{estabelecimentosVinculados._id}}" data-bs-nome="{{estabelecimentosVinculados.nome}}">Adquirir Plano</button>
+                                    {{else}}
+                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{estabelecimentosVinculados._id}}" data-bs-nome="{{estabelecimentosVinculados.nome}}">Adquirir Plano</button>
+                                    {{/if}}
+                                {{/if}}
+                                
                             </div>
                         </div>
                     </div>
                     {{/each}}
                 </div>
 
+                <!-- Modal -->
+                <div class="modal fade" id="modalAddPlano" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="modalAddPlanoLabel" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="text-center display-4">Escolher Plano</div>
+                                <div class="text-center">
+                                    <span class="h5">Estabelecimento: <span id="add-plano-nome-estabelecimento"></span></span>
+                                    
+                                    <form action="/configuracao/add-plano-estabelecimento" method="post">
+                                        <div class="row mx-1 mt-4">
+                                        {{#each planos}}
+                                            <div class="col-lg-6">
+                                                <div class="card" >
+                                                    <div class="card-body">
+                                                        <h5 class="card-title">{{nome}} - <span class="valorFormatar">{{valor}}</span></h5>
+                                                        <p class="card-text">Periodicidade: {{periodicidade}}</p>
+                                                        
+                                                        <div class="form-check form-switch">
+                                                            <input class="form-check-input ml-4" type="radio" name="idPlano" value="{{_id}}">
+                                                            <label class="form-check-label mr-4" for="flexSwitchCheckDefault">Selecionar</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        {{/each}}
+                                        </div>
+                                        <input type="text" name="idEstabelecimento" id="input-add-plano-id-estabelecimento" hidden readonly>
+                                        <button class="btn btn-success mt-2" type="submit">Adquirir plano</button>
+                                    </form>
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <script>
+                    var modalAddPlano = document.getElementById('modalAddPlano')
+                    modalAddPlano.addEventListener('show.bs.modal', function (event) {
+                        var button = event.relatedTarget
+                        $('#add-plano-nome-estabelecimento').text(button.getAttribute('data-bs-nome'))
+                        $('#input-add-plano-id-estabelecimento').val(button.getAttribute('data-bs-idEstabelecimento'))
+                    })
+                </script>
+
             </main>
 
         </div>
     </div>
 </div>
+
 
 
 <script>

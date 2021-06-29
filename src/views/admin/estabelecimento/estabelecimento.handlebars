@@ -69,32 +69,49 @@
             <div class="tab-pane fade show active" id="nav-faturas">
                 <div class="card">
                     <div class="card-body">
+                        <form action="/admin/administrativo/edit-plano-estabelecimento" method="post">
                         <div class="table-responsive">
                             <table class="table table-centered table-nowrap mb-0 rounded">
                                 <tbody>
-                                        <tr>
-                                            <td>Plano</td>
-                                            <td>{{estabelecimento.locacao.plano}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Liberado</td>
-                                            <td>{{{formatTrueFalse estabelecimento.locacao.liberado}}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Liberado até</td>
-                                            <td>{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "DD/MM/YYYY"}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Dia Vencimento</td>
-                                            <td>{{estabelecimento.locacao.diaVencimento}}</td>
-                                        </tr>
-                                        <tr>
-                                            <td>Valor</td>
-                                            <td>{{estabelecimento.locacao.valor}}</td>
-                                        </tr>
+                                    <tr>
+                                        <td>Plano</td>
+                                        <td>{{estabelecimento.locacao.plano}}</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Liberado</td>
+                                        <td>
+                                            <select class="form-select form-select-sm " name="locacaoLiberado" id="edit-estabelecimento-locacao-liberado">
+                                                <option value="true">Liberado</option>
+                                                <option value="false">Bloqueado</option>
+                                            </select>
+                                            <script>
+                                                $('#edit-estabelecimento-locacao-liberado option[value="{{estabelecimento.locacao.liberado}}"]').attr("selected", "selected");
+                                            </script>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Liberado até</td>
+                                        <td>
+                                            <input type="date" class="form-control form-control-sm" name="locacaoLiberadoAte" value="{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "YYYY-MM-DD"}}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Dia Vencimento</td>
+                                        <td>
+                                            <input type="number" name="locacaoDiaVencimento"   class="form-control form-control-sm" value="{{estabelecimento.locacao.diaVencimento}}">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>Valor</td>
+                                        <td>
+                                            <input type="number" name="locacaoDiaVencimento"   class="form-control form-control-sm" value="{{estabelecimento.locacao.valor}}">
+                                        </td>
+                                    </tr>
                                 </tbody>
                             </table>
                         </div>
+                        <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                        </form>
                     </div>
                 </div>
                 <div class="card mt-2">
@@ -115,7 +132,7 @@
                                         <tr>
                                             <form action="/admin/administrativo/edit-fatura" method="post">
                                                 <td>
-                                                    <i class="fas fa-pen text-warning" data-bs-toggle="modal" data-bs-target="#edit-cobranca" data-bs-idFatura="{{}}"></i>
+                                                    <i class="fas fa-pen text-warning" data-bs-toggle="modal" data-bs-target="#edit-cobranca" data-bs-idFatura=""></i>
                                                 </td>
                                                 <td>
                                                     {{dataFormatTimeZone usuarioLogado.timeZone vencimento "DD/MM/YYYY"}}

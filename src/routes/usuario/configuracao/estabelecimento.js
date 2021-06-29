@@ -14,6 +14,48 @@ const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/Plano")
 const Plano = mongoose.model("planos")
 
+
+router.post('/add-plano-estabelecimento', async (req, res) => {
+    try {
+        let plano = await Plano.findById({'_id': req.body.idPlano})
+
+        Estabelecimento.updateOne(
+            {'_id': req.body.idEstabelecimento},
+            {'$set': {
+                locacao: {
+                    idPlano: plano._id,
+                    plano: plano.nome,
+                    liberado: true,
+                    dataLiberado: moment(),
+                    diaVencimento: moment().date(),
+                    valor: plano.valor,
+                
+                    faturas: [{
+                        idPlano: plano._id,
+                        descricao: `Fatura ${moment().format('DD/MM/YYYY')} até ${moment().add(plano.mesesPeriodicidade, 'months').format('DD/MM/YYYY')}`,
+                        valor: plano.valor,
+                        vencimento: moment(),
+                        situacao: 'waiting',
+                        pago: false,
+                        cancelado: false,
+                        logs: [{
+                            descricao: 'Fatura gerada ao adquirir o plano'
+                        }]
+                    }]
+                },
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Aquisição realizada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
 router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
         let estabelecimento = await Estabelecimento.aggregate([
@@ -245,14 +287,56 @@ router.post('/edit-estabelecimento-integracao-mercado-pago', (req, res) => {
 })
 
 router.post('/add-estabelecimento',  (req, res) => { // adicionar estabelecimento
+    console.log('iok')
     let user = req.user
     if (user) {
         if (user.usuarioMaster == true) {
             if(user.freeSystem.habilitado == true) {
-                free = {
-                    habilitado: true,
-                    dataFim: user.freeSystem.dataFim
-                } 
+                addEstabelecimento = {
+                    nome: req.body.nome,
+                    nomePainel: req.body.nome,
+                    url: req.body.url,
+                    endereco: {
+                        logradouro: req.body.logradouro,
+                        bairro: req.body.bairro,
+                        localidade: req.body.cidade,
+                        cep: req.body.cep,
+                        numero: req.body.numero,
+                        uf: req.body.uf
+                    },
+                    cnpj: req.body.cnpj,
+                    telefone: req.body.telefone,
+                    idUsuarioMaster: user._id,
+                    
+                    freeSystem: {
+                        habilitado: true,
+                        dataFim: user.freeSystem.dataFim
+                    },
+                }
+                new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
+                    editUsuario = {
+                        idEstabelecimento: estabelecimento._id,
+                        cnpj: estabelecimento.cnpj,
+                        nome: estabelecimento.nome,
+                        url: estabelecimento.url
+                    }
+                    Usuario.updateOne(
+                        { '_id': user._id },
+                        {
+                            $push: { "estabelecimentosVinculados": editUsuario }
+                        }
+                    ).then(e => {
+                        req.flash('success_msg', 'Estabelecimento adicionado')
+                        res.redirect('back')
+                    }).catch(err => {
+                        console.log(err)
+                    })
+    
+                }).catch(err => {
+                    req.flash('error_msg', 'Ocorreu um erro')
+                    res.redirect('back')
+                })
+
             }else{
                 Plano.findById({'_id': req.body.idPlano}).then(plano => {
                     addEstabelecimento = {
@@ -316,9 +400,6 @@ router.post('/add-estabelecimento',  (req, res) => { // adicionar estabeleciment
                     })
                 })
             }
-
-            
-            
         } else {
             req.flash('warning_msg', 'Somente usuário MASTER pode adicionar um estabelecimento')
             res.redirect('back')

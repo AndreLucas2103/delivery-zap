@@ -18,7 +18,7 @@ router.get('/faturas', async (req, res) => { // Entrar no "perfil" do estabeleci
             { $unwind: '$locacao' },
         ])
 
-        console.log(faturas.length)
+        console.log(faturas)
 
         res.render('usuarios/fatura/faturas', {
             faturas: faturas
