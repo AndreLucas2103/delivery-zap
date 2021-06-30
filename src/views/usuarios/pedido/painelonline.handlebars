@@ -174,35 +174,28 @@
                 <form action="" method="post" id="form-add-painel-carrinho-produto-2">
                     <div class="row">
                         <div class="col">
-                            <input type="number" id="input-calc-valor-total" readonly hidden>
-                            <input type="number" id="input-calc-valor-total-produto-valor" readonly hidden>
-                            <div class="mt-3" style="margin-left: 10px;">Total: <span
-                                    style="font-size: 25px;color:#27AE60;" id="add-carrinho-valor-total"></span></div>
-                        </div>
-                        <div class="col">
-                            <button type="button" id="minunQtd"
-                                style="background:none;color:black;margin-top:20px;margin-left:10px;font-size:20px;border-style: solid;"><i class="fas fa-minus"></i></i></button>
-                        </div>
-                        <div class="col">
-                            <div class="form-floating ml-3 mb-3" style="width: 50px;padding-left:1px;padding-right:1px;">
-                                <input type="number" class="form-control mt-2" min="1" onkeyup="calcValorClick()"
-                                    onkeydown="calcValorClick()"
-                                    onchange="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                                    value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-"
-                                    required>
-                                <label for="add-produto-carrinho-quantidade">Qtd</label>
+                            
+                            <div class="number-input mt-3">
+                                <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepDown(), calcValorClick()"
+                                    class="minus"></button>
+                                <input onkeyup="calcValorClick()"
+                                    onkeydown="calcValorClick()" onchange="calcValorClick()"
+                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" id="add-produto-carrinho-quantidade"  class="quantity" min="0" name="quantidade" value="1" type="number">
+                                <button type="button" onclick="this.parentNode.querySelector('input[type=number]').stepUp(), calcValorClick()"
+                                    class="plus"></button>
                             </div>
                         </div>
                         <div class="col">
-                            <button type="button" id="plusQtd"
-                                style="background:none;color:black;margin-top:20px;font-size:20px; border-style:solid;"><i
-                                    class="fas fa-plus"></i></button>
-                        </div>
+                            <input type="number" id="input-calc-valor-total" readonly hidden>
+                            <input type="number" id="input-calc-valor-total-produto-valor" readonly hidden>
+                            <div class="mt-3" style="margin-left: 10px;">Total: <span
+                                    style="font-size: 23px;color:#27AE60;font-weight: bold;" id="add-carrinho-valor-total"></span></div>
+                        </div>                    
                     </div>
 
                     <div class="form-floating">
                         <textarea class="form-control" placeholder="-" id="add-produto-carrinho-observacao"
-                            name="observacao" style="height: 100px;"></textarea>
+                            name="observacao" style="height: 100px"></textarea>
                         <label for="add-produto-carrinho-observacao">Observação</label>
                     </div>
 
