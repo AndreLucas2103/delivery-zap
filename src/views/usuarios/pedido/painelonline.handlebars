@@ -57,8 +57,10 @@
             </div>
             {{/each}}
         </div>
-        <button class="button-scroll-left" id="button-scroll" style="font-size:50px;" onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
-        <button class="button-scroll-right" id="button-scroll" style="font-size:50px;" onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
+        <button class="button-scroll-left" id="button-scroll" style="font-size:50px;"
+            onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
+        <button class="button-scroll-right" id="button-scroll" style="font-size:50px;"
+            onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
     </div>
     {{/each}}
 
@@ -130,9 +132,9 @@
                             <div class="row">
                                 <div class="col-lg-4 text-center mt-2">
                                     <img id="add-img-produto" src="" class="mx-auto"
-                                        style="object-fit: contain; width: 100pxx; height: 100px;">
+                                        style="object-fit: contain; width: 100pxx; height: 100px;border-radius:5px;">
                                 </div>
-                                <div class="col-lg-8 mt-2">
+                                <div class="col-lg-8 mt-2" style="font-weight: bold;">
                                     <p>Nome: <span id="add-produto-nome"></span></p>
                                     <p>Valor: <span id="add-produto-valor"></span></p>
                                     <p id="p-add-produto-descricao">Descrição: <span id="add-produto-descricao"></span>
@@ -174,31 +176,42 @@
                         <div class="col">
                             <input type="number" id="input-calc-valor-total" readonly hidden>
                             <input type="number" id="input-calc-valor-total-produto-valor" readonly hidden>
-                            <div class="mt-3" style="margin-left: 10px;">Total: <span style="font-size: 25px;"
-                                    class="text-primary" id="add-carrinho-valor-total"></span></div>
+                            <div class="mt-3" style="margin-left: 10px;">Total: <span
+                                    style="font-size: 25px;color:#27AE60;" id="add-carrinho-valor-total"></span></div>
                         </div>
                         <div class="col">
-                            <div class="form-floating mb-3">
-                                <input type="number" class="form-control" min="1" onkeyup="calcValorClick()"
-                                    onkeydown="calcValorClick()" onchange="calcValorClick()"
-                                    oninput="this.value=this.value.replace(/[^0-9]/g,'');" value="1"
-                                    id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-" required>
-                                <label for="add-produto-carrinho-quantidade">Quantidade</label>
+                            <button type="button" id="minunQtd"
+                                style="background:none;color:black;margin-top:20px;margin-left:40px;font-size:20px; border-style: solid;"><i class="fas fa-minus"></i></i></button>
+                        </div>
+                        <div class="col">
+                            <div class="form-floating mb-3" style="width: 50px;margin-left:-15px;">
+                                <input type="number" class="form-control mt-2" min="1" onkeyup="calcValorClick()"
+                                    onkeydown="calcValorClick()"
+                                    onchange="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
+                                    value="1" id="add-produto-carrinho-quantidade" name="quantidade" placeholder="-"
+                                    required>
+                                <label for="add-produto-carrinho-quantidade">Qtd</label>
                             </div>
+                        </div>
+                        <div class="col">
+                            <button type="button" id="plusQtd"
+                                style="background:none;color:black;margin-top:20px;font-size:20px;margin-left:-15px; border-style:solid;"><i
+                                    class="fas fa-plus"></i></button>
                         </div>
                     </div>
 
                     <div class="form-floating">
                         <textarea class="form-control" placeholder="-" id="add-produto-carrinho-observacao"
-                            name="observacao" style="height: 100px"></textarea>
+                            name="observacao" style="height: 100px;"></textarea>
                         <label for="add-produto-carrinho-observacao">Observação</label>
                     </div>
 
                     <input type="text" id="add-produto-carrinho-idProduto" name="idProduto" hidden readonly>
                 </form>
 
-                <button type="submit" class="btn btn-primary btn-sm mt-2"
-                    id="button-submit-add-produto-carrinho">Adicionar</button>
+                <button type="submit" class="mt-2"
+                    style="height: 40px;width:190px;background:#27AE60;border:none;color:white;"
+                    id="button-submit-add-produto-carrinho">Adicionar no carrinho</button>
             </div>
         </div>
     </div>
@@ -535,7 +548,7 @@
                 response.ingredientes.forEach(element => {
                     $('#add-ingredientes').append(`<label style="font-size:13px;font-weight: bold;">${element.nome},</label>`)
                 })
-     // adicionais
+                // adicionais
                 response.adicionais.length == 0 ? $('#card-add-adicionais').hide() : $('#card-add-adicionais').show()
                 $('#add-adicionais').empty()
                 response.adicionais.forEach(element => {
@@ -548,7 +561,7 @@
                         </tr>
                     `)
                 })
-                
+
 
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()

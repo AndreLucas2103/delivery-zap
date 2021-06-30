@@ -602,6 +602,7 @@
         color: #27AE60;
       }
       
+      
       .radio-toolbar input[name="TipoPg"]:checked+label {
         background-color: #27AE60;
         color: white;
