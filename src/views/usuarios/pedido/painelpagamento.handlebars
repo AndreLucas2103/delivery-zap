@@ -7,23 +7,25 @@
 
         <div style="height:100%;background:white">
             <br>
-            <center>
+                
                 <div class="radio-toolbar rb">
+                    <center>
                     Selecione a forma de pagamento<br>
                     <input type="radio" id="pgentrega" name="TipoPg" value="">
                     <label style="margin-top: 10px;" name="TipoPgLabel" for="pgentrega">Pagar na entrega</label>
+                    </center>
                     <div id="formasPg">
 
                     </div>
+                    <center>
                     <input type="radio" id="pgOnline" name="TipoPg" value="">
                     <label style="margin-top: 5px;" name="TipoPgLabel" for="pgOnline">Pagamento online</label>
+                    </center>
                     <div id="formasPgOnline">
 
                     </div>
 
-
                 </div>
-            </center>
         </div>
     </div>
 </div>
@@ -36,7 +38,7 @@
 
 <script>
     $('#pgentrega').click(function () {
-        $("#formasPg").append('<input type="radio" name="name="formaPg" class="mt-2  mb-2" id="flexRadioDefault1"><label class="mt-2  mb-2" for="flexRadioDefault1"> Cartão de crédito</label>')
+        $("#formasPg").append('<div style="display: block;"><input style="width: 20px;height:20px;" type="radio" name="name="formaPg" class="mt-2  mb-2" id="flexRadioDefault1"><label style="font-size:20px;margin-left:20px;font-weight: bold;" class="mt-2  mb-2" for="flexRadioDefault1"> Cartão de débito</label></div><div style="display: block;"><input style="width: 20px;height:20px;" type="radio" name="name="formaPg" class="mt-2  mb-2" id="flexRadioDefault1"><label style="font-size:20px;margin-left:20px;font-weight: bold;" class="mt-2  mb-2" for="flexRadioDefault1"> Cartão de crédito</label></div><div style="display: block;"><input style="width: 20px;height:20px;" type="radio" name="name="formaPg" class="mt-2  mb-2" id="flexRadioDefault1"><label style="font-size:20px;margin-left:20px;font-weight: bold;" class="mt-2  mb-2" for="flexRadioDefault1"> Dinheiro</label></div>')
         $("#formasPgOnline").empty()
         $("#pgentrega").prop("disabled", true);
         $("#pgOnline").prop("disabled", false);

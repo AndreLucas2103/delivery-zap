@@ -311,7 +311,10 @@
                         </div>
 
                         <hr>
-
+                         <div class="form-check form-switch  mt-2">
+                        <input class="form-check-input" type="checkbox" id="cep-statusAtivo" name="statusAtivo" value="true" {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}} checked {{else}} {{/if}}>
+                        <label class="form-check-label" for="cep-statusAtivo">Utilizar controle de CEP</label>
+                        </div>
                         <input type="text" name="cepsDisponiveis" id="add-cepsDisponiveis" placeholder="Ceps para entregas">
                         <span style="font-size: x-small;">* Coloque com pontuação adequada. Ex: 37145-000</span>
                         <script>
@@ -324,7 +327,7 @@
                                     enabled : 0 // always opens dropdown when input gets focus
                                 },
                             })
-                            tagifyAddCepsDisponiveis.addTags([{{#each estabelecimento.configPedidos.cepsDisponiveis}} '{{cep}}', {{/each}}])
+                            tagifyAddCepsDisponiveis.addTags([{{#each estabelecimento.configPedidos.controleCEP.cepsDisponiveis}} '{{cep}}', {{/each}}])
                         </script>
 
                         <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
