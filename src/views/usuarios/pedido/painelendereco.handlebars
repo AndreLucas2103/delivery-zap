@@ -38,7 +38,9 @@
 <br><br><br><br>
 
 <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="voltar">« Voltar</button></a>
+       <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
+            <button class="voltar" type="submit" name="uuid4Client" id="uuid4Client-carrinho">« Voltar</button>
+        </form>
     <a href="/estabelecimento/{{estabelecimento.url}}/pagamento/"><button class="proximo">Próximo »</button></a>
 </div>
 
@@ -58,4 +60,20 @@ $("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="
  $("#retirarLocal").empty()
 })
 
+</script>
+
+
+<script>
+      function uuidv4() { // gerador de uuidv4
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
+        localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
+        $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
+    }
+
+    $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
 </script>

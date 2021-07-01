@@ -103,11 +103,15 @@
 <br><br><br><br>
 
 <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="voltar">« Voltar</button></a>
+    <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/">
+    <button type="submit" class="voltar">« Voltar</button>
+    </form>
      {{#if carrinho.produtos}}
      <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="proximo">Próximo »</button></a>
      {{else}}
-    <a href="/estabelecimento/{{estabelecimento.url}}/"><button class="proximo">Adicionar Produtos</button></a>
+     <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/">
+    <button type="submit" class="proximo">Adicionar Produtos</button>
+    </form>
      {{/if}}
 </div>
 
