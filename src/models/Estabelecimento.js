@@ -83,9 +83,15 @@ const Estabelecimento = new Schema({
       type: Number,
       default: 0
     },
+    controleCEP: {
+      statusAtivo: {
+        type: Boolean,
+        default: false
+      },
     cepsDisponiveis: [{
       cep: String
-    }]
+    }],
+  },
   },
 
   impressora: {

@@ -38,7 +38,9 @@
 <br><br><br><br>
 
 <div class="background-pedidos">
-    <a href="/estabelecimento/{{estabelecimento.url}}/carrinho/"><button class="voltar">« Voltar</button></a>
+       <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
+            <button class="voltar" type="submit" name="uuid4Client" id="uuid4Client-carrinho">« Voltar</button>
+        </form>
     <a href="/estabelecimento/{{estabelecimento.url}}/pagamento/"><button class="proximo">Próximo »</button></a>
 </div>
 
@@ -52,10 +54,26 @@ $("#entrega").empty()
 })
 
 $('#radioEntrega').click(function() {
-$("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block "><input type="text" class="form-control" id="nomeCompleto" name="nomeCompleto" placeholder="0"required><label for="nomeCompleto">CEP*</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Cidade*</label></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div></div>')
+$("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0" required><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div></div>')
  $("#radioEntrega").prop("disabled",true);
  $("#radioLocal").prop("disabled",false)
  $("#retirarLocal").empty()
 })
 
+</script>
+
+
+<script>
+      function uuidv4() { // gerador de uuidv4
+        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+        );
+    }
+
+    if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
+        localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
+        $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
+    }
+
+    $("#uuid4Client-carrinho").val(localStorage.getItem('uuid4Cliente'))
 </script>

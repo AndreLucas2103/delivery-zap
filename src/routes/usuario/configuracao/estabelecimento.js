@@ -79,18 +79,23 @@ router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { 
 })
 
 router.post('/edit-estabelecimento-configPedido', (req, res) => {
-    if(req.body.cepsDisponiveis == "" || req.body.meioPagamento == ""){
-        req.flash('error_msg', 'Insira pelo menos 1 Meio de pagamento ou 1 CEP')
+    
+    if(req.body.statusAtivo == "true" && req.body.cepsDisponiveis == ""){
+        req.flash('error_msg', 'Insira pelo menos 1 CEP')
         return res.redirect('back')
     }
-
-    let arraycepsDisponiveis = JSON.parse(req.body.cepsDisponiveis)
+            
+    if(req.body.meioPagamento == ""){
+        req.flash('error_msg', 'Insira pelo menos 1 meio de pagamento')
+        return res.redirect('back')
+        
+    }
     let arraymeioPagamento = JSON.parse(req.body.meioPagamento)
-    console.log(arraycepsDisponiveis)
-
+    
+ 
     Estabelecimento.updateOne(
         {_id: req.body.idEstabelecimento},
-        {$set: {"configPedidos.meioPagamento": [], "configPedidos.cepsDisponiveis": [], 'configPedidos.taxaEntrega': req.body.taxaEntrega}}
+        {$set: {"configPedidos.meioPagamento": [], "configPedidos.controleCEP.cepsDisponiveis": [], 'configPedidos.controleCEP.statusAtivo': req.body.statusAtivo, 'configPedidos.taxaEntrega': req.body.taxaEntrega}}
     ).then(estabelecimento => {
         arraymeioPagamento.forEach(element => {
             Estabelecimento.updateOne( 
@@ -100,23 +105,27 @@ router.post('/edit-estabelecimento-configPedido', (req, res) => {
                         'configPedidos.meioPagamento': { nome : element.value, tipo: element.valor },
                     }
                 }
+                
             ).catch(err => {
                 console.log(err)
             })
         })
-
-        arraycepsDisponiveis.forEach(element => {
-            Estabelecimento.updateOne( 
-                {_id: req.body.idEstabelecimento},
-                {
-                    $push: {
-                        'configPedidos.cepsDisponiveis': { cep : element.value },
+        
+        if(req.body.cepsDisponiveis != ""){
+            let arraycepsDisponiveis = JSON.parse(req.body.cepsDisponiveis) 
+            arraycepsDisponiveis.forEach(element => {
+                Estabelecimento.updateOne( 
+                    {_id: req.body.idEstabelecimento},
+                    {
+                        $push: {
+                            'configPedidos.controleCEP.cepsDisponiveis': { cep : element.value },
+                        }
                     }
-                }
-            ).catch(err => {
-                console.log(err)
+                ).catch(err => {
+                    console.log(err)
+                })
             })
-        })
+        }
 
         req.flash('success_msg', 'Configuração Pedido editado')
         res.redirect('back')
