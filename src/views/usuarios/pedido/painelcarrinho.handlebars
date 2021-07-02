@@ -107,7 +107,9 @@
     <button type="submit" class="voltar">« Voltar</button>
     </form>
      {{#if carrinho.produtos}}
-     <a href="/estabelecimento/{{estabelecimento.url}}/endereco/"><button class="proximo">Próximo »</button></a>
+     <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/endereco/{{carrinho._id}}">
+     <button type="submit" class="proximo">Próximo »</button>
+     </form>
      {{else}}
      <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/">
     <button type="submit" class="proximo">Adicionar Produtos</button>

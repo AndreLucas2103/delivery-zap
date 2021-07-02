@@ -413,28 +413,29 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
     }
 })
 
-router.get('/:urlPainel/endereco', async (req, res)=>{
+router.post('/:urlPainel/endereco/:idCarrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-        
+        let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
         
         res.render('usuarios/pedido/painelendereco', {
             estabelecimento: estabelecimento,
-            dados: req.body // endereco, cidade, idCarrinho
+            carrinho: carrinho
         })
     } catch (err) {
         console.log(err)
     }
 })
 
-router.get('/:urlPainel/pagamento', async (req, res)=>{
+router.post('/:urlPainel/pagamento/:idCarrinho', async (req, res)=>{
+    
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-        
+        let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
         
         res.render('usuarios/pedido/painelpagamento', {
             estabelecimento: estabelecimento,
-            
+            carrinho: carrinho
         })
     } catch (err) {
         console.log(err)

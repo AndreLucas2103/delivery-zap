@@ -1,74 +1,81 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 <div style="color: black;">
     <h1 class="estabelecimento rb" id="nomeEstabelecimento">
-    Como você deseja</h1>
+        Como você deseja</h1>
     <h1 style="margin-top:-10px" class="estabelecimento rb" id="nomeEstabelecimento">
-    receber seu pedido?</h1><p>
+        receber seu pedido?</h1>
+    <p>
 </div>
 
 
 <div class="container-md max-container" id="container-end">
-
+<form method="POST" id="add-endereco"
+            action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}">
     <div style="height:100%;background:white;">
         <center>
             <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">
+             
             <div class="radio-toolbar rb">
                 Selecione a forma de entrega<br>
-                <input type="radio" id="radioLocal" name="TipoEntrega" value="">
+                <input type="radio" id="radioLocal" name="TipoEntrega" value="RetirarLocal">
                 <label style="margin-top: 10px;" name="TipoEntregaLabel" for="radioLocal">Retirar no local</label>
-                <input type="radio" id="radioEntrega" name="TipoEntrega" value="">
-                <label  style="margin-top: 5px;" name="TipoEntregaLabel" for="radioEntrega">Entrega</label>
+                <input type="radio" id="radioEntrega" name="TipoEntrega" value="Entrega">
+                <label style="margin-top: 5px;" name="TipoEntregaLabel" for="radioEntrega">Entrega</label>
 
-    
+
             </div>
         </center>
+       
+            <div id="retirarLocal" style="padding-left:5px;padding-right:5px;">
 
-        <div id="retirarLocal" style="padding-left:5px;padding-right:5px;">
-           
-        </div>
+            </div>
 
-        <div id="entrega" style="padding-left:5px;padding-right:5px;">
-            
-        </div>
+            <div id="entrega" style="padding-left:5px;padding-right:5px;">
+
+            </div>
     </div>
 
 </div>
-
+</form>
 
 <br><br><br><br>
 
 <div class="background-pedidos">
-       <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
-            <button class="voltar" type="submit" name="uuid4Client" id="uuid4Client-carrinho">« Voltar</button>
-        </form>
-    <a href="/estabelecimento/{{estabelecimento.url}}/pagamento/"><button class="proximo">Próximo »</button></a>
+
+    <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
+        <button class="voltar" type="submit" name="uuid4Client" id="uuid4Client-carrinho">« Voltar</button>
+    </form>
+
+    <button type="submit" id="proximo" form="add-endereco" class="proximo" style="background: gray;" disabled>Próximo »</button>
+  
 </div>
 
 <script>
-$('#radioLocal').click(function() {
-$("#retirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="nome" name="nome" placeholder="0"><label for="nome">Seu Nome *</label></div></div></div><div class="row g-2" style="margin-top:10px;"><div class="col-md"><div class="form-floating center-block "><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div>')
-$("#radioLocal").prop("disabled",true);
- $("#radioEntrega").prop("disabled",false);
-$("#entrega").empty()
+    $('#radioLocal').click(function () {
+        $("#retirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="0"><label for="logradouro">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0"><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0"><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0"><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div>')
+        $("#radioLocal").prop("disabled", true);
+        $("#radioEntrega").prop("disabled", false);
+        $("#entrega").empty()
+        $("#proximo").removeAttr('disabled');
+        $("#proximo").css("background", "");
+    })
 
-})
-
-$('#radioEntrega').click(function() {
-$("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="email" class="form-control" id="email" name="email" placeholder="0" required><label for="email">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="cpf" name="cpf" placeholder="0" maxlength="18"required><label for="cpf">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="senha" name="senha" placeholder="0" required><label for="celcomercial">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0" required><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..." required></textarea></div></div>')
- $("#radioEntrega").prop("disabled",true);
- $("#radioLocal").prop("disabled",false)
- $("#retirarLocal").empty()
-})
-
+    $('#radioEntrega').click(function () {
+        $("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="0" required><label for="logradouro">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0" required><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" required><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0" required><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div></div>')
+        $("#radioEntrega").prop("disabled", true);
+        $("#radioLocal").prop("disabled", false)
+        $("#retirarLocal").empty()
+        $("#proximo").removeAttr('disabled');
+        $("#proximo").css("background", "");
+    })
 </script>
-
 
 <script>
       function uuidv4() { // gerador de uuidv4
-        return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
-            (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
-        );
-    }
+         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
+             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
+         );
+     }
 
     if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
         localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
