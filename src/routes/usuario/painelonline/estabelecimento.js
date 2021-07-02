@@ -420,7 +420,7 @@ router.get('/:urlPainel/endereco', async (req, res)=>{
         
         res.render('usuarios/pedido/painelendereco', {
             estabelecimento: estabelecimento,
-            
+            dados: req.body // endereco, cidade, idCarrinho
         })
     } catch (err) {
         console.log(err)
