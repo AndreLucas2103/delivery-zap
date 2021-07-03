@@ -226,10 +226,11 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
 
 router.post('/checkout/finalizar', async (req, res) => {
     try {
+        console.log(req.body)
         let {uuid4Client, idEstabelecimento, nomeCliente, pagamentoTipoSelecionado, formaPagamento, trocoPara, observacao, rua, bairro, cidade, cep, numero, telefone, entrega, retirarLocal} = req.body
         console.log(req.body)
         let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
-        let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': uuid4Client}, {'idEstabelecimento': idEstabelecimento}]})
+        let carrinho = await Carrinho.findById(req.body.idCarrinho)
         
         let tipoEntrega
         retirarLocal == "true" ? tipoEntrega = "retirarLocal" : entrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "retirarLocal"
