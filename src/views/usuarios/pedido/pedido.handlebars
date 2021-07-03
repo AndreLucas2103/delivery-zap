@@ -361,7 +361,7 @@
                         </tbody>
                     </table>
 
-                    {{#if pedido.infoTransacao.idTransacaoOperadora}}
+                    {{#if pedido.infoTransacao.idPedidoTransacaoOperadora}}
                         <form action="/pedido/search-pedido-mercadoPago" method="post">
                             <button class="btn btn-primary btn-sm mt-4" type="submit" name="identificacaoPedido" value="{{pedido.identificacaoPedido}}">Recarregar Mercado Pago</button>
                         </form>
