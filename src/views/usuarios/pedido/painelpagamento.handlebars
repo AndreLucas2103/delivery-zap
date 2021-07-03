@@ -47,14 +47,14 @@
     $('#pgentrega').click(function () {
         if ($('#pgentrega').is(":checked")) {
             $("#formasPg").append(`
-        <select style="width:200px;border-color:#27AE60;" onchange="Selectforma(this.value)" class="form-select mt-3 mb-3">
+        <select style="width:200px;border-color:#27AE60;" onchange="Selectforma(this.value)" class="form-select mt-3 mb-3" name="formaPagamento">
             {{#each estabelecimento.configPedidos.meioPagamento}}
-            <option name="formaPagamento" value="{{nome}}">{{nome}}</option>
+            <option value="{{tipo}}">{{nome}}</option>
         {{/each}}
         </select>
         <div id="troco">
         <label for="valuedinheiro">Vai precisar de troco?</label><p>
-        <input type="number" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara">
+        <input type="number" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
         </div>
         <div hidden>
         <input type="text" name="idCarrinho" value="{{carrinho._id}}">
@@ -72,6 +72,7 @@
         </div>            
         `)
             $("#formasPgOnline").empty()
+            $("#pgOnline").prop("checked", false);
             $("#pgOnline").prop("disabled", false);
             $("#proximo").removeAttr('disabled');
             $("#proximo").css("background", "");
@@ -84,7 +85,10 @@
 
 
     $('#pgOnline').click(function () {
+         if($('#pgOnline').is(":checked")){
         $("#formasPgOnline").append(`
+        <h6 style="margin-top:20px;"><i class="fas fa-exclamation-triangle"></i> Atenção! O seu pedido será concluído e você será direcionado para pagina de pagamento.</h6>
+           <button type="submit" form="checkout-pedido" class="proximo mt-3" id="proximo">Ok, confirmar</button>
         <div hidden>
         <input type="text" name="idCarrinho" value="{{carrinho._id}}">
         <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
@@ -101,22 +105,23 @@
         </div>
         `)
         $("#formasPg").empty()
-        $("#pgOnline").prop("disabled", true);
+        $("#pgentrega").prop("checked", false);
         $("#pgentrega").prop("disabled", false);
-        $("#proximo").removeAttr('disabled');
-        $("#proximo").css("background", "");
+         }else{
+             $("#formasPgOnline").empty()
+         }
     })
 
 </script>
 
 <script>
     function Selectforma(forma) {
-        if (forma != "Dinheiro") {
+        if (forma != "dinheiro") {
             $("#troco").empty()
         } else {
             $("#troco").append(`    
         <label for="valuedinheiro">Vai precisar de troco?</label><p>
-        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara">
+        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
                `)
         }
 
