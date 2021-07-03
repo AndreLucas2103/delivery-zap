@@ -44303,9 +44303,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 /*# sourceMappingURL=volt.css.map */
 
 @media print {
-
-    body {transform: scale(.7);}
-    table {page-break-inside: avoid;}
+    
 
     @page 
     {
@@ -44315,7 +44313,8 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
     body * {
       visibility: hidden;
     }
-       
+    table {page-break-inside: avoid;}
+
     .pagebreak { page-break-before: always; } 
 
     .printable, .printable * {

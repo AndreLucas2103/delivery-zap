@@ -10,6 +10,7 @@
 <form method="POST" id="add-endereco"
             action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}">
 <div class="container-md max-container" id="container-end">
+    <input type="text" name="uuid4Client" id="uuid4Client-carrinho" hidden>
     <div style="height:100%;background:white;">
         <center>
             <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">     

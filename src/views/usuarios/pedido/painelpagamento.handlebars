@@ -3,35 +3,35 @@
 <div style="margin:auto;">
     <h1 style="color:black;" class="estabelecimento rb">Como deseja pagar?</h1>
 </div>
-    <div class="container-md max-container" id="container-end">
-        <form method="POST" id="checkout-pedido" action="/estabelecimento/checkout/finalizar">
-            <div style="height:100%;background:white">
-                <br>
-                <div>
-                    <center>
-                        Selecione a forma de entrega<br>
-                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
-                        <div class="mt-2">
-                            <input style="width: 20px;height:20px;" type="checkbox" id="pgentrega"
-                                name="pagamentoTipoSelecionado" value="pagarRecebimento">
-                            <label style="font-size:18px;" for="pgentrega">Pagar na entrega</label>
-                        </div>
-                        <div id="formasPg">
-                        </div>
+<div class="container-md max-container" id="container-end">
+    <form method="POST" id="checkout-pedido" action="/estabelecimento/checkout/finalizar">
+        <div style="height:100%;background:white">
+            <br>
+            <div>
+                <center>
+                    Selecione a forma de entrega<br>
+                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
+                    <div class="mt-2">
+                        <input style="width: 20px;height:20px;" type="checkbox" id="pgentrega"
+                            name="pagamentoTipoSelecionado" value="pagarRecebimento">
+                        <label style="font-size:18px;" for="pgentrega">Pagar na entrega</label>
+                    </div>
+                    <div id="formasPg">
+                    </div>
 
-                        {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
-                        <div class="mt-2">
-                            <input style="width: 20px;height:20px;" type="checkbox" id="pgOnline"
-                                name="pagamentoTipoSelecionado" value="mercadoPago">
-                            <label style="font-size:18px;" for="pgOnline">Pagamento Online</label>
-                        </div>
-                        <div id="formasPgOnline">
-                        </div>
-                        {{else}} {{/if}}
-                </div>
+                    {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
+                    <div class="mt-2">
+                        <input style="width: 20px;height:20px;" type="checkbox" id="pgOnline"
+                            name="pagamentoTipoSelecionado" value="mercadoPago">
+                        <label style="font-size:18px;" for="pgOnline">Pagamento Online</label>
+                    </div>
+                    <div id="formasPgOnline">
+                    </div>
+                    {{else}} {{/if}}
             </div>
-            </center>
-    </div>
+        </div>
+        </center>
+</div>
 </form>
 <div class="background-pedidos">
     <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/endereco/{{carrinho._id}}">
@@ -42,17 +42,23 @@
         Pedido</button>
 </div>
 
+
 <script>
     $('#pgentrega').click(function () {
         if ($('#pgentrega').is(":checked")) {
             $("#formasPg").append(`
-        <select style="width:200px;border-color:#27AE60;" class="form-select mt-3 mb-3">
+        <select style="width:200px;border-color:#27AE60;" onchange="Selectforma(this.value)" class="form-select mt-3 mb-3">
             {{#each estabelecimento.configPedidos.meioPagamento}}
             <option name="formaPagamento" value="{{nome}}">{{nome}}</option>
         {{/each}}
         </select>
+        <div id="troco">
+        <label for="valuedinheiro">Vai precisar de troco?</label><p>
+        <input type="number" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara">
+        </div>
         <div hidden>
-        <input type="text" name="idCarrinho" value="{{carrinho._id}}"
+        <input type="text" name="idCarrinho" value="{{carrinho._id}}">
+         <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
         <input type="text" name="retirarLocal" value="{{dados.retirarLocal}}">
         <input type="text" name="entrega" value="{{dados.entrega}}">
         <input type="text" name="nomeCliente" value="{{dados.nome}}">
@@ -60,7 +66,7 @@
         <input type="text" name="telefone" value="{{dados.telefone}}"> 
         <input type="text" name="rua" value="{{dados.endereco}}"> 
         <input type="text"name="numero" value="{{dados.numero}}">  
-        <input type="text" name="bairro" value="{{dados.numero}}"> 
+        <input type="text" name="bairro" value="{{dados.bairro}}"> 
         <input type="text" name="cidade" value="{{dados.cidade}}">  
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>            
@@ -76,8 +82,24 @@
         }
     })
 
+
     $('#pgOnline').click(function () {
-        $("#formasPgOnline").append('')
+        $("#formasPgOnline").append(`
+        <div hidden>
+        <input type="text" name="idCarrinho" value="{{carrinho._id}}">
+        <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
+        <input type="text" name="retirarLocal" value="{{dados.retirarLocal}}">
+        <input type="text" name="entrega" value="{{dados.entrega}}">
+        <input type="text" name="nomeCliente" value="{{dados.nome}}">
+        <input type="text" name="cep" value="{{dados.cep}}"> 
+        <input type="text" name="telefone" value="{{dados.telefone}}"> 
+        <input type="text" name="rua" value="{{dados.endereco}}"> 
+        <input type="text"name="numero" value="{{dados.numero}}">  
+        <input type="text" name="bairro" value="{{dados.bairro}}"> 
+        <input type="text" name="cidade" value="{{dados.cidade}}">  
+        <input type="text" name="observacao" value="{{dados.observacao}}">  
+        </div>
+        `)
         $("#formasPg").empty()
         $("#pgOnline").prop("disabled", true);
         $("#pgentrega").prop("disabled", false);
@@ -85,5 +107,18 @@
         $("#proximo").css("background", "");
     })
 
+</script>
 
+<script>
+    function Selectforma(forma) {
+        if (forma != "Dinheiro") {
+            $("#troco").empty()
+        } else {
+            $("#troco").append(`    
+        <label for="valuedinheiro">Vai precisar de troco?</label><p>
+        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara">
+               `)
+        }
+
+    }
 </script>
