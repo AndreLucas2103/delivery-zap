@@ -309,10 +309,13 @@ router.post('/checkout/finalizar', async (req, res) => {
             }
         }
 
-        Pedido(addPedido).save().then(async(pedido) => {
+        Pedido(addPedido).save().then(async(pedido) => {     
             try {
-                
-                if(pagamentoTipoSelecionado == "pagarRecebimento"){
+                Carrinho.deleteOne({_id: req.body.idCarrinho}, function (err) {
+                    if (err)
+                    return console.error(err);
+                })                      
+                if(pagamentoTipoSelecionado == "pagarRecebimento"){                   
                     req.flash('success_msg', 'Pedido Finalizado')
                     return res.redirect('/estabelecimento/'+estabelecimento.url)
                 }else if(pagamentoTipoSelecionado == "mercadoPago"){
