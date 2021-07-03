@@ -229,10 +229,10 @@ router.post('/checkout/finalizar', async (req, res) => {
         let {uuid4Client, idEstabelecimento, nomeCliente, pagamentoTipoSelecionado, formaPagamento, trocoPara, observacao, rua, bairro, cidade, cep, numero, telefone, entrega, retirarLocal} = req.body
         console.log(req.body)
         let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
-        let carrinho = await Carrinho.findOne({$and: [{'uuid4Client': uuid4Client}, {'idEstabelecimento': idEstabelecimento}]})
+        let carrinho = await Carrinho.findById({_id: req.body.idCarrinho})
         
         let tipoEntrega
-        retirarLocal == "true" ? tipoEntrega = "retirarEstabelecimento" : entrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "retirarEstabelecimento"
+        retirarLocal == "true" ? tipoEntrega = "retirarLocal" : entrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "retirarLocal"
         retirarLocal == "true" ? taxaEntregaPedido = 0 : taxaEntregaPedido = estabelecimento.configPedidos.taxaEntrega
         
         let identificacaoPedido = Date.now()+"-"+estabelecimento._id+"-"+uuidv4()+uuidv4()
@@ -313,7 +313,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                 
                 if(pagamentoTipoSelecionado == "pagarRecebimento"){
                     req.flash('success_msg', 'Pedido Finalizado')
-                    return res.redirect('back')
+                    return res.redirect('/estabelecimento/'+estabelecimento.url)
                 }else if(pagamentoTipoSelecionado == "mercadoPago"){
                     console.log(pedido)
                     let itensPedidos = ""
@@ -432,10 +432,11 @@ router.post('/:urlPainel/pagamento/:idCarrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
-        
+        console.log(req.body)
         res.render('usuarios/pedido/painelpagamento', {
             estabelecimento: estabelecimento,
-            carrinho: carrinho
+            carrinho: carrinho,
+            dados: req.body
         })
     } catch (err) {
         console.log(err)

@@ -1,51 +1,79 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
-<div style="margin: 150px auto;">
+<div style="margin:auto;">
     <h1 style="color:black;" class="estabelecimento rb">Como deseja pagar?</h1>
-
-    <div class="container-md max-container" id="container-end">
-
-        <div style="height:100%;background:white">
-            <br>
-                
-                <div class="radio-toolbar rb">
- <center>
-                    Selecione a forma de pagamento<br>
-                    <input type="radio" id="pgentrega" name="TipoPg" value="">
-                    <label style="margin-top: 7px;" name="TipoPgLabel" for="pgentrega">Pagar na entrega</label>
-                    
-                    <div id="formasPg">                  
-                    </div>
-                    {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
-                    <input type="radio" id="pgOnline" name="TipoPg" value="">
-                    <label style="margin-top: 5px;" name="TipoPgLabel" for="pgOnline">Pagamento online</label>
-                    <div id="formasPgOnline">
-                    
-                    </div>
-                    {{else}} {{/if}}
-</center>
-                </div>
-        </div>
-    </div>
 </div>
-<br><br><br><br>
+    <div class="container-md max-container" id="container-end">
+        <form method="POST" id="checkout-pedido" action="/estabelecimento/checkout/finalizar">
+            <div style="height:100%;background:white">
+                <br>
+                <div>
+                    <center>
+                        Selecione a forma de entrega<br>
+                        <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
+                        <div class="mt-2">
+                            <input style="width: 20px;height:20px;" type="checkbox" id="pgentrega"
+                                name="pagamentoTipoSelecionado" value="pagarRecebimento">
+                            <label style="font-size:18px;" for="pgentrega">Pagar na entrega</label>
+                        </div>
+                        <div id="formasPg">
+                        </div>
 
+                        {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
+                        <div class="mt-2">
+                            <input style="width: 20px;height:20px;" type="checkbox" id="pgOnline"
+                                name="pagamentoTipoSelecionado" value="mercadoPago">
+                            <label style="font-size:18px;" for="pgOnline">Pagamento Online</label>
+                        </div>
+                        <div id="formasPgOnline">
+                        </div>
+                        {{else}} {{/if}}
+                </div>
+            </div>
+            </center>
+    </div>
+</form>
 <div class="background-pedidos">
     <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/endereco/{{carrinho._id}}">
-    <button type="submit" class="voltar">« Voltar</button>
+        <button type="submit" class="voltar">« Voltar</button>
     </form>
 
-    <button class="proximo" id="proximo" style="background: gray;" disabled>Enviar Pedido</button>
+    <button type="submit" form="checkout-pedido" class="proximo" id="proximo" style="background: gray;" disabled>Enviar
+        Pedido</button>
 </div>
 
 <script>
     $('#pgentrega').click(function () {
-        $("#formasPg").append('<select style="width:200px;border-color:#27AE60;" class="form-select mt-3 mb-3">{{#each estabelecimento.configPedidos.meioPagamento}}<option name="" value="{{nome}}">{{nome}}</option>{{/each}}</select>')
-        $("#formasPgOnline").empty()
-        $("#pgentrega").prop("disabled", true);
-        $("#pgOnline").prop("disabled", false);
-        $("#proximo").removeAttr('disabled');
-        $("#proximo").css("background", "");
+        if ($('#pgentrega').is(":checked")) {
+            $("#formasPg").append(`
+        <select style="width:200px;border-color:#27AE60;" class="form-select mt-3 mb-3">
+            {{#each estabelecimento.configPedidos.meioPagamento}}
+            <option name="formaPagamento" value="{{nome}}">{{nome}}</option>
+        {{/each}}
+        </select>
+        <div hidden>
+        <input type="text" name="idCarrinho" value="{{carrinho._id}}"
+        <input type="text" name="retirarLocal" value="{{dados.retirarLocal}}">
+        <input type="text" name="entrega" value="{{dados.entrega}}">
+        <input type="text" name="nomeCliente" value="{{dados.nome}}">
+        <input type="text" name="cep" value="{{dados.cep}}"> 
+        <input type="text" name="telefone" value="{{dados.telefone}}"> 
+        <input type="text" name="rua" value="{{dados.endereco}}"> 
+        <input type="text"name="numero" value="{{dados.numero}}">  
+        <input type="text" name="bairro" value="{{dados.numero}}"> 
+        <input type="text" name="cidade" value="{{dados.cidade}}">  
+        <input type="text" name="observacao" value="{{dados.observacao}}">  
+        </div>            
+        `)
+            $("#formasPgOnline").empty()
+            $("#pgOnline").prop("disabled", false);
+            $("#proximo").removeAttr('disabled');
+            $("#proximo").css("background", "");
+        } else {
+            $("#formasPg").empty()
+            $("#proximo").prop("disabled", true);
+            $("#proximo").css("background", "gray");
+        }
     })
 
     $('#pgOnline').click(function () {
@@ -56,5 +84,6 @@
         $("#proximo").removeAttr('disabled');
         $("#proximo").css("background", "");
     })
+
 
 </script>

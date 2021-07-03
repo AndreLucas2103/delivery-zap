@@ -7,30 +7,33 @@
     <p>
 </div>
 
-
-<div class="container-md max-container" id="container-end">
 <form method="POST" id="add-endereco"
             action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}">
+<div class="container-md max-container" id="container-end">
     <div style="height:100%;background:white;">
         <center>
-            <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">
-             
-            <div class="radio-toolbar rb">
+            <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">     
+            <div>
                 Selecione a forma de entrega<br>
-                <input type="radio" id="radioLocal" name="TipoEntrega" value="RetirarLocal">
-                <label style="margin-top: 10px;" name="TipoEntregaLabel" for="radioLocal">Retirar no local</label>
-                <input type="radio" id="radioEntrega" name="TipoEntrega" value="Entrega">
-                <label style="margin-top: 5px;" name="TipoEntregaLabel" for="radioEntrega">Entrega</label>
-
-
+                 
+                 <div class="mt-2">
+                        <input style="width: 20px;height:20px;" type="checkbox" id="retirarLocal" name="retirarLocal"
+                            value="true">
+                        <label style="font-size:18px;" for="retirarLocal">Quero retirar no local</label>
+                    </div>
+                    <div class="mt-2">
+                        <input style="width: 20px;height:20px;" type="checkbox" id="entrega" name="entrega"
+                            value="true">
+                        <label style="font-size:18px;" for="entrega">Entregue no endereço</label>
+                    </div>
             </div>
-        </center>
+       </center>
        
-            <div id="retirarLocal" style="padding-left:5px;padding-right:5px;">
+            <div id="divretirarLocal">
 
             </div>
 
-            <div id="entrega" style="padding-left:5px;padding-right:5px;">
+            <div id="diventrega">
 
             </div>
     </div>
@@ -51,23 +54,37 @@
 </div>
 
 <script>
-    $('#radioLocal').click(function () {
-        $("#retirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="0"><label for="logradouro">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0"><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;" hidden><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0"><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0"><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div>')
-        $("#radioLocal").prop("disabled", true);
-        $("#radioEntrega").prop("disabled", false);
-        $("#entrega").empty()
+    
+    $('#retirarLocal').click(function () {
+        if($('#retirarLocal').is(":checked")){
+        $("#divretirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" required><label for="telefone">Celular *</label></div></div></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div>')
+        $("#entrega").prop("checked", false);
+        $("#entrega").prop("disabled", false);
+        $("#diventrega").empty()
         $("#proximo").removeAttr('disabled');
         $("#proximo").css("background", "");
+        }else{
+            $("#divretirarLocal").empty()
+            $("#proximo").prop("disabled", true);
+            $("#proximo").css("background", "gray");
+        }
     })
 
-    $('#radioEntrega').click(function () {
-        $("#entrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="celular" name="celular" placeholder="0" required><label for="celular">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="0" required><label for="logradouro">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0" required><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" required><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="localidade" name="localidade" placeholder="0" required><label for="localidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div></div>')
-        $("#radioEntrega").prop("disabled", true);
-        $("#radioLocal").prop("disabled", false)
-        $("#retirarLocal").empty()
+    $('#entrega').click(function () {
+         if($('#entrega').is(":checked")){
+        $("#diventrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" required><label for="telefone">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="endereco" name="endereco" placeholder="0" required><label for="endereco">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0" required><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" required><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cidade" name="cidade" placeholder="0" required><label for="cidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div></div>')
+        $("#retirarLocal").prop("checked", false)
+        $("#retirarLocal").prop("disabled", false)
+        $("#divretirarLocal").empty()
         $("#proximo").removeAttr('disabled');
         $("#proximo").css("background", "");
+         }else{
+             $("#diventrega").empty()
+            $("#proximo").prop("disabled", true);
+            $("#proximo").css("background", "gray");
+         }
     })
+    
 </script>
 
 <script>

@@ -155,64 +155,6 @@
         margin-top:-20px;
     }
 
-    .radio-toolbar input[name="TipoEntrega"] {
-        display: none;
-      }
-      
-      .radio-toolbar label[name="TipoEntregaLabel"] {
-    
-        width: 200px;
-        height: 50px;
-        border-style: solid;
-        border-width: thin;
-        background:rgb(255, 255, 255);
-        margin-top:-10px;
-        display: block;
-        border-color: 2px #27AE60;
-        padding: 10px 11px;
-        font-size: 20px;
-        color: #27AE60;
-      }
-      
-      .radio-toolbar input[name="TipoEntrega"]:checked+label {
-        background-color: #27AE60;
-        color: white;
-      }
-
-      .radio-toolbar input[name="TipoPg"] {
-        display: none;
-      }
-      
-      .radio-toolbar label[name="TipoPgLabel"] {
-    
-        width: 200px;
-        height: 50px;
-        border-style: solid;
-        border-width: thin;
-        background:rgb(255, 255, 255);
-        margin-top:-10px;
-        display: block;
-        border-color: 2px #27AE60;
-        padding: 10px 11px;
-        font-size: 20px;
-        color: #27AE60;
-      }
-      
-      .radio-toolbar input[name="TipoPg"]:checked+label {
-        background-color: #27AE60;
-        color: white;
-      }
-
-      .radio-label {
-        display: block;
-         margin-left: 10%;
-         margin-top:-15px;
-     }
-     .radio-input {
-        display: block;
-          margin-left: 50%;
-     }
-     
 }
 
 @media (min-width: 900px) {
