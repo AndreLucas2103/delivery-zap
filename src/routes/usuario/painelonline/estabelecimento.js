@@ -417,6 +417,20 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
     }
 })
 
+router.get('/:urlPainel/meuspedidos', async (req, res)=>{
+    try {
+        let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
+        let pedido = await Pedido.findOne({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).populate('produtos.idProduto').lean()
+
+        res.render('usuarios/pedido/painelmeuspedidos', {
+            estabelecimento: estabelecimento,
+            pedido: pedido
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.post('/:urlPainel/endereco/:idCarrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()

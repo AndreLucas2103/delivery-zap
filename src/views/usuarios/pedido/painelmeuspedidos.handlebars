@@ -1,0 +1,39 @@
+<link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
+
+<div style="margin:auto;">
+    <h1 style="color:black;" class="estabelecimento rb">Seus pedidos</h1>
+</div>
+<div class="container-md max-container" id="container-end">
+   
+</div>
+
+
+
+<center>
+    <div class="container-md">
+        <div class="scrolling-wrapper" id="container-{{_id}}">
+            {{#each pedido}}
+            <div class="card card-style-produto">
+                <img class="card-image" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
+                <p class="card-text rb">Data do pedido: </p>
+                <p class="card-value valorFormatar rb">Valor do pedido: {{valorTotal}}</p>
+                <button class="button-adicionar rb" style="background-color:#F0A431"
+                    data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
+                    data-bs-id="{{_id}}">Adicionar</button>
+            </div>
+            {{/each}}
+        </div>
+        <button class="button-scroll-left" id="button-scroll" style="font-size:50px;"
+            onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
+        <button class="button-scroll-right" id="button-scroll" style="font-size:50px;"
+            onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
+    </div>
+</center>
+
+<div class="background-pedidos">
+    <center>
+    <form method="GET" action="/estabelecimento/{{estabelecimento.url}}">
+        <button type="submit" class="voltar">« Voltar</button>
+    </form>
+    </center>
+</div>
