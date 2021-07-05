@@ -10,48 +10,35 @@
 
 
 <center>
-    <br><br><br>
+    <br>
+    {{#each pedido}}  
     <div class="container-md">
-
-        <div class="scrolling-wrapper-pedidos" id="container-scroll">  
-                 {{#each pedido}}       
+        <div class="scrolling-wrapper-pedidos" id="container-scroll">              
             <div class="card-pedidos card-style-produto">
-                <img class="card-image" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
+                <img class="card-image-pedido" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
                 <p class="card-text rb">Data: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "DD/MM/YYYY"}}</p>
                 <p class="card-text rb" style="margin-top: -15px;" >Hora: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "HH:mm"}}</p>
-                <p class="card-text rb" style="margin-top: -15px;" id="status-pedido">Status: {{situacao}}</p>
+                <p class="card-text rb" style="margin-top: -15px;">Status: {{situacao}}</p>
                 <p class="card-value rb">Total: <span class="valorFormatar">{{valorTotal}}</span></p>
-                <button class="button-detalhar rb mt-2" style="background-color:#F0A431"
+                <button class="button-detalhar rb" style="background-color:#F0A431"
                     data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Detalhes</button>
             </div>
-             {{/each}}
+            
         </div>
-         
-        <button class="button-scroll-left" id="button-scroll" style="font-size:50px;"
-            onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
-        <button class="button-scroll-right" id="button-scroll" style="font-size:50px;"
-            onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
     </div>
+     {{/each}}
 </center>
-
+<br><br><br>
 <div class="background-pedidos">
     <center>
     <form method="GET" action="/estabelecimento/{{estabelecimento.url}}">
-        <button type="submit" class="voltar">« Voltar</button>
+        <button type="submit" class="voltar">« Página inicial</button>
     </form>
     </center>
 </div>
 
 <script>
-    function clickscrollright(idCategoria) {
-        var leftPos = $("#container-scroll").scrollLeft();
-        $("#container-scroll").animate({ scrollLeft: leftPos + 200 }, 400);
-    }
-    function clickscrollleft(idCategoria) {
-        var leftPos = $("#container-scroll").scrollLeft();
-        $("#container-scroll").animate({ scrollLeft: leftPos - 200 }, 400);
-    }
 
      $(".valorFormatar").each(function (item) {
         let textFormat = $(this).text()
@@ -60,5 +47,5 @@
 </script>
 
 
-
+{{>_msg}}
 
