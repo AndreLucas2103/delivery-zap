@@ -1,7 +1,7 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
 <div style="margin:auto;">
-    <h1 style="color:black;" class="estabelecimento rb">Seus pedidos</h1>
+    <h1 style="color:black;" class="estabelecimento rb">Meus Pedidos</h1>
 </div>
 <div class="container-md max-container" id="container-end">
    
@@ -10,19 +10,24 @@
 
 
 <center>
+    <br><br><br>
     <div class="container-md">
-        <div class="scrolling-wrapper" id="container-{{_id}}">
-            {{#each pedido}}
-            <div class="card card-style-produto">
+
+        <div class="scrolling-wrapper-pedidos" id="container-scroll">  
+                 {{#each pedido}}       
+            <div class="card-pedidos card-style-produto">
                 <img class="card-image" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
-                <p class="card-text rb">Data do pedido: </p>
-                <p class="card-value valorFormatar rb">Valor do pedido: {{valorTotal}}</p>
-                <button class="button-adicionar rb" style="background-color:#F0A431"
+                <p class="card-text rb">Data: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "DD/MM/YYYY"}}</p>
+                <p class="card-text rb" style="margin-top: -15px;" >Hora: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "HH:mm"}}</p>
+                <p class="card-text rb" style="margin-top: -15px;" id="status-pedido">Status: {{situacao}}</p>
+                <p class="card-value rb">Total: <span class="valorFormatar">{{valorTotal}}</span></p>
+                <button class="button-detalhar rb mt-2" style="background-color:#F0A431"
                     data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
-                    data-bs-id="{{_id}}">Adicionar</button>
+                    data-bs-id="{{_id}}">Detalhes</button>
             </div>
-            {{/each}}
+             {{/each}}
         </div>
+         
         <button class="button-scroll-left" id="button-scroll" style="font-size:50px;"
             onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
         <button class="button-scroll-right" id="button-scroll" style="font-size:50px;"
@@ -37,3 +42,23 @@
     </form>
     </center>
 </div>
+
+<script>
+    function clickscrollright(idCategoria) {
+        var leftPos = $("#container-scroll").scrollLeft();
+        $("#container-scroll").animate({ scrollLeft: leftPos + 200 }, 400);
+    }
+    function clickscrollleft(idCategoria) {
+        var leftPos = $("#container-scroll").scrollLeft();
+        $("#container-scroll").animate({ scrollLeft: leftPos - 200 }, 400);
+    }
+
+     $(".valorFormatar").each(function (item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+</script>
+
+
+
+

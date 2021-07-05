@@ -317,7 +317,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                 })                      
                 if(pagamentoTipoSelecionado == "pagarRecebimento"){                   
                     req.flash('success_msg', 'Pedido Finalizado')
-                    return res.redirect('/estabelecimento/'+estabelecimento.url)
+                    return res.redirect('/estabelecimento/'+estabelecimento.url+'/meuspedidos/?uuid4Client='+uuid4Client)
                 }else if(pagamentoTipoSelecionado == "mercadoPago"){
                     console.log(pedido)
                     let itensPedidos = ""
@@ -420,11 +420,13 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
 router.get('/:urlPainel/meuspedidos', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
-        let pedido = await Pedido.findOne({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).lean()
+        let pedido = await Pedido.find({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).sort({ _id: -1 }).lean()
 
+        console.log(pedido)
         res.render('usuarios/pedido/painelmeuspedidos', {
             estabelecimento: estabelecimento,
             pedido: pedido
+           
         })
     } catch (err) {
         console.log(err)

@@ -40,6 +40,14 @@
         text-align: center;
     }
 
+    .scrolling-wrapper-pedidos {
+        margin-top: 12px;
+        height: 355px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
     .scrolling-wrapper {
         margin-top: 10px;
         height: 240px;
@@ -208,6 +216,14 @@
         white-space: nowrap;
     }
 
+    .scrolling-wrapper-pedidos {
+        margin-top: 12px;
+        height: 355px;
+        overflow-x: scroll;
+        overflow-y: hidden;
+        white-space: nowrap;
+    }
+
     .button-scroll-left {
         width: 50px;
         height: 50px;
@@ -271,9 +287,33 @@
         margin-right: 12px !important;
     }
 
+    .card-pedidos {
+        margin-top: 10px;
+        border: none;
+        border-radius: 20px;
+        display: inline-block;
+        overflow: visible;
+        width: 260px;
+        height: 260px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+        margin-right: 12px !important;
+    }
+
     .button-adicionar {
         border-radius: 10px;
         width: 145px;
+        height: 36px;
+        font-style: normal;
+        font-weight: bold;
+        position: relative;
+        border: none;
+        color: white;
+    }
+
+    .button-detalhar {
+       
+        border-radius: 10px;
+        width: 200px;
         height: 36px;
         font-style: normal;
         font-weight: bold;
@@ -413,9 +453,32 @@
         margin-right: 12px !important;
     }
 
+    .card-pedidos {
+        margin-top: 12px;
+        border: none;
+        border-radius: 24px;
+        display: inline-block;
+        overflow: visible;
+        width: 300px;
+        height: 300px;
+        box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+        margin-right: 12px !important;
+    }
+
     .button-adicionar {
         border-radius: 12px;
         width: 145px;
+        height: 36px;
+        font-style: normal;
+        font-weight: bold;
+        position: relative;
+        border: none;
+        color: white;
+    }
+
+    .button-detalhar {
+        border-radius: 10px;
+        width: 200px;
         height: 36px;
         font-style: normal;
         font-weight: bold;
@@ -686,6 +749,10 @@
 
 .button-adicionar:active {
     filter: brightness(50%)
+}
+
+.scrolling-wrapper-pedidos::-webkit-scrollbar {
+    display: none;
 }
 
 .scrolling-wrapper::-webkit-scrollbar {
