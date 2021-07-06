@@ -3,49 +3,41 @@
 <div style="margin:auto;">
     <h1 style="color:black;" class="estabelecimento rb">Meus Pedidos</h1>
 </div>
-<div class="container-md max-container" id="container-end">
-   
-</div>
-
-
-
+<div>
 <center>
-    <br>
-    {{#each pedido}}  
-    <div class="container-md">
-        <div class="scrolling-wrapper-pedidos" id="container-scroll">              
-            <div class="card-pedidos card-style-produto">
+    <div class="container-md" style="margin-top: 80px;" id="statuspedido">      
+           {{#each pedido}}                 
+            <div class="card-pedidos card-style-produto text-center">
                 <img class="card-image-pedido" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
                 <p class="card-text rb">Data: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "DD/MM/YYYY"}}</p>
                 <p class="card-text rb" style="margin-top: -15px;" >Hora: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "HH:mm"}}</p>
                 <p class="card-text rb" style="margin-top: -15px;">Status: {{situacao}}</p>
-                <p class="card-value rb">Total: <span class="valorFormatar">{{valorTotal}}</span></p>
+                <p class="card-value rb"  step="0.01" min="0.01">Total: <span class="valorFormatar">{{valorTotal}}</span></p>
                 <button class="button-detalhar rb" style="background-color:#F0A431"
                     data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Detalhes</button>
-            </div>
-            
-        </div>
+         </div> 
+              {{/each}} 
     </div>
-     {{/each}}
+    <br><br><br><br><br><br>
 </center>
-<br><br><br>
+</div>
 <div class="background-pedidos">
-    <center>
     <form method="GET" action="/estabelecimento/{{estabelecimento.url}}">
         <button type="submit" class="voltar">« Página inicial</button>
     </form>
-    </center>
 </div>
 
 <script>
-
-     $(".valorFormatar").each(function (item) {
-        let textFormat = $(this).text()
-        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
-    })
+     $(function() {
+   setTime()
+   function setTime() {
+      setTimeout(setTime, 3000);
+      $('#statuspedido').load(document.URL +  ' #statuspedido');
+      
+   }
+ })
 </script>
-
 
 {{>_msg}}
 

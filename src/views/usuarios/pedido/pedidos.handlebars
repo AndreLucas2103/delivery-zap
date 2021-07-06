@@ -96,7 +96,7 @@
                     })
 
                     let tagifyFiltroTipoEntrega = new Tagify(document.querySelector('input[id=filtro-pedido-tipoEntrega]'), {
-                        whitelist: ['retirarEstabelecimento', 'entrega'],
+                        whitelist: ['retirarLocal', 'entrega'],
                         editTags: false,
                         dropdown: {
                             maxItems: Infinity,
@@ -128,7 +128,8 @@
         
     </div>
     
-    <div class="card border-light shadow-sm mb-4">
+    <div class="card border-light shadow-sm mb-4" id="loadpedidos">
+        
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-centered table-nowrap mb-0 rounded">
@@ -174,6 +175,7 @@
                                     </form>
                                 </ul>
                             </td>
+                           
                             <td><span class="text-primary font-weight-bold">{{infoEntrega.nomeCliente}}</span> </td>
                             <td>
                                 <span class="text-primary font-weight-bold">{{infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{infoEntrega.telefone}}" data-bs-nome="{{infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </span> 
@@ -327,7 +329,7 @@
 </div>
 
 <script>
-    $(".valorFormatar").each(function (item) {
+  $(".valorFormatar").each(function (item) {
         let textFormat = $(this).text()
         $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
     })
@@ -357,6 +359,18 @@
                 $(this).html('err')
         }
     })
+</script>
+
+<script>
+     $(function() {     
+   setTime()
+     
+   function setTime() {
+      setTimeout(setTime, 3000);
+      $('#loadpedidos').load(document.URL +  ' #loadpedidos');
+
+    }
+ })
 </script>
 
 {{>usuario/_rodape}}
