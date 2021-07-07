@@ -376,11 +376,15 @@ router.get('/:urlPainel', async (req, res)=>{
         let produtos = await Produto.aggregate([
             {$match: {$and: [{idEstabelecimento: estabelecimento._id}, {statusAtivo: true}]}},
             {
+                
                 $group:{
                     _id: '$idCategoriaProduto', 
                     produtos: {$push: {_id:"$_id", nome: '$nome', valor: '$valor', img:'$img.foto.url' }},
-                }
+                    
+                },
             },
+
+        
             {
                 $lookup:
                     {
@@ -389,8 +393,11 @@ router.get('/:urlPainel', async (req, res)=>{
                         foreignField: "_id",
                         as: "categoriaProdutos"
                     },
+                   
             },
-            {$unwind: '$categoriaProdutos'},
+            {$sort:{'categoriaProdutos': -1}},
+            {$unwind: '$categoriaProdutos'}
+            
         ])
         
         res.render('usuarios/pedido/painelonline', {

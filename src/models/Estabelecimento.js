@@ -153,6 +153,11 @@ const Estabelecimento = new Schema({
     dataFim: Date
   },
 
+  statusAberto: {
+    type: Boolean,
+    default: true
+  },
+
   statusAtivo: {
     type: Boolean,
     default: true

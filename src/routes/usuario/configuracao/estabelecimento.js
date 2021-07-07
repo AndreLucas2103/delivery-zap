@@ -419,6 +419,27 @@ router.post('/add-estabelecimento',  (req, res) => { // adicionar estabeleciment
     }
 })
 
+router.post('/statusAberto', (req, res) => { // adicionar estilo do estabelecimento
+    let statusAberto
+    req.body.statusAberto == "true" ? statusAberto = true : statusAberto = false
+        Estabelecimento.updateOne(  
+            { _id: req.body.idEstabelecimento },
+            {
+                $set: {
+                    'statusAberto': statusAberto
+                }
+            }
+           ).then(() => {
+                req.flash('success_msg', 'Status alterado')
+                res.redirect('back')
+            }).catch(err => {
+                req.flash('error_msg', 'Ocorreu um erro')
+                res.redirect('back')
+            })
+       
+    })
+
+
 router.get('/painel/:idPainel', eAdmin, async (req, res) => {
     try {
         let estabelecimento = await Estabelecimento.aggregate([

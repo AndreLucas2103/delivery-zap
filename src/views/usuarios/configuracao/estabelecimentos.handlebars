@@ -176,11 +176,24 @@
                 <div class="row">
                     {{#each estabelecimentos}}
                     <div class="col-12 col-lg-6 mb-4">
-                        <div class="card border-light shadow-sm">
+                        <div class="card border-light shadow-sm">            
                             <div class="card-header border-bottom border-light d-flex justify-content-between">
-                                <h2 class="h5 mb-0">{{estabelecimentosVinculados.nome}}</h2>
+                                <form method="POST" action="/configuracao/statusAberto" id="status-estabelecimento-{{estabelecimentosVinculados._id}}">
+                                <h5>{{estabelecimentosVinculados.nome}}
+                                <input type="text" name="idEstabelecimento" value="{{estabelecimentosVinculados._id}}" hidden>
+                                <div class="form-check form-switch">
+                                <input class="form-check-input" type="checkbox" id="id-statusAberto" onchange="clickStatus('{{estabelecimentosVinculados._id}}')" name="statusAberto" value="true" {{#if estabelecimentosVinculados.statusAberto}} checked {{else}} {{/if}}>
+                                    <label class="form-check-label" for="id-statusAberto">{{#if estabelecimentosVinculados.statusAberto}} Fechar{{else}} Abrir{{/if}}</label>
+                                </div>
+                                </h5>
+                                </form>
+                                 <script>
+                                    function clickStatus(status){
+                                        $(`#status-estabelecimento-${status}`).submit()
+                                    }
+                                </script>
                                 <a href="/configuracao/estabelecimento/{{estabelecimentosVinculados._id}}"
-                                    class="btn btn-sm btn-secondary">Ver</a>
+                                    class="btn btn-sm btn-secondary" style="height: 30px;">Ver</a>
                             </div>
                             <div class="card-body">
                                 {{#if estabelecimentosVinculados.locacao.plano}}

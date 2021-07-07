@@ -329,7 +329,7 @@ router.get('/produtos', async (req, res) => { // listo todos os produtos
             { idEstabelecimento: userEstabelecimentos }, nome, idCategorias
         ]
     })
-        .populate('idCategoriaProduto idEstabelecimento').lean().sort({ createdAt: -1 })
+        .populate('idCategoriaProduto idEstabelecimento').sort({ 'nome': 1, 'produtos.statusAtivo': true}).lean()
 
     let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
     let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()

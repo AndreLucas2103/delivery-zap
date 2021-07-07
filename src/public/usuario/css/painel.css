@@ -1,4 +1,4 @@
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
     .capa-painel {
         width: 100%;
         height: 180px;
@@ -165,7 +165,7 @@
 
 }
 
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
     .capa-painel {
         width: 50%;
         height: 260px;
@@ -258,7 +258,7 @@
     filter: brightness(50%);
 }
 
-@media (max-width: 900px) {
+@media (max-width: 1200px) {
     .search{
         margin-top: -10px;
         text-align: center;
@@ -419,7 +419,7 @@
 }
 
 
-@media (min-width: 900px) {
+@media (min-width: 1200px) {
     .search{
         margin-top: -10px;
         text-align: center;

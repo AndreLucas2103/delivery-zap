@@ -1,6 +1,6 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
-
-<body style="background:{{estabelecimento.painel.colorFundo}};">
+<div {{#if estabelecimento.statusAberto}} {{else}} style="filter: grayscale(100%);" {{/if}}>
+<body {{#if estabelecimento.statusAberto}} style="background:{{estabelecimento.painel.colorFundo}}" {{else}} style="background:gray" {{/if}};>
     <header>
         <div class="container-md capa-painel" style="background-image: url({{estabelecimento.img.capa.url}})">
             <center>
@@ -35,8 +35,13 @@
 </div>
 
 <center style="color:{{estabelecimento.painel.colorFonte}};">
+    {{#if estabelecimento.statusAberto}}
     <p class="status-text rb mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
             style="font-size: 12px;color:green"></i> Aberto</p>
+            {{else}}
+            <p class="status-text rb mt-1" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-circle"
+            style="font-size: 12px;color:rgb(126, 62, 59)"></i> Fechado</p>
+            {{/if}}
     <hr class="w-25 text-center">
     <input type="text" class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}};">
     <br><br>
@@ -105,13 +110,15 @@
     </script>
 
     <br><br><br>
-
+</div>
     <div class="background-pedidos">
+        {{#if estabelecimento.statusAberto}}
         <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
             <button class="carrinho" type="submit" name="uuid4Client" id="uuid4Client-carrinho"><i
                     class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
         </form>
-
+        {{else}}
+        {{/if}}
         <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/meuspedidos/">
             <button class="pedidos" type="submit" name="uuid4Client" id="uuid4Client-pedidos"><i
                     class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus
