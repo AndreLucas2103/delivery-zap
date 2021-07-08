@@ -134,6 +134,7 @@
     <div class="modal fade" id="modal-add-ingredientes" tabindex="-1" aria-labelledby="modal-add-ingredientesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                 {{#if categoriaAtiva}}
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-add-ingredientesLabel">Adicionar Ingredientes</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -166,6 +167,19 @@
             </div>
             </div>
         </div>
+        {{else}}
+        <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-adicionalLabel">Cadastre ou ative as categorias.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div style="margin-top: 20px;" class="text-center">
+                <img src="/usuario/assets/img/favicon/categorias-null.png">
+            <p class="h5" style="margin-top: 30px;">Nenhuma categoria de produtos ativa identificada neste estabelecimento.</p>
+            <p class="h5" style="margin-top: -10px;" >Ela é necessária para adicionar produtos.</p>
+            <p class="h6" style="margin-top: 30px;">Clique no botão abaixo para adicionar ou ativar as categorias.</p>
+            <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
+            </div>
+         {{/if}}
     </div>
     <!-- Modal add ingredientes END -->
 

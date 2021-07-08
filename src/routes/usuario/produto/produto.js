@@ -329,14 +329,15 @@ router.get('/produtos', async (req, res) => { // listo todos os produtos
             { idEstabelecimento: userEstabelecimentos }, nome, idCategorias
         ]
     })
-        .populate('idCategoriaProduto idEstabelecimento').sort({ 'nome': 1, 'produtos.statusAtivo': true}).lean()
+        .populate('idCategoriaProduto idEstabelecimento').sort({ 'nome': 1}).lean()
 
     let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
     let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
-
+    let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
     res.render('usuarios/produto/produtos', {
         produtos: produtos,
         estabelecimentos: estabelecimentos,
+        categoriaAtiva : categoriaAtiva,
         categoriasProdutos: JSON.stringify(categoriasProdutos),
 
         //filter
@@ -468,9 +469,11 @@ router.get('/ingredientes', eAdmin, async (req, res) => { // listo todas as cate
 
         let ingredientes = await Ingrediente.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento categoriasProdutos.idCategoriaProduto').lean().sort({ createdAt: -1 })
         let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
+        let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
 
         res.render('usuarios/produto/ingredientes', {
             ingredientes: ingredientes,
+            categoriaAtiva: categoriaAtiva,
             categoriasProdutos: JSON.stringify(categoriasProdutos)
         })
 
@@ -582,9 +585,11 @@ router.get('/adicionais', eAdmin, async (req, res) => { // listo todas as catego
 
         let adicionais = await Adicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento idCategoriaAdicional').lean().sort({ createdAt: -1 })
         let categoriasAdicionais = await CategoriaAdicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
+        let categoriaAtiva = await CategoriaAdicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
 
         res.render('usuarios/produto/adicionais', {
             adicionais: adicionais,
+            categoriaAtiva: categoriaAtiva,
             categoriasAdicionais: JSON.stringify(categoriasAdicionais)
         })
 

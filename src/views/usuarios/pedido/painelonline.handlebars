@@ -217,10 +217,11 @@
 
                     <input type="text" id="add-produto-carrinho-idProduto" name="idProduto" hidden readonly>
                 </form>
-
+            {{#if estabelecimento.statusAberto}} 
                 <button type="submit" class="mt-4"
                     style="height: 40px;width:190px;background:#27AE60;border:none;color:white;"
                     id="button-submit-add-produto-carrinho">+ Adicionar no carrinho</button>
+                    {{else}} {{/if}}
             </div>
         </div>
     </div>

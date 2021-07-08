@@ -19,6 +19,7 @@
     </nav>
 
     <div>
+     
         <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-produtos">+ Adicionar</button>
         <button class="btn btn-{{#if filtroExist}}danger{{else}}white{{/if}} btn-sm mb-4 float-end" data-bs-toggle="collapse" data-bs-target="#collapseExample"> <i class="fas fa-filter"></i> </button>
 
@@ -69,8 +70,9 @@
 
     <!-- Modal add ingredientes START -->
     <div class="modal fade" id="modal-add-produtos" tabindex="-1" aria-labelledby="modal-add-produtosLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg">
+         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+                 {{#if categoriaAtiva}}
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-add-produtosLabel">Adicionar Produto</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -112,6 +114,21 @@
             </div>
             </div>
         </div>
+       
+        {{else}}
+        <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-adicionalLabel">Cadastre ou ative as categorias.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div style="margin-top: 20px;" class="text-center">
+                <img src="/usuario/assets/img/favicon/categorias-null.png">
+            <p class="h5" style="margin-top: 30px;">Nenhuma categoria de produtos ativa identificada neste estabelecimento.</p>
+            <p class="h5" style="margin-top: -10px;" >Ela é necessária para adicionar produtos.</p>
+            <p class="h6" style="margin-top: 30px;">Clique no botão abaixo para adicionar ou ativar as categorias.</p>
+            <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
+            </div>
+         {{/if}}
+        
     </div>
     <!-- Modal add ingredientes END -->
 
