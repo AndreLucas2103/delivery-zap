@@ -4,12 +4,15 @@
     <h1 style="color:black;" class="estabelecimento rb">Como deseja pagar?</h1>
 </div>
 <div class="container-md max-container" id="container-end">
+    
     <form method="POST" id="checkout-pedido" action="/estabelecimento/checkout/finalizar">
         <div style="height:100%;background:white">
+            <center>
+             <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-venda.png">  
             <br>
             <div>
-                {{uuid4Client}}
-                <center>
+                
+                    
                     Selecione a forma de entrega<br>
                     <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
                     <div class="mt-2">
@@ -86,10 +89,10 @@
 
 
     $('#pgOnline').click(function () {
-         if($('#pgOnline').is(":checked")){
-        $("#formasPgOnline").append(`
+        if ($('#pgOnline').is(":checked")) {
+            $("#formasPgOnline").append(`
         <h6 style="margin-top:20px;"><i class="fas fa-exclamation-triangle"></i> Atenção! O seu pedido será concluído e você será direcionado para pagina de pagamento.</h6>
-           <button type="submit" form="checkout-pedido" class="proximo mt-3" id="proximo">Ok, confirmar</button>
+           <button type="submit" form="checkout-pedido" class="proximo mt-3">Ok, confirmar</button>
         <div hidden>
         <input type="text" name="idCarrinho" value="{{carrinho._id}}">
         <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
@@ -105,12 +108,14 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>
         `)
-        $("#formasPg").empty()
-        $("#pgentrega").prop("checked", false);
-        $("#pgentrega").prop("disabled", false);
-         }else{
-             $("#formasPgOnline").empty()
-         }
+            $("#formasPg").empty()
+            $("#proximo").prop("disabled", true);
+            $("#proximo").css("background", "gray");
+            $("#pgentrega").prop("checked", false);
+            $("#pgentrega").prop("disabled", false);
+        } else {
+            $("#formasPgOnline").empty()
+        }
     })
 
 </script>
