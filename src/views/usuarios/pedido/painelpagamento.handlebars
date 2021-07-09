@@ -35,9 +35,6 @@
                     {{else}} {{/if}}
             </div>
         </div>
-        <div id="resumocompra">
-
-        </div>
         </center>
 </div>
 </form>
@@ -80,18 +77,7 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>            
         `)
-         $("#resumocompra").append(`
-         <p style="color:black;" class="estabelecimento rb " id="nomeEstabelecimento">
-            Resumo da compra</p>
-        <table class="table text-center">
-            <tbody>
-                <tr>
-                    <td>Total</td>
-                    <td id="valor-total-pedido"></td>
-                </tr>
-            </tbody>
-        </table>
-         `)
+        
             $("#formasPgOnline").empty()
             $("#pgOnline").prop("checked", false);
             $("#pgOnline").prop("disabled", false);
@@ -126,26 +112,7 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>
         `)
-         $("#resumocompra").append(`
-           <p style="color:black;" class="estabelecimento rb " id="nomeEstabelecimento">
-            Resumo da compra</p>
-        <table class="table text-center">
-            <tbody>
-                <tr>
-                    <td>Sub-total</td>
-                    <td class="valorFormatar">{{carrinho.valorTotal}}</td>
-                </tr>
-                <tr class="border-dark">
-                    <td>Entrega</td>
-                    <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>
-                </tr>
-                <tr>
-                    <td>Total</td>
-                    <td id="valor-total-pedido"></td>
-                </tr>
-            </tbody>
-        </table>
-         `)
+       
             $("#formasPg").empty()
             $("#proximo").prop("disabled", true);
             $("#proximo").css("background", "gray");
@@ -172,6 +139,3 @@
     }
 </script>
 
-<script>
- $('#valor-total-pedido').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{carrinho.valorTotal}}') + Number('{{estabelecimento.configPedidos.taxaEntrega}}')))
-</script>
