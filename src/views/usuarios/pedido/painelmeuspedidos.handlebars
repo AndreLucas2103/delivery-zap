@@ -12,8 +12,8 @@
                 <img class="card-image-pedido" src="/usuario/assets/img/illustrations/icone-entrega.png"></h2>
                 <p class="card-text rb">Data: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "DD/MM/YYYY"}}</p>
                 <p class="card-text rb" style="margin-top: -15px;" >Hora: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "HH:mm"}}</p>
-                <p class="card-text rb" style="margin-top: -15px;"><label class="format-pedido-situacao">{{situacao}}</label></p>
-                <p class="card-value rb"  step="0.01" min="0.01">Total: <span class="valorFormatar">{{valorTotal}}</span></p>
+                <p class="card-text rb" style="margin-top: -15px;"><label class="format-pedido-situacao">{{{situacaoPedido situacao}}}</label></p>
+                <p class="card-value rb"  step="0.01" min="0.01">Total: <span>{{FormatValor valorTotal}}</span></p>
                 <button class="button-detalhar rb" style="background-color:#F0A431"
                     data-bs-toggle="modal" data-bs-target="#modal-pedido-ajax-produto"
                     data-bs-id="{{_id}}">Detalhes</button>

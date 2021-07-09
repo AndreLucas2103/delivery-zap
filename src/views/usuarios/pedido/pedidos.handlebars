@@ -127,9 +127,8 @@
         </div>
         
     </div>
-    
-    <div class="card border-light shadow-sm mb-4" id="loadpedidos">
-       
+  <div id="loadpedidos">
+    <div class="card border-light shadow-sm mb-4">   
         <div class="card-body">
             <div class="table-responsive">
                 <table class="table table-centered table-nowrap mb-0 rounded">
@@ -181,7 +180,7 @@
                                 <span class="text-primary font-weight-bold">{{infoEntrega.telefone}} <i class="fab fa-whatsapp text-success" data-bs-toggle="modal" data-bs-target="#modal-send-msg-WhatsApp" data-bs-telefone="{{infoEntrega.telefone}}" data-bs-nome="{{infoEntrega.nomeCliente}}" style="cursor: pointer;"></i> </span> 
                             </td>
                             <td>{{dataFormatTimeZone ../usuarioLogado.timeZone dataCriacao "DD/MM/YYYY HH:mm"}}</td>
-                            <td class="valorFormatar">{{valorTotal}}</td>
+                            <td>{{FormatValor valorTotal}}</td>
                             <td>{{pagamento.tipo}}
                                 {{#if pagamento.forma}}
                                     <button class="btn btn-white btn-sm" type="button" id="dropdown-pagamento-{{_id}}" data-bs-toggle="dropdown" >
@@ -196,7 +195,7 @@
                                 {{/if}}
                             </td>
                             <td>{{tipoEntrega}}</td>
-                            <td class="format-pedido-situacao">{{situacao}}</td>
+                            <td class="format-pedido-situacao">{{{situacaoPedido situacao}}}</td>
                             <td>
                                 {{#if pagamento.pago}}
                                     <i class="fas fa-check-circle text-success"></i> PAGO
@@ -319,52 +318,18 @@
 
         </div>
     </div>
-
+</div>
 </main>
 
 </div>
 </div>
 </div>
-
-<script>
-  $(".valorFormatar").each(function (item) {
-        let textFormat = $(this).text()
-        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
-    })
-
-    $(".format-pedido-situacao").each(function (item) {
-        let textFormat = $(this).text()
-        switch (textFormat) {
-            case 'canceled':
-                $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
-                break;
-            case 'waiting':
-                $(this).html('<i class="fas fa-clock"></i> Aguardando')
-                break;
-            case 'production':
-                $(this).html('<i class="fas fa-spinner text-warning"></i> Produção')
-                break;
-            case 'concluded':
-                $(this).html('<i class="fas fa-check text-success"></i> Concluido')
-                break;
-            case 'delivery':
-                $(this).html('<i class="fas fa-truck"></i> Entrega')
-                break;
-            case 'finished':
-                $(this).html('<i class="fas fa-check-circle text-success"></i> Finalizado')
-                break;
-            default:
-                $(this).html('err')
-        }
-    })
-</script>
-
 <script>
      $(function() {     
    setTime()
      
    function setTime() {
-      setTimeout(setTime, 3000);
+      setTimeout(setTime, 10000);
       $('#loadpedidos').load(document.URL +  ' #loadpedidos');
       $('#loadscript').load(' #loadscript');
 
