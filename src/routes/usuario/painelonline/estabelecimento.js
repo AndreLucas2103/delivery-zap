@@ -583,9 +583,9 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
     }
 })
 
-router.post('/ajax-get-carrinho-painel', (req, res) => {
-    Carrinho.findOne({$and: [{idEstabelecimento: ObjectId(req.body.idEstabelecimento)}, {uuid4Client: req.body.uuid4Client}]}).populate('produtos.idProduto').lean().then(carrinho => {
-        res.json(carrinho)
+router.post('/ajax-get-pedido-painel', (req, res) => {
+    Pedido.findById({_id: req.body.idPedido}).lean().then(pedido => {
+        res.json(pedido)
     })
 })
 

@@ -68,7 +68,7 @@
             onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
     </div>
     {{/each}}
-
+    
     <script>
         //Aumenta o card caso a resolução seja menor ou mair que 900px
         $(document).ready(() => {
@@ -112,18 +112,18 @@
     <br><br><br>
 </div>
     <div class="background-pedidos">
-        {{#if estabelecimento.statusAberto}}
+        <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/meuspedidos/">
+            <button class="pedidos" type="submit" name="uuid4Client" id="uuid4Client-pedidos"><i
+                    class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus
+                Pedidos</button>
+        </form>
+          {{#if estabelecimento.statusAberto}}
         <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/carrinho/">
             <button class="carrinho" type="submit" name="uuid4Client" id="uuid4Client-carrinho"><i
                     class="fas fa-shopping-cart"></i>&nbsp;Carrinho</button>
         </form>
         {{else}}
         {{/if}}
-        <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/meuspedidos/">
-            <button class="pedidos" type="submit" name="uuid4Client" id="uuid4Client-pedidos"><i
-                    class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus
-                Pedidos</button>
-        </form>
 
     </div>
 </center>
@@ -228,307 +228,11 @@
 </div>
 {{!-- Modal adicionar produto ao carrinho END --}}
 
-<!-- Modal ver carrinho START -->
-<div class="modal fade" id="modal-carrinho-ajax" tabindex="-1" aria-labelledby="modal-carrinho-ajaxLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
 
-                <span id="carrinho-ajax-produto">
-
-                </span>
-
-                <div class="mt-3 float-end" style="margin-left: 10px;">Total: <span style="font-size: 25px;"
-                        class="text-primary" id="carrinho-valor-total"></span></div>
-
-                <button type="button" class="btn btn-primary btn-sm mt-4" data-bs-toggle="modal"
-                    data-bs-target="#modal-finalizarPedido">Finalizar pedido</button>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal ver carrinho END -->
-
-<!-- Modal finalizar pedido START -->
-<div class="modal fade" id="modal-finalizarPedido" tabindex="-1" aria-labelledby="modal-finalizarPedidoLabel"
-    aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-                <form action="/estabelecimento/checkout/finalizar" method="post">
-                    <div class="form-check form-switch">
-                        <input class="form-check-input" type="checkbox" id="retirarLocal" name="retirarLocal"
-                            value="true">
-                        <label class="form-check-label" for="retirarLocal">Retirar no estabelecimento</label>
-                    </div>
-                    <div class="form-check form-switch mb-4">
-                        <input class="form-check-input" type="checkbox" id="entrega" name="entrega" value="true">
-                        <label class="form-check-label" for="entrega">Entrega</label>
-                    </div>
-
-                    <span id="escolha-entrega-retirada"></span>
-                    <div class="row">
-                        <div class="form-floating mb-3 col-lg-3">
-                            <input type="text" class="form-control" id="nomeCliente" name="nomeCliente" placeholder="-"
-                                required>
-                            <label for="nomeCliente" style="margin-left: 10px;">Nome</label>
-                        </div>
-                        <div class="form-floating mb-3 col-lg-3">
-                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-"
-                                required>
-                            <label for="telefone" style="margin-left: 10px;">Telefone</label>
-                        </div>
-                        <div class="form-floating  mb-3 col-lg-6">
-                            <textarea class="form-control" name="observacao" placeholder="-" id="observacao"></textarea>
-                            <label for="observacao" style="margin-left: 10px;">Observação</label>
-                        </div>
-                    </div>
-
-                    <hr class="">
-
-                    <div class="row">
-                        <div class="col-lg-4">
-                            <table class="table">
-                                <thead>
-                                    <tr>
-                                        <th scope="col">#</th>
-                                        <th scope="col">Valor</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr>
-                                        <td>Produtos</td>
-                                        <td id="checkout-valorTotal-produtos"></td>
-                                    </tr>
-                                    <tr>
-                                        <td>Frete</td>
-                                        <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td class="table-primary">Total</td>
-                                        <td class="table-primary" id="checkout-valorTotalPedido"></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="col-lg-8">
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" id="pagarRecebimento"
-                                    name="pagamentoTipoSelecionado" value="pagarRecebimento">
-                                <label class="form-check-label" for="pagarRecebimento">Pagar no recebimento</label>
-                            </div>
-
-                            {{#if estabelecimento.integracao.mercadoPago.statusAtivo}}
-                            <div class="form-check form-switch">
-                                <input class="form-check-input" type="radio" id="mercadoPago"
-                                    name="pagamentoTipoSelecionado" value="mercadoPago">
-                                <label class="form-check-label" for="mercadoPago">Mercado Pago</label>
-                            </div>
-                            {{/if}}
-
-                            <span id="metodo-pagamento"></span>
-                        </div>
-                    </div>
-
-                    <script>
-
-                        $('#entrega').change(() => {
-                            $('#retirarLocal').prop('checked', false)
-                            $('#escolha-entrega-retirada').empty()
-                            $('#escolha-entrega-retirada').append(`
-                                <div class="row">
-                                    <div class="form-floating mb-3 col-lg-8">
-                                        <input type="text" class="form-control" id="rua" name="rua" placeholder="-" required>
-                                        <label for="rua" style="margin-left: 10px;">Rua</label>
-                                    </div>
-                                    <div class="form-floating mb-3 col-lg-4">
-                                        <input type="text" class="form-control" id="bairro" name="bairro" placeholder="-" required>
-                                        <label for="bairro" style="margin-left: 10px;">Bairro</label>
-                                    </div>
-                                    <div class="form-floating mb-3 col-lg-4">
-                                        <input type="text" class="form-control" id="cidade" name="cidade" placeholder="-" required>
-                                        <label for="cidade" style="margin-left: 10px;">Cidade</label>
-                                    </div>
-                                    <div class="form-floating mb-3 col-lg-4">
-                                        <input type="text" class="form-control" id="cep" name="cep" placeholder="-" required>
-                                        <label for="cep" style="margin-left: 10px;">CEP</label>
-                                    </div>
-                                    <div class="form-floating mb-3 col-lg-4">
-                                        <input type="text" class="form-control" id="numero" name="numero" placeholder="-" required>
-                                        <label for="numero" style="margin-left: 10px;">Número</label>
-                                    </div>
-                                </div>
-                            `)
-                        })
-
-                        $('#retirarLocal').change((e) => {
-                            $('#entrega').prop('checked', false)
-                            $('#escolha-entrega-retirada').empty()
-                        })
-
-                        $('input:radio[name="pagamentoTipoSelecionado"]').change((e) => {
-                            if (e.target.value == "mercadoPago") {
-                                $('#metodo-pagamento').empty()
-                                $('#metodo-pagamento').append(`
-                                    <button class="btn btn-success mt-4 w-50 float-end" type="submit">Continuar</button>
-                                `)
-                            } else if (e.target.value == "pagarRecebimento") {
-                                $('#metodo-pagamento').empty()
-                                $('#metodo-pagamento').append(`
-                                    <div class="row mt-4" >
-                                        <div class="form-floating mb-3 col-lg-6">
-                                            <select class="form-select" id="meioPagamento" name="formaPagamento"  onchange="selectMeioPagamento()" aria-label="Floating label select example" required>
-                                                <option value="" hidden>Selecione</option>
-                                                {{#each estabelecimento.configPedidos.meioPagamento}}
-                                                    <option value="{{tipo}}">{{nome}}</option>
-                                                {{/each}}
-                                            </select>
-                                            <label for="meioPagamento" style="margin-left: 10px;">Meio de Pagamento</label>
-                                        </div>
-                                        <div class="mb-3 col-lg-4 " id="select-meio-pagamento"></div>
-                                    </div>
-
-                                    <button class="btn btn-success mt-2 w-50 float-end" type="submit" >Finalizar</button>
-                                `)
-                            }
-                        })
-
-                        function selectMeioPagamento() {
-                            if ($('#meioPagamento').val() == "dinheiro") {
-                                $('#select-meio-pagamento').append(`
-                                    <div class="form-floating ">
-                                        <input type="number" class="form-control" id="trocoPara" name="trocoPara" placeholder="-" min="0" step="0.01" required>
-                                        <label for="trocoPara" style="margin-left: 10px;">Troco para (R$)</label>
-                                    </div>
-                                `)
-                            } else {
-                                $('#select-meio-pagamento').empty()
-                            }
-                        }
-
-                    </script>
-
-                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden readonly>
-                    <input type="text" name="uuid4Client" id="checkout-uuid4Client" readonly hidden>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-<!-- Modal finalizar pedido END -->
 
 </body>
 <script>
-    var modalCarrinho = document.getElementById('modal-carrinho-ajax')
-    modalCarrinho.addEventListener('show.bs.modal', function (event) {
-        var button = event.relatedTarget
-
-        $('#carrinho-ajax-produto').empty()
-        jQuery.ajax({
-            type: "POST",
-            url: '/estabelecimento/ajax-get-carrinho-painel',
-            data: { idEstabelecimento: '{{estabelecimento._id}}', uuid4Client: localStorage.getItem('uuid4Cliente') },
-            success: function (response) {
-                $("#checkout-valorTotal-produtos").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
-                $("#checkout-valorTotalPedido").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{estabelecimento.configPedidos.taxaEntrega}}') + response.valorTotal))
-                $("#checkout-uuid4Client").val(localStorage.getItem('uuid4Cliente'))
-
-                $("#carrinho-valor-total").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
-                response.produtos.forEach(element => {
-                    $('#carrinho-ajax-produto').append(`
-                        <div class="card bg-light border-light text-center" style="width: 100%; height: 100%">
-                            <div class="card-body">
-                                <div class="row">
-                                    
-                                    <div class="col-lg-2 mt-2">
-                                        <img src="${element.idProduto.img.foto.url}" class="mx-auto"
-                                            style="object-fit: contain; width: 80pxx; height: 80px;">
-                                    </div>
-
-                                    <div class="col-lg-10 mt-2">
-                                        <p>${element.nome}</p>
-                                        <p>${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valorTotal)}</p>
-                                        <button class="btn btn-white btn-sm text-primary"  type="button" data-bs-toggle="collapse" data-bs-target="#collapse-${element._id}">Detalhar</button>                                    </div>
-                                </div>
-                                
-                                
-                                <div class="collapse mt-2" id="collapse-${element._id}">
-                                    <table class="table">
-                                        <thead>
-                                            <tr>
-                                            <th scope="col"></th>
-                                            <th scope="col"></th>
-                                            </tr>
-                                        </thead>
-                                        <tbody id="carrinho-${element._id}">
-                                        </tbody>
-                                        <tbody id="carrinho-adicionais-${element._id}">
-                                            <tr>
-                                                <td>Adicionais</td>
-                                                <td id="carrinho-adicionais-element-${element._id}"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Quantidade</td>
-                                                <td id="carrinho-quantidade-${element._id}"></td>
-                                            </tr>
-                                            <tr>
-                                                <td>Valor Produto (Unit.)</td>
-                                                <td id="carrinho-adicionais-element-${element._id}">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(element.valor)}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Observação</td>
-                                                <td id="carrinho-observacao-${element._id}"></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </div>
-
-                                <form action="/estabelecimento/delete-carrinho-painel" method="post">
-                                    <input name="idCarrinho" value="${response._id}" hidden readonly/>
-                                    <button class="btn btn-light btn-sm float-start text-danger" name="idCarrinhoProduto" value="${element._id}">Remover</button>
-                                </form>
-                            </div>
-                        </div>
-                    `)
-
-                    element.opcao.forEach(opcao => {
-                        $(`#carrinho-${element._id}`).append(`
-                            <tr>
-                                <td>${opcao.nomeOpcao}</td>
-                                <td id="carrinho-opcao-opcoes-${opcao._id}"></td>
-                            </tr>
-                        `)
-
-                        opcao.opcoes.forEach(opcoes => {
-                            $(`#carrinho-opcao-opcoes-${opcao._id}`).append(`
-                                <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${opcoes.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</button>
-                            `)
-                        })
-                    })
-
-                    element.adicionais.length == 0 ? $(`#carrinho-adicionais-${element._id}`).hide() : $(`#carrinho-adicionais-${element._id}`).show()
-                    element.adicionais.forEach(adicional => {
-                        $(`#carrinho-adicionais-element-${element._id}`).append(`
-                            <button class="btn btn-sm" style="font-size: 10px; background-color:#d6d6d6">${adicional.nome} ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(adicional.valor)}</button>
-                        `)
-                    })
-
-                    element.observacao ? $(`#carrinho-observacao-${element._id}`).text(`Observação: ${element.observacao}`) :
-
-                        $(`#carrinho-quantidade-${element._id}`).text(`Quantidade: ${element.quantidade}`)
-                })
-            }
-        })
-    })
-
+    
     var modalPedidoProduto = document.getElementById('modal-pedido-ajax-produto')
     modalPedidoProduto.addEventListener('show.bs.modal', function (event) {
         spinngLoading(true)
