@@ -35,6 +35,8 @@ router.post('/add-chamado', (req, res) => {
         }]
     }
 
+    console.log('tes')
+
     Chamado(addChamado).save().then(() => {
         req.flash('success_msg', "Chamado aberto")
         res.redirect('back')
