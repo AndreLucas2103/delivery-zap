@@ -4,26 +4,20 @@
   $('#recursos').on('click', function () {
     $('#recursos').fadeIn();
   })
-  $('#recursos').on('click', function () {
-    $('#recursos').fadeIn();
-  })
-  $('#planos').on('click', function () {
-    $('#planos').fadeIn();
-  })
   $('#contatos').on('click', function () {
     $('#contatos').fadeIn();
   })
 </script>
 <section id="home" class="about-us section">
 
-  <div class="container">
+  <div class="container" style="margin-right: 800px;">
     <div class="col-lg-10 col-15">
       <div class="about-right wow fadeInRight" data-wow-delay=".4s">
-        <p><img src="site/images/header/about-img.png" alt="#"></br>
+        <p><img class="img-principal" src="site/images/header/img-principal.png" alt="#"></br>
       </div>
     </div>
     <center>
-      <br><button type="button" style="top: 300px;" class="btn btn-primary btn-lg btn-block"><a style="color:white"
+      <br><button type="button" style="top: 300px;" class="btn btn-primary btn-lg btn-block ativ-b"><a style="color:white"
           href="/registro">Crie sua conta</a></button>
     </center>
   </div>
@@ -118,61 +112,6 @@
 <!-- Fim Recursos -->
 
 
-<!-- Preços -->
-<section id="planos" class="pricing-table section">
-  <div class="container">
-    <div class="title">
-      <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">Planos
-      </h3>
-    </div>
-    <br>
-    <div class="row">
-      <div class="col-12">
-      </div>
-    </div>
-    <div class="row">
-      <div class="col-lg-6 col-md-8 col-12">
-        <div class="single-table wow fadeInUp" data-wow-delay=".4s">
-          <div class="table-head">
-            <h4 class="title" style="color:#95D5B2">Plano mensal</h4>
-            <div class="price">
-              <p class="amount" style="color: #95D5B2;">R$ 50,00</p>
-            </div>
-          </div>
-          <ul class="table-list">
-            <li style="color: #2D6A4F;">size</li>
-          </ul>
-          <div class="button">
-            <button type="button" style="top: 300px;" class="btn btn-primary btn-lg">Contratar</button>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6 col-md- col-12">
-        <div class="single-table wow fadeInUp" data-wow-delay=".4s">
-          <div class="table-head">
-            <h4 class="title" style="color:#95D5B2">Plano Semestral</h4>
-            <div class="price">
-              <p class="amount" style="color:#95D5B2">R$ 240,00</p>
-            </div>
-          </div>
-          <ul class="table-list">
-            <li>20% de desconto!</li>
-          </ul>
-          <div class="button">
-            <button type="button" style="top: 300px;" class="btn btn-primary btn-lg">Contratar</button>
-          </div>
-        </div>
-      </div>
-    </div>
-  </div>
-</section>
-<!--/ Fim Preços -->
-
-
-
-
 {{>_navbutton}}
 
 {{>_rodape}}
-
-{{>_preloader}}

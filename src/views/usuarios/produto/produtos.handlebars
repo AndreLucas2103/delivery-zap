@@ -46,7 +46,7 @@
 
     <div class="row">
         {{#each produtos}}
-        <div class="col-12 col-lg-3 mb-4">
+        <div class="col-12 col-lg-3 mb-4"{{#if statusAtivo}}  {{else}} style="filter: grayscale(100%);" {{/if}}>
             <div class="card border-light shadow-sm">
                 <div class="card-header border-bottom border-light d-flex justify-content-between">
                     <h2 class="h5 mb-0">{{nome}}</h2>
@@ -68,7 +68,7 @@
         {{/each}}
     </div>
 
-    <!-- Modal add ingredientes START -->
+    <!-- Modal add Produtos START -->
     <div class="modal fade" id="modal-add-produtos" tabindex="-1" aria-labelledby="modal-add-produtosLabel" aria-hidden="true">
          <div class="modal-dialog modal-lg">
             <div class="modal-content">
@@ -130,7 +130,7 @@
          {{/if}}
         
     </div>
-    <!-- Modal add ingredientes END -->
+    <!-- Modal add Produtos END -->
 
     <script> // script para adicionar categorias
         var categoriasProdutos = {{{ categoriasProdutos }}};

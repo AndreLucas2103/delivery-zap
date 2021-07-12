@@ -1,6 +1,21 @@
 /* ===========================
-Index Of css
+Tamanho da imagem principal
 ========================== */
+@media (max-width: 1200px) {
+  .img-principal{
+width: 800px;
+height:200px;
+}
+}
+@media (min-width: 1200px) {
+  .ativ-b {
+    display: none;
+  }
+  .img-principal{
+width: 1200px;
+height:auto;
+}
+}
 /*======================================
     Variables
 ========================================*/
@@ -1041,7 +1056,7 @@ ol {
   width: 100px;
   height: 100px;
   border-radius: 100%;
-  background: #95D5B2;
+  background: #FF5A00;
   -webkit-animation: preloader-fx 1.6s linear infinite;
   animation: preloader-fx 1.6s linear infinite;
 }
@@ -1122,7 +1137,7 @@ ol {
 }
 
 .sticky .navbar .navbar-nav .nav-item a.active {
-  color: #95D5B2;
+  color: #FF5A00;
 }
 
 .sticky .navbar .navbar-toggler .toggler-icon {
@@ -1242,7 +1257,7 @@ ol {
   .navbar-nav .nav-item a {
     display: inline-block;
     padding: 6px 0px;
-    color: #95D5B2;
+    color: #FF5A00;
   }
 }
 
@@ -1250,7 +1265,7 @@ ol {
   .navbar-nav .nav-item a {
     display: inline-block;
     padding: 6px 0px;
-    color: #95D5B2;
+    color: #FF5A00;
   }
 }
 
@@ -1259,7 +1274,7 @@ ol {
   position: absolute;
   bottom: 0;
   height: 3px;
-  background: #95D5B2;
+  background: #FF5A00;
   z-index: -1;
   opacity: 0;
   border-radius: 10px;
@@ -1280,7 +1295,7 @@ ol {
 
 .navbar-nav .nav-item a:hover,
 .navbar-nav .nav-item a.active {
-  color: #95D5B2;
+  color: #FF5A00;
 }
 
 .navbar-nav .nav-item:hover a:before,
@@ -1290,7 +1305,7 @@ ol {
 }
 
 .header .navbar-nav li .sub-menu li a.active {
-  background-color: #95D5B2 !important;
+  background-color: #FF5A00 !important;
   color: #fff !important;
 }
 
@@ -1406,7 +1421,7 @@ ol {
     About Us CSS
 ========================================*/
 .about-us {
-  background-color: #2D6A4F;
+  background-color: #FF5A00;
 }
 
 /*--------------------------------------------------------------
@@ -1451,7 +1466,7 @@ ol {
 }
 
 .pricing-table .single-table {
-  background: #2D6A4F;
+  background: #FF5A00;
   text-align: center;
   position: relative;
   -webkit-transition: all 0.4s ease;
@@ -1522,12 +1537,12 @@ ol {
 	Pricing Table CSS
 ===============================*/
 .pricing-table2 {
-  background: #95D5B2; 
+  background: #7e3914; 
   position: relative;
 }
 
 .pricing-table2 .single-table {
-  background: #2D6A4F;
+  background: #7e3914;
   text-align: center;
   position: relative;
   -webkit-transition: all 0.4s ease;
@@ -2440,7 +2455,7 @@ ol {
 	Footer CSS
 ========================================*/
 .footer {
-  background-color: #2D6A4F;
+  background-color: #FF5A00;
   z-index: 2;
   position: relative;
 }

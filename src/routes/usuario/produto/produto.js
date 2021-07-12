@@ -329,7 +329,7 @@ router.get('/produtos', async (req, res) => { // listo todos os produtos
             { idEstabelecimento: userEstabelecimentos }, nome, idCategorias
         ]
     })
-        .populate('idCategoriaProduto idEstabelecimento').sort({ 'nome': 1}).lean()
+        .populate('idCategoriaProduto idEstabelecimento').sort({statusAtivo: -1 ,'nome': 1}).lean()
 
     let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
     let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
@@ -352,7 +352,7 @@ router.get('/produtos', async (req, res) => { // listo todos os produtos
 // Adicionar produto no geral mesmo
 router.post('/edit-produto', async (req, res) => { // editar o produto
     try {
-        let produtoExist = await Produto.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaProduto: req.body.idCategoriaProduto }] })
+        let produtoExist = await Produto.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaProduto: req.body.idCategoriaProduto }] })
         if (produtoExist && req.body.idProduto != produtoExist._id) {
             req.flash('warning_msg', 'Produto já existe para essa categoria e estabelecimento')
             res.redirect('back')
@@ -383,7 +383,7 @@ router.post('/add-produto', async (req, res) => { // adicionar produto
         req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
         res.redirect('back')
     } else {
-        let produtoExist = await Produto.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaProduto: req.body.idCategoriaProduto }] })
+        let produtoExist = await Produto.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaProduto: req.body.idCategoriaProduto }] })
         if (produtoExist) {
             req.flash('warning_msg', 'Produto já existe para essa categoria e estabelecimento')
             res.redirect('back')
@@ -467,7 +467,7 @@ router.get('/ingredientes', eAdmin, async (req, res) => { // listo todas as cate
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-        let ingredientes = await Ingrediente.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento categoriasProdutos.idCategoriaProduto').lean().sort({ createdAt: -1 })
+        let ingredientes = await Ingrediente.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento categoriasProdutos.idCategoriaProduto').lean().sort({statusAtivo: -1 ,nome: 1})
         let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
         let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
 
@@ -488,7 +488,7 @@ router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria c
             req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
             res.redirect('back')
         } else {
-            let ingredienteExist = await Ingrediente.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+            let ingredienteExist = await Ingrediente.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
             if (ingredienteExist) {
                 req.flash('warning_msg', 'Ingrediente já existe para esse estabelecimento. Vincule o ingrediente a nova categoria também')
                 res.redirect('back')
@@ -520,9 +520,9 @@ router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria c
 
 router.post('/edit-ingredientes', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
     try {
-        let ingredienteExist = await Ingrediente.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+        let ingredienteExist = await Ingrediente.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (ingredienteExist && req.body.idIngrediente != ingredienteExist._id) {
-            req.flash('warning_msg', 'Ingrediente já existe para esse estabelecimento')
+            req.flash('warning_msg', 'Ingrediente já existe para esse estabelecimento. Vincule o ingrediente a nova categoria também')
             res.redirect('back')
         } else {
             let statusAtivo
@@ -583,7 +583,7 @@ router.get('/adicionais', eAdmin, async (req, res) => { // listo todas as catego
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-        let adicionais = await Adicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento idCategoriaAdicional').lean().sort({ createdAt: -1 })
+        let adicionais = await Adicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento idCategoriaAdicional').lean().sort({statusAtivo: -1 ,nome: 1})
         let categoriasAdicionais = await CategoriaAdicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
         let categoriaAtiva = await CategoriaAdicional.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
 
@@ -604,7 +604,7 @@ router.post('/add-adicionais', async (req, res) => { // adiciono a categoria com
             req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
             res.redirect('back')
         } else {
-            let adicionalExist = await Adicional.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaAdicional: req.body.idCategoriaAdicional }] })
+            let adicionalExist = await Adicional.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaAdicional: req.body.idCategoriaAdicional }] })
             if (adicionalExist) {
                 req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
                 res.redirect('back')
@@ -623,7 +623,7 @@ router.post('/add-adicionais', async (req, res) => { // adiciono a categoria com
 
 router.post('/edit-adicionais', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
     try {
-        let adicionalExist = await Adicional.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaAdicional: req.body.idCategoriaAdicional }] })
+        let adicionalExist = await Adicional.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaAdicional: req.body.idCategoriaAdicional }] })
         if (adicionalExist && req.body.idAdicional != adicionalExist._id) {
             req.flash('warning_msg', 'Adicional já existe para essa categoria e estabelecimento')
             res.redirect('back')
@@ -666,7 +666,7 @@ router.get('/categoria-adicionais', eAdmin, async (req, res) => { // listo todas
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-        let categorias = await CategoriaAdicional.find({ idEstabelecimento: userEstabelecimentos }).populate('idEstabelecimento').lean().sort({ createdAt: -1 })
+        let categorias = await CategoriaAdicional.find({ idEstabelecimento: userEstabelecimentos }).populate('idEstabelecimento').lean().sort({statusAtivo: -1 ,nome: 1})
 
         res.render('usuarios/produto/categoria-adicionais', { categorias: categorias })
     } catch (err) {
@@ -676,7 +676,7 @@ router.get('/categoria-adicionais', eAdmin, async (req, res) => { // listo todas
 
 router.post('/add-categoria-adicionais', async (req, res) => {
     try {
-        let categoriaProdutoExist = await CategoriaAdicional.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+        let categoriaProdutoExist = await CategoriaAdicional.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (categoriaProdutoExist) {
             req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
@@ -693,7 +693,7 @@ router.post('/add-categoria-adicionais', async (req, res) => {
 
 router.post('/edit-categoria-adicionais', async (req, res) => { // rota para editar 
     try {
-        let categoriaAdicionalExist = await CategoriaAdicional.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+        let categoriaAdicionalExist = await CategoriaAdicional.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (categoriaAdicionalExist && req.body.idCategoriaAdicional != categoriaAdicionalExist._id) {
             req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
@@ -736,7 +736,7 @@ router.get('/categoria-produtos', eAdmin, async (req, res) => { // listo todas a
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-        let categorias = await CategoriaProduto.find({ idEstabelecimento: userEstabelecimentos }).populate('idEstabelecimento').lean().sort({ createdAt: -1 })
+        let categorias = await CategoriaProduto.find({ idEstabelecimento: userEstabelecimentos }).populate('idEstabelecimento').lean().sort({statusAtivo: -1 ,nome: 1})
 
         res.render('usuarios/produto/categoria-produtos', { categorias: categorias })
     } catch (err) {
@@ -746,7 +746,7 @@ router.get('/categoria-produtos', eAdmin, async (req, res) => { // listo todas a
 
 router.post('/add-categoria-produtos', async (req, res) => { // 
     try {
-        let categoriaProdutoExist = await CategoriaProduto.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+        let categoriaProdutoExist = await CategoriaProduto.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (categoriaProdutoExist) {
             req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')
@@ -763,7 +763,7 @@ router.post('/add-categoria-produtos', async (req, res) => { //
 
 router.post('/edit-categoria-produtos', async (req, res) => { // rota para editar 
     try {
-        let categoriaProdutoExist = await CategoriaProduto.findOne({ $and: [{ nome: { $regex: req.body.nome, $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
+        let categoriaProdutoExist = await CategoriaProduto.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (categoriaProdutoExist && req.body.idCategoriaProduto != categoriaProdutoExist._id) {
             req.flash('warning_msg', 'O nome da categoria já existe para o estabelecimento selecionado')
             res.redirect('back')

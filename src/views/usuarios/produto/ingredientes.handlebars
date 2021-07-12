@@ -52,6 +52,7 @@
     <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
         <div class="modal-dialog modal-lg">
             <div class="modal-content">
+            {{#if categoriaAtiva}}
             <div class="modal-header">
                 <h5 class="modal-title" id="modal-edit-ingredientesLabel">Editar Categoria</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -88,6 +89,19 @@
             </div>
             </div>
         </div>
+        {{else}}
+        <div class="modal-header">
+                <h5 class="modal-title" id="modal-add-adicionalLabel">Cadastre ou ative as categorias.</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div style="margin-top: 20px;" class="text-center">
+                <img src="/usuario/assets/img/favicon/categorias-null.png">
+            <p class="h5" style="margin-top: 30px;">Nenhuma categoria de produtos ativa identificada neste estabelecimento.</p>
+            <p class="h5" style="margin-top: -10px;" >Ela é necessária para editar os ingredientes.</p>
+            <p class="h6" style="margin-top: 30px;">Clique no botão abaixo para adicionar ou ativar as categorias.</p>
+            <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
+            </div>
+         {{/if}}
     </div>
     <!-- Modal edit ingredientes END -->
 
@@ -118,7 +132,7 @@
                         }
                         $('#radio-edit-ingrediente-categoria').append(`
                         <div class="form-check form-switch col-6 ">
-                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="edit-categoria${element._id}" value="${element._id}" ${checkedCategoria}>
+                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="edit-categoria${element._id}" value="${element._id}" ${checkedCategoria} required>
                             <label class="form-check-label" for="edit-categoria${element._id}">${element.nome}</label>
                         </div>
                         `)
@@ -175,7 +189,7 @@
             <div style="margin-top: 20px;" class="text-center">
                 <img src="/usuario/assets/img/favicon/categorias-null.png">
             <p class="h5" style="margin-top: 30px;">Nenhuma categoria de produtos ativa identificada neste estabelecimento.</p>
-            <p class="h5" style="margin-top: -10px;" >Ela é necessária para adicionar produtos.</p>
+            <p class="h5" style="margin-top: -10px;" >Ela é necessária para adicionar ingredientes.</p>
             <p class="h6" style="margin-top: 30px;">Clique no botão abaixo para adicionar ou ativar as categorias.</p>
             <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
             </div>
@@ -191,14 +205,14 @@
                 if(element.idEstabelecimento._id == this.value){
                     $('#radio-add-ingrediente-categoria').append(`
                     <div class="form-check form-switch col-6 ">
-                        <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="${element._id}" value="${element._id}" >
+                        <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="${element._id}" value="${element._id}" required>
                         <label class="form-check-label" for="${element._id}">${element.nome}</label>
                     </div>
                     `)
                 }
             })
         });
-
+        
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
             $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
