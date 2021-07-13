@@ -44310,6 +44310,14 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
         size: auto;   
         margin: 5mm; 
     }
+    .printable, .printable * {
+        visibility: visible;
+      }
+      .printable {
+        position: fixed;
+        left: 0;
+        top: 0;
+      }
     body{
       visibility: hidden;
     }
@@ -44317,12 +44325,5 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 
     .pagebreak { page-break-before: always; } 
 
-    .printable, .printable * {
-      visibility: visible;
-    }
-    .printable {
-      position: fixed;
-      left: 0;
-      top: 0;
-    }
+    
   }
