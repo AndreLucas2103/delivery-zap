@@ -41,9 +41,8 @@
                                         comandas.push(pedido._id)
                                         console.log('adicionar: ')
                                         $("#ajax-comandas").append(`
-                                        <head>
                                 <div class="col-lg-3" id="pedido-${pedido._id}">
-                                    <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189);border:none;">
+                                    <div class="card shadow-sm border-light justify-content-between printable" style="font-size: small; background-color:rgb(255, 237, 189);border:none;">
                                         <div class="card-body">
                                             <span class="float-end not-printable">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
@@ -144,7 +143,6 @@
                                                 opcao.opcoes.forEach(opcoes => {
                                                     $(`#pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes`).append(`
                                             <span>${opcoes.nome} - ${formatValor(opcoes.valor)};</span>
-                                            </head>
                                         `)
                                                 })
                                             })
