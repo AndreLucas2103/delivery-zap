@@ -3,19 +3,20 @@ Tamanho da imagem principal
 ========================== */
 @media (max-width: 1200px) {
   .img-principal{
-width: 800px;
-height:200px;
-}
-}
+    width: 800px;
+    height:200px;
+  } 
+  }
 @media (min-width: 1200px) {
   .ativ-b {
     display: none;
   }
   .img-principal{
-width: 1200px;
-height:auto;
-}
-}
+    margin-top: -300px;
+    width: 1200px;
+    height:auto;
+  }
+  }
 /*======================================
     Variables
 ========================================*/
@@ -28,7 +29,7 @@ html {
 }
 
 body {
-  background-color: #D8F3DC;
+  background-color: #FF5A00;
   font-family: "Spartan", sans-serif;
   font-weight: normal;
   font-style: normal;
@@ -861,7 +862,7 @@ ol {
 
 /* Bread Crumbs */
 .breadcrumbs {
-  background-color: #081828;
+  background-color: #FF5A00;
   position: relative;
   padding: 100px 0;
   padding-top: 180px;
@@ -940,7 +941,7 @@ ol {
   width: 50px;
   height: 50px;
   line-height: 50px;
-  background: #081C15;
+  background: #FF5A00;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -982,7 +983,7 @@ ol {
   width: 100%;
   height: 100%;
   opacity: 0.4;
-  background: #081828;
+  background: #FF5A00;
   content: "";
   -webkit-transition: all 0.4s ease;
   transition: all 0.4s ease;
