@@ -44304,18 +44304,23 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 
 @media print {
     
+
     @page 
     {
         size: auto;   
         margin: 5mm; 
     }
+    .printable, .printable * {
+        visibility: visible;
+      }
+    body * {
+      visibility: hidden;
+    }
     table {page-break-inside: avoid;}
 
     .pagebreak { page-break-before: always; } 
 
-    .printable, .printable * {
-      visibility: visible;
-    }
+    
     .printable {
       position: fixed;
       left: 0;
