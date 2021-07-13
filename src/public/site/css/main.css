@@ -945,10 +945,10 @@ ol {
 
 /* Nav button - (botão de navegação)*/
 .scroll-top {
-  width: 50px;
+  width: 200px;
   height: 50px;
   line-height: 50px;
-  background: #FF5A00;
+  background: #081c15;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -960,7 +960,6 @@ ol {
           align-items: center;
   font-size: 14px;
   color: #fff !important;
-  border-radius: 0;
   position: fixed;
   bottom: 30px;
   right: 30px;
@@ -968,7 +967,7 @@ ol {
   cursor: pointer;
   -webkit-transition: all .3s ease-out 0s;
   transition: all .3s ease-out 0s;
-  border-radius: 50%;
+  border-radius: 50px;
 }
 
 .scroll-top:hover {
@@ -1265,7 +1264,7 @@ ol {
   .navbar-nav .nav-item a {
     display: inline-block;
     padding: 6px 0px;
-    color: #FF5A00;
+    color: #333;
   }
 }
 
@@ -1273,7 +1272,7 @@ ol {
   .navbar-nav .nav-item a {
     display: inline-block;
     padding: 6px 0px;
-    color: #FF5A00;
+    color: #333;
   }
 }
 
@@ -1282,7 +1281,7 @@ ol {
   position: absolute;
   bottom: 0;
   height: 3px;
-  background: #FF5A00;
+  background: #333;
   z-index: -1;
   opacity: 0;
   border-radius: 10px;
@@ -1303,7 +1302,7 @@ ol {
 
 .navbar-nav .nav-item a:hover,
 .navbar-nav .nav-item a.active {
-  color: #FF5A00;
+  color: #333;
 }
 
 .navbar-nav .nav-item:hover a:before,
@@ -1313,7 +1312,7 @@ ol {
 }
 
 .header .navbar-nav li .sub-menu li a.active {
-  background-color: #FF5A00 !important;
+  background-color: #333 !important;
   color: #fff !important;
 }
 
