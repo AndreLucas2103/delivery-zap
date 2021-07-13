@@ -3,17 +3,21 @@ Tamanho da imagem principal
 ========================== */
 @media (max-width: 1200px) {
   .img-principal{
+    margin-left: -180px;
     width: 800px;
     height:200px;
   } 
+  .title-pc{
+    display:none;
+  }
   }
 @media (min-width: 1200px) {
   .ativ-b {
     display: none;
   }
   .img-principal{
-    margin-top: -300px;
-    width: 1200px;
+    margin-top: -350px;
+    width: 800px;
     height:auto;
   }
   }
@@ -1538,12 +1542,12 @@ ol {
 	Pricing Table CSS
 ===============================*/
 .pricing-table2 {
-  background: #7e3914; 
+  background: #ffffff; 
   position: relative;
 }
 
 .pricing-table2 .single-table {
-  background: #7e3914;
+  background: #ffffff;
   text-align: center;
   position: relative;
   -webkit-transition: all 0.4s ease;
