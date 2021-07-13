@@ -42,9 +42,9 @@
                                         console.log('adicionar: ')
                                         $("#ajax-comandas").append(`
                                 <div class="col-lg-3" id="pedido-${pedido._id}">
-                                    <div class="card shadow-sm border-light justify-content-between printable" style="font-size: small; background-color:rgb(255, 237, 189);border:none;">
-                                        <div class="card-body">
-                                            <span class="float-end not-printable">
+                                    <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
+                                        <div class="card-body ">
+                                            <span class="float-end">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
                                                  <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
