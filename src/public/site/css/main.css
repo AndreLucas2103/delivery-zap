@@ -3,9 +3,9 @@ Tamanho da imagem principal
 ========================== */
 @media (max-width: 1200px) {
   .img-principal{
-    margin-left: -180px;
-    width: 800px;
-    height:200px;
+    margin-left: -120px;
+    width: 450px;
+    height:300px;
   } 
   .title-pc{
     display:none;
@@ -16,8 +16,11 @@ Tamanho da imagem principal
     display: none;
   }
   .img-principal{
+    position: absolute;
     margin-top: -350px;
+    margin-left: -100px;
     width: 800px;
+    max-width: auto;
     height:auto;
   }
   }
