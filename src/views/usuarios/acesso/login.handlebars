@@ -2,39 +2,54 @@
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
 
 {{>_msg}}
-<body style="background:#D8F3DC;"></body>
-<section style="background-color: #D8F3DC;"  class="pricing-table section">
-    <div class="container">
-        <form action="acessos/login" method="post">
-            <div class="title">
-                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
-                    <a href="/"><img src="site/images/logo/logo.png"></a>
-                </h3>
-            </div>
-            <br>
-            <div class="row">
-                <div class="col-12">
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-lg-4 col-md-8 col-12" style="margin:auto;">
-                    <div class="single-table wow fadeInUp" data-wow-delay=".4s">
-                        <div class="form-floating mb-3">
-                            <input type="email" class="form-control" name="email" id="floatingInput" placeholder="name@example.com" required>
-                            <label for="floatingInput">Email</label>
+
+   <!-- Section -->
+   
+        <section class="vh-lg-100 d-flex align-items-center">
+            <div class="card" style="margin: auto;margin-top:100px;">
+                <div class="row justify-content-center form-bg-image" data-background-lg="../../assets/img/illustrations/signin.svg">
+                    <div class="col-12 d-flex align-items-center justify-content-center">
+                        <div class="signin-inner my-3 my-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
+                            <div class="text-center text-md-center mb-4 mt-md-0">
+                               <a href="/"><img src="site/images/logo/logo.png" style="width: 250px;height:60px;" alt=""></a>
+                            </div>
+                            <form action="/acessos/login" method="POST" class="mt-4">
+                                <!-- Form -->
+                                <div class="form-group mb-4">
+                                    <label for="email">Digite seu e-mail</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
+                                        <input type="email" class="form-control" name="email" id="email" autofocus required>
+                                    </div>  
+                                </div>
+                                <!-- End of Form -->
+                                <div class="form-group">
+                                    <!-- Form -->
+                                    <div class="form-group mb-4">
+                                        <label for="senha">Digite sua senha</label>
+                                        <div class="input-group">
+                                            <span class="input-group-text" id="basic-addon2"><span class="fas fa-unlock-alt"></span></span>
+                                            <input type="password"  name="senha" class="form-control" id="senha" required>
+                                        </div>  
+                                    </div>
+                                    <!-- End of Form -->
+                                    <div class="d-flex justify-content-between align-items-center mb-4">
+                                        <div><a href="#" class="small text-right">Esqueceu sua senha?</a></div>
+                                    </div>
+                                </div>
+                                <button type="submit" style="width: 250px;height:40px;background:#262B40;color:white;border:none;border-radius:5px;">Acessar</button>
+                            </form>                        
+                            <div class="d-flex justify-content-center align-items-center mt-4">
+                                <span class="font-weight-normal">
+                                    Não registrado?
+                                    <a href="/registro" class="font-weight-bold">Crie sua conta</a>
+                                </span>
+                            </div>
                         </div>
-                        <div class="form-floating">
-                            <input type="password" class="form-control" name="senha" id="floatingPassword" placeholder="Password"  required>
-                            <label for="floatingPassword">Senha</label>
-                        </div>
-                        <br><button type="submit" style="top: 300px;" class="btn btn-primary btn-lg">Login</button>
                     </div>
                 </div>
             </div>
-        </form>
-    </div>
-</section>
-
-
+        </section>
+   
 
 {{>_preloader}}

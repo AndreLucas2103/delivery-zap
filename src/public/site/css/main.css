@@ -1,7 +1,7 @@
 /* ===========================
 Tamanho da imagem principal
 ========================== */
-@media (max-width: 1200px) {
+@media (max-width: 900px) {
   .img-principal{
     margin-left: -120px;
     width: 450px;
@@ -11,7 +11,7 @@ Tamanho da imagem principal
     display:none;
   }
   }
-@media (min-width: 1200px) {
+@media (min-width: 900px) {
   .ativ-b {
     display: none;
   }
@@ -36,7 +36,7 @@ html {
 }
 
 body {
-  background-color: #FF5A00;
+  background-color:white;
   font-family: "Spartan", sans-serif;
   font-weight: normal;
   font-style: normal;
@@ -48,7 +48,7 @@ body {
 .fonts-title{
   font-size: 14px;
   text-align: center;
-  color:#081C15
+  color:white;
 
 }
 

@@ -3,21 +3,18 @@
 
 {{>_msg}}
 
-<body style="background:#D8F3DC;"></body>
+
 <form action="acessos/registro" method="POST">
 
-    <section id="minhaDiv" style="background-color: #D8F3DC;" class="pricing-table section">
+    <section id="minhaDiv" style="background-color:white;" class="pricing-table section">
         <div class="container">
-            <div class="title">
-                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
-                    <a href="/"><img src="site/images/logo/logo.png"></a>
-                </h3>
-            </div>
             <br>
-            <div class="col-lg-6 col-md-6 col-10" style="margin:auto;">
-                <div class="single-table wow fadeInUp" data-wow-delay=".4s">
-                    <div class="row g-2">
-                        <h5 style="color: white;">Informações pessoais</h5>
+            <div class="col-lg-8 col-md-6 col-10 mt-5" style="margin:auto;">
+                <div class="card" data-wow-delay=".4s">
+                    <div class="row g-2" style="padding-left: 15px;padding-right: 15px;">
+                        <center>
+                        <a href="/"><img class="mb-4 mt-4" style="width: 250px;height:60px;" src="site/images/logo/logo.png"></a>
+                        </center>
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
@@ -69,47 +66,47 @@
                             </div>
                         </div>
                     </div>
-                    <br><button type="button" onclick="Mudarestado()" class="btn btn-primary btn-lg">Próximo
-                        »</button>
+                    <br>
+                    <center>
+                    <button type="submit" class="mb-4" style="width: 400px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;"  onclick="Mudarestado()">Próximo
+                    »</button> 
+                    </center>         
                 </div>
             </div>
         </div>
     </section>
 
-    <section id="minhaDiv2" style="background-color: #D8F3DC;" class="pricing-table section">
+    <section id="minhaDiv2" style="background-color:white;" class="pricing-table section">
         <div class="container">
-            <div class="title">
-                <h3 style="text-align: center;color:#95D5B2" data-wow-delay=".2s">
-                    <a href="/"><img src="site/images/logo/logo.png"></a>
-                </h3>
-            </div>
-            <div class="col-lg-6 col-md-8 col-12" style="margin:auto;">
-                <div class="single-table wow fadeInUp">
-                  <h5 style="color: white;">Painel de Vendas</h5>
+            <div class="col-lg-8 col-md-6 col-10 mt-5" style="margin:auto;">
+                <div class="card" style="padding-left: 15px;padding-right: 15px;">
+                  <center>
+                        <a href="/"><img class="mb-4 mt-4" style="width: 250px;height:60px;" src="site/images/logo/logo.png"></a>
+                        </center>
                     <div class="row g-2">
                         <center>
                             <div class="col-md-8">
-                                <div class="form-floating">
-                                    <input type="text" class="form-control" id="url" name="url" placeholder="0"
+                                <label class="mb-2">Digite a url do painel de vendas</label>
+                                <div class="form-floating">    
+                                    <input type="text" maxlength="20" class="form-control" id="url" name="url" placeholder="0"
                                         required>
-                                    <label for="url">delivery-zap.com/estabelecimento/</label>
+                                    <label for="url">hotpedidos.com/estabelecimento/</label>
                                 </div>
                             </div>
                         </center>
                     </div>
-                    <div class="row g-2">
-                        <h7 style="color: white;">Dados do estabelecimento</h7>
+                    <div class="row g-2 mt-2">
                         <div class="col-md">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="nome" name="nome" placeholder="0" required>
-                                <label for="nome">Nome da empresa*</label>
+                                <label for="nome">Nome do estabelecimento*</label>
                             </div>
                         </div>
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0"
                                     required>
-                                <label for="telefone">Whatsapp*</label>
+                                <label for="telefone">Celular*</label>
                             </div>
 
                         </div>
@@ -159,9 +156,12 @@
                             </div>
                         </div>
                     </div>
-                    <br><button type="button" onclick="Mudarestado2()" class="btn btn-primary btn-lg">«
-                        Voltar</button>
-                    <button type="submit" class="btn btn-primary btn-lg">Cadastrar</button>
+                    <br>
+                    <center>
+                    <button type="button" class="mb-4" style="width: 150px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;padding-right:15px;" onclick="Mudarestado2()">«
+                        Voltar</button> 
+                        <button type="submit" class="mb-4" style="width: 150px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;" >Cadastrar</button> 
+                    </center> 
                 </div>
             </div>
         </div>
