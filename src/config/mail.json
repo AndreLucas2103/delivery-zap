@@ -1,7 +1,7 @@
 {
     "host": "smtp.gmail.com",
     "port" : "587",
-    "user" : "",
-      "pass" : "",
+    "user" : "hotpedidosalterosa@gmail.com",
+      "pass" : "@HOTpedidos2525",
       "useTLS": "true"
 } 

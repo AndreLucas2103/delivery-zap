@@ -50,6 +50,15 @@ const Usuario = new Schema({
 
     observacao: String,
 
+    senhaResetToken: {
+        type: String,
+        select: false,
+    },
+    senhaResetExpires: {
+        type: Date,
+        select: false,
+    },
+
     freeSystem: {
         habilitado: Boolean,
         dataFim: Date

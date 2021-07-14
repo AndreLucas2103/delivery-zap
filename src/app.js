@@ -4,6 +4,8 @@ require('./helpers/schendule')
 
 // ------ Módulos carregados -----------------------------------------------------------------------------------------------------------------------
 const express = require('express')
+const nodemailer = require('nodemailer');
+const mailer = require('../node_modules/mailer')
 const handlebars = require('express-handlebars')
 const bodyParser = require("body-parser")
 const path = require("path")

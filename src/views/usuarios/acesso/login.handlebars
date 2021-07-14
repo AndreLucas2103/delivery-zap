@@ -34,7 +34,8 @@
                                     </div>
                                     <!-- End of Form -->
                                     <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <div><a href="#" class="small text-right">Esqueceu sua senha?</a></div>
+                                        <div><a href="#" data-bs-toggle="modal" data-bs-target="#trocarsenha" class="small text-right">Esqueceu sua senha?</a>
+                                        </div>
                                     </div>
                                 </div>
                                 <button type="submit" style="width: 250px;height:40px;background:#262B40;color:white;border:none;border-radius:5px;">Acessar</button>
@@ -51,5 +52,162 @@
             </div>
         </section>
    
+<div class="modal fade" id="trocarsenha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Trocar Senha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-enviar-confirmacao" action="/acessos/mail-senha" method="POST">
 
-{{>_preloader}}
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="emailtroca" name="emailtroca" placeholder="0">
+                            <label for="emailtroca">Digite seu e-mail</label>
+                        </div>
+                    </div>
+                    <button type="submit" id="enviaemail" class="btn btn-primary">Enviar</button>
+
+                </form>
+
+                <form id="form-confirma-token" action="/acessos/reset-senha" method="POST">
+                    <input type="hidden" id="receberemail" name="receberemail">
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="text" class="form-control" id="token" name="token" placeholder="0">
+                            <label for="emailtroca">Chave recebida</label>
+                        </div>
+                    </div>
+                    <div class="col-md">
+                        <div class="form-floating">
+                            <input type="password" class="form-control" id="senhanova" name="senhanova" placeholder="0">
+                            <label for="emailtroca">Digite sua nova senha</label>
+                        </div>
+                    </div>
+
+                    <button id="trocasenha" class="btn btn-primary">Salvar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $("#spinner-loading").remove();
+     $("#style-body").remove();
+    $('#form-confirma-token').hide()
+    $('#form-enviar-confirmacao').submit(() => {
+        let emailtroca = $('#emailtroca').val()
+        event.preventDefault()
+        jQuery.ajax({
+            type: "POST",
+            url: '/acessos/mail-senha',
+            data: { emailtroca: emailtroca },
+            success: function (response) {
+                if (response.responseid == 200) {
+                    $('#receberemail').val(emailtroca)
+                    $('#form-confirma-token').show()
+                    $('#form-enviar-confirmacao').hide()
+                }
+                if (response.responseid == 100) {
+                    $(document).ready(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Esse e-mail não está cadastrado.',
+                            footer: '<a href="/registro">Criar uma conta.</a>',
+                            confirmButtonText: 'Ok',
+                            allowOutsideClick: false,
+                            
+                       }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.location.reload(true);
+                            }
+                        })
+                    })
+                }
+            }
+        });
+    })
+
+</script>
+<script>
+    $('#form-confirma-token').submit(() => {
+        let token = $('#token').val()
+        let senhanova = $('#senhanova').val()
+        let receberemail = $('#receberemail').val()
+        event.preventDefault()
+        jQuery.ajax({
+            type: "POST",
+            url: '/acessos/reset-senha',
+            data: { receberemail: receberemail, senhanova: senhanova, token: token },
+            success: function (response) {
+                if (response.responseid == 200) {
+
+                    $(document).ready(() => {
+                        Swal.fire({
+                            icon: 'success',
+                            title: 'Senha alterada com sucesso!',
+                            confirmButtonText: 'Ok',
+                            allowOutsideClick: false,
+                        }).then((result) => {
+                            if (result.isConfirmed) {
+                                document.location.reload(true);
+                            }
+                        })
+
+                    })
+
+                }
+                if (response.responseid == 100) {
+                    $(document).ready(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Chave inválida.',
+                            allowOutsideClick: false,
+
+                        })
+                    })
+                }
+                if (response.responseid == 125) {
+                    $(document).ready(() => {
+                        Swal.fire({
+                            icon: 'error',
+                            title: 'Senha muito curta.',
+                            allowOutsideClick: false,
+
+                        })
+                    })
+                }
+            }
+        });
+    })
+
+</script>
+<script>
+    var capturando = "";
+    function trocarmodal() {
+        capturando = document.getElementById('emailtroca').value
+        document.getElementById('emailrecebido').innerHTML = capturando;
+    }
+
+</script>
+
+
+{{#if error_msg}}
+
+<script>
+    $(document).ready(() => {
+        Swal.fire({
+            icon: 'error',
+            title: '{{error_msg}}',
+
+        })
+
+    })
+
+</script>
+
+{{/if}}
+

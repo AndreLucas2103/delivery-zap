@@ -5,7 +5,8 @@ const bcryptjs = require("bcryptjs")
 const passport = require("passport")
 const { v4: uuidv4 } = require('uuid');
 const moment = require('moment')
-
+const mailer = require('../../../../node_modules/mailer')
+const crypto = require('crypto')
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
@@ -167,5 +168,81 @@ router.get("/logout", (req, res) => {
     req.flash("success_msg", "Deslogado com sucesso!")
     res.redirect("/login")
 })
+
+
+router.post('/mail-senha', async (req, res) => {
+
+    try {
+        const user = await Usuario.findOne({ email: req.body.emailtroca });
+
+        if (!user) {
+            res.json({ responseid: 100 })
+        } else {
+
+            const token = crypto.randomBytes(2).toString('hex')
+            const now = new Date();
+            now.setHours(now.getHours() + 1)
+
+            Usuario.findByIdAndUpdate(user._id, {
+                '$set': {
+                    senhaResetToken: token,
+                    senhaResetExpires: now,
+                }
+            }).then(() => {
+
+                mailer.sendMail({
+                    to: req.body.emailtroca,
+                    from: 'hotpedidosalterosa@gmail.com',
+                    template: '/forgot_password',
+                    context: { token },
+
+                }, (err) => {
+                    if (err)
+                        console.log(err)
+
+                })
+
+                console.log(token, now)
+                res.json({ responseid: 200 })
+            }).catch(err => {
+                console.log(err)
+
+            })
+        }
+
+    } catch (err) {
+        console.log(err)
+        res.render('/404')
+    }
+})
+
+router.post('/trocar-senha', async (req, res) => { // rota para edicao do perfil, apenas o dados
+
+    Usuario.findById({ _id: req.body.valueid }).then(usuario => {
+
+        usuario.senha = req.body.senha2
+        bcryptjs.genSalt(10, (erro, salt) => {
+            bcryptjs.hash(usuario.senha, salt, (erro, hash) => {
+                if (erro) {
+                    res.json(402)
+                }
+
+                usuario.senha = hash
+
+                usuario.save().then(() => {
+                    console.log('ok')
+                    req.flash('success_msg', 'Dados editado com sucesso')
+                    res.redirect('/usuarios/perfil/' + usuario._id)
+                }).catch(err => {
+                    req.flash('error_msg', 'Error ao editar dados' + err)
+                    res.redirect('/')
+                    console.log(err)
+                })
+            })
+        })
+
+    })
+})
+
 
 module.exports = router;

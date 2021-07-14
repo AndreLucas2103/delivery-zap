@@ -6,6 +6,7 @@ Tamanho da imagem principal
     margin-left: -120px;
     width: 450px;
     height:300px;
+    
   } 
   .title-pc{
     display:none;
@@ -36,7 +37,7 @@ html {
 }
 
 body {
-  background-color:white;
+  background-color:#FF5A00;
   font-family: "Spartan", sans-serif;
   font-weight: normal;
   font-style: normal;
@@ -945,7 +946,7 @@ ol {
 
 /* Nav button - (botão de navegação)*/
 .scroll-top {
-  width: 200px;
+  width: 50px;
   height: 50px;
   line-height: 50px;
   background: #081c15;
