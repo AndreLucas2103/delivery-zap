@@ -232,7 +232,7 @@ app.get('/teste', async (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80s
+const PORT = 80
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
