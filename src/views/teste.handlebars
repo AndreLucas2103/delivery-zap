@@ -1,0 +1,64 @@
+ <div class="row g-2" style="margin-top:50px;">
+      <div class="col-md">
+        <div class="form-floating center-block">
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+                 required>
+            <label for="nome">Seu Nome *</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating center-block rb">
+            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" 
+                required />
+            <label for="telefone">Celular *</label>
+        </div>
+    </div>
+</div>
+<div class="row g-2" style="margin-top:5px;">
+    <div class="col-md-4">
+        <div class="form-floating center-block ">
+            {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
+            <input type="text" class="form-control" id="cep" name="cep" placeholder="0"  required>
+            <label for="cep">CEP*</label>
+            {{else}} {{/if}}
+        </div>
+    </div>
+</div>
+<div class="row g-2" style="margin-top:5px;">
+    <div class="col-md">
+        <div class="form-floating center-block">
+            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="0" maxlength="55"
+                 required>
+            <label for="endereco">Endereço*</label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-floating center-block rb">
+            <input type="text" class="form-control" id="numero" name="numero" placeholder="0" maxlength="35"
+                 required>
+            <label for="numero">Número*</label>
+        </div>
+    </div>
+    </div>
+    <div class="row g-2" style="margin-top:5px;">
+        <div class="col-md center-block rb">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
+                     required>
+                <label for="bairro">Bairro*</label>
+            </div>
+        </div>
+        <div class="col-md center-block rb">
+            <div class="form-floating">
+                {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
+                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
+                      required>
+                <label for="cidade">Cidade*</label>
+                {{else}} {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="row g-2" style="margin-top:5px;">
+        <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" maxlength="100"
+             placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
+    </div>

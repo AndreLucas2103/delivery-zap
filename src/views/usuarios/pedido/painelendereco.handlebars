@@ -7,8 +7,9 @@
     <p>
 </div>
 
-<form method="POST" id="add-endereco" action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}" autocomplete="off" >
-    <div class="container-md max-container" id="container-end">
+
+<div class="container-md max-container" id="container-end">
+    <form method="POST" id="add-endereco" action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}">
         <input type="text" name="uuid4Client" id="uuid4Client-value" hidden>
         <div style="height:100%;background:white;">
             <center>
@@ -27,19 +28,20 @@
                         <label style="font-size:18px;" for="entrega">Entregue no endereço</label>
                     </div>
                 </div>
+
+
+                <div id="divretirarLocal">
+
+                </div>
+
+                <div id="diventrega">
+
+                </div>
             </center>
-
-            <div id="divretirarLocal">
-
-            </div>
-
-            <div id="diventrega">
-
-            </div>
         </div>
+    </form>
+</div>
 
-    </div>
-</form>
 
 <br><br><br><br>
 
@@ -62,14 +64,14 @@
             <div class="row g-2" style="margin-top:50px;">
     <div class="col-md">
         <div class="form-floating center-block">
-            <input type="text" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+            <input type="search" autocomplete = "off" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
                  required>
             <label for="nome">Seu Nome *</label>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-floating center-block rb">
-            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" 
+            <input type="search" autocomplete = "off" class="form-control" id="telefone" name="telefone" placeholder="0" 
                 required />
             <label for="telefone">Celular *</label>
         </div>
@@ -78,8 +80,7 @@
 
 <div class="row g-2" style="margin-top:5px;">
     <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" 
-        maxlength="100" placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui...">
-         </textarea>
+        maxlength="100" placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
 </div>
             `)
             $("#entrega").prop("checked", false);
@@ -97,18 +98,18 @@
     $('#entrega').click(function () {
         if ($('#entrega').is(":checked")) {
             $("#diventrega").append(`
-                <div class="row g-2" style="margin-top:50px;">
-     <div class="col-md">
+                 <div class="row g-2" style="margin-top:50px;">
+      <div class="col-md">
         <div class="form-floating center-block">
-            <input type="text" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
-               required  />
+            <input type="search" autocomplete = "off" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+                 required>
             <label for="nome">Seu Nome *</label>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-floating center-block rb">
-            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" 
-                required>
+            <input type="search" autocomplete = "off" class="form-control" id="telefone" name="telefone" placeholder="0" 
+                required />
             <label for="telefone">Celular *</label>
         </div>
     </div>
@@ -117,7 +118,7 @@
     <div class="col-md-4">
         <div class="form-floating center-block ">
             {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-            <input type="text" class="form-control" id="cep" name="cep" placeholder="0"  required>
+            <input type="search" autocomplete = "off" class="form-control" id="cep" name="cep" placeholder="0"  required>
             <label for="cep">CEP*</label>
             {{else}} {{/if}}
         </div>
@@ -126,22 +127,23 @@
 <div class="row g-2" style="margin-top:5px;">
     <div class="col-md">
         <div class="form-floating center-block">
-            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="0" maxlength="55"
+            <input type="search" autocomplete = "off" class="form-control" id="endereco" name="endereco" placeholder="0" maxlength="55"
                  required>
             <label for="endereco">Endereço*</label>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-floating center-block rb">
-            <input type="text" class="form-control" id="numero" name="numero" placeholder="0" maxlength="35"
+            <input type="search" autocomplete = "off" class="form-control" id="numero" name="numero" placeholder="0" maxlength="35"
                  required>
             <label for="numero">Número*</label>
         </div>
     </div>
+    </div>
     <div class="row g-2" style="margin-top:5px;">
         <div class="col-md center-block rb">
             <div class="form-floating">
-                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
+                <input type="search" autocomplete = "off" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
                      required>
                 <label for="bairro">Bairro*</label>
             </div>
@@ -149,7 +151,7 @@
         <div class="col-md center-block rb">
             <div class="form-floating">
                 {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
+                <input type="search" autocomplete = "off" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
                       required>
                 <label for="cidade">Cidade*</label>
                 {{else}} {{/if}}
@@ -160,8 +162,13 @@
         <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" maxlength="100"
              placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
     </div>
-</div>
+
+
 `)
+            let tagArr = document.getElementsByTagName("input");
+            for (let i = 0; i < tagArr.length; i++) {
+                tagArr[i].autocomplete = 'off';
+            }
             $("#retirarLocal").prop("checked", false)
             $("#retirarLocal").prop("disabled", false)
             $("#divretirarLocal").empty()
