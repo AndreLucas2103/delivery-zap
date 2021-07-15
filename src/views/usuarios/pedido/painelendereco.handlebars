@@ -57,6 +57,7 @@
 </div>
 
 <script>
+    
 
     $('#retirarLocal').click(function () {
         if ($('#retirarLocal').is(":checked")) {
@@ -80,9 +81,19 @@
 
 <div class="row g-2" style="margin-top:5px;">
     <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" 
-        maxlength="100" placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
+        maxlength="100" placeholder="Caso tenha uma observação sobre a entrega descreva ela aqui..."></textarea>
 </div>
             `)
+            var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+        spOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
+            }
+        };
+
+    $('#telefone').mask(SPMaskBehavior, spOptions);
             $("#entrega").prop("checked", false);
             $("#entrega").prop("disabled", false);
             $("#diventrega").empty()
@@ -108,7 +119,7 @@
     </div>
     <div class="col-md-6">
         <div class="form-floating center-block rb">
-            <input type="search" autocomplete = "off" class="form-control" id="telefone" name="telefone" placeholder="0" 
+            <input type="search" autocomplete = "off" class="form-control" id="telefone2" name="telefone" placeholder="0" 
                 required />
             <label for="telefone">Celular *</label>
         </div>
@@ -160,15 +171,19 @@
     </div>
     <div class="row g-2" style="margin-top:5px;">
         <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" maxlength="100"
-             placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
+             placeholder="Caso tenha uma observação sobre a entrega descreva ela aqui..."></textarea>
     </div>
-
-
-`)
-            let tagArr = document.getElementsByTagName("input");
-            for (let i = 0; i < tagArr.length; i++) {
-                tagArr[i].autocomplete = 'off';
+        `)
+         var SPMaskBehavior = function (val) {
+        return val.replace(/\D/g, '').length === 11 ? '(00) 00000-0000' : '(00) 0000-00009';
+    },
+        spOptions = {
+            onKeyPress: function (val, e, field, options) {
+                field.mask(SPMaskBehavior.apply({}, arguments), options);
             }
+        };
+
+    $('#telefone2').mask(SPMaskBehavior, spOptions);
             $("#retirarLocal").prop("checked", false)
             $("#retirarLocal").prop("disabled", false)
             $("#divretirarLocal").empty()
@@ -184,7 +199,7 @@
 </script>
 
 <script>
-
+     
     function uuidv4() { // gerador de uuidv4
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
