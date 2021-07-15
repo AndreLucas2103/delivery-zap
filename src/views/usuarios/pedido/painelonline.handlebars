@@ -43,7 +43,7 @@
             style="font-size: 12px;color:rgb(126, 62, 59)"></i> Fechado</p>
             {{/if}}
     <hr class="w-25 text-center">
-    <input type="text" class="search rb" style="border-color:{{estabelecimento.painel.colorFonte}};">
+    <input type="text" class="search rb" maxlength="15" style="border-color:{{estabelecimento.painel.colorFonte}};">
     <br><br>
 
     {{#each produtos}}
@@ -68,7 +68,7 @@
             onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
     </div>
     {{/each}}
-    
+    </center>
     <script>
         //Aumenta o card caso a resolução seja menor ou mair que 900px
         $(document).ready(() => {
@@ -126,7 +126,7 @@
         {{/if}}
 
     </div>
-</center>
+
 
 {{!-- Modal adicionar produto ao carrinho START --}}
 <div class="modal fade" id="modal-pedido-ajax-produto" tabindex="-1" aria-labelledby="modal-pedido-ajax-produtoLabel"
@@ -193,8 +193,8 @@
                                     class="minus"></button>
                                 <input onkeyup="calcValorClick()" onkeydown="calcValorClick()"
                                     onchange="calcValorClick()" oninput="this.value=this.value.replace(/[^0-9]/g,'');"
-                                    id="add-produto-carrinho-quantidade" class="quantity" min="0" name="quantidade"
-                                    value="1" type="number">
+                                    id="add-produto-carrinho-quantidade" class="quantity" min="1" max="999" name="quantidade"
+                                    value="1" type="number" disabled>
                                 <button type="button"
                                     onclick="this.parentNode.querySelector('input[type=number]').stepUp(), calcValorClick()"
                                     class="plus"></button>

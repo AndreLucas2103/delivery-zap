@@ -183,7 +183,7 @@ router.post('/mail-senha', async (req, res) => {
             const now = new Date();
             now.setHours(now.getHours() + 1)
 
-            Usuario.findByIdAndUpdate(user._id, {
+            Usuario.updateOne({_id: user._id}, {
                 '$set': {
                     senhaResetToken: token,
                     senhaResetExpires: now,

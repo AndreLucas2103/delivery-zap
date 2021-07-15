@@ -7,17 +7,16 @@
     <p>
 </div>
 
-<form method="POST" id="add-endereco"
-            action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}">
-<div class="container-md max-container" id="container-end">
-    <input type="text" name="uuid4Client" id="uuid4Client-value" hidden>
-    <div style="height:100%;background:white;">
-        <center>
-            <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">     
-            <div>
-                Selecione a forma de entrega<br>
-                 
-                 <div class="mt-2">
+<form method="POST" id="add-endereco" action="/estabelecimento/{{estabelecimento.url}}/pagamento/{{carrinho._id}}" autocomplete="off" >
+    <div class="container-md max-container" id="container-end">
+        <input type="text" name="uuid4Client" id="uuid4Client-value" hidden>
+        <div style="height:100%;background:white;">
+            <center>
+                <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-entrega.png">
+                <div>
+                    Selecione a forma de entrega<br>
+
+                    <div class="mt-2">
                         <input style="width: 20px;height:20px;" type="checkbox" id="retirarLocal" name="retirarLocal"
                             value="true">
                         <label style="font-size:18px;" for="retirarLocal">Quero retirar no local</label>
@@ -27,9 +26,9 @@
                             value="true">
                         <label style="font-size:18px;" for="entrega">Entregue no endereço</label>
                     </div>
-            </div>
-       </center>
-       
+                </div>
+            </center>
+
             <div id="divretirarLocal">
 
             </div>
@@ -37,9 +36,9 @@
             <div id="diventrega">
 
             </div>
-    </div>
+        </div>
 
-</div>
+    </div>
 </form>
 
 <br><br><br><br>
@@ -50,21 +49,45 @@
         <button class="voltar" type="submit" name="uuid4Client" id="uuid4Client-back">« Voltar</button>
     </form>
 
-    <button type="submit" id="proximo" form="add-endereco" class="proximo" style="background: gray;" disabled>Próximo »</button>
-  
+    <button type="submit" id="proximo" form="add-endereco" class="proximo" style="background: gray;" disabled>Próximo
+        »</button>
+
 </div>
 
 <script>
-    
+
     $('#retirarLocal').click(function () {
-        if($('#retirarLocal').is(":checked")){
-        $("#divretirarLocal").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" required><label for="telefone">Celular *</label></div></div></div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div>')
-        $("#entrega").prop("checked", false);
-        $("#entrega").prop("disabled", false);
-        $("#diventrega").empty()
-        $("#proximo").removeAttr('disabled');
-        $("#proximo").css("background", "");
-        }else{
+        if ($('#retirarLocal').is(":checked")) {
+            $("#divretirarLocal").append(`
+            <div class="row g-2" style="margin-top:50px;">
+    <div class="col-md">
+        <div class="form-floating center-block">
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+                 required>
+            <label for="nome">Seu Nome *</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating center-block rb">
+            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" 
+                required />
+            <label for="telefone">Celular *</label>
+        </div>
+    </div>
+</div>
+
+<div class="row g-2" style="margin-top:5px;">
+    <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" 
+        maxlength="100" placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui...">
+         </textarea>
+</div>
+            `)
+            $("#entrega").prop("checked", false);
+            $("#entrega").prop("disabled", false);
+            $("#diventrega").empty()
+            $("#proximo").removeAttr('disabled');
+            $("#proximo").css("background", "");
+        } else {
             $("#divretirarLocal").empty()
             $("#proximo").prop("disabled", true);
             $("#proximo").css("background", "gray");
@@ -72,24 +95,89 @@
     })
 
     $('#entrega').click(function () {
-         if($('#entrega').is(":checked")){
-        $("#diventrega").append('<div class="row g-2" style="margin-top:50px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="nome" name="nome" placeholder="0" required><label for="nome">Seu Nome *</label></div></div><div class="col-md-6"><div class="form-floating center-block rb"><input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" required><label for="telefone">Celular *</label></div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md-4"><div class="form-floating center-block ">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cep" name="cep" placeholder="0"required><label for="cep">CEP*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md"><div class="form-floating center-block"><input type="text" class="form-control" id="endereco" name="endereco" placeholder="0" required><label for="endereco">Endereço*</label></div></div><div class="col-md-3"><div class="form-floating center-block rb"><input type="text" class="form-control" id="numero" name="numero" placeholder="0" required><label for="numero">Número*</label></div></div><div class="row g-2" style="margin-top:5px;"><div class="col-md center-block rb"><div class="form-floating"><input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" required><label for="bairro">Bairro*</label></div></div><div class="col-md center-block rb"><div class="form-floating">{{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}<input type="text" class="form-control" id="cidade" name="cidade" placeholder="0" required><label for="cidade">Cidade*</label>{{else}} {{/if}}</div></div></div><div class="row g-2" style="margin-top:5px;"><textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao"placeholder="Deixe uma observação aqui..."></textarea></div></div>')
-        $("#retirarLocal").prop("checked", false)
-        $("#retirarLocal").prop("disabled", false)
-        $("#divretirarLocal").empty()
-        $("#proximo").removeAttr('disabled');
-        $("#proximo").css("background", "");
-         }else{
-             $("#diventrega").empty()
+        if ($('#entrega').is(":checked")) {
+            $("#diventrega").append(`
+                <div class="row g-2" style="margin-top:50px;">
+     <div class="col-md">
+        <div class="form-floating center-block">
+            <input type="text" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+               required  />
+            <label for="nome">Seu Nome *</label>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="form-floating center-block rb">
+            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="0" 
+                required>
+            <label for="telefone">Celular *</label>
+        </div>
+    </div>
+</div>
+<div class="row g-2" style="margin-top:5px;">
+    <div class="col-md-4">
+        <div class="form-floating center-block ">
+            {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
+            <input type="text" class="form-control" id="cep" name="cep" placeholder="0"  required>
+            <label for="cep">CEP*</label>
+            {{else}} {{/if}}
+        </div>
+    </div>
+</div>
+<div class="row g-2" style="margin-top:5px;">
+    <div class="col-md">
+        <div class="form-floating center-block">
+            <input type="text" class="form-control" id="endereco" name="endereco" placeholder="0" maxlength="55"
+                 required>
+            <label for="endereco">Endereço*</label>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="form-floating center-block rb">
+            <input type="text" class="form-control" id="numero" name="numero" placeholder="0" maxlength="35"
+                 required>
+            <label for="numero">Número*</label>
+        </div>
+    </div>
+    <div class="row g-2" style="margin-top:5px;">
+        <div class="col-md center-block rb">
+            <div class="form-floating">
+                <input type="text" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
+                     required>
+                <label for="bairro">Bairro*</label>
+            </div>
+        </div>
+        <div class="col-md center-block rb">
+            <div class="form-floating">
+                {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
+                <input type="text" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
+                      required>
+                <label for="cidade">Cidade*</label>
+                {{else}} {{/if}}
+            </div>
+        </div>
+    </div>
+    <div class="row g-2" style="margin-top:5px;">
+        <textarea rows="4" cols="50" class="form-control" id="observacao" name="observacao" maxlength="100"
+             placeholder="Caso tenha uma observação sobre a entrega, descreva ela aqui..."></textarea>
+    </div>
+</div>
+`)
+            $("#retirarLocal").prop("checked", false)
+            $("#retirarLocal").prop("disabled", false)
+            $("#divretirarLocal").empty()
+            $("#proximo").removeAttr('disabled');
+            $("#proximo").css("background", "");
+        } else {
+            $("#diventrega").empty()
             $("#proximo").prop("disabled", true);
             $("#proximo").css("background", "gray");
-         }
+        }
     })
-    
+
 </script>
 
 <script>
-  
+
     function uuidv4() { // gerador de uuidv4
         return ([1e7] + -1e3 + -4e3 + -8e3 + -1e11).replace(/[018]/g, c =>
             (c ^ crypto.getRandomValues(new Uint8Array(1))[0] & 15 >> c / 4).toString(16)
@@ -99,7 +187,7 @@
     if (!localStorage.getItem('uuid4Cliente')) { // id do cliente, salvo em localStorage, forma de busca o carrinhoda pessoa
         localStorage.setItem('uuid4Cliente', Date.now() + "-" + uuidv4() + uuidv4() + uuidv4());
         $("#uuid4Client-back").val(localStorage.getItem('uuid4Cliente'))
-         $("#uuid4Client-value").val(localStorage.getItem('uuid4Cliente'))
+        $("#uuid4Client-value").val(localStorage.getItem('uuid4Cliente'))
     }
 
     $("#uuid4Client-back").val(localStorage.getItem('uuid4Cliente'))
