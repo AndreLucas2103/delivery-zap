@@ -870,7 +870,8 @@
     
     background-color: #fff;
     width: 150px;
-    height: 40px;
+    height: 25px;
+    border-radius: 25px;
     border: none;
     box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
 }
