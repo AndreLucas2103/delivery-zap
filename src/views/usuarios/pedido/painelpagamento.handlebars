@@ -49,18 +49,16 @@
 
 
 <script>
-    $('#pgentrega').click(function () {
+    $('#pgentrega').click(function () {  
         $("#resumocompra").empty()
         if ($('#pgentrega').is(":checked")) {
             $("#formasPg").append(`
-        <select style="width:200px;border-color:#27AE60;" onchange="Selectforma(this.value)" class="form-select mt-3 mb-3" name="formaPagamento">
+        <select style="width:200px;border-color:#27AE60;" id="tipopg" onchange="Selectforma(this.value)" class="form-select mt-3 mb-3" name="formaPagamento">
             {{#each estabelecimento.configPedidos.meioPagamento}}
             <option value="{{tipo}}">{{nome}}</option>
         {{/each}}
         </select>
         <div id="troco">
-        <label for="valuedinheiro">Vai precisar de troco?</label><p>
-        <input type="number" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
         </div>
         <div hidden>
         <input type="text" name="idCarrinho" value="{{carrinho._id}}">
@@ -77,6 +75,7 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>            
         `)
+        
         
             $("#formasPgOnline").empty()
             $("#pgOnline").prop("checked", false);
@@ -126,6 +125,22 @@
 </script>
 
 <script>
+
+     $('#pgentrega').click(function () { 
+         let forma = document.querySelector('#tipopg');
+        if (forma.value != "dinheiro") {
+            $("#troco").empty()
+        } else {
+            $("#troco").append(`    
+        <label for="valuedinheiro">Vai precisar de troco?</label><p>
+        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
+               `)
+        }
+     })
+    
+</script>
+
+<script>
     function Selectforma(forma) {
         if (forma != "dinheiro") {
             $("#troco").empty()
@@ -135,7 +150,6 @@
         <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
                `)
         }
-
     }
 </script>
 

@@ -43,11 +43,16 @@
             style="font-size: 12px;color:rgb(126, 62, 59)"></i> Fechado</p>
             {{/if}}
     <hr class="w-25 text-center">
-    <input type="text" class="search rb" maxlength="15" style="border-color:{{estabelecimento.painel.colorFonte}};" hidden>
-    <br><br>
+    <div class="search-box">
+        <form method="get">
+   <a href="/estabelecimento/{{estabelecimento.url}}"></a> <button class="btn-search"><i class="fas fa-search"></i></button></a>
+    <input type="text" class="input-search" name="nome" value="{{nome}}" placeholder="Digite o nome do produto...">
+    </form>
+  </div>
 
-    {{#each produtos}}
-
+<br><br>
+   
+   {{#each produtos}}
     <span class="categoria rb">{{categoriaProdutos.nome}}</span>
     <div class="container-md">
         <div class="scrolling-wrapper" id="container-{{_id}}">

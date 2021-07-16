@@ -371,10 +371,12 @@ router.post('/checkout/finalizar', async (req, res) => {
 })
 
 router.get('/:urlPainel', async (req, res)=>{
+
+    req.query.nome ? nome = { nome: { $regex: req.query.nome, $options: "i" } } : nome = {}
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let produtos = await Produto.aggregate([
-            {$match: {$and: [{idEstabelecimento: estabelecimento._id}, {statusAtivo: true}]}},
+            {$match: {$and: [{idEstabelecimento: estabelecimento._id}, {statusAtivo: true}, nome]}},
             {
                 
                 $group:{
@@ -383,8 +385,7 @@ router.get('/:urlPainel', async (req, res)=>{
                     
                 },
             },
-
-        
+       
             {
                 $lookup:
                     {
