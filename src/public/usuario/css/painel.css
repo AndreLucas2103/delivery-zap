@@ -866,4 +866,12 @@
   pointer-events: painted;  
 }
 
+.btn-clear{
+    
+    background-color: #fff;
+    width: 150px;
+    height: 40px;
+    border: none;
+    box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
+}
 

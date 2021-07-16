@@ -48,9 +48,12 @@
    <a href="/estabelecimento/{{estabelecimento.url}}"></a> <button class="btn-search"><i class="fas fa-search"></i></button></a>
     <input type="text" class="input-search" name="nome" value="{{nome}}" placeholder="Digite o nome do produto...">
     </form>
+    <p>
+    <a href="/estabelecimento/{{estabelecimento.url}}"><button class="btn-clear" style="color:#000000;;"><i style="color: rgb(126, 62, 59);" class="fas fa-times">&nbsp;Limpar busca</i></button></a>
+    </p>
   </div>
 
-<br><br>
+<br>
    
    {{#each produtos}}
     <span class="categoria rb">{{categoriaProdutos.nome}}</span>
