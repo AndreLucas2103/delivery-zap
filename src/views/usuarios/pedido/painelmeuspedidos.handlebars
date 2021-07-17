@@ -1,52 +1,63 @@
-
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 
 <div style="margin:auto;">
     <h1 style="color:black;" class="estabelecimento rb">Meus Pedidos</h1>
 </div>
 <div>
-<center>
-    <div class="container-md" style="margin-top: 80px;" id="statuspedido">  
-  
-           {{#each pedido}}                 
+    <center>
+        {{#if pedido}}
+        <div class="container-md" style="margin-top: 80px;" id="statuspedido">
+
+            {{#each pedido}}
             <div class="card-pedidos card-style-produto text-center mt-3">
                 <img class="card-image-pedido" src="/usuario/assets/img/illustrations/icone-entrega.png">
                 <p class="card-text rb">Data: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "DD/MM/YYYY"}}</p>
-                <p class="card-text rb" style="margin-top: -15px;" >Hora: {{dataFormatTimeZone usuarioLogado.timeZone dataCriacao "HH:mm"}}</p>
-                <p class="card-text rb" style="margin-top: -15px;"><label class="format-pedido-situacao">{{{situacaoPedido situacao}}}</label></p>
-                <p class="card-value rb"  step="0.01" min="0.01">Total: <span>{{FormatValor valorTotal}}</span></p>
-                <button class="button-detalhar rb" style="background-color:#F0A431"
-                    data-bs-toggle="modal"  data-bs-target="#modal-pedido-ajax"
-                    data-bs-id="{{_id}}">Detalhes</button>
-         </div> 
-              {{/each}} 
-    </div>
-
-    <!-- Modal ver carrinho START -->
-<div class="modal fade" id="modal-pedido-ajax" tabindex="-1" aria-labelledby="modal-pedido-ajaxLabel"
-    aria-hidden="true">
-    <div class="modal-dialog">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5>Detalhes do pedido</h5>
-                <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <div class="modal-body">
-
-                <span id="carrinho-ajax-produto">
-
-                </span>
-
-                <div class="mt-3 rb" style="margin-left: 10px;font-weight: bold;font-size: 25px;">Total: <span style="font-size: 25px;color:#27AE60;"
-                        class="rb" id="carrinho-valor-total"></span></div>
+                <p class="card-text rb" style="margin-top: -15px;">Hora: {{dataFormatTimeZone usuarioLogado.timeZone
+                    dataCriacao "HH:mm"}}</p>
+                <p class="card-text rb" style="margin-top: -15px;"><label
+                        class="format-pedido-situacao">{{{situacaoPedido situacao}}}</label></p>
+                <p class="card-value rb" step="0.01" min="0.01">Total: <span>{{FormatValor valorTotal}}</span></p>
+                <button class="button-detalhar rb" style="background-color:#F0A431" data-bs-toggle="modal"
+                    data-bs-target="#modal-pedido-ajax" data-bs-id="{{_id}}">Detalhes</button>
             </div>
         </div>
-    </div>
-</div>
-<!-- Modal ver carrinho END -->
+        {{/each}}
 
-    <br><br><br><br><br><br>
-</center>
+        {{else}}
+        
+            <img style="margin-top: 100px;" id="img-carrinho" class="img-carrinho-meuspedidos"
+                src="/usuario/assets/img/illustrations/icone-nenhumpedido.png">
+                <p style="color:black;font-size: 16px;margin-top:20px;margin-bottom: 5px;">Você ainda não realizou pedidos nesse aparelho.</p>
+        {{/if}}
+
+
+        <!-- Modal ver carrinho START -->
+        <div class="modal fade" id="modal-pedido-ajax" tabindex="-1" aria-labelledby="modal-pedido-ajaxLabel"
+            aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5>Detalhes do pedido</h5>
+                        <button type="button" class="btn-close btn-sm" data-bs-dismiss="modal"
+                            aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+
+                        <span id="carrinho-ajax-produto">
+
+                        </span>
+
+                        <div class="mt-3 rb" style="margin-left: 10px;font-weight: bold;font-size: 25px;">Total: <span
+                                style="font-size: 25px;color:#27AE60;" class="rb" id="carrinho-valor-total"></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- Modal ver carrinho END -->
+
+        <br><br><br><br><br><br>
+    </center>
 </div>
 <div class="background-pedidos">
     <form method="GET" action="/estabelecimento/{{estabelecimento.url}}">
@@ -55,14 +66,14 @@
 </div>
 
 <script>
-     $(function() {
-   setTime()
-   function setTime() {
-      setTimeout(setTime, 3000);
-      $('#statuspedido').load(document.URL +  ' #statuspedido');
+    $(function () {
+        setTime()
+        function setTime() {
+            setTimeout(setTime, 3000);
+            $('#statuspedido').load(document.URL + ' #statuspedido');
 
-   }
- })
+        }
+    })
 </script>
 
 {{>_msg}}
@@ -76,9 +87,9 @@
         jQuery.ajax({
             type: "POST",
             url: '/estabelecimento/ajax-get-pedido-painel',
-            data: { idPedido: button.getAttribute('data-bs-id')},
+            data: { idPedido: button.getAttribute('data-bs-id') },
             success: function (response) {
-               
+
                 $("#carrinho-valor-total").text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(response.valorTotal))
                 response.produtos.forEach(element => {
                     $('#carrinho-ajax-produto').append(`

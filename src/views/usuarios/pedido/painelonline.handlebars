@@ -49,7 +49,7 @@
     <input type="text" autocomplete="off" class="input-search" name="nome" value="{{nome}}" placeholder="Digite o nome do produto...">
     </form>
     <p>
-    <a href="/estabelecimento/{{estabelecimento.url}}"><button class="btn-clear mt-2" style="color:#000000;;"><i style="color: rgb(126, 62, 59);" class="fas fa-times">&nbsp;Limpar busca</i></button></a>
+    {{#if filtroExist}}<a href="/estabelecimento/{{estabelecimento.url}}"><button class="btn-clear mt-3" style="color:#000000;;"><i style="color: rgb(126, 62, 59);" class="fas fa-times">&nbsp;Limpar busca</i></button></a>{{else}}{{/if}}
     </p>
   </div>
 
@@ -70,10 +70,10 @@
             </div>
             {{/each}}
         </div>
-        <button class="button-scroll-left" id="button-scroll" style="font-size:50px;"
-            onclick="clickscrollleft('{{_id}}')"><i class="fas fa-chevron-circle-left"></i></button>
-        <button class="button-scroll-right" id="button-scroll" style="font-size:50px;"
-            onclick="clickscrollright('{{_id}}')"><i class="fas fa-chevron-circle-right"></i></button>
+        <span class="button-scroll-left" id="button-scroll" style="font-size:40px;"
+            onclick="clickscrollleft('{{_id}}')" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-chevron-circle-left"></i></span>
+        <span class="button-scroll-right" id="button-scroll" style="font-size:40px;"
+            onclick="clickscrollright('{{_id}}')" style="color:{{estabelecimento.painel.colorFonte}}"><i class="fas fa-chevron-circle-right"></i></span>
     </div>
     {{/each}}
     </center>
@@ -227,7 +227,7 @@
                 </form>
             {{#if estabelecimento.statusAberto}} 
                 <button type="submit" class="mt-4"
-                    style="height: 40px;width:190px;background:#27AE60;border:none;color:white;"
+                    style="height: 40px;width:250px;background:#27AE60;border:none;color:white;"
                     id="button-submit-add-produto-carrinho">+ Adicionar no carrinho</button>
                     {{else}} {{/if}}
             </div>

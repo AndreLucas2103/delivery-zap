@@ -371,6 +371,12 @@ router.post('/checkout/finalizar', async (req, res) => {
 })
 
 router.get('/:urlPainel', async (req, res)=>{
+    
+    if (req.query.nome) {
+        filtroExist = true
+    } else {
+        filtroExist = false
+    }
 
     req.query.nome ? nome = { nome: { $regex: req.query.nome.trim(), $options: "i" } } : nome = {}
     try {
@@ -405,6 +411,7 @@ router.get('/:urlPainel', async (req, res)=>{
             estabelecimento: estabelecimento,
             produtos: produtos,
             horariosFuncionamento: JSON.stringify(estabelecimento.horarioFuncionamento),
+            filtroExist: filtroExist
         })
     } catch (err) {
         console.log(err)
