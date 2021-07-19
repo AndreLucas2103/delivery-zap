@@ -5,16 +5,15 @@
     <br>
 </div>
 <div class="container-md max-container" id="container-end">
-    
+
     <form method="POST" id="checkout-pedido" action="/estabelecimento/checkout/finalizar">
-        <div style="height:100%;background:white">        
+        <div style="height:100%;background:white">
             <center>
-              <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-venda.png">
-            <br>
-            <div>
-                
-                    
-                    Selecione a forma de entrega<br>
+                <img id="img-carrinho" class="img-entrega" src="/usuario/assets/img/illustrations/icone-venda.png">
+                <br>
+                <div>
+                    Selecione a forma de pagamento<br>
+                    {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
                     <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
                     <div class="mt-2">
                         <input style="width: 20px;height:20px;" type="checkbox" id="pgentrega"
@@ -24,7 +23,6 @@
                     <div id="formasPg">
                     </div>
 
-                    {{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}
                     <div class="mt-2">
                         <input style="width: 20px;height:20px;" type="checkbox" id="pgOnline"
                             name="pagamentoTipoSelecionado" value="mercadoPago">
@@ -32,8 +30,34 @@
                     </div>
                     <div id="formasPgOnline">
                     </div>
-                    {{else}} {{/if}}
-            </div>
+                    {{else}}
+                    <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" hidden>
+                     <input style="width: 20px;height:20px;" type="text" id="pgentrega"
+                            name="pagamentoTipoSelecionado" value="pagarRecebimento" hidden>
+                    <select style="width:200px;border-color:#27AE60;" id="tipopg" onchange="Selectforma(this.value)"
+                        class="form-select mt-3 mb-3" name="formaPagamento">
+                        {{#each estabelecimento.configPedidos.meioPagamento}}
+                        <option value="{{tipo}}">{{nome}}</option>
+                        {{/each}}
+                    </select>
+                    <div id="troco">
+                    </div>
+                    <div hidden>
+                        <input type="text" name="idCarrinho" value="{{carrinho._id}}">
+                        <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
+                        <input type="text" name="retirarLocal" value="{{dados.retirarLocal}}">
+                        <input type="text" name="entrega" value="{{dados.entrega}}">
+                        <input type="text" name="nomeCliente" value="{{dados.nome}}">
+                        <input type="text" name="cep" value="{{dados.cep}}">
+                        <input type="text" name="telefone" value="{{dados.telefone}}">
+                        <input type="text" name="rua" value="{{dados.endereco}}">
+                        <input type="text" name="numero" value="{{dados.numero}}">
+                        <input type="text" name="bairro" value="{{dados.bairro}}">
+                        <input type="text" name="cidade" value="{{dados.cidade}}">
+                        <input type="text" name="observacao" value="{{dados.observacao}}">
+                    </div>
+                    {{/if}}
+                </div>
         </div>
         </center>
 </div>
@@ -43,13 +67,13 @@
         <button type="submit" class="voltar">« Voltar</button>
     </form>
 
-    <button type="submit" form="checkout-pedido" class="proximo" id="proximo" style="background: gray;" disabled>Enviar
+    <button type="submit" form="checkout-pedido" class="proximo" id="proximo"{{#if estabelecimento.integracao.mercadoPago.testadoAtivo}}style="background: gray;" disabled{{else}}style="background: #27AE60;"{{/if}}>Enviar
         Pedido</button>
 </div>
 
 
 <script>
-    $('#pgentrega').click(function () {  
+    $('#pgentrega').click(function () {
         $("#resumocompra").empty()
         if ($('#pgentrega').is(":checked")) {
             $("#formasPg").append(`
@@ -75,8 +99,8 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>            
         `)
-        
-        
+
+
             $("#formasPgOnline").empty()
             $("#pgOnline").prop("checked", false);
             $("#pgOnline").prop("disabled", false);
@@ -111,7 +135,7 @@
         <input type="text" name="observacao" value="{{dados.observacao}}">  
         </div>
         `)
-       
+
             $("#formasPg").empty()
             $("#proximo").prop("disabled", true);
             $("#proximo").css("background", "gray");
@@ -125,9 +149,8 @@
 </script>
 
 <script>
-
-     $('#pgentrega').click(function () { 
-         let forma = document.querySelector('#tipopg');
+  $(function() {
+        let forma = document.querySelector('#tipopg');
         if (forma.value != "dinheiro") {
             $("#troco").empty()
         } else {
@@ -136,8 +159,20 @@
         <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
                `)
         }
-     })
-    
+    })
+
+    $('#pgentrega').click(function () {
+        let forma = document.querySelector('#tipopg');
+        if (forma.value != "dinheiro") {
+            $("#troco").empty()
+        } else {
+            $("#troco").append(`    
+        <label for="valuedinheiro">Vai precisar de troco?</label><p>
+        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
+               `)
+        }
+    })
+
 </script>
 
 <script>
@@ -152,4 +187,3 @@
         }
     }
 </script>
-
