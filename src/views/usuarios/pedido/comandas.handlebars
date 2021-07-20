@@ -92,28 +92,28 @@
                                             <hr>
                                                 <span class="d-block">Taxa Entrega:${formatValor(pedido.infoEntrega.taxaEntrega)}</span>
                                                 <span class="d-block">Total pedido: ${formatValor(pedido.valorTotal)}</span>
-                                                <hr id="append-endereco-${pedido._id}">
-                                                
-                                                {{#if pedido.infoEntrega.endereco.rua}}<span class="d-block">Rua: {{pedido.infoEntrega.endereco.rua}}</span>{{/if}}
-                                                {{#if pedido.infoEntrega.endereco.bairro}}<span class="d-block">Bairro: {{pedido.infoEntrega.endereco.bairro}}</span>{{/if}}
-                                                {{#if pedido.infoEntrega.endereco.cidade}}<span class="d-block">Cidade: {{pedido.infoEntrega.endereco.cidade}}</span>{{/if}}
-                                                {{#if pedido.infoEntrega.endereco.cep}}<span class="d-block">CEP: {{pedido.infoEntrega.endereco.cep}}</span>{{/if}}
-                                                {{#if pedido.infoEntrega.endereco.numero}}<span class="d-block">Número:</span>{{/if}}
-                                        </div>                                     
+                                                <hr>
+                                               
+                                                <div class="append-endereco-${pedido._id}">
+                                                 </div>
+                                        </div>                                    
                                     </div>
                                 </div>
                             </div>
                             `)
 
-                                        if (pedido.produtos.endereco) {
-                                            $(`#append-endereco-${pedido._id}`).append(`
+                                    if(pedido.infoEntrega.endereco.rua != ""){  
+                                    $(`.append-endereco-${pedido._id}`).append(`
+                                    <h6>Endereço</h6>
                                     <span class="d-block">Rua: ${pedido.infoEntrega.endereco.rua}</span>
                                     <span class="d-block">Bairro: ${pedido.infoEntrega.endereco.bairro}</span>
+                                    {{#if pedido.infoEntrega.endereco.cep}}
                                     <span class="d-block">Cidade: ${pedido.infoEntrega.endereco.cidade}</span>
                                     <span class="d-block">CEP: ${pedido.infoEntrega.endereco.cep}</span>
+                                    {{else}}{{/if}}
                                     <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
                                 `)
-                                        }
+                                        } 
 
                                         pedido.produtos.forEach(produto => {
                                             $(`#pedido-produtos-${pedido._id}`).append(`
@@ -201,7 +201,6 @@
 
 
                     }
-                </script>
                 </script>
 
             </main>
