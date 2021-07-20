@@ -383,9 +383,9 @@
                                     if (comandas.findIndex(element => element == pedido._id) == -1) {
                                         comandas.push(pedido._id)
                                         console.log('adicionar: ')
-                                        $("#edit-pedido").append(`                             
-                                <div class="col-lg-11" id="pedido-${pedido._id}">
-                                    <span class="float-end ml-3">
+                                        $("#edit-pedido").append(`                      
+                                <div class="col-lg-10" id="pedido-${pedido._id}">
+                                     <span class="float-end ml-3">
                                            <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-primary btn-sm" value="Print Div Contents" ><i class="fas fa-print" ></i>&nbspImprimir </button>
                                             </span>
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">

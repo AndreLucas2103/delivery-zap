@@ -198,15 +198,13 @@ router.post('/edit-pedidos-situacao', (req, res) => {
 })
 
 router.post('/ajax-get-pedido', async (req, res) => { //
-    console.log(req.body)
-    let pedidos = await Pedido.find({$and: [
+     let pedidos = await Pedido.find({$and: [
         {'_id': req.body.idPedido},
         {'idEstabelecimento': req.body.idEstabelecimento}
-    ]}).sort({'updateAt': -1}).populate('idEstabelecimento').lean()
+    ]}).populate('idEstabelecimento').lean()
 
     res.json(pedidos)
 })
-
 
 router.post('/search-pedido-mercadoPago', async (req, res) => {
     try {
