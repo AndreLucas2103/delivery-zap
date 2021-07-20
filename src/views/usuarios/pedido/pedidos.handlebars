@@ -195,7 +195,8 @@
                                     </ul>
                                 {{/if}}
                             </td>
-                            <td>{{tipoEntrega}}</td>
+                            <td><button class="btn btn-white btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal-edit-pedido" data-bs-whatever="{{_id}}" data-bs-estabelecimento="{{idEstabelecimento._id}}"><i class="fas fa-eye"></i>
+                                </button> {{tipoEntrega}}</td>
                             <td class="format-pedido-situacao">{{{situacaoPedido situacao}}}</td>
                             <td>
                                 {{#if pagamento.pago}}
@@ -274,6 +275,33 @@
                 </script>
 
             </div>
+            <!-- Modal Edit pedidos -->
+             <div class="modal fade" id="modal-edit-pedido" tabindex="-1" aria-labelledby="modal-edit-pedidos" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                    <div class="modal-header">
+                        <h2 class="h6 modal-title">Detalhes do pedido</h2>
+                        <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="row" id="edit-pedido">
+                </div>
+
+                </div>
+                    </div>
+                </div>
+            </div>
+
+             <script>
+                var modalSendnfomodal = document.getElementById('modal-edit-pedido')
+                modalSendnfomodal.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget
+                    $('#send-edit-id').val(button.getAttribute('data-bs-id'))
+                    $('#send-edit-estabelecimento').val(button.getAttribute('data-bs-estabelecimento'))
+                })
+            </script>
 
             <!-- Modal Envio WhatsApp -->
             <div class="modal fade" id="modal-send-msg-WhatsApp" tabindex="-1" aria-labelledby="modal-send-msg-WhatsAppLabel" aria-hidden="true">
@@ -326,6 +354,168 @@
 </div>
 </div>
 </div>
+
+ <script>
+    function formatValor(valor) {
+        return new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(valor)
+         }
+         let comandas = []
+                    var modalEditPedidos = document.getElementById('modal-edit-pedido')
+                    modalEditPedidos.addEventListener('show.bs.modal', function (event) {
+                    var button = event.relatedTarget
+                    var recipient = button.getAttribute('data-bs-whatever')
+                    var recipient2 = button.getAttribute('data-bs-estabelecimento')          
+                        jQuery.ajax({
+                            type: "POST",
+                            url: '/pedido/ajax-get-pedido',
+                            data: {idPedido: recipient, idEstabelecimento: recipient2},
+                            success: function (response) {
+                               console.log(response)
+                               
+                                comandas.forEach((comanda, index) => {
+                                    if (response.findIndex(pedido => pedido._id == comanda) == -1) {
+                                        $(`#pedido-${comanda}`).remove()
+                                        comandas.splice(index, 1)
+                                    }
+                                })
+
+                                response.forEach((pedido, index) => {
+                                    if (comandas.findIndex(element => element == pedido._id) == -1) {
+                                        comandas.push(pedido._id)
+                                        console.log('adicionar: ')
+                                        $("#edit-pedido").append(`                             
+                                <div class="col-lg-11" id="pedido-${pedido._id}">
+                                    <span class="float-end ml-3">
+                                           <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-primary btn-sm" value="Print Div Contents" ><i class="fas fa-print" ></i>&nbspImprimir </button>
+                                            </span>
+                                    <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
+                                        <div class="card-body ">                                          
+                                            <div id="comanda-${pedido._id}">
+                                            <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
+                                            <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
+                                            <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
+                                            <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
+                                            <hr>
+                                            <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>
+                                            
+                                            {{#each pedido.produtos}}
+                                                <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
+                                                    <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
+                                                </button>
+                                                <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
+                                                    {{#if opcao}}
+                                                        {{#each opcao}}
+                                                            <span class="my-1 d-block">{{nomeOpcao}}: 
+                                                                {{#each opcoes}}
+                                                                    <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                                                {{/each}}
+                                                            </span>
+                                                        {{/each}}
+                                                    {{/if}}
+                                                    
+                                                    {{#if adicionais}}
+                                                        <span class="my-1">Adicionais: 
+                                                            {{#each adicionais}}
+                                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
+                                                            {{/each}}
+                                                        </span>
+                                                    {{/if}}
+
+                                                    {{#if observacao}}
+                                                        <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
+                                                    {{/if}}
+                                                    
+                                                    <span class="d-block">Qtd: {{quantidade}}</span>
+                                                    <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
+                                                </div>
+                                                
+                                            {{/each}}
+
+                                            <hr>
+                                                <span class="d-block">Taxa Entrega:${formatValor(pedido.infoEntrega.taxaEntrega)}</span>
+                                                <span class="d-block">Total pedido: ${formatValor(pedido.valorTotal)}</span>
+                                                <hr>
+                                               
+                                                <div class="append-endereco-${pedido._id}">
+                                                 </div>
+                                        </div>                                    
+                                    </div>
+                                </div>
+                            </div>
+                            `)
+
+                                    if(pedido.infoEntrega.endereco.rua != ""){  
+                                    $(`.append-endereco-${pedido._id}`).append(`
+                                    <h6>Endereço</h6>
+                                    <span class="d-block">Rua: ${pedido.infoEntrega.endereco.rua}</span>
+                                    <span class="d-block">Bairro: ${pedido.infoEntrega.endereco.bairro}</span>
+                                    {{#if pedido.infoEntrega.endereco.cep}}
+                                    <span class="d-block">Cidade: ${pedido.infoEntrega.endereco.cidade}</span>
+                                    <span class="d-block">CEP: ${pedido.infoEntrega.endereco.cep}</span>
+                                    {{else}}{{/if}}
+                                    <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
+                                `)
+                                        } 
+
+                                        pedido.produtos.forEach(produto => {
+                                            $(`#pedido-produtos-${pedido._id}`).append(`
+                                    <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
+                                        <i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
+                                    </button>
+                                    <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-${produto._id}">
+                                        
+                                        <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-opcao"></span>
+
+                                        <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-adicionais">Adicionais: </span>
+                                        
+                                        ${produto.observacao ? `<span class="d-block" class="my-1">Obeservação: ${produto.observacao} </span>` : ``}
+                                        
+                                        
+                                        <span class="d-block">Qtd: ${produto.quantidade}</span>
+                                        <span class="d-block">Total: <span class="valorFormatar">${formatValor(produto.valorTotal)}</span></span>
+                                    </div>
+                                    
+                                `)
+
+                                            produto.opcao.forEach(opcao => {
+                                                $(`#pedido-${pedido._id}-produto-${produto._id}-opcao`).append(`
+                                        <span class="my-1 d-block" id="pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes">${opcao.nomeOpcao}: </span>
+                                    `)
+
+                                                opcao.opcoes.forEach(opcoes => {
+                                                    $(`#pedido-${pedido._id}-produto-${produto._id}-opcao-${opcao._id}-opcoes`).append(`
+                                            <span>${opcoes.nome} - ${formatValor(opcoes.valor)};</span>
+                                        `)
+                                                })
+                                            })
+
+                                            produto.adicionais.length == 0 ? $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).remove() : produto.adicionais.forEach(adiconal => { $(`#pedido-${pedido._id}-produto-${produto._id}-adicionais`).append(` <span>${adiconal.nome} - ${formatValor(adiconal.valor)};</span>`) })
+                                        })
+
+                                    }
+                                })
+                                   
+                            }
+                        });
+                    })
+                    </script>
+
+                     <script>
+                    function printContent(el, el2, el3) {
+                        $(`#comanda-${el}`).addClass("printable pagebreak");
+                        $(`#comanda-${el}`).css("width", el2);
+                        $(`#comanda-${el}`).css("font-size", el3);
+                        window.print();
+
+                        window.close()
+                        $(`#comanda-${el}`).css("width", "");
+                        $(`#comanda-${el}`).css("font-size", "");
+                        $(`#comanda-${el}`).removeClass("printable pagebreak");
+
+
+                    }
+                </script>
+
 <script>
      $(function() {     
    setTime()

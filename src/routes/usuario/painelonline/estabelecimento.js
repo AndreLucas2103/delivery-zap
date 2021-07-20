@@ -436,8 +436,6 @@ router.get('/:urlPainel/meuspedidos', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let pedido = await Pedido.find({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).sort({ _id: -1 }).lean()
-
-        console.log(pedido)
         res.render('usuarios/pedido/painelmeuspedidos', {
             estabelecimento: estabelecimento,
             pedido: pedido

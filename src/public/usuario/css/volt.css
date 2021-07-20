@@ -22765,6 +22765,15 @@ button.close {
     }
 }
 
+hr {
+    display: block;
+    height: 1px;
+    background: solid;
+    width: 100%;
+    border: none;
+    border-top: solid 1px rgb(0, 0, 0);
+}
+
 @media print {
     .d-print-none {
         display: none !important;
