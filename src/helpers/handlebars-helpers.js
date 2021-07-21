@@ -34,7 +34,7 @@ Handlebars.registerHelper('situacaoPedido', function(pedido) {
             return ('<i class="fas fa-clock"></i> Pedido enviado')
             break;
         case 'production':
-            return ('<i class="fas fa-spinner text-warning"></i> Aceito, em preparo')
+            return ('<i class="fas fa-hamburger"></i> Preparando seu pedido')
             break;
         case 'concluded':
             return ('<i class="fas fa-check text-success"></i> Concluido')
