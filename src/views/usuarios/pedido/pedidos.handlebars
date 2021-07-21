@@ -157,7 +157,7 @@
                                 </button>
                                 <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{_id}}">
                                     <li class="mx-3"><a class="btn btn-sm" href="/pedido/pedido?pedido={{_id}}"><i class="fas fa-eye"></i> Ver</a></li>
-                                    <li class="mx-3 mt-2"><a class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-pedido" data-bs-whatever="{{_id}}" data-bs-estabelecimento="{{idEstabelecimento._id}}"><i class="fas fa-print" ></i> Detalhar</a></li>
+                                    <li class="mx-3 mt-2"><a class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-pedido" data-bs-whatever="{{_id}}" data-bs-estabelecimento="{{idEstabelecimento._id}}"><i class="fas fa-print" ></i> Comanda</a></li>
                                     <form action="/pedido/edit-pedidos-situacao" method="post">
                                         <input type="text" name="idPedido" value="{{_id}}" hidden readonly>
                                         <li><hr class="dropdown-divider"></li>
@@ -387,7 +387,7 @@
                                         <span class="float-start mb-2" id="ButtonImpress">
                                            <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-primary btn-sm" value="Print Div Contents" ><i class="fas fa-print" ></i>&nbspImprimir </button>
                                             </span>                    
-                                <div class="col-lg-8 ml-6" id="pedido-${pedido._id}">
+                                <div class="col-lg-8" id="pedido-${pedido._id}">
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
                                         <div class="card-body ">                                          
                                             <div id="comanda-${pedido._id}">
@@ -396,41 +396,7 @@
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
                                             <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
                                             <hr>
-                                            <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>
-                                            
-                                            {{#each pedido.produtos}}
-                                                <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
-                                                    <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
-                                                </button>
-                                                <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
-                                                    {{#if opcao}}
-                                                        {{#each opcao}}
-                                                            <span class="my-1 d-block">{{nomeOpcao}}: 
-                                                                {{#each opcoes}}
-                                                                    <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                                                {{/each}}
-                                                            </span>
-                                                        {{/each}}
-                                                    {{/if}}
-                                                    
-                                                    {{#if adicionais}}
-                                                        <span class="my-1">Adicionais: 
-                                                            {{#each adicionais}}
-                                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                                            {{/each}}
-                                                        </span>
-                                                    {{/if}}
-
-                                                    {{#if observacao}}
-                                                        <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
-                                                    {{/if}}
-                                                    
-                                                    <span class="d-block">Qtd: {{quantidade}}</span>
-                                                    <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
-                                                </div>
-                                                
-                                            {{/each}}
-
+                                            <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>      
                                             <hr>
                                                 <span class="d-block">Taxa Entrega:${formatValor(pedido.infoEntrega.taxaEntrega)}</span>
                                                 <span class="d-block">Total pedido: ${formatValor(pedido.valorTotal)}</span>
@@ -459,10 +425,10 @@
 
                                         pedido.produtos.forEach(produto => {
                                             $(`#pedido-produtos-${pedido._id}`).append(`
-                                    <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
+                                    <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145);font-size:18px;font-weight: bold;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
                                         <i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
                                     </button>
-                                    <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-${produto._id}">
+                                    <div class="collapse show " id="collapse-comanda-produto-${produto._id}">
                                         
                                         <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-opcao"></span>
 
