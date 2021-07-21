@@ -157,7 +157,7 @@
                                 </button>
                                 <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{_id}}">
                                     <li class="mx-3"><a class="btn btn-sm" href="/pedido/pedido?pedido={{_id}}"><i class="fas fa-eye"></i> Ver</a></li>
-                                    
+                                    <li class="mx-3 mt-2"><a class="btn btn-sm" data-bs-toggle="modal" data-bs-target="#modal-edit-pedido" data-bs-whatever="{{_id}}" data-bs-estabelecimento="{{idEstabelecimento._id}}"><i class="fas fa-print" ></i> Detalhar</a></li>
                                     <form action="/pedido/edit-pedidos-situacao" method="post">
                                         <input type="text" name="idPedido" value="{{_id}}" hidden readonly>
                                         <li><hr class="dropdown-divider"></li>
@@ -195,8 +195,7 @@
                                     </ul>
                                 {{/if}}
                             </td>
-                            <td><button class="btn btn-white btn-sm" type="button" data-bs-toggle="modal" data-bs-target="#modal-edit-pedido" data-bs-whatever="{{_id}}" data-bs-estabelecimento="{{idEstabelecimento._id}}"><i class="fas fa-eye"></i>
-                                </button> {{tipoEntrega}}</td>
+                            <td>{{tipoEntrega}}</td>
                             <td class="format-pedido-situacao">{{{situacaoPedido situacao}}}</td>
                             <td>
                                 {{#if pagamento.pago}}
@@ -521,7 +520,7 @@
    setTime()
      
    function setTime() {
-      setTimeout(setTime, 10000);
+      setTimeout(setTime, 20000);
       $('#loadpedidos').load(document.URL +  ' #loadpedidos');
       $('#loadscript').load(' #loadscript');
 

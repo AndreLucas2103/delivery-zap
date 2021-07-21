@@ -31,16 +31,16 @@ Handlebars.registerHelper('situacaoPedido', function(pedido) {
             return ('<i class="fas fa-times-circle text-danger"></i> Cancelado')
             break;
         case 'waiting':
-            return ('<i class="fas fa-clock"></i> Aguardando')
+            return ('<i class="fas fa-clock"></i> Pedido enviado')
             break;
         case 'production':
-            return ('<i class="fas fa-spinner text-warning"></i> Produção')
+            return ('<i class="fas fa-spinner text-warning"></i> Aceito, em preparo')
             break;
         case 'concluded':
             return ('<i class="fas fa-check text-success"></i> Concluido')
             break;
         case 'delivery':
-            return ('<i class="fas fa-truck"></i> Entrega')
+            return ('<i class="fas fa-truck"></i> Saindo para entrega')
             break;
         case 'finished':
             return ('<i class="fas fa-check-circle text-success"></i> Finalizado')
