@@ -44276,17 +44276,9 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 @media print {
     
 
-    @page 
-    {
-        size: auto;   
-        margin-left: 1mm;
-        margin-top: 0;
-        visibility: hidden; 
-    }
-    body {
-        visibility: hidden;
-        background: none;
-      }
+    @page { margin: 0; }
+    body { margin: 1.6cm;
+     }
 
     .printable {
         background-color: white;
