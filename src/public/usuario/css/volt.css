@@ -44284,10 +44284,12 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
     }
     body {
         visibility: hidden;
+        background: none;
       }
 
     .printable {
         color:black;
+        background: none;
         position: fixed;
         left: 0;
         top: 0;
