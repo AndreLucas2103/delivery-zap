@@ -22774,44 +22774,6 @@ hr {
     border-top: solid 1px rgb(0, 0, 0);
 }
 
-@media print {
-    .d-print-none {
-        display: none !important;
-    }
-
-    .d-print-inline {
-        display: inline !important;
-    }
-
-    .d-print-inline-block {
-        display: inline-block !important;
-    }
-
-    .d-print-block {
-        display: block !important;
-    }
-
-    .d-print-table {
-        display: table !important;
-    }
-
-    .d-print-table-row {
-        display: table-row !important;
-    }
-
-    .d-print-table-cell {
-        display: table-cell !important;
-    }
-
-    .d-print-flex {
-        display: flex !important;
-    }
-
-    .d-print-inline-flex {
-        display: inline-flex !important;
-    }
-}
-
 .headroom {
     will-change: transform;
     background-color: inherit;
@@ -44317,13 +44279,15 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
     @page 
     {
         size: auto;   
-        margin: 5mm; 
+        margin-left: 1mm;
+        margin-top: 0; 
     }
     body {
         visibility: hidden;
       }
 
     .printable {
+        color:black;
         position: fixed;
         left: 0;
         top: 0;

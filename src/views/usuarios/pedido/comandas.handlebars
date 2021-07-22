@@ -46,7 +46,6 @@
                                         <div class="card-body ">
                                             <span class="float-end">
                                                 <button type="button" onclick="clickButtonConcluirComanda('concluded', '${pedido._id}')" class="btn btn-sm button-concluir-comanda" ><i class="fas fa-check text-success" ></i> </button>
-                                                 <button type="button" onclick="printContent('${pedido._id}', '${pedido.idEstabelecimento.impressora.bobina}','${pedido.idEstabelecimento.impressora.fonte}')" class="btn btn-sm button-concluir-comanda" value="Print Div Contents" ><i class="fas fa-print" ></i> </button>
                                             </span>
                                             <div id="comanda-${pedido._id}">
                                             <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
@@ -55,40 +54,6 @@
                                             <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
                                             <hr>
                                             <span class="d-block" id="pedido-produtos-${pedido._id}">Produtos:</span>
-                                            
-                                            {{#each pedido.produtos}}
-                                                <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145)" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-{{_id}}" >
-                                                    <i class="fas fa-list"></i> {{nome}} - <span class="valorFormatar">{{valor}}</span>
-                                                </button>
-                                                <div class="collapse show " style="font-weight: 900;" id="collapse-comanda-produto-{{_id}}">
-                                                    {{#if opcao}}
-                                                        {{#each opcao}}
-                                                            <span class="my-1 d-block">{{nomeOpcao}}: 
-                                                                {{#each opcoes}}
-                                                                    <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                                                {{/each}}
-                                                            </span>
-                                                        {{/each}}
-                                                    {{/if}}
-                                                    
-                                                    {{#if adicionais}}
-                                                        <span class="my-1">Adicionais: 
-                                                            {{#each adicionais}}
-                                                                <span>{{nome}} - <span class="valorFormatar">{{valor}}</span>,</span>
-                                                            {{/each}}
-                                                        </span>
-                                                    {{/if}}
-
-                                                    {{#if observacao}}
-                                                        <span class="d-block" class="my-1">Obeservação: {{observacao}}</span>
-                                                    {{/if}}
-                                                    
-                                                    <span class="d-block">Qtd: {{quantidade}}</span>
-                                                    <span class="d-block">Total: <span class="valorFormatar">{{valorTotal}}</span></span>
-                                                </div>
-                                                
-                                            {{/each}}
-
                                             <hr>
                                                 <span class="d-block">Taxa Entrega:${formatValor(pedido.infoEntrega.taxaEntrega)}</span>
                                                 <span class="d-block">Total pedido: ${formatValor(pedido.valorTotal)}</span>
@@ -186,23 +151,6 @@
                     }
 
                 </script>
-
-                <script>
-                    function printContent(el, el2, el3) {
-                        $(`#comanda-${el}`).addClass("printable pagebreak");
-                        $(`#comanda-${el}`).css("width", el2);
-                        $(`#comanda-${el}`).css("font-size", el3);
-                        window.print();
-
-                        window.close()
-                        $(`#comanda-${el}`).css("width", "");
-                        $(`#comanda-${el}`).css("font-size", "");
-                        $(`#comanda-${el}`).removeClass("printable pagebreak");
-
-
-                    }
-                </script>
-
             </main>
 
         </div>

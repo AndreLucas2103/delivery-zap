@@ -391,7 +391,7 @@
                                     <div class="card shadow-sm border-light justify-content-between" style="font-size: small; background-color:rgb(255, 237, 189)">
                                         <div class="card-body ">                                          
                                             <div id="comanda-${pedido._id}">
-                                            <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente} </span>
+                                            <span class="d-block">Nome: ${pedido.infoEntrega.nomeCliente}</span>
                                             <span class="d-block">Telefone: ${pedido.infoEntrega.telefone}</span>
                                             <span class="d-block">Tipo Entrega: ${pedido.tipoEntrega}</span>
                                             <span class="d-block"><i class="fas fa-map-marker-alt text-danger"></i> ${pedido.idEstabelecimento.nome}</span>
@@ -414,20 +414,21 @@
                                     $(`.append-endereco-${pedido._id}`).append(`
                                     <h6>Endereço</h6>
                                     <span class="d-block">Rua: ${pedido.infoEntrega.endereco.rua}</span>
+                                    <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
                                     <span class="d-block">Bairro: ${pedido.infoEntrega.endereco.bairro}</span>
                                     {{#if pedido.infoEntrega.endereco.cep}}
                                     <span class="d-block">Cidade: ${pedido.infoEntrega.endereco.cidade}</span>
                                     <span class="d-block">CEP: ${pedido.infoEntrega.endereco.cep}</span>
-                                    {{else}}{{/if}}
-                                    <span class="d-block">Número: ${pedido.infoEntrega.endereco.numero}</span>
+                                    {{else}}{{/if}}   
                                 `)
                                         } 
 
                                         pedido.produtos.forEach(produto => {
                                             $(`#pedido-produtos-${pedido._id}`).append(`
-                                    <button class="btn btn-sm my-2 d-block" style="background-color:rgb(252, 223, 145);font-size:18px;font-weight: bold;" type="button" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
-                                        <i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
-                                    </button>
+                                            <br>
+                                    <span style="width:29px;background-color:rgb(252, 223, 145);font-weight:bold;border-radius:10px;width:${pedido.idEstabelecimento.impressora.bobina};" data-bs-toggle="collapse" data-bs-target="#collapse-comanda-produto-${produto._id}" >
+                                        &nbsp<i class="fas fa-list"></i> ${produto.nome} - <span class="valorFormatar">${formatValor(produto.valor)}</span>
+                                    </span>
                                     <div class="collapse show " id="collapse-comanda-produto-${produto._id}">
                                         
                                         <span class="my-1" id="pedido-${pedido._id}-produto-${produto._id}-opcao"></span>
