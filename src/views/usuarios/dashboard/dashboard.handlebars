@@ -5,6 +5,10 @@
 <div class="col-12">
 {{>usuario/_menu}}
 
+<script src="https://cdn.jsdelivr.net/npm/chart.js@3.4.1/dist/chart.min.js" integrity="sha256-GMN9UIJeUeOsn/Uq4xDheGItEeSpI5Hcfp/63GclDZk=" crossorigin="anonymous"></script>
+
+
+
 <main class="content">
     
     <div class="">
@@ -14,9 +18,332 @@
             </ol>
         </nav>
     </div>
-    
+
     <div>
-        
+        <div class="row">
+            <div class="col-12 col-sm-4 col-lx-4 mb-4">
+                <div class="card border-light shadow-sm">
+                    <div class="card-body">
+                        <div class="row d-block d-xl-flex align-items-center">
+                            <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                <div class="icon icon-shape icon-md icon-shape-primary rounded mr-4 mr-sm-0"><span class="fas fa-clock"></span></div>
+                                <div class="d-sm-none">
+                                    <h2 class="h5">Aguardando </h2>
+                                    <h3 class="mb-1">{{pedidos_aguardando}} Pedidos</h3>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-7 px-xl-0">
+                                <div class="d-none d-sm-block">
+                                    <h2 class="h5">Aguardando</h2>
+                                    <h3 class="mb-1">{{pedidos_aguardando}} Pedidos</h3>
+                                </div>
+                                <div class="small mt-2">                               
+                                    Contagem de 7 dias
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-xl-4 mb-4">
+                <div class="card border-light shadow-sm">
+                    <div class="card-body">
+                        <div class="row d-block d-xl-flex align-items-center">
+                            <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                <div class="icon icon-shape icon-md icon-shape-warning rounded mr-4 mr-sm-0"><span class="fas fa-spinner"></span></div>
+                                <div class="d-sm-none">
+                                    <h2 class="h5">Andamento </h2>
+                                    <h3 class="mb-1">{{pedidos_andamento}} Pedidos</h3>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-7 px-xl-0">
+                                <div class="d-none d-sm-block">
+                                    <h2 class="h5">Andamento</h2>
+                                    <h3 class="mb-1">{{pedidos_andamento}} Pedidos</h3>
+                                </div>
+                                <div class="small mt-2">                               
+                                    Contagem de 7 dias
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-12 col-sm-4 col-xl-4 mb-4">
+                <div class="card border-light shadow-sm">
+                    <div class="card-body">
+                        <div class="row d-block d-xl-flex align-items-center">
+                            <div class="col-12 col-xl-5 text-xl-center mb-3 mb-xl-0 d-flex align-items-center justify-content-xl-center">
+                                <div class="icon icon-shape icon-md icon-shape-success rounded mr-4 mr-sm-0"><span class="fas fa-check-circle"></span></div>
+                                <div class="d-sm-none">
+                                    <h2 class="h5">Finalizados </h2>
+                                    <h3 class="mb-1">{{pedidos_finalizado}} Pedidos</h3>
+                                </div>
+                            </div>
+                            <div class="col-12 col-xl-7 px-xl-0">
+                                <div class="d-none d-sm-block">
+                                    <h2 class="h5">Finalizados</h2>
+                                    <h3 class="mb-1">{{pedidos_finalizado}} Pedidos</h3>
+                                </div>
+                                <div class="small mt-2">                               
+                                    Contagem de 7 dias
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-5">
+                <div class="card card-body  m-1" id="pedidos-cacelados-finalizados">
+                    <canvas id="myChart" width="200" height="200"></canvas>
+                    <script>
+                        $.ajax({
+                            method:"POST",
+                            url: '/dashboard/chart-pedidos-cancelados-finalizados',
+                            data: {},
+                            success: function (data) {
+                                if(data.canceled == 0 && data.finished == 0) {
+                                    $('#pedidos-cacelados-finalizados').html('Pedidos Cancelados e Finalizados (30 dias) <hr> <div class="display-5">Nenhum resultado listado</div>')
+                                }else{
+                                    var ctx1 = document.getElementById('myChart').getContext('2d');
+                                    var myChart1 = new Chart(ctx1, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: ['Cancelados', 'Finalizados'],
+                                            datasets: [{
+                                                data: [data.canceled, data.finished],
+                                                backgroundColor: [
+                                                    '#fca7a7',
+                                                    '#99a3f7',
+                                                ],
+                                            }],
+                                        },
+                                        options: {
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Pedidos Cancelados e Finalizados (30 dias)',
+                                                    font: {
+                                                        size: 18
+                                                    }
+                                                },
+                                                legend: {
+                                                    display: true,
+                                                    labels: {
+                                                        datasetIndex: 1,
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    });
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div class="col-lg-7">
+                <div class="card card-body m-1" >
+                    <h5 class="text-center">Últimos 5 Pedidos</h5>
+                    <div class="table-responsive">
+                        <table class="table table-centered table-nowrap mb-0 rounded">
+                            <thead class="thead-light">
+                                <tr>
+                                    <th class="border-0">#</th>
+                                    <th class="border-0">Nome Cliente</th>
+                                    <th class="border-0">Telefone Cliente</th>
+                                    <th class="border-0">Data</th>
+                                    <th class="border-0">Valor Total</th>
+                                    <th class="border-0">Tipo Pagamento</th>
+                                    <th class="border-0">Tipo Entrega</th>
+                                    <th class="border-0">Situação</th>
+                                    <th class="border-0">Pagamento</th>
+                                    <th>Estabelecimento</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {{#each pedidos}}
+                                <!-- Item -->
+                                <tr>
+                                    <td>
+                                        <button class="btn btn-white btn-sm" type="button" id="dropdown-options-{{_id}}" data-bs-toggle="dropdown" >
+                                            <i class="fas fa-ellipsis-v"></i>
+                                        </button>
+                                        <ul class="dropdown-menu" style="min-width: auto" aria-labelledby="dropdown-options-{{_id}}">
+                                            <li class="mx-3"><a class="btn btn-sm" href="/pedido/pedido?pedido={{_id}}"><i class="fas fa-eye"></i> Ver</a></li>
+                                        </ul>
+                                    </td>
+                                
+                                    <td><span class="text-primary font-weight-bold">{{infoEntrega.nomeCliente}}</span> </td>
+                                    <td>
+                                        <span class="text-primary font-weight-bold">{{infoEntrega.telefone}}  </span> 
+                                    </td>
+                                    <td>{{dataFormatTimeZone ../usuarioLogado.timeZone dataCriacao "DD/MM/YYYY HH:mm"}}</td>
+                                    <td>{{FormatValor valorTotal}}</td>
+                                    <td>{{pagamento.tipo}}
+                                        {{#if pagamento.forma}}
+                                            <button class="btn btn-white btn-sm" type="button" id="dropdown-pagamento-{{_id}}" data-bs-toggle="dropdown" >
+                                                +
+                                            </button>
+                                            <ul class="dropdown-menu" aria-labelledby="dropdown-pagamento-{{_id}}">
+                                                <div class="m-2">Forma: {{pagamento.forma}}</div>
+                                                {{#if pagamento.trocoPara}}
+                                                    <div class="m-2">Troco para: <span class="valorFormatar">{{pagamento.trocoPara}}</span></div>
+                                                {{/if}}
+                                            </ul>
+                                        {{/if}}
+                                    </td>
+                                    <td>{{tipoEntrega}}</td>
+                                    <td class="format-pedido-situacao">{{{situacaoPedido situacao}}}</td>
+                                    <td>
+                                        {{#if pagamento.pago}}
+                                            <i class="fas fa-check-circle text-success"></i> PAGO
+                                        {{else}}
+                                            {{#if infoTransacao.pedidoPago}}
+                                                <i class="fas fa-check-circle text-success"></i> PAGO
+                                            {{else}}
+                                                {{#if infoTransacao.pedidoCancelado}}
+                                                    <i class="fas fa-times-circle text-danger"></i> CANCELADO
+                                                {{else}}
+                                                    <i class="fas fa-clock"></i> Aguardando
+                                                {{/if}}
+                                            {{/if}}
+                                        {{/if}}
+                                    </td>
+                                    <td>{{idEstabelecimento.nome}}</td>
+                                </tr>
+                                <!-- End of Item -->
+                                {{/each}}
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card card-body  m-1" id="pedidos-retiradosEstabelecimento-entregas">
+                    <canvas id="chart-pedidos-retiradosEstabelecimento-entregas" width="200" height="200"></canvas>
+                    <script>
+                        $.ajax({
+                            method:"POST",
+                            url: '/dashboard/chart-pedidos-retiradosEstabelecimento-entregas',
+                            data: {},
+                            success: function (data) {
+                                if(data.retirar == 0 && data.entregas == 0) {
+                                    $('#pedidos-retiradosEstabelecimento-entregas').html('Pedidos de entregas e retirada no estabelecimento (30 dias) <hr> <div class="display-5">Nenhum resultado listado</div>')
+                                }else{
+                                    var ctx2 = document.getElementById('chart-pedidos-retiradosEstabelecimento-entregas').getContext('2d');
+                                    var myChart2 = new Chart(ctx2, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: ['Retirar Estabelecimento', 'Entregas'],
+                                            datasets: [{
+                                                data: [data.retirar, data.entregas],
+                                                backgroundColor: [
+                                                    '#383594',
+                                                    '#998d36',
+                                                ],
+                                            }],
+                                        },
+                                        options: {
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Pedidos de entregas e retirada no estabelecimento (30 dias)',
+                                                    font: {
+                                                        size: 18
+                                                    }
+                                                },
+                                                legend: {
+                                                    display: true,
+                                                    labels: {
+                                                        datasetIndex: 1,
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    });
+                                }
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+            <div class="col-lg-6">
+                <div class="card card-body  m-1" id="pedidos-meio-pagamento-pagarRecebimento">
+                    <canvas id="chart-pedidos-meio-pagamento-pagarRecebimento" width="200" height="200"></canvas>
+                    <script>
+                        $.ajax({
+                            method:"POST",
+                            url: '/dashboard/chart-pedidos-meio-pagamento-pagarRecebimento',
+                            data: {},
+                            success: function (data) {
+                                
+                                let meios = data.map(v => v._id === "cartaoCredito" ? "Cartão Crédito" : 
+                                    v._id === "cartaoDebito" ? "Cartão Débito" :
+                                    v._id === "dinheiro" ? "Dinheiro" :
+                                    v._id === "pix" ? "PIX" : 'error'
+                                )
+                                let meiosValor = data.map(v => v.count)
+
+                                
+                                    var ctx3 = document.getElementById('chart-pedidos-meio-pagamento-pagarRecebimento').getContext('2d');
+                                    var myChart3 = new Chart(ctx3, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: meios,
+                                            datasets: [{
+                                                data: meiosValor,
+                                                backgroundColor: [
+                                                    '#581845',
+                                                    '#900C3F',
+                                                    '#C70039',
+                                                    '#FF5733',
+                                                ],
+                                            }],
+                                        },
+                                        options: {
+                                            plugins: {
+                                                title: {
+                                                    display: true,
+                                                    text: 'Meios de pagamento (30 dias)',
+                                                    font: {
+                                                        size: 18
+                                                    }
+                                                },
+                                                subtitle: {
+                                                    display: true,
+                                                    text: 'Somente listados os que pagam em recebimento',
+                                                },
+                                                legend: {
+                                                    display: true,
+                                                    labels: {
+                                                        datasetIndex: 1,
+                                                    }
+                                                }
+                                            }
+                                        }
+                                        
+                                    });
+                            }
+                        });
+                    </script>
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
 </main>
@@ -24,6 +351,8 @@
 </div>
 </div>
 </div>
+
+
 
 {{>usuario/_rodape}}
 
