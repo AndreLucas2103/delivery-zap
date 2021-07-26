@@ -61,18 +61,28 @@
             </div>
             <div class="modal-body">
                 <form id="form-enviar-confirmacao" action="/acessos/mail-senha" method="POST">
-
                     <div class="col-md">
                         <div class="form-floating">
                             <input type="text" class="form-control" id="emailtroca" name="emailtroca" placeholder="0">
                             <label for="emailtroca">Digite seu e-mail</label>
                         </div>
                     </div>
-                    <button type="submit" id="enviaemail" class="btn btn-primary">Enviar</button>
-
+                    <button type="submit" id="enviaemail" class="btn btn-primary mt-2">Enviar</button>
                 </form>
+            </div>
+        </div>
+    </div>
+</div>
 
-                <form id="form-confirma-token" action="/acessos/reset-senha" method="POST">
+<div class="modal fade" id="trocarsenha2" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Trocar Senha</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">              
+                        <form id="form-confirma-token" action="/acessos/reset-senha" method="POST">
                     <input type="hidden" id="receberemail" name="receberemail">
                     <div class="col-md">
                         <div class="form-floating">
@@ -80,25 +90,23 @@
                             <label for="token">Chave recebida</label>
                         </div>
                     </div>
-                    <div class="col-md">
+                    <div class="col-md mt-2">
                         <div class="form-floating">
                             <input type="password" class="form-control" id="senhanova" name="senhanova" placeholder="0">
                             <label for="senhanova">Digite sua nova senha</label>
                         </div>
                     </div>
-
-                    <button id="trocasenha" class="btn btn-primary">Salvar</button>
+                    <button id="trocasenha" class="btn btn-primary mt-2">Salvar</button>
                 </form>
             </div>
         </div>
     </div>
 </div>
+
+
 </body>
 <script>
-    $("#spinner-loading").remove();
-     $("#style-body").remove();
-    $('#form-confirma-token').hide()
-    $('#form-enviar-confirmacao').submit(() => {
+    $('#form-enviar-confirmacao').submit(() => {      
         let emailtroca = $('#emailtroca').val()
         event.preventDefault()
         jQuery.ajax({
@@ -107,11 +115,13 @@
             data: { emailtroca: emailtroca },
             success: function (response) {
                 if (response.responseid == 200) {
+                    spinngLoading(false)
                     $('#receberemail').val(emailtroca)
-                    $('#form-confirma-token').show()
-                    $('#form-enviar-confirmacao').hide()
+                    $('#trocarsenha').modal('hide')
+                    $('#trocarsenha2').modal('show')                  
                 }
                 if (response.responseid == 100) {
+                     spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',
@@ -144,7 +154,7 @@
             data: { receberemail: receberemail, senhanova: senhanova, token: token },
             success: function (response) {
                 if (response.responseid == 200) {
-
+                    spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'success',
@@ -158,9 +168,9 @@
                         })
 
                     })
-
                 }
                 if (response.responseid == 100) {
+                     spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',
@@ -171,6 +181,7 @@
                     })
                 }
                 if (response.responseid == 125) {
+                     spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',

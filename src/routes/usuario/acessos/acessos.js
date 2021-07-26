@@ -216,6 +216,39 @@ router.post('/mail-senha', async (req, res) => {
     }
 })
 
+router.post('/reset-senha', async (req, res) => {
+    try {
+        const user = await Usuario.findOne({ email: req.body.receberemail })
+            .select('+senhaResetToken senhaResetExpires')
+        const now = new Date();
+        if (req.body.token !== user.senhaResetToken || now > user.senhaResetExpires) {
+            res.json({ responseid: 100 })
+        } if (req.body.senhanova == null || req.body.senhanova.length < 4) {
+            res.json({ responseid: 125 })
+        } else {
+
+            res.json({ responseid: 200 })
+
+            user.senha = req.body.senhanova
+            bcryptjs.genSalt(10, (erro, salt) => {
+                bcryptjs.hash(user.senha, salt, (erro, hash) => {
+                    if (erro) {
+                    }
+                    user.senha = hash
+                    user.save().then(() => {
+
+                    }).catch((erro) => {
+                        console.log(erro)
+                    })
+                })
+            })
+
+        }
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 router.post('/trocar-senha', async (req, res) => { // rota para edicao do perfil, apenas o dados
 
     Usuario.findById({ _id: req.body.valueid }).then(usuario => {
