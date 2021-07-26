@@ -47,11 +47,50 @@ router.get('/', async (req, res) => {
             ]
         }).sort({'dataCriacao': -1}).limit(5).lean().populate('idEstabelecimento')
 
+        let adicionais_mais_pedidos = await Pedido.aggregate([
+            {'$match': {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}} },
+            {'$unwind': '$produtos'},
+            {'$unwind': '$produtos.adicionais'},
+            {
+                $group:{
+                    _id: '$produtos.adicionais.nome', 
+                    count: { $sum: 1 }
+                },
+            }, 
+            {'$sort': {'count': -1}},
+            {'$limit': 5}
+        ])
+
+        let produtos_mais_vendidos = await Pedido.aggregate([
+            {'$match': {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}} },
+            {'$unwind': '$produtos'},
+            {
+                $group:{
+                    _id: '$produtos.idProduto', 
+                    count: { $sum: 1 }
+                },
+            }, 
+            {
+                $lookup:
+                    {
+                        from: "produtos",
+                        localField: "_id",
+                        foreignField: "_id",
+                        as: "_id"
+                    },
+            },
+            {'$unwind': '$_id'},
+            {'$sort': {'count': -1}},
+            {'$limit': 5}
+        ])
+        
         res.render('usuarios/dashboard/dashboard', {
             pedidos_aguardando: pedidos_aguardando,
             pedidos_andamento: pedidos_andamento,
             pedidos_finalizado: pedidos_finalizado,
-            pedidos: last_5_pedidos
+            pedidos: last_5_pedidos,
+            adicionais_mais_pedidos: adicionais_mais_pedidos,
+            produtos_mais_vendidos: produtos_mais_vendidos
         })
     } catch (err) {
         console.log(err)
@@ -126,13 +165,33 @@ router.post('/chart-pedidos-meio-pagamento-pagarRecebimento', async (req, res) =
             {'$sort': {'_id': 1}}
         ])
 
-        console.log(meios)
-
         res.status(200).json(meios)
     } catch (err) {
         console.log(err)
     }
 })
+
+router.post('/chart-pedidos-pedidos-ultimos-28-dias', async (req, res) => {
+    try {
+        let findData =  {'dataCriacao': { '$gte': new Date(moment().subtract(28, 'days')), '$lte': new Date(moment())}}
+
+        let pedidos = await Pedido.aggregate([
+            {'$match': {'$and': [findData]}},
+            {
+                $group:{
+                    _id : { $dateToString: { format: "%d/%m", date: "$dataCriacao" } },
+                    count: { $sum: 1 }
+                },
+            }, 
+            {'$sort': {'_id': 1}},
+        ])
+
+        res.status(200).json(pedidos)
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 
 
 module.exports = router
