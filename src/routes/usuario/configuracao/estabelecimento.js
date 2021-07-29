@@ -6,6 +6,7 @@ const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 const moment = require('moment')
+const aws = require("aws-sdk");
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -492,7 +493,7 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
 
 
 let upload = multer(multerConfig.uploadEstabelecimento).single('file')
-
+const s3 = new aws.S3();
 router.post("/upload/:idEstabelecimento", (req, res) => {
     upload(req, res, function (err) {
         if (err) {
@@ -507,26 +508,79 @@ router.post("/upload/:idEstabelecimento", (req, res) => {
                 return
             }
         }
+        const fotos =  Estabelecimento.find({_id: req.params.idEstabelecimento});
         const { originalname: name, size, key, location: url = "" } = req.file;
-        Estabelecimento.updateOne(
-            {_id: req.params.idEstabelecimento},
-            req.body.tipo == "capa" ? 
+        Estabelecimento.findById({_id: req.params.idEstabelecimento}).then(photos => {
+            if(req.body.tipo == "capa"){
+        if(!photos.img.capa.key){
+        Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
             $set = {
-                'img.capa': {  name, size, key, url },
-            }:
-            $set = {
-                'img.logo': {  name, size, key, url },
+                'img.capa' : {  name, size, key, url }
             }
-        ).then(() => {
-            req.flash('success_msg', 'Foto editada')
-            res.redirect('back')
-        }).catch(err => {
-            console.log(err)
-        })
+              ).then(() => {
+                    req.flash('success_msg', 'Foto de Capa editada')
+                    res.redirect('back')
+                })
+            
+         }else{
+            return s3.deleteObject({
+                Bucket: process.env.BUCKET_NAME,
+                Key: photos.img.capa.key
+            }).promise().then(response => {
+                Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
+            $set = {
+                'img.capa' : {  name, size, key, url }
+            }
 
+                ).then(() => {
+                    req.flash('success_msg', 'Foto de Capa editada')
+                    res.redirect('back')
+                })
+            }).catch(response => {
+                req.flash('error_msg', 'Ocorreu um erro')
+                res.redirect('back')
+            });
+        }
+    }
+
+    if(req.body.tipo == "logo"){
+        if(!photos.img.logo.key){
+        Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
+            $set = {
+                'img.logo' : {  name, size, key, url }
+            }
+              ).then(() => {
+                    req.flash('success_msg', 'Logo editada')
+                    res.redirect('back')
+                })
+            
+         }else{
+            return s3.deleteObject({
+                Bucket: process.env.BUCKET_NAME,
+                Key: photos.img.logo.key
+            }).promise().then(response => {
+                Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
+            $set = {
+                'img.logo' : {  name, size, key, url }
+            }
+
+                ).then(() => {
+                    req.flash('success_msg', 'Logo editada')
+                    res.redirect('back')
+                })
+            }).catch(response => {
+                req.flash('error_msg', 'Ocorreu um erro')
+                res.redirect('back')
+            });
+        }
+    }
     })
+})
+})
+
+
     
-});
+
 
 
 module.exports = router;

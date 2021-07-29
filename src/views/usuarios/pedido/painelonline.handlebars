@@ -483,11 +483,11 @@
 
     function clickscrollright(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
-        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos + 200 }, 400);
+        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos + 500 }, 400);
     }
     function clickscrollleft(idCategoria) {
         var leftPos = $(`#container-${idCategoria}`).scrollLeft();
-        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos - 200 }, 400);
+        $(`#container-${idCategoria}`).animate({ scrollLeft: leftPos - 500 }, 400);
     }
     $(".valorFormatar").each(function (item) {
         let textFormat = $(this).text()

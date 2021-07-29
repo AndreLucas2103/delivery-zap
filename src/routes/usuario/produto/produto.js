@@ -8,6 +8,7 @@ const multer = require('multer')
 const multerConfig = require('../../../config/multer')
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
+const aws = require("aws-sdk");
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -798,7 +799,7 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
 })
 
 let upload = multer(multerConfig.uploadProduto).single('file')
-
+const s3 = new aws.S3();
 router.post("/upload-produto/:idProduto/:idEstabelecimento", (req, res) => {
     upload(req, res, function (err) {
         if (err) {
@@ -814,16 +815,36 @@ router.post("/upload-produto/:idProduto/:idEstabelecimento", (req, res) => {
             }
         }
         const { originalname: name, size, key, location: url = "" } = req.file;
-        Produto.updateOne(
-            { _id: req.params.idProduto },
-            $set = {
-                'img.foto': { name, size, key, url },
-            },
-        ).then(() => {    
-            req.flash('success_msg', 'Foto editada')
-            res.redirect('/produto/perfil?produto=' + req.params.idProduto)
-        }).catch(err => {
-            console.log(err)
+        Produto.findById({_id: req.params.idProduto}).then(photos => {
+        if(!photos.img.foto.key){
+            Produto.updateOne({_id: req.params.idProduto},
+                $set = {
+                    'img.foto' : {  name, size, key, url }
+                }
+                  ).then(() => {
+                        req.flash('success_msg', 'Foto alterada')
+                        res.redirect('back')
+                    })
+                
+             }else{
+                return s3.deleteObject({
+                    Bucket: process.env.BUCKET_NAME,
+                    Key: photos.img.foto.key
+                }).promise().then(response => {
+                    Produto.updateOne({_id: req.params.idProduto},
+                $set = {
+                    'img.foto' : {  name, size, key, url }
+                }
+    
+                    ).then(() => {
+                        req.flash('success_msg', 'Foto alterada')
+                        res.redirect('back')
+                    })
+                }).catch(response => {
+                    req.flash('error_msg', 'Ocorreu um erro')
+                    res.redirect('back')
+                });
+            }
         })
 
     })
