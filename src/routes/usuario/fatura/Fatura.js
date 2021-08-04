@@ -180,8 +180,15 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
             }).then(async dados => {
 
                 console.log(dados)
+                console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
 
                 let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
+                
+                console.log(dados.body.results)
+                
+                console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
+                
+                console.log(pagamento)
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
 
