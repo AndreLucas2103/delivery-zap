@@ -141,7 +141,7 @@ router.post('/checkout', async (req, res) => {
                     {"id": "digital_wallet"},
                     {"id": "digital_currency"},
                 ],
-                "installments": 1
+                "installmen'ts": 1
             }
         }
 
@@ -163,6 +163,8 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
     try {
         let id = req.query.id
         let topic = req.query.topic
+
+        console.log('Entrou aqui')
 
         MercadoPago.configure({
             access_token: process.env.MERCADO_PAGO_ACESS_TOKEN
