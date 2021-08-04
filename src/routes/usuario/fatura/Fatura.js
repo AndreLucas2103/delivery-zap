@@ -177,6 +177,8 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 qs: fitro
             }).then(async dados => {
 
+                console.log(dados)
+
                 let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
@@ -188,10 +190,9 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 ])
                 let estabelecimento = estabelecimentoFind[0]
 
-                if(estabelecimento.locacao.faturas.rotina.validado === true) 
-                    return registerLog.registerLog({text: 'Rotina IPN Mercado Pago', code: '403', description: 'Alguem tentou realizar uma requisição utilizando paramentros confiáveis da external reference'})
-
                 if(pagamento.status == "approved"){
+                    if(estabelecimento.locacao.faturas.rotina.validado === true) 
+                        return registerLog.registerLog({text: 'Rotina IPN Mercado Pago', code: '403', description: 'Alguem tentou realizar uma requisição utilizando paramentros confiáveis da external reference'})
 
                     let plano = await Plano.findById(estabelecimento.locacao.idPlano)
                     let dataVencimento = moment(estabelecimento.locacao.dataLiberado).diff(moment(), 'days') <= 0 ? moment().add(plano.mesesPeriodicidade, 'months') : moment(estabelecimento.locacao.dataLiberado).add(plano.mesesPeriodicidade, 'months') 
