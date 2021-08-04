@@ -159,7 +159,7 @@ router.post('/checkout', async (req, res) => {
 })
 
 
-router.post('/IPN-mercadoPago-hotPedidos', async (req,res) => {
+router.post('/IPN-fatura-mercado-pago', async (req,res) => {
     try {
         let id = req.query.id
         let topic = req.query.topic
