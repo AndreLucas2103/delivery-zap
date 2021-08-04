@@ -179,16 +179,15 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 qs: fitro
             }).then(async dados => {
 
-                console.log(dados)
-                console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
-
                 let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
                 
-                console.log(dados.body.results)
-                
+                console.log(dados)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
-                
+                console.log(dados.body.results)
+                console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
                 console.log(pagamento)
+                console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
+
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
 
@@ -223,6 +222,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                         }
                     ).then(async () => {
                         try {
+                            console.log('Pedido aprovado')
                             return await new RotinaSistema ({
                                 dataExecutar: moment(dataVencimento).subtract(15, 'days'),
                                 tipo: 'cobranca',
@@ -253,7 +253,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                             }
                         }
                     ).then(() => {
-
+                        console.log('Pedido cancelado')
                     }).catch(err => {
                         console.log(err)
                     })
@@ -274,7 +274,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                             }
                         }
                     ).then(() => {
-                        
+                        console.log('Pedido aguardando')
                     }).catch(err => {
                         console.log(err)
                     })
