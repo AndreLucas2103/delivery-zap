@@ -3,10 +3,15 @@ const router = express.Router()
 const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
+const moment = require('moment')
+const { v4: uuidv4 } = require('uuid');
+
 
 
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("../../../models/Plano")
+const Plano = mongoose.model("planos")
 
 
 router.get('/estabelecimento', async (req, res) => {
@@ -50,6 +55,65 @@ router.get('/estabelecimentos', async (req, res) => {
             }
         })
         
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/edit-plano-estabelecimento', (req, res) => {
+    Estabelecimento.updateOne(
+        {'_id': req.body.idEstabelecimento},
+        {
+            '$set': {
+                'locacao.liberado': req.body.locacaoLiberado,
+                'locacao.dataLiberado': req.body.locacaoLiberadoAte,
+                'locacao.diaVencimento': req.body.locacaoDiaVencimento,
+                'locacao.valor': req.body.valor,
+            }
+        }
+    ).then(() => {
+        req.flash('success_msg', 'Estabelecimento editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+router.post('/add-plano-fatura', async (req, res) => {
+    try {
+        let estabelecimento = await Estabelecimento.findById(req.body.idEstabelecimento)
+        let plano = await Plano.findById(estabelecimento.locacao.idPlano)
+
+        Estabelecimento.updateOne(
+            {'_id': req.body.idEstabelecimento},
+            {
+                "$push": {
+                    'locacao.faturas': {
+                        $each: [
+                            {
+                                'idPlano': estabelecimento.locacao.idPlano,
+                                'descricao':  req.body.descricao ? req.body.descricao : `Fatura | Plano: ${plano.nome} | ${moment(req.body.vencimento).format('MM')}/${moment(req.body.vencimento).format('YYYY')}`,
+                                'valor': req.body.valor,
+                                'vencimento': req.body.vencimento,
+                                'situacao': 'waiting',
+                                'pago': false,
+                                'cancelado': false,
+                                'idTransacaoOperadora': `${req.body.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
+                                'logs': [{
+                                    descricao: `Gerada manualmente por ${req.user.primeiroNome}`
+                                }]
+                            }
+                        ],
+                        $position: 0,
+                    }
+                }
+            }
+        ).then(() => {
+            req.flash('success_msg', 'Fatura adicionada')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
     } catch (err) {
         console.log(err)
     }

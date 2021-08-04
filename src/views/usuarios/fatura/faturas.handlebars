@@ -15,6 +15,12 @@
         </nav>
     </div>
 
+    <div class="alert alert-dark" role="alert">
+        <span class="text-white">
+            As faturas são geradas após o pagamento da atual, seguimos o conceito de pagar e utilizar, ou seja, após o pagamento adicionamos a peridiocidade de seu plano na vigência
+        </span>
+    </div>
+
     <div class="card">
         <div class="card-body">
             <div class="table-responsive">
@@ -30,21 +36,85 @@
                         </tr>
                     </thead>
                     <tbody>
+                        <form action="/fatura/checkout" method="post">
                         {{#each faturas}}
                             <tr>
-                                <td>{{vencimento}}</td>
-                                <td>{{asd}}</td>
-                                <td>{{descricacao}}</td>
-                                <td>{{valor}}</td>
-                                <td>{{situacao}}</td>
+                                <td>{{dataFormatTimeZone usuarioLogado.timeZone locacao.faturas.vencimento "DD/MM/YYYY"}}</td>
+                                <td>{{nome}}</td>
+                                <td>{{locacao.faturas.descricao}}</td>
+                                <td>{{FormatValor locacao.faturas.valor}}</td>
+                                <td class="faturaSituacao">{{locacao.faturas.situacao}}</td>
                                 <td>
-                                    a
+                                    {{#if locacao.faturas.pago}}
+                                    {{else}}
+                                        {{#if locacao.faturas.cancelado}}
+                                        {{else}}
+                                            <button type="submit" class="btn btn-success btn-sm" name="idFatura" value="{{locacao.faturas._id}}">Pagar</button>
+                                        {{/if}}
+                                    {{/if}}
                                 </td>
                             </tr>
                         {{/each}}
+                        </form>
+
                     </tbody>
                 </table>
             </div>
+
+            <div class="mt-4">
+
+                <div class="dropdown">
+                <button class="btn btn-white btn-sm float-end" type="button" id="dropdown-limit-list" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-limit-list">
+                    <div class="text-center">Registro por página</div>
+                    <div>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="10">10</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="20">20</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="50">50</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="100">100</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 mr-1 click-paginate" value="200">200</button>
+                    </div>
+                </ul>
+                </div>
+                <span class="float-end mt-1 mr-4">{{pagination.startPage}} a {{pagination.endPage}} de {{pagination.totalPage}}</span>
+
+                <nav class="page-pagination">
+                    <ul class="pagination pagination-sm">
+                    {{#paginate pagination type="first"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">«</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="middle" limit="5"}}
+                        <li {{#if active}}class="page-item active current" {{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">{{n}}</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="last"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">»</a></li>
+                    {{/paginate}}
+                    </ul>
+                </nav>
+
+                <script>
+                    let filtro1 = $('#form-filtro-1').serialize()
+                    let limit = "limit="+10
+
+                    $('.click-paginate').click(function (e) {
+                        event.preventDefault()
+                        if(e.target.classList[0] == "buttonClickLimit"){
+                            $('#filtro-pedido-limit').val(e.target.value)
+                            $('#form-filtro-1').submit()
+                        }else{
+                            $(this).attr('href').slice(1)
+                            paginate = $(this).attr('href').slice(1);
+                            location.href = `?${paginate}&${filtro1}` ;
+                        }
+                    });
+                </script>
+
+            </div>
+
         </div>
     </div>
 
@@ -56,9 +126,21 @@
 
 
 <script>
-    $(".valorFormatar").each(function (item) {
+    $(".faturaSituacao").each(function () {
         let textFormat = $(this).text()
-        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+        switch (textFormat) {
+            case 'canceled':
+                $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
+                break;
+            case 'waiting':
+                $(this).html('<i class="fas fa-clock"></i> Aguardando')
+                break;
+            case 'paid':
+                $(this).html('<i class="fas fa-check-circle text-success"></i> Finalizado')
+                break;
+            default:
+                $(this).html('err')
+        }
     })
 </script>
 

@@ -56,151 +56,185 @@
         <!-- infos a direita START --> 
         <div class="col-12 col-xl-8">
 
-        <ul class="nav nav-pills " id="pills-tab" role="tablist">
-            <li class="nav-item" >
-                <button class="nav-link active"  data-bs-toggle="pill" data-bs-target="#nav-faturas" type="button" role="tab" aria-selected="true">Fatura</button>
-            </li>
-            <li class="nav-item">
-                <button class="nav-link " data-bs-toggle="pill" data-bs-target="#nav-ingredientes" type="button" role="tab" aria-selected="false">Ingredientes</button>
-            </li>
-        </ul>
-        <div class="tab-content">
-            <!-- Faturas START -->
-            <div class="tab-pane fade show active" id="nav-faturas">
-                <div class="card">
-                    <div class="card-body">
-                        <form action="/admin/administrativo/edit-plano-estabelecimento" method="post">
-                        <div class="table-responsive">
-                            <table class="table table-centered table-nowrap mb-0 rounded">
-                                <tbody>
-                                    <tr>
-                                        <td>Plano</td>
-                                        <td>{{estabelecimento.locacao.plano}}</td>
-                                    </tr>
-                                    <tr>
-                                        <td>Liberado</td>
-                                        <td>
-                                            <select class="form-select form-select-sm " name="locacaoLiberado" id="edit-estabelecimento-locacao-liberado">
-                                                <option value="true">Liberado</option>
-                                                <option value="false">Bloqueado</option>
-                                            </select>
-                                            <script>
-                                                $('#edit-estabelecimento-locacao-liberado option[value="{{estabelecimento.locacao.liberado}}"]').attr("selected", "selected");
-                                            </script>
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Liberado até</td>
-                                        <td>
-                                            <input type="date" class="form-control form-control-sm" name="locacaoLiberadoAte" value="{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "YYYY-MM-DD"}}">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Dia Vencimento</td>
-                                        <td>
-                                            <input type="number" name="locacaoDiaVencimento"   class="form-control form-control-sm" value="{{estabelecimento.locacao.diaVencimento}}">
-                                        </td>
-                                    </tr>
-                                    <tr>
-                                        <td>Valor</td>
-                                        <td>
-                                            <input type="number" name="locacaoDiaVencimento"   class="form-control form-control-sm" value="{{estabelecimento.locacao.valor}}">
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
-                        </form>
-                    </div>
-                </div>
-                <div class="card mt-2">
-                    <div class="card-body">
-                        <div class="table-responsive">
-                            <table class="table table-centered table-nowrap mb-0 rounded">
-                                <thead class="thead-light">
-                                    <tr>
-                                        <th class="border-0">#</th>
-                                        <th class="border-0">Vencimento</th>
-                                        <th class="border-0">Descrição</th>
-                                        <th class="border-0">Valor</th>
-                                        <th class="border-0">Situação</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    {{#each estabelecimento.locacao.faturas}}
+            <ul class="nav nav-pills " id="pills-tab" role="tablist">
+                <li class="nav-item" >
+                    <button class="nav-link active"  data-bs-toggle="pill" data-bs-target="#nav-faturas" type="button" role="tab" aria-selected="true">Fatura</button>
+                </li>
+            </ul>
+            <div class="tab-content">
+                <!-- Faturas START -->
+                <div class="tab-pane fade show active" id="nav-faturas">
+                    <div class="card">
+                        <div class="card-body">
+                            <form action="/admin/administrativo/edit-plano-estabelecimento" method="post">
+                            <div class="table-responsive">
+                                <table class="table table-centered table-nowrap mb-0 rounded">
+                                    <tbody>
                                         <tr>
-                                            <form action="/admin/administrativo/edit-fatura" method="post">
-                                                <td>
-                                                    <i class="fas fa-pen text-warning" data-bs-toggle="modal" data-bs-target="#edit-cobranca" data-bs-idFatura=""></i>
-                                                </td>
-                                                <td>
-                                                    {{dataFormatTimeZone usuarioLogado.timeZone vencimento "DD/MM/YYYY"}}
-                                                </td>
-                                                <td>{{descricacao}}</td>
-                                                <td>{{valor}}</td>
-                                                <td class="format-locacao-situacao-cobranca">{{situacao}}</td>
-                                            </form>
+                                            <td>Plano</td>
+                                            <td>{{estabelecimento.locacao.plano}}</td>
                                         </tr>
-                                    {{/each}}
-                                </tbody>
-                            </table>
-                        </div>
+                                        <tr>
+                                            <td>Liberado</td>
+                                            <td>
+                                                <select class="form-select form-select-sm " name="locacaoLiberado" id="edit-estabelecimento-locacao-liberado">
+                                                    <option value="true">Liberado</option>
+                                                    <option value="false">Bloqueado</option>
+                                                </select>
+                                                <script>
+                                                    $('#edit-estabelecimento-locacao-liberado option[value="{{estabelecimento.locacao.liberado}}"]').attr("selected", "selected");
+                                                </script>
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Liberado até</td>
+                                            <td>
+                                                <input type="date" class="form-control form-control-sm" name="locacaoLiberadoAte" value="{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "YYYY-MM-DD"}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Dia Vencimento</td>
+                                            <td>
+                                                <input type="number" name="locacaoDiaVencimento"   class="form-control form-control-sm" value="{{estabelecimento.locacao.diaVencimento}}">
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>Valor</td>
+                                            <td>
+                                                <input type="number" name="valor"   class="form-control form-control-sm" value="{{estabelecimento.locacao.valor}}">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
 
-                        <!-- Modal -->
-                        <div class="modal fade" id="edit-cobranca" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-cobrancaLabel" aria-hidden="true">
-                            <div class="modal-dialog modal-dialog-centered">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <h5 class="modal-title" id="edit-cobrancaLabel">Modal title</h5>
-                                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                    </div>
-                                    <div class="modal-body">
-                                        
+                            <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" readonly hidden >
+                            <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                            </form>
+                        </div>
+                    </div>
+                    <div class="card mt-2">
+                        <div class="card-body">
+
+
+                            <!-- Modal add fatura START -->
+                            <button class="btn btn-primary btn-sm mb-2"  data-bs-toggle="modal" data-bs-target="#add-fatura" >+ Adicionar</button>
+                            <div class="modal fade" id="add-fatura" data-bs-keyboard="false" tabindex="-1" aria-labelledby="add-faturaLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="add-faturaLabel">Adicionar fatura</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            <form action="/admin/administrativo/add-plano-fatura" method="post">
+                                                <div class="form-floating mb-3">
+                                                    <input type="text" class="form-control" name="descricao" id="add-fatura-descricao" placeholder="-">
+                                                    <label for="floatingInput">Descrição</label>
+                                                </div>
+                                                <div class="row">
+                                                    <div class="col-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="date" class="form-control" name="vencimento" id="add-fatura-vencimento" placeholder="-" required>
+                                                            <label for="floatingInput">Vencimento</label>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-6">
+                                                        <div class="form-floating mb-3">
+                                                            <input type="Number" class="form-control" name="valor" id="add-fatura-valor" step=".01" min="0" placeholder="-" required>
+                                                            <label for="floatingInput">Valor</label>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" readonly hidden >
+                                                <button type="submit">Adicionar</button>
+                                            </form>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
+                            <!-- Modal add fatura END -->
+
+                            <div class="table-responsive">
+                                <table class="table table-centered table-nowrap mb-0 rounded">
+                                    <thead class="thead-light">
+                                        <tr>
+                                            <th class="border-0">#</th>
+                                            <th class="border-0">Vencimento</th>
+                                            <th class="border-0">Descrição</th>
+                                            <th class="border-0">Valor</th>
+                                            <th class="border-0">Situação</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        {{#each estabelecimento.locacao.faturas}}
+                                            <tr>
+                                                <form action="/admin/administrativo/edit-fatura" method="post">
+                                                    <td>
+                                                        <i class="fas fa-pen text-warning" data-bs-toggle="modal" data-bs-target="#edit-cobranca" data-bs-idFatura=""></i>
+                                                    </td>
+                                                    <td>
+                                                        {{dataFormatTimeZone usuarioLogado.timeZone vencimento "DD/MM/YYYY" "exact"}}
+                                                    </td>
+                                                    <td>{{descricao}}</td>
+                                                    <td>{{FormatValor valor}}</td>
+                                                    <td class="format-locacao-situacao-cobranca">{{situacao}}</td>
+                                                </form>
+                                            </tr>
+                                        {{/each}}
+                                    </tbody>
+                                </table>
+                            </div>
+
+                            <!-- Modal edit fatura START -->
+                            <div class="modal fade" id="edit-fatura"  data-bs-keyboard="false" tabindex="-1" aria-labelledby="edit-faturaLabel" aria-hidden="true">
+                                <div class="modal-dialog modal-dialog-centered">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <h5 class="modal-title" id="edit-faturaLabel">Modal title</h5>
+                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                        </div>
+                                        <div class="modal-body">
+                                            
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- Modal edit fatura END -->
+
+                            <script>
+                                var modalEditFatura = document.getElementById('edit-fatura')
+                                modalEditFatura.addEventListener('show.bs.modal', function (event) {
+                                    var button = event.relatedTarget
+                                    var recipient = button.getAttribute('data-bs-whatever')
+                                })
+
+                                $(".format-locacao-situacao-cobranca").each(function (item) {
+                                    let textFormat = $(this).text()
+                                    switch (textFormat) {
+                                        case 'canceled':
+                                            $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
+                                            break;
+                                        case 'waiting':
+                                            $(this).html('<i class="fas fa-clock"></i> Aguardando')
+                                            break;
+                                        case 'paid':
+                                            $(this).html('<i class="fas fa-check-circle text-success"></i> Pago')
+                                            break;
+                                        default:
+                                            $(this).html('err')
+                                    }
+                                })
+                            </script>
+
+
                         </div>
-
-                        <script>
-                            var exampleModal = document.getElementById('exampleModal')
-                            exampleModal.addEventListener('show.bs.modal', function (event) {
-                                var button = event.relatedTarget
-                                var recipient = button.getAttribute('data-bs-whatever')
-                                
-                            })
-
-                            $(".format-locacao-situacao-cobranca").each(function (item) {
-                                let textFormat = $(this).text()
-                                switch (textFormat) {
-                                    case 'canceled':
-                                        $(this).html('<i class="fas fa-times-circle text-danger"></i> Cancelado')
-                                        break;
-                                    case 'waiting':
-                                        $(this).html('<i class="fas fa-clock"></i> Aguardando')
-                                        break;
-                                    case 'paid':
-                                        $(this).html('<i class="fas fa-check-circle text-success"></i> Pago')
-                                        break;
-                                    default:
-                                        $(this).html('err')
-                                }
-                            })
-                        </script>
-
-
                     </div>
                 </div>
-            </div>
-            <!-- Faturas END -->
-           
-            <div class="tab-pane fade" id="nav-ingredientes">
-                
-            </div>
-
-        </div>
+                <!-- Faturas END -->
             
-            
+            </div>
 
         </div>
         <!-- infos a direita END --> 

@@ -12,12 +12,17 @@ Handlebars.registerHelper('formatTrueFalse', function(status) {
     }
 })
     
-Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, format) {
+Handlebars.registerHelper('dataFormatTimeZone', function(userTimeZone, data, format, exactDb) {
     userTimeZone ? timeZone = userTimeZone : timeZone = "-03:00";
     format ? formtMoment = format : formtMoment = "";
 
     //{{dataFormatTimeZone usuarioLogado.timeZone data ""}}
-    return moment(new Date(data)).utcOffset(timeZone).format(formtMoment);
+
+    if (exactDb == "exact"){
+        return moment(new Date(data)).utcOffset('+00:00').format(formtMoment);
+    }else{
+        return moment(new Date(data)).utcOffset(timeZone).format(formtMoment);
+    }
 })
 
 Handlebars.registerHelper('FormatValor', function(valor) {

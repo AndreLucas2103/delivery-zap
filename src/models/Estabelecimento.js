@@ -115,12 +115,8 @@ const Estabelecimento = new Schema({
       type: Schema.Types.ObjectId,
       ref: "planos",
     },
-
-    plano: String,
     liberado: Boolean,
     dataLiberado: Date,
-    diaVencimento: Number,
-    valor: Number,
 
     faturas: [{
       idPlano: {
@@ -140,8 +136,13 @@ const Estabelecimento = new Schema({
         type: Boolean,
         default: false
       },
-
       dataPagamento: Date,
+      idTransacaoOperadora: String,
+
+      rotina: {
+        validado: Boolean
+      },
+
       logs: [{
         descricao: String
       }]

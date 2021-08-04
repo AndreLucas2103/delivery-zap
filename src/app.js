@@ -226,8 +226,83 @@ const adminPlano = require("./routes/admin/plano/plano")
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
 
-app.get('/teste', async (req, res) => {
-    res.render('teste')
+require("./models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
+
+const moment = require('moment')
+
+app.post('/teste', async (req, res) => {
+    try {
+
+
+        /* function GerarCobranca (props) {
+            console.log('ok')
+
+            Estabelecimento.updateOne(
+                {'_id': props._id},
+                {
+                    "$push": {
+                        'locacao.faturas': {
+                            $each: [
+                                {
+                                    'idPlano': props.plano_id,
+                                    'descricao': props.descricao,
+                                    'valor': props.valor,
+                                    'vencimento': props.vencimento,
+                                    'situacao': 'waiting',
+                                    'pago': false,
+                                    'cancelado': false,
+                                    'logs': [{
+                                        descricao: 'Gerada pela rotina do sistema'
+                                    }]
+                                }
+                            ],
+                            $position: 0,
+                        }
+                    }
+                }
+            ).then(() => {
+                console.log('ok')
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+
+        let estabelecimentos = await Estabelecimento.find({
+            $and: [
+                {'statusAtivo': true},
+                {'locacao.liberado': true}
+            ]
+        })
+
+        estabelecimentos.forEach(async estabelecimento => {
+            let dataLiberado = estabelecimento.locacao.dataLiberado
+            let faturas = estabelecimento.locacao.faturas
+
+            let plano = await Plano.findById(estabelecimento.locacao.idPlano)
+
+            if(!faturas[0] || moment(faturas[0].vencimento).format('MM') != moment().format('MM')){
+                GerarCobranca({
+                    '_id': estabelecimento._id,
+                    'plano_id': plano._id,
+                    'descricao': `Fatura | Plano: ${plano.nome} | ${moment().format('MM')}/${moment().format('YYYY')}`,
+                    'vencimento': new Date(`${moment().format('YYYY')}-${moment().format('MM')}-${estabelecimento.locacao.diaVencimento}`),
+                })
+            }else{
+                
+            }
+        })   */
+
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
+app.get('/estabelecimento', (req, res) => {
+    Estabelecimento.findById(req.query.id, {impressora: 0, integracao: 0, painel:0, configPedidos:0, img:0}).lean().then(estabelecimento => {
+        res.json(estabelecimento)
+    })
 })
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
