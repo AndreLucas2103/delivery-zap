@@ -1,6 +1,5 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
-<div {{#if estabelecimento.statusAberto}} {{else}} style="filter: grayscale(100%);" {{/if}}>
-<body {{#if estabelecimento.statusAberto}} style="background:{{estabelecimento.painel.colorFundo}}" {{else}} style="background:gray" {{/if}};>
+<body style="background:{{estabelecimento.painel.colorFundo}}">
     <header>
         <div class="container-md capa-painel" style="background-image: url({{estabelecimento.img.capa.url}})">
             <center>
@@ -118,11 +117,11 @@
     </script>
 
     <br><br><br>
-</div>
+
     <div class="background-pedidos">
         <form method="GET" action="/estabelecimento/{{estabelecimento.url}}/meuspedidos/">
-            <button class="pedidos" type="submit" name="uuid4Client" id="uuid4Client-pedidos"><i
-                    class="fas fa-clipboard-list" style="font-size: 20px;"></i>&nbsp;Meus
+            <button class="pedidos" type="submit" name="uuid4Client" id="uuid4Client-pedidos" {{#if estabelecimento.statusAberto}}  {{else}} style="border: 1px solid rgb(216, 47, 47);color:rgb(216, 47, 47)" {{/if}}><i
+                    class="fas fa-clipboard-list" {{#if estabelecimento.statusAberto}}  style="font-size: 20px;" {{else}} style="font-size: 20px;color:rgb(216, 47, 47)" {{/if}}></i>&nbsp;Meus
                 Pedidos</button>
         </form>
           {{#if estabelecimento.statusAberto}}
@@ -229,14 +228,14 @@
                 <button type="submit" class="mt-4"
                     style="height: 40px;width:250px;background:#27AE60;border:none;color:white;"
                     id="button-submit-add-produto-carrinho">+ Adicionar no carrinho</button>
-                    {{else}} {{/if}}
+                    {{else}}
+                    <span style="color:rgb(216, 47, 47);font-size:15px;">*O estabelecimento está fechado</span>
+                     {{/if}}
             </div>
         </div>
     </div>
 </div>
 {{!-- Modal adicionar produto ao carrinho END --}}
-
-
 
 </body>
 <script>

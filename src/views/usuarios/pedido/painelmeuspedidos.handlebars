@@ -60,7 +60,7 @@
 
 <div class="background-pedidos">
     <form method="GET" action="/estabelecimento/{{estabelecimento.url}}">
-        <button type="submit" class="voltar">« Página inicial</button>
+        <button type="submit" class="voltar"  {{#if estabelecimento.statusAberto}}  {{else}} style="border: 1px solid rgb(216, 47, 47);color:rgb(216, 47, 47)" {{/if}} >« Página inicial</button>
     </form>
 </div>
 

@@ -1,6 +1,7 @@
 {{>usuario/_top-css}}
 
-
+<script src='https://code.jquery.com/jquery-2.2.4.min.js'></script>
+ <script src='https://s3-us-west-2.amazonaws.com/s.cdpn.io/130527/qrcode.js'></script>
 <div class="container-fluid bg-soft">
     <div class="row">
         <div class="col-12">
@@ -33,7 +34,7 @@
                                                 class="rounded-circle rounded border logo-image-st" id="imgst">
                                         </div>
                                     </div>
-                                    <center>
+                                    <center>                                                                        
                                         <div class="col-md">
                                             <div>
                                                 <h6>Link para pedidos:</h6>
@@ -42,12 +43,18 @@
                                                     style="color: #5A7FFF;">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a>
                                             </div>
                                         </div>
-                                    </center>
-                                </div>
-                                <br> <br>
-                                <div class="row g-2">
+                                          </center>
+                                        <div class="qr-code-generator mt-4">
 
-                                    <div class="col-md">
+                                            <input type="text" class="qr-url" value="hotpedidos.com/estabelecimento/{{estabelecimento.url}}" hidden>
+                                            <input type="number" class="qr-size" value="200" min="20" max="500" hidden>
+
+                                            <center><button type="button" class="generate-qr-code">Gerar QRCODE&nbsp;&nbsp;<i class="fas fa-qrcode"></i></button></center>                        
+                                            <div id="qrcode" class="mt-2"></div>
+                                        </div>    
+                                </div>
+                                <div class="row g-2 mt-2">
+                                    <div class="col-md" style="margin-top: -80px;">
                                         <div class="form-floating">
                                             <input type="text" class="form-control" id="nome" name="nome"
                                                 placeholder="0" value="{{estabelecimento.nomePainel}}" required>
@@ -55,7 +62,7 @@
                                         </div>
                                     </div>
                                     </center>
-                                </div><br>
+                                </div>
                                 <div class="row g-2">
                                     <div class="col-md-6">
                                         <div class="form-floating">
@@ -133,7 +140,8 @@
                         <label>Pré-visualização:</label>
                         <div class="smartphone" style="background:{{estabelecimento.painel.colorFundo}};"
                             id="backcolor">
-                            <div class="container-md capa-image-sm" style="background-image: url({{estabelecimento.img.capa.url}});" id="img2">
+                            <div class="container-md capa-image-sm"
+                                style="background-image: url({{estabelecimento.img.capa.url}});" id="img2">
                                 <center>
                                     <div>
                                         <br>
@@ -159,7 +167,8 @@
                                 <center>
                                     <hr class="w-25">
                                 </center>
-                               <input type="text" class="search-sm rb" style="border-color:{{estabelecimento.painel.colorFonte}};">
+                                <input type="text" class="search-sm rb"
+                                    style="border-color:black;">
                             </div>
                         </div>
                     </div>
@@ -187,7 +196,7 @@
 <script>
     $('#file02').change(() => {
         $('#file02-upload').submit()
-          res.send('/configuracao/delete/{{estabelecimento._id}}')
+        res.send('/configuracao/delete/{{estabelecimento._id}}')
     })
 </script>
 
@@ -224,6 +233,21 @@
             $("#bairroEstabelecimento").text(" - " + inputBairro.value);
         }
     }
+</script>
+
+
+<script> //QRCODE
+$('.generate-qr-code').on('click', function(){
+$('#qrcode').empty();
+$('#qrcode').css('margin-bottom',90);
+$('#qrcode').css({
+'width' : $('.qr-size').val(),
+'height' : $('.qr-size').val()
+})
+
+$('#qrcode').qrcode({width: $('.qr-size').val(),height: $('.qr-size').val(),text: $('.qr-url').val()});
+
+});
 </script>
 
 {{>usuario/_rodape}}
