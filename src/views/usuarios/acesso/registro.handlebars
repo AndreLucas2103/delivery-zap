@@ -1,19 +1,17 @@
 <link rel="stylesheet" href="site/css/main.css" />
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
-
+<body style="background:#FF5A00;"></body>
 {{>_msg}}
 <script>window.rwbp={email: 'hotpedidosalterosa@gmail.com',phone: '+5535999028100',message: 'Olá! Em que podemos ajudar?'}</script><script defer async src='https://duz4dqsaqembt.cloudfront.net/client/whats.js'></script>
 <form action="acessos/registro" method="POST">
-<body style="background: #FF5A00;">
 
-    <section id="minhaDiv" style="background-color:#FF5A00;" class="pricing-table section">
-        <div class="container">
-            <br>
+    <div id="minhaDiv" style="margin-top: 100px;background:#FF5A00;height:500px;">
             <div class="col-lg-6 col-md-6 col-10 mt-5" style="margin:auto;">
-                <div class="card" style="border-style:solid;border-color:#262B40" data-wow-delay=".4s">
+                <br><br>
+                <div class="card" style="border:none;background:#FF5A00;">
                     <div class="row g-2 mt-3" style="padding-left: 15px;padding-right: 15px;">
                         <center>
-                        <a href="/"><img src="site/images/logo/logo.svg" style="width: 250px;height:60px;margin-bottom:30px;" alt=""></a>
+                        <a href="/"><img src="site/images/logo/logo-rodape.png" style="width: 200px;height:60px;margin-bottom:30px;" alt=""></a>
                         </center>
                         <div class="col-md-4">
                             <div class="form-floating">
@@ -73,15 +71,15 @@
                     </center>         
                 </div>
             </div>
-        </div>
-    </section>
+        
+    </div>
 
-    <section id="minhaDiv2" style="background-color:#FF5A00;" class="pricing-table section">
-        <div class="container">
+    <div id="minhaDiv2" style="margin-top: 100px;background:#FF5A00;;height:500px;">
             <div class="col-lg-6 col-md-6 col-10 mt-5" style="margin:auto;">
-                <div class="card" style="border-style:solid;border-color:#262B40;padding-left: 15px;padding-right: 15px;">
+                <br><br>
+                <div class="card" style="border:none;background:#FF5A00;">
                   <center>
-                        <a href="/"><img src="site/images/logo/logo.svg" style="width: 250px;height:60px;margin-bottom:30px;" class="mt-3"></a>
+                        <a href="/"><img src="site/images/logo/logo-rodape.png" style="width: 200px;height:60px;margin-bottom:30px;" class="mt-3"></a>
                         </center>
                     <div class="row g-2">
                         <center>
@@ -158,15 +156,14 @@
                     </div>
                     <br>
                     <center>
-                    <button type="button" class="mb-4" style="width: 150px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;padding-right:15px;" onclick="Mudarestado2()">« Voltar</button> 
+                    <button type="button" class="mb-4" style="width: 150px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;padding-right:15px;margin-right:5px;" onclick="Mudarestado2()">« Voltar</button> 
                         <button type="submit" class="mb-4" style="width: 150px;height:50px;background:#262B40;color:white;border:none;border-radius:5px;" >Cadastrar</button> 
                     </center> 
                 </div>
             </div>
-        </div>
-    </section>
+    </div>
 </form>
-</body>
+
 <script>
     const cep = document.querySelector("#cep")
 
@@ -229,14 +226,14 @@
             return false;
 
         } else {
-            $('#minhaDiv').hide(500)
-            $('#minhaDiv2').show(600)
+            $('#minhaDiv').hide()
+            $('#minhaDiv2').show()
         }
     }
 
     function Mudarestado2() {
-        $('#minhaDiv').show(600)
-        $('#minhaDiv2').hide(500)
+        $('#minhaDiv').show()
+        $('#minhaDiv2').hide()
     }
 </script>
 
@@ -343,3 +340,5 @@
 </script>
 
 {{>_preloader}}
+
+</body>
