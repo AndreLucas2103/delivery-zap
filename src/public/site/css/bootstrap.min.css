@@ -8692,7 +8692,9 @@ fieldset:disabled .btn {
     }
 
     .d-md-flex {
-        display: flex !important
+        display:block !important;
+        margin-left: 20%;
+
     }
 
     .d-md-inline-flex {
