@@ -1,15 +1,18 @@
 <link rel="stylesheet" href="site/css/main.css">
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
-<script>window.rwbp={email: 'hotpedidosalterosa@gmail.com',phone: '+5535999028100',message: 'Olá! Em que podemos ajudar?'}</script><script defer async src='https://duz4dqsaqembt.cloudfront.net/client/whats.js'></script>
-<form action="acessos/registro" method="POST">
+<script>window.rwbp = { email: 'hotpedidosalterosa@gmail.com', phone: '+5535999028100', message: 'Olá! Em que podemos ajudar?' }</script>
+<script defer async src='https://duz4dqsaqembt.cloudfront.net/client/whats.js'></script>
 {{>_msg}}
-   
-        <div class="container-fluid" >
+
+<div class="container-fluid">
     <div class="row no-gutter">
-        
-        <div class="col-md d-none d-md-flex bg-image"> 
-             <a href="/"><img src="site/images/logo/logo.png" style="margin-top: 50%;width:500px;height:250px;"></a>         
-                              
+
+        <div class="col-md d-none d-md-flex bg-image">
+            <div class="containerp" style="display:list-item;margin-left:-200px;">
+                <p><a href="/"><img style="width: 450px;margin-top:250px;" src="site/images/logo/logo.png"></a></p>
+                <p><span class="word"></span></p>
+            </div>
+
         </div>
         <div class="col-md-4" style="background: #FF5A00;">
             <div class="login d-flex align-items-center py-5">
@@ -22,16 +25,22 @@
                             <br>
                             <form action="/acessos/login" method="POST">
                                 <div class="form-group mb-3">
-                                    <input id="email" type="email" name="email" placeholder="Email" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
+                                    <input id="email" type="email" name="email" placeholder="Email" required=""
+                                        autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
                                 </div>
                                 <div class="form-group mb-3">
-                                    <input id="senha" name="senha" type="password" placeholder="Senha" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
+                                    <input id="senha" name="senha" type="password" placeholder="Senha" required=""
+                                        class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
                                 </div>
-                                
-                                <button type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">Sign in</button>
-                                <div class="text-center d-flex justify-content-between mt-4"><p>Esqueceu sua senha? <a href="#" data-bs-toggle="modal" data-bs-target="#trocarsenha" class="font-italic" style="color: white;"> 
-                                        <u>Clique aqui</u></a></p></div>
-                                        <p>Não possui uma conta?<a href="/registro" class="font-italic" style="color: white;"> 
+
+                                <button type="submit"
+                                    class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">Acessar</button>
+                                <div class="text-center d-flex justify-content-between mt-4">
+                                    <p>Esqueceu sua senha? <a href="#" data-bs-toggle="modal"
+                                            data-bs-target="#trocarsenha" class="font-italic" style="color: white;">
+                                            <u>Clique aqui</u></a></p>
+                                </div>
+                                <p>Não possui uma conta?<a href="/registro" class="font-italic" style="color: white;">
                                         <u>Clique aqui</u></a></p>
                             </form>
                         </div>
@@ -43,7 +52,7 @@
     </div>
 </div>
 
-   
+
 <div class="modal fade" id="trocarsenha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
@@ -59,7 +68,8 @@
                             <label for="emailtroca">Digite seu e-mail</label>
                         </div>
                     </div>
-                    <button type="submit" id="enviaemail" class="mt-2" style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Enviar</button>
+                    <button type="submit" id="enviaemail" class="mt-2"
+                        style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Enviar</button>
                 </form>
             </div>
         </div>
@@ -73,8 +83,8 @@
                 <h5 class="modal-title" id="exampleModalLabel">Trocar Senha</h5>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
-            <div class="modal-body">              
-                        <form id="form-confirma-token" action="/acessos/reset-senha" method="POST">
+            <div class="modal-body">
+                <form id="form-confirma-token" action="/acessos/reset-senha" method="POST">
                     <input type="hidden" id="receberemail" name="receberemail">
                     <div class="col-md">
                         <div class="form-floating">
@@ -88,7 +98,8 @@
                             <label for="senhanova">Digite sua nova senha</label>
                         </div>
                     </div>
-                    <button id="trocasenha"  class="mt-2" style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Alterar</button>
+                    <button id="trocasenha" class="mt-2"
+                        style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Alterar</button>
                 </form>
             </div>
         </div>
@@ -98,7 +109,7 @@
 
 </body>
 <script>
-    $('#form-enviar-confirmacao').submit(() => {      
+    $('#form-enviar-confirmacao').submit(() => {
         let emailtroca = $('#emailtroca').val()
         event.preventDefault()
         jQuery.ajax({
@@ -110,10 +121,10 @@
                     spinngLoading(false)
                     $('#receberemail').val(emailtroca)
                     $('#trocarsenha').modal('hide')
-                    $('#trocarsenha2').modal('show')                  
+                    $('#trocarsenha2').modal('show')
                 }
                 if (response.responseid == 100) {
-                     spinngLoading(false)
+                    spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',
@@ -121,8 +132,8 @@
                             footer: '<a href="/registro">Criar uma conta.</a>',
                             confirmButtonText: 'Ok',
                             allowOutsideClick: false,
-                            
-                       }).then((result) => {
+
+                        }).then((result) => {
                             if (result.isConfirmed) {
                                 document.location.reload(true);
                             }
@@ -162,7 +173,7 @@
                     })
                 }
                 if (response.responseid == 100) {
-                     spinngLoading(false)
+                    spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',
@@ -173,7 +184,7 @@
                     })
                 }
                 if (response.responseid == 125) {
-                     spinngLoading(false)
+                    spinngLoading(false)
                     $(document).ready(() => {
                         Swal.fire({
                             icon: 'error',
@@ -212,5 +223,57 @@
 
 </script>
 
+
+
 {{/if}}
 
+<script>
+    var
+  words = ['Controle seus pedidos.','Divulgue seus produtos.','Melhore suas vendas.'],
+  part,
+  i = 0,
+  offset = 0,
+  len = words.length,
+  forwards = true,
+  skip_count = 0,
+  skip_delay = 5,
+  speed = 100;
+
+var wordflick = function(){
+  setInterval(function(){
+      if (forwards) {
+        if(offset >= words[i].length){
+          ++skip_count;
+          if (skip_count == skip_delay) {
+            forwards = false;
+            skip_count = 0;
+          }
+        }
+      }
+      else {
+         if(offset == 0){
+            forwards = true;
+            i++;
+            offset = 0;
+            if(i >= len){
+              i=0;
+            } 
+         }
+      }
+      part = words[i].substr(0, offset);
+      if (skip_count == 0) {
+        if (forwards) {
+          offset++;
+        }
+        else {
+          offset--;
+        }
+      }
+      $('.word').text(part);
+  },speed);
+};
+
+$(document).ready(function(){
+  wordflick();
+});
+</script>
