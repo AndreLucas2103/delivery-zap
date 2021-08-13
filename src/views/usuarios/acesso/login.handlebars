@@ -1,56 +1,48 @@
 <link rel="stylesheet" href="site/css/main.css">
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
-
+<script>window.rwbp={email: 'hotpedidosalterosa@gmail.com',phone: '+5535999028100',message: 'Olá! Em que podemos ajudar?'}</script><script defer async src='https://duz4dqsaqembt.cloudfront.net/client/whats.js'></script>
+<form action="acessos/registro" method="POST">
 {{>_msg}}
-<body style="background: #FF5A00;">
-   <!-- Section -->
    
-        <section class="vh-lg-100 d-flex align-items-center">
-            <div class="card" style="margin: auto;margin-top:100px;">
-                <div class="row justify-content-center form-bg-image" data-background-lg="../../assets/img/illustrations/signin.svg">
-                    <div class="col-12 d-flex align-items-center justify-content-center">
-                        <div class="signin-inner my-3 my-lg-0 bg-white shadow-soft border rounded border-light p-4 p-lg-5 w-100 fmxw-500">
-                            <div class="text-center text-md-center mb-4 mt-md-0">
-                               <a href="/"><img src="site/images/logo/logo.svg" style="width: 250px;height:60px;" alt=""></a>
-                            </div>
-                            <form action="/acessos/login" method="POST" class="mt-4">
-                                <!-- Form -->
-                                <div class="form-group mb-4">
-                                    <label for="email">Digite seu e-mail</label>
-                                    <div class="input-group">
-                                        <span class="input-group-text" id="basic-addon1"><span class="fas fa-envelope"></span></span>
-                                        <input type="email" class="form-control" name="email" id="email" autofocus required>
-                                    </div>  
+        <div class="container-fluid" >
+    <div class="row no-gutter">
+     
+        <div class="col-md text-center"> 
+             <a href="/"><img src="site/images/logo/logo.png" style="margin-top: 50%;width:500px;height:250px;"></a>         
+                              
+        </div>
+        <div class="col-md-4" style="background: #FF5A00;">
+            <div class="login d-flex align-items-center py-5">
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-lg-10 col-xl-8 mx-auto" style="color: white;">
+                            <h3 class="display-4">Login</h3>
+                            <p class="font-italic" style="color: white;">Acesse sua conta com seu e-mail e senha.</p>
+                            <br>
+                            <form action="/acessos/login" method="POST">
+                                <div class="form-group mb-3">
+                                    <input id="email" type="email" name="email" placeholder="Email" required="" autofocus="" class="form-control rounded-pill border-0 shadow-sm px-4">
                                 </div>
-                                <!-- End of Form -->
-                                <div class="form-group">
-                                    <!-- Form -->
-                                    <div class="form-group mb-4">
-                                        <label for="senha">Digite sua senha</label>
-                                        <div class="input-group">
-                                            <span class="input-group-text" id="basic-addon2"><span class="fas fa-unlock-alt"></span></span>
-                                            <input type="password"  name="senha" class="form-control" id="senha" required>
-                                        </div>  
-                                    </div>
-                                    <!-- End of Form -->
-                                    <div class="d-flex justify-content-between align-items-center mb-4">
-                                        <div><a href="#" data-bs-toggle="modal" data-bs-target="#trocarsenha" class="small text-right">Esqueceu sua senha?</a>
-                                        </div>
-                                    </div>
+                                <div class="form-group mb-3">
+                                    <input id="senha" name="senha" type="password" placeholder="Senha" required="" class="form-control rounded-pill border-0 shadow-sm px-4 text-primary">
                                 </div>
-                                <button type="submit" style="width: 250px;height:40px;background:#262B40;color:white;border:none;border-radius:5px;">Acessar</button>
-                            </form>                        
-                            <div class="d-flex justify-content-center align-items-center mt-4">
-                                <span class="font-weight-normal">
-                                    Não registrado?
-                                    <a href="/registro" class="font-weight-bold">Crie sua conta</a>
-                                </span>
-                            </div>
+                                
+                                <button type="submit" class="btn btn-primary btn-block text-uppercase mb-2 rounded-pill shadow-sm">Sign in</button>
+                                <div class="text-center d-flex justify-content-between mt-4"><p>Esqueceu sua senha? <a href="#" data-bs-toggle="modal" data-bs-target="#trocarsenha" class="font-italic" style="color: white;"> 
+                                        <u>Clique aqui</u></a></p></div>
+                                        <p>Não possui uma conta?<a href="/registro" class="font-italic" style="color: white;"> 
+                                        <u>Clique aqui</u></a></p>
+                            </form>
                         </div>
                     </div>
                 </div>
+
             </div>
-        </section>
+        </div>
+    </div>
+</div>
+
    
 <div class="modal fade" id="trocarsenha" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
@@ -67,7 +59,7 @@
                             <label for="emailtroca">Digite seu e-mail</label>
                         </div>
                     </div>
-                    <button type="submit" id="enviaemail" class="mt-2" style="width: 100px;height:40px;background:#262B40;color:white;border:none;border-radius:5px;">Enviar</button>
+                    <button type="submit" id="enviaemail" class="mt-2" style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Enviar</button>
                 </form>
             </div>
         </div>
@@ -96,7 +88,7 @@
                             <label for="senhanova">Digite sua nova senha</label>
                         </div>
                     </div>
-                    <button id="trocasenha"  class="mt-2" style="width: 100px;height:40px;background:#262B40;color:white;border:none;border-radius:5px;">Alterar</button>
+                    <button id="trocasenha"  class="mt-2" style="width: 100px;height:40px;background:#081C15;color:white;border:none;border-radius:5px;">Alterar</button>
                 </form>
             </div>
         </div>

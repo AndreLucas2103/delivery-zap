@@ -3116,15 +3116,15 @@ fieldset:disabled .btn {
 }
 
 .btn-primary {
-    color: #95D5B2;
+    color: white;
     background-color: #081C15;
     border-color: #081C15
 }
 
 .btn-primary:hover {
-    color: #081C15;
-    background-color: #95D5B2;
-    border-color: #95D5B2
+    color: white;
+    background-color: #020705;
+    border-color: #020705
 }
 
 .btn-check:focus+.btn-primary,
