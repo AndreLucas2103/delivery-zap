@@ -1062,13 +1062,15 @@ ol {
 }
 
 .containerp {
-  height: 100vh;
-  display: flex;
-  justify-content: start;
+  height: auto;
+  position: absolute;
+  top: 50%;
+  left: 35%;
+  transform: translate(-50%, -50%);
   align-items: center;
 }
 .containerp {
-  font-size: 3rem;
+  font-size: 2rem;
   padding: 0.5rem;
   font-weight: bold;
   letter-spacing: 0.1rem;
