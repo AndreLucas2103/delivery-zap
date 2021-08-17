@@ -25,6 +25,7 @@ const RotinaSistema = new Schema({
             type: Schema.Types.ObjectId,
             ref: "planos",
         },
+        vencimento: Date,
     }
 },{ timestamps: true})
 

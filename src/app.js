@@ -228,73 +228,41 @@ const adminPlano = require("./routes/admin/plano/plano")
 
 require("./models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+require("./models/RotinaSistema")
+const RotinaSistema = mongoose.model("rotinasSistemas")
 
 const moment = require('moment')
+const registerLog = require('./components/log')
 
-app.post('/teste', async (req, res) => {
+app.get('/teste', async (req, res) => {
     try {
-
-
-        /* function GerarCobranca (props) {
-            console.log('ok')
-
-            Estabelecimento.updateOne(
-                {'_id': props._id},
-                {
-                    "$push": {
-                        'locacao.faturas': {
-                            $each: [
-                                {
-                                    'idPlano': props.plano_id,
-                                    'descricao': props.descricao,
-                                    'valor': props.valor,
-                                    'vencimento': props.vencimento,
-                                    'situacao': 'waiting',
-                                    'pago': false,
-                                    'cancelado': false,
-                                    'logs': [{
-                                        descricao: 'Gerada pela rotina do sistema'
-                                    }]
-                                }
-                            ],
-                            $position: 0,
-                        }
-                    }
-                }
-            ).then(() => {
-                console.log('ok')
-            }).catch(err => {
-                console.log(err)
-            })
-        }
-
         let estabelecimentos = await Estabelecimento.find({
             $and: [
-                {'statusAtivo': true},
-                {'locacao.liberado': true}
+                {"statusAtivo": true},
+                {"freeSystem.habilitado": false},
+                {"locacao.liberado": true},
+                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days")}}
             ]
         })
 
+        if(estabelecimentos.length === 0 ){
+            console.log("nenhum establecimento")
+        }
+
         estabelecimentos.forEach(async estabelecimento => {
-            let dataLiberado = estabelecimento.locacao.dataLiberado
-            let faturas = estabelecimento.locacao.faturas
-
-            let plano = await Plano.findById(estabelecimento.locacao.idPlano)
-
-            if(!faturas[0] || moment(faturas[0].vencimento).format('MM') != moment().format('MM')){
-                GerarCobranca({
-                    '_id': estabelecimento._id,
-                    'plano_id': plano._id,
-                    'descricao': `Fatura | Plano: ${plano.nome} | ${moment().format('MM')}/${moment().format('YYYY')}`,
-                    'vencimento': new Date(`${moment().format('YYYY')}-${moment().format('MM')}-${estabelecimento.locacao.diaVencimento}`),
-                })
-            }else{
-                
-            }
-        })   */
+            await Usuario.updateMany(
+                {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
+                {
+                    "$pull": {
+                        "estabelecimentosSelecionados": {"idEstabelecimento": estabelecimento._id}
+                    }
+                }
+            )
+        })
 
     } catch (err) {
         console.log(err)
+        //registerLog.registerLog({text: "Error system routine", code: "500", description: err})
     }
 })
 
@@ -307,7 +275,7 @@ app.get('/estabelecimento', (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80
+const PORT = 3000
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
