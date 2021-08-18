@@ -2,7 +2,7 @@
 <link rel="stylesheet" href="site/css/main.css" />
 <link rel="stylesheet" href="site/css/bootstrap.min.css">
 {{>_navb}}
-<script>$("#recursos1").empty()</script>
+<script>$("#recursos1").remove()</script>
 <body style="background:#FF5A00;"></body>
 {{>_msg}}
 <script>window.rwbp={email: 'hotpedidosalterosa@gmail.com',phone: '+5535999028100',message: 'Olá! Em que podemos ajudar?'}</script><script defer async src='https://duz4dqsaqembt.cloudfront.net/client/whats.js'></script>
@@ -240,14 +240,14 @@
             return false;
 
         } else {
-            $('#minhaDiv').hide()
-            $('#minhaDiv2').show()
+            $('#minhaDiv').hide(1200)
+            $('#minhaDiv2').show(1200)
         }
     }
 
     function Mudarestado2() {
-        $('#minhaDiv').show()
-        $('#minhaDiv2').hide()
+        $('#minhaDiv').show(1200)
+        $('#minhaDiv2').hide(1200)
     }
 </script>
 

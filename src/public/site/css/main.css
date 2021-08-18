@@ -5,8 +5,8 @@ Tamanho da imagem principal
   .title-pc{
     display:none;
   }
-  .s{
-    width: 300px;
+  .img-principal{
+    width: 340px;
     position: relative;
     max-width: 500px;
     height:auto;
@@ -18,12 +18,24 @@ Tamanho da imagem principal
   }
   .img-principal{
     position: absolute;
-    margin-top: -360px;
-    width: 450px;
+    margin-top: -330px;
+    padding-right: 20px;
+    width: 520px;
     max-width: auto;
-    height:auto;
+    height:480px;
   }
   }
+
+  /* Transation */
+  #pc1 {
+    transform: scaleY(0);
+    transition: transform 400ms ease 0ms;
+}
+
+#pc1.is-show {
+    transform: scaleY(1);
+    transition: transform 400ms ease 0ms;
+}
 /*======================================
     Variables
 ========================================*/
