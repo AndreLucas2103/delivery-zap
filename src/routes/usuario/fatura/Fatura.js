@@ -187,7 +187,12 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
                 console.log(pagamento)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
-
+                
+                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', description: `
+                    dados da IPN: {
+                        ${dados}
+                    }
+                `})
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
 
@@ -222,13 +227,15 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                         }
                     ).then(async () => {
                         try {
+                            registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} realizou o pagamento da fatura ${pagamento.external_reference}`})
                             console.log('Pedido aprovado')
                             return await new RotinaSistema ({
                                 dataExecutar: moment(dataVencimento).subtract(15, 'days'),
                                 tipo: 'cobranca',
                                 typeCobranca: {
                                     idEstabelecimento: estabelecimento._id,
-                                    idPlano: plano._id
+                                    idPlano: plano._id,
+                                    vencimento: dataVencimento
                                 }
                             }).save()
                         } catch (err) {
@@ -247,12 +254,14 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                                 'locacao.faturas.$.situacao': "waiting",
                                 'locacao.faturas.$.rotina.validado': false,
                                 'locacao.faturas.$.cancelado': true,
+                                'locacao.faturas.$.pago': false,
                             },
                             '$push': {
                                 'locacao.faturas.$.logs': {'descricao': 'Cancelado pola rotina do sistema'}
                             }
                         }
                     ).then(() => {
+                        registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} teve fatura cancelada, fatura: ${pagamento.external_reference}`})
                         console.log('Pedido cancelado')
                     }).catch(err => {
                         console.log(err)
@@ -274,12 +283,14 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                             }
                         }
                     ).then(() => {
+                        registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} está com fatura aguardando, fatura: ${pagamento.external_reference}`})
                         console.log('Pedido aguardando')
                     }).catch(err => {
                         console.log(err)
                     })
 
                 }else{
+                    registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '500', description: `Estabelecimento ${estabelecimento._id} está com erro na fatura, verificar motivo`})
                     console.log('OCorreu um erro eu acho né')
                 }
 
@@ -296,8 +307,6 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
 
 router.post('/teste', async (req, res) => {
     try {
-        
-
         MercadoPago.configure({
             access_token: process.env.MERCADO_PAGO_ACESS_TOKEN
         });
