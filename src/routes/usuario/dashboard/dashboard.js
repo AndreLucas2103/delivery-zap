@@ -26,29 +26,41 @@ const Entregador = mongoose.model("entregadores")
 router.get('/', async (req, res) => {
     try {
 
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
         let pedidos_aguardando = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}},
             {'situacao': 'waiting'}
         ]})
 
         let pedidos_andamento = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}},
             {'situacao': 'production'}
         ]})
 
         let pedidos_finalizado = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}},
             {'situacao': 'finished'}
         ]})
 
         let last_5_pedidos = await Pedido.find({
             $and: [
+                {"idEstabelecimento": userEstabelecimentos},
                 {'statusAtivo': true}
             ]
         }).sort({'dataCriacao': -1}).limit(5).lean().populate('idEstabelecimento')
 
         let adicionais_mais_pedidos = await Pedido.aggregate([
-            {'$match': {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}} },
+            {'$match': { 
+                $and: [
+                    {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment()) } },
+                    {"idEstabelecimento": {"$in": userEstabelecimentos }},
+                ]
+            }},
             {'$unwind': '$produtos'},
             {'$unwind': '$produtos.adicionais'},
             {
@@ -62,7 +74,12 @@ router.get('/', async (req, res) => {
         ])
 
         let produtos_mais_vendidos = await Pedido.aggregate([
-            {'$match': {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}} },
+            {'$match': { 
+                $and: [
+                    {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment()) } },
+                    {"idEstabelecimento": {"$in": userEstabelecimentos }},
+                ]
+            }},
             {'$unwind': '$produtos'},
             {
                 $group:{
@@ -100,13 +117,18 @@ router.get('/', async (req, res) => {
 
 router.post('/chart-pedidos-cancelados-finalizados', async (req, res) => {
     try {
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
         let findData =  {'dataCriacao': { '$gte': new Date(moment().subtract(30, 'days')), '$lte': new Date(moment())}}
 
         let pedidos_cancelado = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             findData,
             {'situacao': 'canceled'}
         ]})
         let pedidos_finalizado = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             findData,
             {'situacao': 'finished'}
         ]})
@@ -126,13 +148,18 @@ router.post('/chart-pedidos-cancelados-finalizados', async (req, res) => {
 
 router.post('/chart-pedidos-retiradosEstabelecimento-entregas', async (req, res) => {
     try {
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
         let findData =  {'dataCriacao': { '$gte': new Date(moment().subtract(30, 'days')), '$lte': new Date(moment())}}
 
         let pedidos_entregas = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             findData,
             {'tipoEntrega': 'entrega'}
         ]})
         let pedidos_retirar = await Pedido.countDocuments({$and: [
+            {"idEstabelecimento": userEstabelecimentos},
             findData,
             {'tipoEntrega': 'retirarLocal'}
         ]})
@@ -152,10 +179,18 @@ router.post('/chart-pedidos-retiradosEstabelecimento-entregas', async (req, res)
 
 router.post('/chart-pedidos-meio-pagamento-pagarRecebimento', async (req, res) => {
     try {
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
         let findData =  {'dataCriacao': { '$gte': new Date(moment().subtract(30, 'days')), '$lte': new Date(moment())}}
 
         let meios = await Pedido.aggregate([
-            {'$match': {'$and': [{'pagamento.tipo': 'pagarRecebimento'}, findData]}},
+            {'$match': {'$and': [
+                {'pagamento.tipo': 'pagarRecebimento'}, 
+                findData,
+                {"idEstabelecimento": {"$in": userEstabelecimentos }},
+            ]
+            }},
             {
                 $group:{
                     _id: '$pagamento.forma', 
@@ -173,10 +208,17 @@ router.post('/chart-pedidos-meio-pagamento-pagarRecebimento', async (req, res) =
 
 router.post('/chart-pedidos-pedidos-ultimos-28-dias', async (req, res) => {
     try {
+        let userEstabelecimentos = []
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+
         let findData =  {'dataCriacao': { '$gte': new Date(moment().subtract(28, 'days')), '$lte': new Date(moment())}}
 
         let pedidos = await Pedido.aggregate([
-            {'$match': {'$and': [findData]}},
+            {'$match': {'$and': [
+                findData,
+                {"idEstabelecimento": {"$in": userEstabelecimentos }},
+            ]
+            }},
             {
                 $group:{
                     _id : { $dateToString: { format: "%d/%m", date: "$dataCriacao" } },
