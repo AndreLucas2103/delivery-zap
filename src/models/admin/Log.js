@@ -10,6 +10,7 @@ const Log = new Schema({
     date: Date,
     code: String,
     description: String,
+    obj: Object,
 
 },{ timestamps: true})
 

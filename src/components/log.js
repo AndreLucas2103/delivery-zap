@@ -11,6 +11,7 @@ module.exports = {
             'date': new Date(),
             'code': props.code,
             'description': props.description,
+            'obj': props.obj,
         }).save().then( () => {
             return {status: 200}
         }).catch(err => {

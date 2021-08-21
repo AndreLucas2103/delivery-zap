@@ -187,11 +187,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 console.log(pagamento)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
                 
-                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', description: `
-                    dados da IPN: {
-                        ${dados}
-                    }
-                `})
+                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', obj: dados})
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
 
