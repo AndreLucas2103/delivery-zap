@@ -54,8 +54,6 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
             ]
         })
 
-        console.log(rotina)
-
         if(rotina.length === 0) {
             return registerLog.registerLog({text: "No routine to run", code: "200", description: "A base de dados não possui nenhuma rotina para executar"})
         } 
