@@ -85,7 +85,10 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                         cnpj: req.body.cnpj,
                                         telefone: req.body.telefone,
                                         idUsuarioMaster: usuarioEdit._id,
-    
+                                        locacao: {
+                                            liberado: true,
+                                            dataLiberado: moment().add(7, 'days')
+                                        },
                                         freeSystem: {
                                             habilitado: true,
                                             dataFim: moment().add(7, 'days')

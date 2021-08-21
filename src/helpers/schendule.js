@@ -119,7 +119,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
     }
 });
 
-schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 06:01:01 todos os dias
+schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
     try {
         let estabelecimentos = await Estabelecimento.find({
             $and: [
@@ -147,6 +147,6 @@ schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 06:01:01 to
 
     } catch (err) {
         console.log(err)
-        //registerLog.registerLog({text: "Error system routine", code: "500", description: err})
+        registerLog.registerLog({text: "Error system routine", code: "500", description: err})
     }
 });

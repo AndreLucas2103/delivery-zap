@@ -158,7 +158,6 @@ router.post('/checkout', async (req, res) => {
     }
 })
 
-
 router.post('/IPN-fatura-mercado-pago', async (req,res) => {
     try {
         let id = req.query.id
@@ -204,6 +203,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 let estabelecimento = estabelecimentoFind[0]
 
                 if(pagamento.status == "approved"){
+
                     if(estabelecimento.locacao.faturas.rotina.validado === true) 
                         return registerLog.registerLog({text: 'Rotina IPN Mercado Pago', code: '403', description: 'Alguem tentou realizar uma requisição utilizando paramentros confiáveis da external reference'})
 

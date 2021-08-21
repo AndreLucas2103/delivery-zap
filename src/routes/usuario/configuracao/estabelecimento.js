@@ -20,6 +20,13 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
     try {
         let plano = await Plano.findById({'_id': req.body.idPlano})
 
+        let estabelecimento = await Estabelecimento.findById({'_id': req.body.idEstabelecimento})
+
+        console.log(moment(estabelecimento.locacao.dataLiberado).diff(moment(), "days"))
+        let diff = moment(estabelecimento.locacao.dataLiberado).diff(moment(), "days")
+
+        let data = diff < 0 ? moment() : estabelecimento.locacao.dataLiberado
+
         Estabelecimento.updateOne(
             {'_id': req.body.idEstabelecimento},
             {'$set': {
@@ -27,15 +34,13 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
                     idPlano: plano._id,
                     plano: plano.nome,
                     liberado: true,
-                    dataLiberado: moment(),
-                    diaVencimento: moment().date(),
+                    dataLiberado: moment(data),
                     valor: plano.valor,
-                
                     faturas: [{
                         idPlano: plano._id,
-                        descricao: `Fatura ${moment().format('DD/MM/YYYY')} até ${moment().add(plano.mesesPeriodicidade, 'months').format('DD/MM/YYYY')}`,
+                        descricao: `Fatura ${moment(data).format('DD/MM/YYYY')} até ${moment(data).add(plano.mesesPeriodicidade, 'months').format('DD/MM/YYYY')}`,
                         valor: plano.valor,
-                        vencimento: moment(),
+                        vencimento: moment(data),
                         situacao: 'waiting',
                         pago: false,
                         cancelado: false,
@@ -182,31 +187,12 @@ router.post('/delete-horarioFuncionamento', async (req, res) => { // deletar os 
     }
 })
 
-router.get('/estabelecimentos', eAdmin, async (req, res) => { // Listar todos os estabelecimentos
+router.get('/estabelecimentos', /* eAdmin, */ async (req, res) => { // Listar todos os estabelecimentos
     try {
-        let estabelecimentos = await Usuario.aggregate([
-            { $match: { _id: req.user._id } },
-            {
-                $lookup:
-                {
-                    from: "estabelecimentos",
-                    localField: "estabelecimentosVinculados.idEstabelecimento",
-                    foreignField: "_id",
-                    as: "estabelecimentosVinculados"
-                }
 
-            },
-            { $unwind: '$estabelecimentosVinculados' },
-            {
-                $lookup:
-                {
-                    from: "usuarios",
-                    localField: "estabelecimentosVinculados._id",
-                    foreignField: "estabelecimentosVinculados.idEstabelecimento",
-                    as: "usuariosVinculados"
-                }
-            },
-        ])
+        let estabelecimentos2 = req.user.estabelecimentosVinculados.map(e => e.idEstabelecimento)
+
+        let estabelecimentos = await Estabelecimento.find({"_id": estabelecimentos2}).populate("locacao.idPlano").lean()
 
         let planos = await Plano.find({'statusAtivo': true}).lean()
 
