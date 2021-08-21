@@ -48,6 +48,7 @@
                                     {{#if locacao.faturas.pago}}
                                     {{else}}
                                         {{#if locacao.faturas.cancelado}}
+                                            <button type="submit" class="btn btn-success btn-sm" name="idFatura" value="{{locacao.faturas._id}}">Pagar</button>
                                         {{else}}
                                             <button type="submit" class="btn btn-success btn-sm" name="idFatura" value="{{locacao.faturas._id}}">Pagar</button>
                                         {{/if}}
