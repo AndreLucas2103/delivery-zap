@@ -1,6 +1,7 @@
 const schedule = require('node-schedule');
 const mongoose = require("mongoose");
 const moment = require('moment')
+const { v4: uuidv4 } = require('uuid');
 
 require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -78,6 +79,10 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                                                 situacao: 'waiting',
                                                 pago: false,
                                                 cancelado: false,
+                                                "rotina": {
+                                                    "validado": false
+                                                },
+                                                'idTransacaoOperadora': `${rotina.typeCobranca.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
                                                 logs: [{
                                                     descricao: 'Fatura gerada pelo sistema (Rotina)'
                                                 }]

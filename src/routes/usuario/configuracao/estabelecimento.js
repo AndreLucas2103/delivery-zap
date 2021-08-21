@@ -7,6 +7,8 @@ const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 const moment = require('moment')
 const aws = require("aws-sdk");
+const { v4: uuidv4 } = require('uuid');
+
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -44,6 +46,10 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
                         situacao: 'waiting',
                         pago: false,
                         cancelado: false,
+                        "rotina": {
+                            "validado": false
+                        },
+                        'idTransacaoOperadora': `${req.body.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
                         logs: [{
                             descricao: 'Fatura gerada ao adquirir o plano'
                         }]

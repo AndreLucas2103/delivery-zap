@@ -103,7 +103,9 @@ router.post('/add-plano-fatura', async (req, res) => {
                                 'situacao': 'waiting',
                                 'pago': false,
                                 'cancelado': false,
-                                "rotina": false,
+                                "rotina": {
+                                    "validado": false
+                                },
                                 'idTransacaoOperadora': `${req.body.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
                                 'logs': [{
                                     descricao: `Gerada manualmente por ${req.user.primeiroNome}`
