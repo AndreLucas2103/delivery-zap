@@ -275,7 +275,7 @@ app.get('/estabelecimento', (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 80
+const PORT = 3000
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
