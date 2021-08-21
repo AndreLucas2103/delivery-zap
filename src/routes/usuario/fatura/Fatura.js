@@ -158,7 +158,6 @@ router.post('/checkout', async (req, res) => {
     }
 })
 
-
 router.post('/IPN-fatura-mercado-pago', async (req,res) => {
     try {
         let id = req.query.id
@@ -188,11 +187,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 console.log(pagamento)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
                 
-                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', description: `
-                    dados da IPN: {
-                        ${dados}
-                    }
-                `})
+                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', obj: dados})
 
                 let queryFindPlano = pagamento.external_reference.split("#@#")
 
@@ -204,6 +199,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 let estabelecimento = estabelecimentoFind[0]
 
                 if(pagamento.status == "approved"){
+
                     if(estabelecimento.locacao.faturas.rotina.validado === true) 
                         return registerLog.registerLog({text: 'Rotina IPN Mercado Pago', code: '403', description: 'Alguem tentou realizar uma requisição utilizando paramentros confiáveis da external reference'})
 
@@ -344,6 +340,7 @@ router.post('/teste', async (req, res) => {
                             'locacao.faturas.$.situacao': "paid",
                             'locacao.faturas.$.pago': true,
                             'locacao.faturas.$.rotina.validado': true,
+                            'locacao.faturas.$.cancelado': false,
                             'locacao.faturas.$.dataPagamento': pagamento.date_approved,
                             'locacao.dataLiberado': dataVencimento,
                             'locacao.liberado': true

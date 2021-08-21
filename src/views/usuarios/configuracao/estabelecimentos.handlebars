@@ -174,15 +174,15 @@
 
                 <div class="row">
                     {{#each estabelecimentos}}
-                    <div class="col-12 col-lg-6 mb-4">
+                    <div class="col-12 col-lg-6 mb-4" {{#if statusAtivo}}  {{else}} style="filter: grayscale(100%);" {{/if}}>
                         <div class="card border-light shadow-sm">            
                             <div class="card-header border-bottom border-light d-flex justify-content-between">
-                                <form method="POST" action="/configuracao/statusAberto" id="status-estabelecimento-{{estabelecimentosVinculados._id}}">
-                                <h5>{{estabelecimentosVinculados.nome}}
-                                <input type="text" name="idEstabelecimento" value="{{estabelecimentosVinculados._id}}" hidden>
+                                <form method="POST" action="/configuracao/statusAberto" id="status-estabelecimento-{{_id}}">
+                                <h5>{{nome}} {{#if statusAtivo}}  {{else}} - INATIVO {{/if}}
+                                <input type="text" name="idEstabelecimento" value="{{_id}}" hidden>
                                 <div class="form-check form-switch">
-                                <input class="form-check-input" type="checkbox" id="id-statusAberto" onchange="clickStatus('{{estabelecimentosVinculados._id}}')" name="statusAberto" value="true" {{#if estabelecimentosVinculados.statusAberto}} checked {{else}} {{/if}}>
-                                    <label class="form-check-label" for="id-statusAberto">{{#if estabelecimentosVinculados.statusAberto}} Fechar{{else}} Abrir{{/if}}</label>
+                                <input class="form-check-input" type="checkbox" id="id-statusAberto" onchange="clickStatus('{{_id}}')" name="statusAberto" value="true" {{#if statusAberto}} checked {{else}} {{/if}}>
+                                    <label class="form-check-label" for="id-statusAberto">{{#if statusAberto}} Fechar{{else}} Abrir{{/if}}</label>
                                 </div>
                                 </h5>
                                 </form>
@@ -191,23 +191,23 @@
                                         $(`#status-estabelecimento-${status}`).submit()
                                     }
                                 </script>
-                                <a href="/configuracao/estabelecimento/{{estabelecimentosVinculados._id}}"
+                                <a href="/configuracao/estabelecimento/{{_id}}"
                                     class="btn btn-sm btn-secondary" style="height: 30px;">Ver</a>
                             </div>
                             <div class="card-body">
-                                {{#if estabelecimentosVinculados.locacao.plano}}
+                                {{#if locacao.idPlano}}
                                     <ul class="list-group list-group-flush list my--3">
-                                        <span>Situação: {{{formatTrueFalse estabelecimentosVinculados.locacao.liberado}}}</span>
-                                        {{#if estabelecimentosVinculados.locacao.liberado}}<span>Liberado até {{dataFormatTimeZone usuarioLogado.timeZone estabelecimentosVinculados.locacao.dataLiberado "DD/MM/YYYY"}}</span>{{/if}}
-                                        <span>Plano: {{estabelecimentosVinculados.locacao.plano}}</span>
-                                        <span>Valor: <span class="valorFormatar">{{estabelecimentosVinculados.locacao.valor}}</span></span>
+                                        <span>Situação: {{{formatTrueFalse locacao.liberado}}}</span>
+                                        {{#if locacao.liberado}}<span>Liberado até {{dataFormatTimeZone usuarioLogado.timeZone locacao.dataLiberado "DD/MM/YYYY"}}</span>{{/if}}
+                                        <span>Plano: {{locacao.idPlano.nome}}</span>
+                                        <span>Valor: <span class="valorFormatar">{{locacao.idPlano.valor}}</span></span>
                                     </ul>
                                 {{else}}
-                                    {{#if estabelecimentosVinculados.freeSystem.habilitado}}
-                                        <h5>Período de testes (até {{dataFormatTimeZone usuarioLogado.timeZone estabelecimentosVinculados.freeSystem.dataFim "DD/MM/YYYY"}})</h5>
-                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{estabelecimentosVinculados._id}}" data-bs-nome="{{estabelecimentosVinculados.nome}}">Adquirir Plano</button>
+                                    {{#if freeSystem.habilitado}}
+                                        <h5>Período de testes (até {{dataFormatTimeZone usuarioLogado.timeZone freeSystem.dataFim "DD/MM/YYYY"}})</h5>
+                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{_id}}" data-bs-nome="{{nome}}">Adquirir Plano</button>
                                     {{else}}
-                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{estabelecimentosVinculados._id}}" data-bs-nome="{{estabelecimentosVinculados.nome}}">Adquirir Plano</button>
+                                        <button class="btn  btn-primary btn-sm" type="submit" data-bs-toggle="modal" data-bs-target="#modalAddPlano" data-bs-idEstabelecimento="{{_id}}" data-bs-nome="{{nome}}">Adquirir Plano</button>
                                     {{/if}}
                                 {{/if}}
                                 

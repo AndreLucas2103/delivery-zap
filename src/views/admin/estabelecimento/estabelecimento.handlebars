@@ -103,8 +103,7 @@
                                                             <td>
                                                                 <input type="date" class="form-control form-control-sm"
                                                                     name="locacaoLiberadoAte"
-                                                                    value="{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "
-                                                                    YYYY-MM-DD"}}">
+                                                                    value="{{dataFormatTimeZone usuarioLogado.timeZone estabelecimento.locacao.dataLiberado "YYYY-MM-DD"}}">
                                                             </td>
                                                         </tr>
                                                         <tr>
@@ -209,13 +208,11 @@
                                                                     data-bs-idFatura=""></i>
                                                             </td>
                                                             <td>
-                                                                {{dataFormatTimeZone usuarioLogado.timeZone vencimento
-                                                                "DD/MM/YYYY" "exact"}}
+                                                                {{dataFormatTimeZone usuarioLogado.timeZone vencimento "DD/MM/YYYY" "exact"}}
                                                             </td>
                                                             <td>{{descricao}}</td>
                                                             <td>{{FormatValor valor}}</td>
-                                                            <td class="format-locacao-situacao-cobranca">{{situacao}}
-                                                            </td>
+                                                            <td class="format-locacao-situacao-cobranca">{{situacao}}</td>
                                                         </form>
                                                     </tr>
                                                     {{/each}}

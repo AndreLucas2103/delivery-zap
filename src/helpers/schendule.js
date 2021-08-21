@@ -1,6 +1,7 @@
 const schedule = require('node-schedule');
 const mongoose = require("mongoose");
 const moment = require('moment')
+const { v4: uuidv4 } = require('uuid');
 
 require("../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -54,8 +55,6 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
             ]
         })
 
-        console.log(rotina)
-
         if(rotina.length === 0) {
             return registerLog.registerLog({text: "No routine to run", code: "200", description: "A base de dados não possui nenhuma rotina para executar"})
         } 
@@ -80,6 +79,10 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                                                 situacao: 'waiting',
                                                 pago: false,
                                                 cancelado: false,
+                                                "rotina": {
+                                                    "validado": false
+                                                },
+                                                'idTransacaoOperadora': `${rotina.typeCobranca.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
                                                 logs: [{
                                                     descricao: 'Fatura gerada pelo sistema (Rotina)'
                                                 }]
@@ -100,7 +103,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                             }
                         )
     
-                        return registerLog.registerLog({text: "Charge generated", code: "200", description: `Cobrança gerada para o estabelecimento ${rotina.typeCobranca.idEstabelecimento}`})
+                        registerLog.registerLog({text: "Charge generated", code: "200", description: `Cobrança gerada para o estabelecimento ${rotina.typeCobranca.idEstabelecimento}`})
                         break;
                 
                     default:
@@ -112,7 +115,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                         break;
                 }
             } catch (err) {
-                return registerLog.registerLog({text: "No routine to run", code: "200", description: "A base de dados não possui nenhuma rotina para executar"})
+                registerLog.registerLog({text: "No routine to run", code: "200", description: err})
             }
         })
 
@@ -121,7 +124,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
     }
 });
 
-schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 06:01:01 todos os dias
+schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
     try {
         let estabelecimentos = await Estabelecimento.find({
             $and: [
@@ -137,6 +140,15 @@ schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 06:01:01 to
         }
 
         estabelecimentos.forEach(async estabelecimento => {
+            await Estabelecimento.updateOne(
+                {"_id": estabelecimento._id},
+                {
+                    "$set": {
+                        'locacao.liberado': false,
+                        "statusAtivo": false
+                    }
+                }
+            )
             await Usuario.updateMany(
                 {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
                 {
@@ -149,6 +161,6 @@ schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 06:01:01 to
 
     } catch (err) {
         console.log(err)
-        //registerLog.registerLog({text: "Error system routine", code: "500", description: err})
+        registerLog.registerLog({text: "Error system routine", code: "500", description: err})
     }
 });
