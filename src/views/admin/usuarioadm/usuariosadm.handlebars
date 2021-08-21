@@ -1,0 +1,137 @@
+{{>admin/_top-css}}
+<div class="container-fluid bg-soft">
+<div class="row">
+<div class="col-12">
+{{>admin/_menu}}
+
+<main class="content">
+    
+    <div class="">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                <li class="breadcrumb-item"><a href="/admin"><span class="fas fa-home"></span></a></li>
+                <li class="breadcrumb-item"><a>Administrativo</a></li>
+                <li class="breadcrumb-item"><a href="/admin/administrativo/usuariosadm">UsuariosMaster</a></li>
+            </ol>
+        </nav>
+    </div>
+
+    <div>
+        <button type="button" class="btn btn-white btn-sm mb-4" onclick="location.reload()"><i class="fas fa-sync"></i></button>
+        <button class="btn btn-{{#if filtroExist}}danger{{else}}white{{/if}} btn-sm mb-4 float-end" data-bs-toggle="collapse" data-bs-target="#collapseExample"> <i class="fas fa-filter"></i> </button>
+
+        <div class="collapse mb-4" id="collapseExample">
+            <div class="card card-body">
+                <form method="get" id="form-filtro-1">
+                    <div class="form-floating mb-3">
+                        <input type="text" class="form-control" name="conteudo" id="find-conteudo" placeholder="-">
+                        <label for="find-conteudo">Nome / E-mail</label>
+                    </div>
+
+                    <input type="text" name="limit" id="filtro-estabelecimentos-limit" value="{{pagination.limitPage}}" hidden readonly> 
+                    
+                    <button class="btn btn-primary btn-sm d-block mt-2" type="submit">Filtrar</button>
+                </form>
+            </div>
+        </div>
+        
+    </div>
+    
+    <div class="card border-light shadow-sm mb-4">
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-centered table-nowrap mb-0 rounded">
+                    <thead class="thead-light">
+                        <tr>
+                            <th class="border-0">#</th>
+                            <th class="border-0">ID</th>
+                            <th class="border-0">Nome</th>
+                            <th class="border-0">E-mail</th>
+                            <th class="border-0">CPF</th>
+                            <th class="border-0">Ativo</th>
+                            <th class="border-0">Criado em</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {{#each estabelecimentos}}
+                        <tr>
+                            <td><a href="/admin/administrativo/usuarioadm?idUsuarioMaster={{idUsuarioMaster._id}}"><i class="fas fa-external-link-square-alt"></i></a></td>
+                            <td>{{idUsuarioMaster._id}}</td>
+                            <td>{{idUsuarioMaster.nomeCompleto}}</td>
+                            <td>{{idUsuarioMaster.email}}</td>
+                            <td>{{idUsuarioMaster.cpf}}</td>
+                            <td>{{{formatTrueFalse statusAtivo}}}</td>
+                            <td>{{dataFormatTimeZone "-03:00" createdAt "DD/MM/YYYY HH:mm"}}</td>
+                        </tr>
+                        {{/each}}
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="mt-4">
+
+                <div class="dropdown">
+                <button class="btn btn-white btn-sm float-end" type="button" id="dropdown-limit-list" data-bs-toggle="dropdown">
+                    <i class="fas fa-bars"></i>
+                </button>
+                <ul class="dropdown-menu" aria-labelledby="dropdown-limit-list">
+                    <div class="text-center">Registro por página</div>
+                    <div>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="10">10</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="20">20</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="50">50</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 click-paginate" value="100">100</button>
+                        <button class="buttonClickLimit btn btn-light btn-sm ml-1 mr-1 click-paginate" value="200">200</button>
+                    </div>
+                </ul>
+                </div>
+                <span class="float-end mt-1 mr-4">{{pagination.startPage}} a {{pagination.endPage}} de {{pagination.totalPage}}</span>
+
+                <nav class="page-pagination">
+                    <ul class="pagination pagination-sm">
+                    {{#paginate pagination type="first"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">«</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="middle" limit="5"}}
+                        <li {{#if active}}class="page-item active current" {{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">{{n}}</a></li>
+                    {{/paginate}}
+                    
+                    {{#paginate pagination type="last"}}
+                        <li {{#if disabled}}class="page-item"{{/if}}><a class="page-link click-paginate" href="?paginate={{n}}">»</a></li>
+                    {{/paginate}}
+                    </ul>
+                </nav>
+
+                <script>
+                    let filtro1 = $('#form-filtro-1').serialize()
+                    let limit = "limit="+10
+
+                    $('.click-paginate').click(function (e) {
+                        event.preventDefault()
+                        if(e.target.classList[0] == "buttonClickLimit"){
+                            $('#filtro-estabelecimentos-limit').val(e.target.value)
+                            $('#form-filtro-1').submit()
+                        }else{
+                            $(this).attr('href').slice(1)
+                            paginate = $(this).attr('href').slice(1);
+                            location.href = `?${paginate}&${filtro1}` ;
+                        }
+                    });
+                </script>
+
+            </div>
+
+
+        </div>
+    </div>
+
+</main>
+
+</div>
+</div>
+</div>
+
+{{>admin/_rodape}}
+
+{{>_msg}}

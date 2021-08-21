@@ -7,7 +7,8 @@ const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 
 
-
+require("../../../models/Usuario")
+const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/Plano")
@@ -16,10 +17,14 @@ const Plano = mongoose.model("planos")
 
 router.get('/estabelecimento', async (req, res) => {
     try {
+      
         let estabelecimento = await Estabelecimento.findById({'_id': req.query.idEstabelecimento}).populate('idUsuarioMaster').lean()
-        
+        let usuarios = await Usuario.find({"estabelecimentosVinculados.idEstabelecimento" : req.query.idEstabelecimento }).populate('estabelecimentosVinculados.idEstabelecimento').lean()
+        console.log(usuarios)
+
         res.render('admin/estabelecimento/estabelecimento', {
-            estabelecimento: estabelecimento
+            estabelecimento: estabelecimento,
+            usuarios: usuarios
         })
     } catch (err) {
         console.log(err)
@@ -115,6 +120,57 @@ router.post('/add-plano-fatura', async (req, res) => {
         }).catch(err => {
             console.log(err)
         })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.get('/usuarioadm', async (req, res) => {
+    try {
+      
+        let estabelecimentos = await Estabelecimento.find({'idUsuarioMaster': req.query.idUsuarioMaster}).lean()
+        let usuario = await Usuario.findById({"_id" : req.query.idUsuarioMaster }).lean()
+
+        res.render('admin/usuarioadm/usuarioadm', {
+            estabelecimentos: estabelecimentos,
+            usuario: usuario
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+
+router.get('/usuariosadm', async (req, res) => {
+    try {
+        let {conteudo, limit, paginate} = req.query
+
+        limit ? find_limit = Number(limit) : find_limit = 20
+        paginate ? find_paginate = Number(paginate) : find_paginate = 1
+        let skip = find_limit * (find_paginate-1)
+
+        conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'nomeCompleto': { '$regex': conteudo.trim(), '$options': "i" } }, { 'email': { '$regex': conteudo.trim(), '$options': "i" } }]}
+        query = {
+            $and: [find_conteudo]
+        }
+
+        let estabelecimentos = await Usuario.find(query).skip(skip).limit(find_limit).populate('idUsuarioMaster').lean()
+        let totalPage = await Usuario.countDocuments(query)
+
+
+        res.render('admin/usuarioadm/usuariosadm', {
+            estabelecimentos: estabelecimentos,
+            pagination: {
+                page: find_paginate,
+                pageCount: Math.ceil(totalPage/find_limit),
+
+                totalPage: totalPage,
+                limitPage: find_limit,
+                startPage: estabelecimentos.length == 0 ? 0 : skip+1,
+                endPage: skip + estabelecimentos.length
+            }
+        })
+        
     } catch (err) {
         console.log(err)
     }
