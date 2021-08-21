@@ -174,11 +174,11 @@
 
                 <div class="row">
                     {{#each estabelecimentos}}
-                    <div class="col-12 col-lg-6 mb-4">
+                    <div class="col-12 col-lg-6 mb-4" {{#if statusAtivo}}  {{else}} style="filter: grayscale(100%);" {{/if}}>
                         <div class="card border-light shadow-sm">            
                             <div class="card-header border-bottom border-light d-flex justify-content-between">
                                 <form method="POST" action="/configuracao/statusAberto" id="status-estabelecimento-{{_id}}">
-                                <h5>{{nome}}
+                                <h5>{{nome}} {{#if statusAtivo}}  {{else}} - INATIVO {{/if}}
                                 <input type="text" name="idEstabelecimento" value="{{_id}}" hidden>
                                 <div class="form-check form-switch">
                                 <input class="form-check-input" type="checkbox" id="id-statusAberto" onchange="clickStatus('{{_id}}')" name="statusAberto" value="true" {{#if statusAberto}} checked {{else}} {{/if}}>

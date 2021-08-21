@@ -233,36 +233,87 @@ const RotinaSistema = mongoose.model("rotinasSistemas")
 
 const moment = require('moment')
 const registerLog = require('./components/log')
+const { v4: uuidv4 } = require('uuid');
 
 app.get('/teste', async (req, res) => {
     try {
-        let estabelecimentos = await Estabelecimento.find({
-            $and: [
-                {"statusAtivo": true},
-                {"freeSystem.habilitado": false},
-                {"locacao.liberado": true},
-                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days")}}
+        let rotina = await RotinaSistema.find({
+            "$and": [
+                {'executada': false},
+                {"dataExecutar": {'$gte': new Date(moment().format('YYYY-MM-DD')), "$lte": new Date(moment())}}
             ]
         })
 
-        if(estabelecimentos.length === 0 ){
-            console.log("nenhum establecimento")
-        }
+        console.log(rotina.length)
 
-        estabelecimentos.forEach(async estabelecimento => {
-            await Usuario.updateMany(
-                {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
-                {
-                    "$pull": {
-                        "estabelecimentosSelecionados": {"idEstabelecimento": estabelecimento._id}
-                    }
+        if(rotina.length == 0) {
+            return registerLog.registerLog({text: "No routine to run", code: "200", description: "A base de dados não possui nenhuma rotina para executar"})
+        } 
+
+        rotina.forEach(async  rotina => {
+            try {
+                switch  (rotina.tipo)  {
+                    case "cobranca":
+                        let plano = await Plano.findById(rotina.typeCobranca.idPlano) 
+
+                        console.log(rotina.typeCobranca.idPlano)
+
+                        let estabelecimento = await Estabelecimento.updateOne(
+                            {"_id": rotina.typeCobranca.idEstabelecimento},
+                            {
+                                "$push" : {
+                                    'locacao.faturas': {
+                                        $each: [
+                                            {
+                                                idPlano: plano._id,
+                                                descricao: `Fatura ${moment(rotina.typeCobranca.vencimento).format('DD/MM/YYYY')} até ${moment(rotina.typeCobranca.vencimento).add(plano.mesesPeriodicidade, 'months').format('DD/MM/YYYY')}`,
+                                                valor: plano.valor,
+                                                vencimento: rotina.typeCobranca.vencimento,
+                                                situacao: 'waiting',
+                                                pago: false,
+                                                cancelado: false,
+                                                "rotina": {
+                                                    "validado": false
+                                                },
+                                                'idTransacaoOperadora': `${rotina.typeCobranca.idEstabelecimento}#@#${uuidv4() + uuidv4()}`,
+                                                logs: [{
+                                                    descricao: 'Fatura gerada pelo sistema (Rotina)'
+                                                }]
+                                            }
+                                        ],
+                                        $position: 0,
+                                    }
+                                }
+                            }
+                        )
+
+                        await RotinaSistema.updateOne(
+                            {'_id': rotina._id},
+                            {
+                                '$set': {
+                                    'executada': true
+                                }
+                            }
+                        )
+    
+                        registerLog.registerLog({text: "Charge generated", code: "200", description: `Cobrança gerada para o estabelecimento ${rotina.typeCobranca.idEstabelecimento}`})
+                        break;
+                
+                    default:
+                        registerLog.registerLog({
+                            text: "Routine with no defined type", 
+                            code: "500", 
+                            description: `A rotina não possui tipo definido {_id: ${rotina._id}}`
+                        })
+                        break;
                 }
-            )
+            } catch (err) {
+                registerLog.registerLog({text: "No routine to run", code: "200", description: err})
+            }
         })
 
     } catch (err) {
-        console.log(err)
-        //registerLog.registerLog({text: "Error system routine", code: "500", description: err})
+        registerLog.registerLog({text: "Error system routine", code: "500", description: err})
     }
 })
 

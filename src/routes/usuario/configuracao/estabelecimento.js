@@ -430,7 +430,7 @@ router.post('/statusAberto', (req, res) => { // adicionar estilo do estabelecime
                 res.redirect('back')
             })
        
-    })
+})
 
 
 router.get('/painel/:idPainel', eAdmin, async (req, res) => {

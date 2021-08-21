@@ -340,6 +340,7 @@ router.post('/teste', async (req, res) => {
                             'locacao.faturas.$.situacao': "paid",
                             'locacao.faturas.$.pago': true,
                             'locacao.faturas.$.rotina.validado': true,
+                            'locacao.faturas.$.cancelado': false,
                             'locacao.faturas.$.dataPagamento': pagamento.date_approved,
                             'locacao.dataLiberado': dataVencimento,
                             'locacao.liberado': true
