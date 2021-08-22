@@ -114,6 +114,9 @@ router.post('/add-plano-fatura', async (req, res) => {
                         ],
                         $position: 0,
                     }
+                },
+                "$set":  {
+                    'freeSystem.habilitado': false
                 }
             }
         ).then(() => {
