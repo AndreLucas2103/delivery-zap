@@ -1,4 +1,4 @@
-const schedule = require('node-schedule');
+﻿const schedule = require('node-schedule');
 const mongoose = require("mongoose");
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
@@ -124,7 +124,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
     }
 });
 
-schedule.scheduleJob('1 51 1 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
+schedule.scheduleJob('1 53 1 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
     try {
         let estabelecimentos = await Estabelecimento.find({
             $and: [
