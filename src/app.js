@@ -231,42 +231,6 @@ const Estabelecimento = mongoose.model("estabelecimentos")
 require("./models/RotinaSistema")
 const RotinaSistema = mongoose.model("rotinasSistemas")
 
-const moment = require('moment')
-const registerLog = require('./components/log')
-
-app.get('/teste', async (req, res) => {
-    try {
-        let estabelecimentos = await Estabelecimento.find({
-            $and: [
-                {"statusAtivo": true},
-                {"freeSystem.habilitado": false},
-                {"locacao.liberado": true},
-                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days")}}
-            ]
-        })
-
-        if(estabelecimentos.length === 0 ){
-            console.log("nenhum establecimento")
-        }
-
-        estabelecimentos.forEach(async estabelecimento => {
-            await Usuario.updateMany(
-                {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
-                {
-                    "$pull": {
-                        "estabelecimentosSelecionados": {"idEstabelecimento": estabelecimento._id}
-                    }
-                }
-            )
-        })
-
-    } catch (err) {
-        console.log(err)
-        //registerLog.registerLog({text: "Error system routine", code: "500", description: err})
-    }
-})
-
-
 app.get('/estabelecimento', (req, res) => {
     Estabelecimento.findById(req.query.id, {impressora: 0, integracao: 0, painel:0, configPedidos:0, img:0}).lean().then(estabelecimento => {
         res.json(estabelecimento)

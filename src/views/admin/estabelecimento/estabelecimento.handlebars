@@ -287,14 +287,12 @@
                                                 <tbody>
                                                 {{#each usuarios}}
                                                 
-                                                    <tr {{#if statusAtivo}} {{else}}style="filter: grayscale(100%);"
-                                                        {{/if}}>
+                                                    <tr {{#if statusAtivo}} {{else}}style="filter: grayscale(100%);" {{/if}}>
                                                         <th scope="row"><img class="rounded-circle user-avatar" src="/img/perfil-avatar/svg/{{perfilAvatar}}.svg"></th>
                                                         <td>{{primeiroNome}}</td>
                                                         <td>{{email}}</td>
                                                         <td>{{cpf}}</td>
-                                                        <td> {{#if eTipoAdmin}}<img
-                                                                src="/usuario/assets/img/favicon/star.png">{{/if}}</td>
+                                                        <td> {{#if eTipoAdmin}}<img src="/usuario/assets/img/favicon/star.png">{{/if}}</td>
                                                     </tr>
                                                
                                                 {{/each}}

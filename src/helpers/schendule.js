@@ -103,7 +103,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                             }
                         )
     
-                        return registerLog.registerLog({text: "Charge generated", code: "200", description: `Cobrança gerada para o estabelecimento ${rotina.typeCobranca.idEstabelecimento}`})
+                        registerLog.registerLog({text: "Charge generated", code: "200", description: `Cobrança gerada para o estabelecimento ${rotina.typeCobranca.idEstabelecimento}`})
                         break;
                 
                     default:
@@ -115,7 +115,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
                         break;
                 }
             } catch (err) {
-                return registerLog.registerLog({text: "No routine to run", code: "200", description: "A base de dados não possui nenhuma rotina para executar"})
+                registerLog.registerLog({text: "No routine to run", code: "200", description: err})
             }
         })
 
@@ -140,6 +140,15 @@ schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 07:01:01 to
         }
 
         estabelecimentos.forEach(async estabelecimento => {
+            await Estabelecimento.updateOne(
+                {"_id": estabelecimento._id},
+                {
+                    "$set": {
+                        'locacao.liberado': false,
+                        "statusAtivo": false
+                    }
+                }
+            )
             await Usuario.updateMany(
                 {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
                 {

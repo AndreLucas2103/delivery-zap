@@ -235,22 +235,29 @@ router.post('/edit-estabelecimentosSelecionados', (req, res) => {
                 $set: {'estabelecimentosSelecionados': []},
             }
         ).then(() => {
+            let establecimentoInativo = false
+
             let arrayEstabelecimentos = JSON.parse(req.body.estabelecimentosSelecionados)
-            arrayEstabelecimentos.forEach(element => {
-                Usuario.updateOne(
-                    {_id: req.user._id},
-                    { $push: {
-                        'estabelecimentosSelecionados': {'idEstabelecimento': ObjectId(element.idEstabelecimento)},
-                    }}
-                ).then(() => {
-                    
-                }).catch(err => {
+            arrayEstabelecimentos.forEach(async element => {
+                try {   
+                    let estabelecimento = await Estabelecimento.findById(element.idEstabelecimento)
+                    if(estabelecimento.statusAtivo === false){
+                        establecimentoInativo = true
+                    }else{
+                        await Usuario.updateOne(
+                            {_id: req.user._id},
+                            { $push: {
+                                'estabelecimentosSelecionados': {'idEstabelecimento': ObjectId(element.idEstabelecimento)},
+                            }}
+                        )
+                    }
+                } catch (err) {
                     console.log(err)
-                })
+                }
             })
     
             setTimeout(() => {
-                req.flash('success_msg', 'Estabelecimentos selecionados editado')
+                establecimentoInativo ? req.flash("info_msg", "Um dos estabelecimentos selecionados está inativo") : req.flash("success_msg", "Estabelecimento selecionado")
                 res.redirect('back')
             }, 2000)
         })
