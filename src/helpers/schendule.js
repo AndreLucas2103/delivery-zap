@@ -124,7 +124,7 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
     }
 });
 
-schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
+schedule.scheduleJob('1 51 1 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
     try {
         let estabelecimentos = await Estabelecimento.find({
             $and: [
@@ -136,7 +136,7 @@ schedule.scheduleJob('1 1 7 * * *', async function(){ // executar as 07:01:01 to
         })
 
         if(estabelecimentos.length === 0 ){
-            console.log("nenhum establecimento")
+            registerLog.registerLog({text: "Rotina de inativar estabelecimento", code: "500", description: "Não teve nenhum estabelecimento para inativar"})
         }
 
         estabelecimentos.forEach(async estabelecimento => {
