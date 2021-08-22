@@ -15,7 +15,7 @@ const RotinaSistema = mongoose.model("rotinasSistemas")
 const registerLog = require('../components/log')
 
 // remover o tempo de teste do usuario
-schedule.scheduleJob('1 1 5 * * *' , async function(){ // executar as 05:01:01 todos os dias
+schedule.scheduleJob('1 1 2 * * *' , async function(){ // executar as 05:01:01 todos os dias
     try {
         let usuariosMaster = await Usuario.find({$and: [
             {'statusAtivo': true},
@@ -46,7 +46,7 @@ schedule.scheduleJob('1 1 5 * * *' , async function(){ // executar as 05:01:01 t
     }
 });
 
-schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 todos os dias
+schedule.scheduleJob('1 1 3 * * *', async function(){ // executar as 06:01:01 todos os dias
     try {
         let rotina = await RotinaSistema.find({
             "$and": [
@@ -124,14 +124,14 @@ schedule.scheduleJob('1 1 6 * * *', async function(){ // executar as 06:01:01 to
     }
 });
 
-schedule.scheduleJob('1 51 1 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
+schedule.scheduleJob('1 1 4 * * *', async function(){ // executar as 07:01:01 todos os dias, rotina de remoção dos estabelecimentos selecionados
     try {
         let estabelecimentos = await Estabelecimento.find({
             $and: [
                 {"statusAtivo": true},
                 {"freeSystem.habilitado": false},
                 {"locacao.liberado": true},
-                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days")}}
+                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days").format("YYYY-MM-DDT23:59")}}
             ]
         })
 
