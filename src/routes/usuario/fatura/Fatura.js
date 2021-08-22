@@ -212,6 +212,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                             '$set': {
                                 'locacao.faturas.$.situacao': "paid",
                                 'locacao.faturas.$.pago': true,
+                                'statusAtivo': true,
                                 'locacao.faturas.$.rotina.validado': true,
                                 'locacao.faturas.$.dataPagamento': pagamento.date_approved,
                                 'locacao.dataLiberado': dataVencimento,
