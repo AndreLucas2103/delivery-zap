@@ -471,8 +471,10 @@ router.get('/ingredientes', eAdmin, async (req, res) => { // listo todas as cate
         let ingredientes = await Ingrediente.find({ $and: [{ idEstabelecimento: userEstabelecimentos }] }).populate('idEstabelecimento categoriasProdutos.idCategoriaProduto').lean().sort({statusAtivo: -1 ,nome: 1})
         let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
         let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
+        let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
 
         res.render('usuarios/produto/ingredientes', {
+            estabelecimentos: estabelecimentos,
             ingredientes: ingredientes,
             categoriaAtiva: categoriaAtiva,
             categoriasProdutos: JSON.stringify(categoriasProdutos)
