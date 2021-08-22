@@ -21,9 +21,15 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes" id="button-add-ingrediente">+ Adicionar</button>
 
-    <div class="row">
+    <center id="not-categorias-produtos">
+        <img src="/usuario/assets/img/favicon/categorias-null.png">
+        <h5>Nenhuma categoria de produto ativa ou cadastrada</h5>
+        <a href="/produto/categoria-produtos" class="btn btn-primary btn-sm">Adicionar</a>
+    </center>
+
+    <div class="row" id="row-ingredientes">
         {{#each ingredientes}}
         <div class="col-12 col-lg-3 mb-4" {{#if statusAtivo}}{{else}}style="filter: grayscale(100%);"{{/if}}>
             <div class="card border-light shadow-sm">
@@ -198,20 +204,26 @@
     <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
-        var categoriasProdutos = {{{ categoriasProdutos }}};
-        $('input[type=radio][name=idEstabelecimento]').change(function() {
-            $('#radio-add-ingrediente-categoria').empty()
-            categoriasProdutos.forEach(element => {
-                if(element.idEstabelecimento._id == this.value){
-                    $('#radio-add-ingrediente-categoria').append(`
-                    <div class="form-check form-switch col-6 ">
-                        <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="${element._id}" value="${element._id}">
-                        <label class="form-check-label" for="${element._id}">${element.nome}</label>
-                    </div>
-                    `)
-                }
-            })
-        });
+        var categoriasProdutos = {{{ categoriasProdutos }}}
+        console.log(categoriasProdutos)
+        if(categoriasProdutos.length == 0) {
+            $("#button-add-ingrediente").hide()
+        }else{
+            $("#not-categorias-produtos").hide()
+            $('input[type=radio][name=idEstabelecimento]').change(function() {
+                $('#radio-add-ingrediente-categoria').empty()
+                categoriasProdutos.forEach(element => {
+                    if(element.idEstabelecimento._id == this.value){
+                        $('#radio-add-ingrediente-categoria').append(`
+                        <div class="form-check form-switch col-6 ">
+                            <input class="form-check-input" type="checkbox" name="idCategoriaProduto[]" id="${element._id}" value="${element._id}">
+                            <label class="form-check-label" for="${element._id}">${element.nome}</label>
+                        </div>
+                        `)
+                    }
+                })
+            });
+        }
         
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
