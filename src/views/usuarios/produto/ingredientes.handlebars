@@ -21,13 +21,7 @@
         </nav>
     </div>
 
-    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes" id="button-add-ingrediente">+ Adicionar</button>
-
-    <center id="not-categorias-produtos">
-        <img src="/usuario/assets/img/favicon/categorias-null.png">
-        <h5>Nenhuma categoria de produto ativa ou cadastrada</h5>
-        <a href="/produto/categoria-produtos" class="btn btn-primary btn-sm">Adicionar</a>
-    </center>
+    <button type="button" class="btn btn-primary btn-sm mb-4" data-bs-toggle="modal" data-bs-target="#modal-add-ingredientes">+ Adicionar</button>
 
     <div class="row" id="row-ingredientes">
         {{#each ingredientes}}
@@ -53,6 +47,7 @@
         </div>
         {{/each}}
     </div>
+   
 
     <!-- Modal edit ingredientes START -->
     <div class="modal fade" id="modal-edit-ingredientes" tabindex="-1" aria-labelledby="modal-edit-ingredientesLabel" aria-hidden="true">
@@ -93,8 +88,6 @@
 
                 </form>
             </div>
-            </div>
-        </div>
         {{else}}
         <div class="modal-header">
                 <h5 class="modal-title" id="modal-edit-ingredientesLabel">Cadastre ou ative as categorias.</h5>
@@ -109,6 +102,8 @@
             </div>
          {{/if}}
     </div>
+    </div>
+        </div>
     <!-- Modal edit ingredientes END -->
 
     <script>
@@ -185,8 +180,6 @@
 
                 </form>
             </div>
-            </div>
-        </div>
         {{else}}
         <div class="modal-header">
                 <h5 class="modal-title" id="modal-add-ingredientesLabel">Cadastre ou ative as categorias.</h5>
@@ -201,15 +194,13 @@
             </div>
          {{/if}}
     </div>
+   </div>
+ </div>
     <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
         var categoriasProdutos = {{{ categoriasProdutos }}}
         console.log(categoriasProdutos)
-        if(categoriasProdutos.length == 0) {
-            $("#button-add-ingrediente").hide()
-        }else{
-            $("#not-categorias-produtos").hide()
             $('input[type=radio][name=idEstabelecimento]').change(function() {
                 $('#radio-add-ingrediente-categoria').empty()
                 categoriasProdutos.forEach(element => {
@@ -223,7 +214,7 @@
                     }
                 })
             });
-        }
+        
         
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()
