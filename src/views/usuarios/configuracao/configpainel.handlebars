@@ -30,7 +30,7 @@
                                     <div class="col-md">
                                         <div style="border-radius: 25px;border-color:white">
                                             <br>
-                                            <img src="{{estabelecimento.img.logo.url}}"
+                                            <img  {{#if estabelecimento.img.logo.url}} src="{{estabelecimento.img.logo.url}}" {{else}} src="/usuario/assets/img/illustrations/no-image.jpg" {{/if}}
                                                 class="rounded-circle rounded border logo-image-st" id="imgst">
                                         </div>
                                     </div>
@@ -141,11 +141,11 @@
                         <div class="smartphone" style="background:{{estabelecimento.painel.colorFundo}};"
                             id="backcolor">
                             <div class="container-md capa-image-sm"
-                                style="background-image: url({{estabelecimento.img.capa.url}});" id="img2">
+                                style="background-image: {{#if estabelecimento.img.capa.url}} url({{estabelecimento.img.capa.url}}) {{else}} url(/usuario/assets/img/illustrations/no-image.jpg) {{/if}}" id="img2">
                                 <center>
                                     <div>
                                         <br>
-                                        <img src="{{estabelecimento.img.logo.url}}"
+                                        <img {{#if estabelecimento.img.logo.url}} src="{{estabelecimento.img.logo.url}}" {{else}} src="/usuario/assets/img/illustrations/no-image.jpg" {{/if}} 
                                             class="rounded-circle rounded border logo-image" id="img1">
                                     </div>
                             </div>

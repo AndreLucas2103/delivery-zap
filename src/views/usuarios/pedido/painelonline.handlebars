@@ -1,11 +1,11 @@
 <link rel="stylesheet" type="text/css" href="/usuario/css/painel.css">
 <body style="background:{{estabelecimento.painel.colorFundo}}">
     <header>
-        <div class="container-md capa-painel" style="background-image: url({{estabelecimento.img.capa.url}})">
+        <div class="container-md capa-painel" style="background-image: {{#if estabelecimento.img.capa.url}} url({{estabelecimento.img.capa.url}}) {{else}} url(/usuario/assets/img/illustrations/no-image.jpg) {{/if}}">
             <center>
                 <div>
                     <br>
-                    <img src="{{estabelecimento.img.logo.url}}" class="rounded-circle rounded border logo-painel">
+                    <img {{#if estabelecimento.img.logo.url}} src="{{estabelecimento.img.logo.url}}" {{else}} src="/usuario/assets/img/illustrations/no-image.jpg" {{/if}} class="rounded-circle rounded border logo-painel">
                 </div>
         </div>
         </center>

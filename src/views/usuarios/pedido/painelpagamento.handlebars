@@ -42,10 +42,35 @@
                     </select>
                     <div id="troco">
                     </div>
+        <p style="color:black;" class="estabelecimento rb " id="nomeEstabelecimento">
+            Resumo da compra</p>
+        <table class="table text-center">
+            <tbody>
+                <tr>
+                    <td>{{#if dados.retirarLocal}}Total{{else}}Sub-total{{/if}}</td>
+                    <td class="valorFormatar">{{carrinho.valorTotal}}</td>
+                </tr>
+                {{#if dados.retirarLocal}}
+                {{else}}
+                <tr class="border-dark" id="tipoEntrega">  
+                    <td>Entrega</td>
+                    <td class="valorFormatar">{{estabelecimento.configPedidos.taxaEntrega}}</td>              
+                </tr>
+                
+                <tr>
+                    <td>Total</td>
+                    <td id="valor-total-pedido"></td>
+                    <script>
+                         $('#valor-total-pedido').text(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(Number('{{carrinho.valorTotal}}') + Number('{{estabelecimento.configPedidos.taxaEntrega}}')))
+                    </script>
+                </tr>
+                {{/if}}
+            </tbody>
+        </table>
                     <div hidden>
                         <input type="text" name="idCarrinho" value="{{carrinho._id}}">
                         <input type="text" name="uuid4Client" value="{{dados.uuid4Client}}">
-                        <input type="text" name="retirarLocal" value="{{dados.retirarLocal}}">
+                        <input type="text" name="retirarLocal" id="valuetipoEntrega" value="{{dados.retirarLocal}}">
                         <input type="text" name="entrega" value="{{dados.entrega}}">
                         <input type="text" name="nomeCliente" value="{{dados.nome}}">
                         <input type="text" name="cep" value="{{dados.cep}}">
@@ -184,9 +209,17 @@
         } else {
             $("#troco").append(`    
         <label for="valuedinheiro">Vai precisar de troco?</label><p>
-        <input type="number" id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
+        <input type="number" class"valorFormatar" on id="Dinheiro" style="width:200px;height:40px;text-align:center;" placeholder="Troco para quanto?" name="trocoPara"  min="0" step="0.01">
                `)
         }
     }
 </script>
 <!--FIM SCRIPT DE TROCO -->
+
+
+<script>
+    $(".valorFormatar").each(function (item) {
+        let textFormat = $(this).text()
+        $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+    })
+</script>
