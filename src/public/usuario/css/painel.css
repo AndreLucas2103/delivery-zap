@@ -5,7 +5,6 @@
         border: none;
         background-repeat: no-repeat;
         background-size: 100% 100%;
-        background-image: url(/usuario/assets/img/favicon/capaApp.png);
         box-shadow: 0px 4px 20px rgba(0, 0, 0, 0.08);
     }
 
@@ -155,7 +154,7 @@
     }
 
     .img-carrinho-meuspedidos{
-        width: 60%;
+        width: 50%;
         margin-top:-20px;
     }
 
@@ -703,14 +702,14 @@
     }
     
     .img-carrinho-meuspedidos{
-        width: 400px;
-        height: 400px;
+        width: 20%;
+        height: 20%;
         margin-top:-20px;
     }
     
     .img-carrinho-compras{
-        width: 50%;
-        height: 50%;
+        width: 45%;
+        height: 45%;
         margin-top:-20px;
     }
 
