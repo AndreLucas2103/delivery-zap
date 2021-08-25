@@ -47,7 +47,7 @@
             <div class="card border-light text-center p-0">
                 <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
                 <div class="card-body pb-5">
-                    <img {{#if produto.img.foto.url}} src="{{produto.img.foto.url}}" {{else}} src="/usuario/assets/img/illustrations/no-image.jpg" {{/if}} class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+                    <img src="{{produto.img.foto.url}}"  class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
                       <form method="POST" id="upload-produto"
                                     action="/produto/upload-produto/{{produto._id}}/{{produto.idEstabelecimento._id}}" enctype="multipart/form-data">
                                     <label class="upload-produto" for="file01">

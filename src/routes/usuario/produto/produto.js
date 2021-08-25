@@ -395,7 +395,14 @@ router.post('/add-produto', async (req, res) => { // adicionar produto
                 descricao: req.body.descricao,
                 idCategoriaProduto: req.body.idCategoriaProduto,
                 idEstabelecimento: req.body.idEstabelecimento,
-                identificaouuidv4: req.user.identificaouuidv4
+                identificaouuidv4: req.user.identificaouuidv4,
+                img:{
+                    foto:{
+                        url : 'https://uploadhotpedidos.s3.sa-east-1.amazonaws.com/No-img/no-image.jpg'
+                    }
+                } 
+                
+                
             }
 
             new Produto(addProduto).save().then((produto) => {

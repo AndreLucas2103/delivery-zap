@@ -156,11 +156,11 @@ router.get('/usuariosadm', async (req, res) => {
 
         conteudo == "" || !conteudo ? find_conteudo = {} : find_conteudo = {$or: [{ 'nomeCompleto': { '$regex': conteudo.trim(), '$options': "i" } }, { 'email': { '$regex': conteudo.trim(), '$options': "i" } }]}
         query = {
-            $and: [find_conteudo]
+            $and:  [{usuarioMaster : true} , find_conteudo]
         }
 
         let estabelecimentos = await Usuario.find(query).skip(skip).limit(find_limit).populate('idUsuarioMaster').lean()
-        let totalPage = await Usuario.countDocuments(query)
+        let totalPage = await Usuario.find({usuarioMaster : true}).countDocuments(query)
 
 
         res.render('admin/usuarioadm/usuariosadm', {
