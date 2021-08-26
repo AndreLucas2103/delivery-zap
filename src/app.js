@@ -57,8 +57,6 @@ app.use((req, res, next) => {
     next();
 })
 
-
-
 app.use(async function (req, res, next) {
     try {
         if (req.user) {
@@ -159,11 +157,15 @@ app.get('/', (req, res) => {
 })
 
 app.get('/login', (req, res) => {
-    res.render('usuarios/acesso/login')
-})
-
-app.get('/loginadm', (req, res) => {
-    res.render('admin/login/login')
+    if(req.user){
+        if(req.user.administracao === true){
+            res.redirect('/admin')
+        }else{
+            res.redirect('/dashboard')
+        }
+    }else{
+        res.render('usuarios/acesso/login')
+    }
 })
 
 app.get('/registro', (req, res) => {

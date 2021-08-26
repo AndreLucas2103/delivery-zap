@@ -22,7 +22,7 @@ const registerLog = require('../../../components/log')
 router.get('/faturas', async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
         let userEstabelecimentos = []
-        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
+        req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
 
         let {limit, paginate} = req.query
 
@@ -110,7 +110,7 @@ router.get('/faturas', async (req, res) => { // Entrar no "perfil" do estabeleci
 router.post('/checkout', async (req, res) => {
     try {
         let userEstabelecimentos = []
-        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
+        req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
 
         let fatura = await Estabelecimento.aggregate([
             {'$match': {'_id': { $in:  userEstabelecimentos}} },
@@ -155,6 +155,7 @@ router.post('/checkout', async (req, res) => {
         
     } catch (err) {
         console.log(err)
+        return res.redirect('back')
     }
 })
 

@@ -28,7 +28,8 @@ require("../../../models/ModeloOpcao")
 const ModeloOpcao = mongoose.model("modeloOpcoes")
 require("../../../models/ModeloAdicional")
 const ModeloAdicional = mongoose.model("modeloAdicionais")
-
+require("../../../models/Pedido")
+const Pedido = mongoose.model("pedidos")
 
 const removeProductCartMiddleware = require("../../../middlewares/removeProductCartMiddleware")
 
@@ -213,6 +214,32 @@ router.post('/edit-produto-opcao', removeProductCartMiddleware, (req, res) => { 
     }).catch(err => {
         console.log(err)
     })
+})
+
+router.post('/delete-produto', async (req, res) => {
+    try {
+        let { idProduto } = req.body
+
+        let pedido = await Pedido.findOne({"produtos.idProduto": idProduto})
+        if(pedido){
+            req.flash("warning_msg", "Não foi possível excluir! Existem pedidos com esse produto")
+            return res.redirect('back')
+        }
+
+        let produto = await Produto.findOne({"opcao.opcoesProduto.idProduto": idProduto})
+        if(produto) {
+            req.flash("warning_msg", "Não foi possível excluir! Existem produtos vinculados a esse produto")
+            return res.redirect('back')
+        }
+
+        await Produto.deleteOne({'_id': idProduto})
+
+        req.flash("success_msg", "Produto deletado")
+        res.redirect('/produto/produtos')
+
+    } catch (err) {
+        console.log(err)
+    }
 })
 
 
