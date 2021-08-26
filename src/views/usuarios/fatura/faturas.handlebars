@@ -36,7 +36,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form action="/fatura/checkout" method="post">
+                        <form action="/fatura/checkout" method="post" target="_blank">
                         {{#each faturas}}
                             <tr>
                                 <td>{{dataFormatTimeZone usuarioLogado.timeZone locacao.faturas.vencimento "DD/MM/YYYY"}}</td>

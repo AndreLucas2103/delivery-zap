@@ -30,6 +30,8 @@ require("../../../models/ModeloAdicional")
 const ModeloAdicional = mongoose.model("modeloAdicionais")
 
 
+const removeProductCartMiddleware = require("../../../middlewares/removeProductCartMiddleware")
+
 // -----------  PRODUTOS ------------------------------------------------------------------------------------------
 router.get('/perfil', async (req, res) => {
     try {
@@ -57,7 +59,7 @@ router.get('/perfil', async (req, res) => {
 })
 
 // Parte para opcoes dos produtos
-router.post('/add-produto-opcoes-individual', (req, res) => { // adicionar opcoes a uma opcao 
+router.post('/add-produto-opcoes-individual', removeProductCartMiddleware, (req, res) => { // adicionar opcoes a uma opcao 
     if (req.body.vinculoProduto == 'true') {
         let arrayidProdutos = JSON.parse(req.body.idProdutos)
 
@@ -96,7 +98,7 @@ router.post('/add-produto-opcoes-individual', (req, res) => { // adicionar opcoe
     }
 })
 
-router.post('/delete-produto-opcoes/:vinculoProduto/:idOpcao', (req, res) => { // adicionar opcoes a uma opcao 
+router.post('/delete-produto-opcoes/:vinculoProduto/:idOpcao', removeProductCartMiddleware, (req, res) => { // adicionar opcoes a uma opcao 
     req.params.vinculoProduto == "true" ? condicao = { 'opcao.$.opcoesProduto': { _id: ObjectId(req.body.id_opcoes_opcoes) } } : condicao = { 'opcao.$.opcoes': { _id: ObjectId(req.body.id_opcoes_opcoes) } }
     Produto.updateOne(
         { _id: req.body.idProduto, 'opcao._id': req.params.idOpcao },
@@ -109,7 +111,7 @@ router.post('/delete-produto-opcoes/:vinculoProduto/:idOpcao', (req, res) => { /
     })
 })
 
-router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nova opcao ao produto
+router.post('/add-produto-opcao', removeProductCartMiddleware, (req, res) => { // rota para adicionar uma nova opcao ao produto
     let multiplaEscolha, vinculoProduto, dividendo, obrigatorio
     req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
     req.body.vinculoProduto == "true" ? vinculoProduto = true : vinculoProduto = false
@@ -136,7 +138,7 @@ router.post('/add-produto-opcao', (req, res) => { // rota para adicionar uma nov
     })
 })
 
-router.post('/add-produto-opcao-modelo-opcoes', (req, res) => { // rota para adicionar uma nova opcao ao produto
+router.post('/add-produto-opcao-modelo-opcoes', removeProductCartMiddleware, (req, res) => { // rota para adicionar uma nova opcao ao produto
     ModeloOpcao.findById({ _id: req.body.idModeloOpcao }, { _id: 0 }).then(modelo => {
         Produto.updateOne(
             { _id: req.body.idProduto },
@@ -156,7 +158,25 @@ router.post('/add-produto-opcao-modelo-opcoes', (req, res) => { // rota para adi
     })
 })
 
-router.post('/edit-produto-opcao', (req, res) => { // rota para editar as informacoes de uma opcao do produto
+router.post('/delete-produto-opcao', removeProductCartMiddleware, async (req, res) => { // deletar opcao do produto
+    try {
+        Produto.updateOne(
+            { _id: req.body.idProduto, 'opcao._id': req.body.idOpcao },
+            { $pull: {
+                "opcao": {"_id": ObjectId(req.body.idOpcao)}
+            }}
+        ).then(() => {
+            req.flash('success_msg', 'Opção removida')
+            res.redirect('back')
+        }).catch(err => {
+            console.log(err)
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
+router.post('/edit-produto-opcao', removeProductCartMiddleware, (req, res) => { // rota para editar as informacoes de uma opcao do produto
     let multiplaEscolha, vinculoProduto, dividendo, obrigatorio
     req.body.multiplaEscolha == "true" ? multiplaEscolha = true : multiplaEscolha = false
     req.body.obrigatorio == "true" ? obrigatorio = true : obrigatorio = false
@@ -197,7 +217,7 @@ router.post('/edit-produto-opcao', (req, res) => { // rota para editar as inform
 
 
 // rota onde pego os ingredientes selecionados pela pessoa
-router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingredientes aos produtos
+router.post('/add-produto-ingrediente', removeProductCartMiddleware,  (req, res) => { // adicionar ingredientes aos produtos
     if (!req.body.idIngredientes) {
         req.flash('error_msg', 'O produto deve possuir pelo menos um ingrediente')
         res.redirect('back')
@@ -236,7 +256,7 @@ router.post('/add-produto-ingrediente', (req, res) => { // adicionar ingrediente
 })
 
 // adicionar e remover adicionais do produto
-router.post('/add-produto-adicional-individual', (req, res) => { // adicionar ingredientes aos produtos
+router.post('/add-produto-adicional-individual', removeProductCartMiddleware,  (req, res) => { // adicionar ingredientes aos produtos
     if (req.body.idAdicional) {
         let arrayIdAdicionais = JSON.parse(req.body.idAdicional)
 
@@ -263,7 +283,7 @@ router.post('/add-produto-adicional-individual', (req, res) => { // adicionar in
     }
 })
 
-router.post('/add-produto-adicionais-modelo-adicionais', (req, res) => { // rota para adicionar uma nova opcao ao produto
+router.post('/add-produto-adicionais-modelo-adicionais', removeProductCartMiddleware,  (req, res) => { // rota para adicionar uma nova opcao ao produto
     ModeloAdicional.findById({ _id: req.body.idModeloAdicional }, { _id: 0 }).then(modelo => {
         modelo.adicionais.forEach(element => {
             Produto.updateOne(
@@ -286,7 +306,7 @@ router.post('/add-produto-adicionais-modelo-adicionais', (req, res) => { // rota
     })
 })
 
-router.post('/delete-produto-adicional', (req, res) => {
+router.post('/delete-produto-adicional', removeProductCartMiddleware,  (req, res) => {
     Produto.updateOne( // realizo o update buscando no estabelecimento e depois o documento que possui o ID desejadi (no caso o horário)
         { '_id': req.body.idProduto },
         {
@@ -351,7 +371,7 @@ router.get('/produtos', async (req, res) => { // listo todos os produtos
 })
 
 // Adicionar produto no geral mesmo
-router.post('/edit-produto', async (req, res) => { // editar o produto
+router.post('/edit-produto', removeProductCartMiddleware,  async (req, res) => { // editar o produto
     try {
         let produtoExist = await Produto.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }, { idCategoriaProduto: req.body.idCategoriaProduto }] })
         if (produtoExist && req.body.idProduto != produtoExist._id) {
