@@ -231,6 +231,10 @@ router.post('/checkout/finalizar', async (req, res) => {
         console.log(req.body)
         let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
         let carrinho = await Carrinho.findById(req.body.idCarrinho)
+
+        if(carrinho.produtos.length <= 0) {
+            return res.redirect("/estabelecimento/" + estabelecimento.url)
+        }
         
         let tipoEntrega
         retirarLocal == "true" ? tipoEntrega = "retirarLocal" : entrega == "true" ? tipoEntrega = "entrega" : tipoEntrega = "retirarLocal"

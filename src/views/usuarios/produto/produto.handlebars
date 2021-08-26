@@ -48,18 +48,18 @@
                 <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
                 <div class="card-body pb-5">
                     <img src="{{produto.img.foto.url}}"  class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
-                      <form method="POST" id="upload-produto"
-                                    action="/produto/upload-produto/{{produto._id}}/{{produto.idEstabelecimento._id}}" enctype="multipart/form-data">
-                                    <label class="upload-produto" for="file01">
-                                                <i class="fas fa-camera"></i>
-                                            </label>
-                                    <input type="file" id="file01" name="file" class="file" hidden>
-                                </form>
-                                <script>
-                                    $('#file01').change(() => {
-                                        $('#upload-produto').submit()
-                                    })
-                                </script>
+                        <form method="POST" id="upload-produto"
+                            action="/produto/upload-produto/{{produto._id}}/{{produto.idEstabelecimento._id}}" enctype="multipart/form-data">
+                            <label class="upload-produto" for="file01">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+                            <input type="file" id="file01" name="file" class="file" hidden>
+                        </form>
+                        <script>
+                            $('#file01').change(() => {
+                                $('#upload-produto').submit()
+                            })
+                        </script>
                     <button type="button" class="btn btn-secondary btn-sm mb-4  " data-bs-toggle="modal" data-bs-target="#modal-edit-produto">Editar Produto</button>
                     <h4 class="">{{produto.nome}}</h4>
                     <h5 class="valorFormatar">{{produto.valor}}</h5>
@@ -335,6 +335,7 @@
                                     </div>
 
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                                    <button type="button" class="btn btn-white btn-sm mt-2 text-danger float-end" onclick="deleteOpcao()">Excluir</button>
 
                                     <script>
                                         $('#edit-div-opcoes-dividendo').hide()
@@ -353,6 +354,32 @@
                                         })
                                     </script>
                                 </form>
+
+                                <!-- Deletar opção do produto START -->
+                                <script>
+                                    function deleteOpcao () {
+                                        Swal.fire({
+                                            title: 'Deseja excluir a opção?',
+                                            text: "Não será possível restaurar!",
+                                            icon: 'warning',
+                                            showCancelButton: true,
+                                            confirmButtonColor: '#3085d6',
+                                            cancelButtonColor: '#d33',
+                                            confirmButtonText: 'Sim, excluir!',
+                                            cancelButtonText: 'Cancelar'
+                                        }).then((result) => {
+                                            if (result.isConfirmed) {
+                                                $("#form-delete-opcao").submit()
+                                            }
+                                        })
+                                    }
+                                </script>
+
+                                <form action="/produto/delete-produto-opcao" method="post" id="form-delete-opcao" hidden>
+                                    <input type="text" name="idProduto" value="{{produto._id}}" readonly>
+                                    <input type="text" name="idOpcao" id="edit-delete-idOpcao" readonly>
+                                </form>
+                                <!-- Deletar opção do produto END -->
                             </div>
                             </div>
                         </div>
@@ -362,6 +389,7 @@
                         var modalEditOpcaoProduto = document.getElementById('modal-edit-opcao')
                         modalEditOpcaoProduto.addEventListener('show.bs.modal', function (event) {
                             var button = event.relatedTarget
+                            $('#edit-delete-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
                             $('#edit-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
                             $('#edit-opcao-nome').val(button.getAttribute('data-bs-nome'))
                             $('#edit-opcao-dividendo').val(button.getAttribute('data-bs-dividendo'))
