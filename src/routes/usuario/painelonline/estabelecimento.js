@@ -491,6 +491,7 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
     }
 })
 
+
 router.post('/add-painel-carrinho-produto', async (req, res) => {
     try {
         let {idProduto, observacao, quantidade, uuid4Client} = req.body
