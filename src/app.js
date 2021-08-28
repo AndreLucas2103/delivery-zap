@@ -204,7 +204,7 @@ app.use('/produto', verifyUser, usuarioProduto)
 app.use('/produto', verifyUser, usuarioProdutoModelo)
 app.use('/pedido', verifyUser, usuarioPedido)
 app.use('/impressora', verifyUser, usuarioImpressora)
-app.use('/estabelecimento', verifyUser, usuarioPainel)
+app.use('/estabelecimento', usuarioPainel)
 app.use('/suporte', verifyUser, usuarioSuporte)
 app.use('/fatura', usuarioFatura)
 
