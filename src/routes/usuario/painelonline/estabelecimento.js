@@ -457,6 +457,10 @@ router.post('/:urlPainel/endereco/:idCarrinho', async (req, res)=>{
         
         res.render('usuarios/pedido/painelendereco', {
             estabelecimento: estabelecimento,
+            controleCEP: JSON.stringify({
+                controleCEP: estabelecimento.configPedidos.controleCEP,
+                cepsDisponiveis: estabelecimento.configPedidos.cepsDisponiveis
+            }),
             carrinho: carrinho
         })
     } catch (err) {

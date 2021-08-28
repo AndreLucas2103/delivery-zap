@@ -30,6 +30,8 @@ require("../../../models/ModeloAdicional")
 const ModeloAdicional = mongoose.model("modeloAdicionais")
 require("../../../models/Pedido")
 const Pedido = mongoose.model("pedidos")
+require("../../../models/Carrinho")
+const Carrinho = mongoose.model("carrinhos")
 
 const removeProductCartMiddleware = require("../../../middlewares/removeProductCartMiddleware")
 
@@ -233,6 +235,15 @@ router.post('/delete-produto', async (req, res) => {
         }
 
         await Produto.deleteOne({'_id': idProduto})
+        
+        await Carrinho.updateMany(
+            {"produtos.idProduto": idProduto},
+            {
+                "$pull": {
+                    "produtos": {idProduto: idProduto}
+                }
+            }
+        )
 
         req.flash("success_msg", "Produto deletado")
         res.redirect('/produto/produtos')

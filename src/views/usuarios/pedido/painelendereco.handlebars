@@ -129,8 +129,9 @@
     <div class="col-md-4">
         <div class="form-floating center-block ">
             {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-            <input type="search" autocomplete="off" class="form-control" id="cep" name="cep" placeholder="0"  required>
+            <input  onchange="cepVarify(this)" onkeypress="cepVarify(this)" onkeyup="cepVarify(this)" type="search" autocomplete="off" class="form-control" id="cep" name="cep" placeholder="0"  required>
             <label for="cep">CEP*</label>
+            <span style="font-size: 13px" id="text-cep" class="text-danger"></span>
             {{else}} {{/if}}
         </div>
     </div>
@@ -155,15 +156,15 @@
         <div class="col-md center-block rb">
             <div class="form-floating">
                 <input type="search" autocomplete="off" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
-                     required>
+                    required>
                 <label for="bairro">Bairro*</label>
             </div>
         </div>
         <div class="col-md center-block rb">
             <div class="form-floating">
                 {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-                <input type="search" autocomplete="off" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
-                      required>
+                <input type="text" autocomplete="off" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
+                    required>
                 <label for="cidade">Cidade*</label>
                 {{else}} {{/if}}
             </div>
@@ -183,7 +184,8 @@
             }
         };
 
-    $('#telefone2').mask(SPMaskBehavior, spOptions);
+            $('#telefone2').mask(SPMaskBehavior, spOptions);
+            $('#cep').mask("00000-000");
             $("#retirarLocal").prop("checked", false)
             $("#retirarLocal").prop("disabled", false)
             $("#divretirarLocal").empty()
@@ -214,5 +216,25 @@
 
     $("#uuid4Client-back").val(localStorage.getItem('uuid4Cliente'))
     $("#uuid4Client-value").val(localStorage.getItem('uuid4Cliente'))
+
+    let controleCEP = {{{ controleCEP }}}
+
+    let cepsDisponiveis = controleCEP.controleCEP.statusAtivo ? controleCEP.controleCEP.cepsDisponiveis.map(v => v.cep) : []
+
+    function cepVarify() {
+        let cep = $("#cep").val()
+        let validate = cepsDisponiveis.includes(cep)
+
+        if(validate){
+            $("#proximo").prop("disabled", false);
+            $("#proximo").css("background", "");
+            $("#text-cep").text("")
+        }else{
+            console.log("err")
+            $("#proximo").prop("disabled", true);
+            $("#proximo").css("background", "gray");
+            $("#text-cep").text("CEP Indisponível para entrega")
+        }
+    }
 
 </script>
