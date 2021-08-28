@@ -209,6 +209,7 @@
                     </div>
 
                     <button type="submit" class="btn btn-primary btn-sm mt-2">Salvar</button>
+                    <button type="button" class="btn btn-white text-danger float-end btn-sm mt-2" onclick="deleteModelo()">Excluir</button>
 
                     <script>
                         $('#edit-div-opcoes-dividendo').hide()
@@ -227,6 +228,10 @@
                         })
                     </script>
                 </form>
+
+                <form action="/produto/delete-modelo-opcao" method="post" id="form-delete-modelo" hidden>
+                    <input type="text" name="idModeloOpcao" id="delete-idOpcao" readonly>
+                </form>
             </div>
             </div>
         </div>
@@ -237,6 +242,7 @@
         modalEditOpcaoProduto.addEventListener('show.bs.modal', function (event) {
             var button = event.relatedTarget
             $('#edit-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
+            $('#delete-idOpcao').val(button.getAttribute('data-bs-idOpcao'))
             $('#edit-opcao-nome').val(button.getAttribute('data-bs-nome'))
             $('#edit-opcao-dividendo').val(button.getAttribute('data-bs-dividendo'))
             $('#edit-opcao-descricao').val(button.getAttribute('data-bs-descricao'))
@@ -256,6 +262,23 @@
                 $('#edit-div-opcoes-dividendo').hide()
             }
         })
+
+        function deleteModelo () {
+            Swal.fire({
+                title: 'Deseja excluir o modelo?',
+                text: "Não será possível restaurar!",
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#3085d6',
+                cancelButtonColor: '#d33',
+                confirmButtonText: 'Sim, excluir!',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.isConfirmed) {
+                    $("#form-delete-modelo").submit()
+                }
+            })
+        }
     </script>
     <!-- Modal edit opção END-->
 

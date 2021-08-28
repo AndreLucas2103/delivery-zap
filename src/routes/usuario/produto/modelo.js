@@ -149,7 +149,6 @@ router.post('/delete-modelo-opcoes-opcoes/:vinculoProduto/:idOpcao', (req, res) 
 })
 
 router.post('/ajax-get-produto-modelo-opcoes', (req, res) => { // consulto os 
-    console.log(req.body)
     ModeloOpcao.findById({_id: req.body.idModeloOpcao}).then(modeloOpcao => {
         Produto.find({idEstabelecimento: modeloOpcao.idEstabelecimento}).populate('idCategoriaProduto').lean().then(produtos => {
             res.json(produtos)
@@ -159,6 +158,17 @@ router.post('/ajax-get-produto-modelo-opcoes', (req, res) => { // consulto os
     }).catch(err => {
         console.log(err)
     })
+})
+
+router.post('/delete-modelo-opcao', async (req, res) => {
+    try{
+        await ModeloOpcao.deleteOne({"_id": req.body.idModeloOpcao})
+
+        req.flash('success_msg', "Modelo deletado")
+        res.redirect('back')
+    }catch (err) {
+        console.log(err)
+    }
 })
 
 // -----------  MODELO ADICONAIS ------------------------------------------------------------------------------------------
@@ -257,7 +267,16 @@ router.post('/ajax-get-modelo-adicionais-adicionais', (req, res) => {
     })
 })
 
+router.post('/delete-modelo-adicionais', async (req, res) => {
+    try{
+        await ModeloAdicional.deleteOne({"_id": req.body.idModeloAdicional})
 
+        req.flash('success_msg', "Modelo deletado")
+        res.redirect('back')
+    }catch (err) {
+        console.log(err)
+    }
+})
 
 
 module.exports = router;

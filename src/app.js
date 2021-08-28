@@ -89,7 +89,6 @@ app.use(async function (req, res, next) {
                 ])
                 res.locals.usuarioLogado = usuario[0];
             }
-            
         }
         next();
     } catch (err) {
@@ -179,6 +178,8 @@ app.get('/registro', (req, res) => {
 
 // ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
 
+let verifyUser = require('./middlewares/verifyUser')
+
 // Rotas para USUARIOS
 const acessoUsuario = require("./routes/usuario/acessos/acessos")
 const usuarioDashboard = require("./routes/usuario/dashboard/dashboard")
@@ -196,15 +197,15 @@ const usuarioFatura = require("./routes/usuario/fatura/fatura")
     const usuarioEstabelecimento = require("./routes/usuario/configuracao/estabelecimento")
 
 app.use('/acessos', acessoUsuario)
-app.use('/dashboard', usuarioDashboard)
+app.use('/dashboard', verifyUser, usuarioDashboard)
 app.use('/usuario', usuarioUsuario)
-app.use('/entregador', usuarioEntregador)
-app.use('/produto', usuarioProduto)
-app.use('/produto', usuarioProdutoModelo)
-app.use('/pedido', usuarioPedido)
-app.use('/impressora', usuarioImpressora)
-app.use('/estabelecimento', usuarioPainel)
-app.use('/suporte', usuarioSuporte)
+app.use('/entregador', verifyUser, usuarioEntregador)
+app.use('/produto', verifyUser, usuarioProduto)
+app.use('/produto', verifyUser, usuarioProdutoModelo)
+app.use('/pedido', verifyUser, usuarioPedido)
+app.use('/impressora', verifyUser, usuarioImpressora)
+app.use('/estabelecimento', verifyUser, usuarioPainel)
+app.use('/suporte', verifyUser, usuarioSuporte)
 app.use('/fatura', usuarioFatura)
 
 
