@@ -231,10 +231,8 @@ const adminPlano = require("./routes/admin/plano/plano")
 
 require("./models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
-require("./models/RotinaSistema")
-const RotinaSistema = mongoose.model("rotinasSistemas")
+
 const moment = require('moment')
-const { v4: uuidv4 } = require('uuid');
 
 const registerLog = require("./components/log")
 
@@ -246,42 +244,44 @@ app.get('/estabelecimento', (req, res) => {
 
 app.get('/teste', async (req, res) => {
     try {
-        let estabelecimentos = await Estabelecimento.find({
-            $and: [
-                {"statusAtivo": true},
-                {"freeSystem.habilitado": false},
-                {"locacao.liberado": true},
-                {"locacao.dataLiberado": {"$lt": moment().subtract(1, "days").format("YYYY-MM-DDT23:59")}}
-            ]
-        })
-
-        if(estabelecimentos.length === 0 ){
-            registerLog.registerLog({text: "Rotina de inativar estabelecimento", code: "500", description: "Não teve nenhum estabelecimento para inativar"})
+        let usuariosMaster = await Usuario.find({$and: [
+            {'statusAtivo': true},
+            {'freeSystem.habilitado': true}
+        ]})
+        
+        if(usuariosMaster == [] || usuariosMaster == null || usuariosMaster.length == 0){
+            console.log('Nenhum usuário em teste')
+        }else{
+            usuariosMaster.forEach(usuario => {
+                if(moment().diff(usuario.freeSystem.dataFim, 'days') <= 0){
+                    console.log('Usuario ainda possui tempo de teste')
+                }else{
+                    usuario.estabelecimentosVinculados.forEach(async estabelecimento => {
+                        try {
+                            await Estabelecimento.updateOne(
+                                {'_id': estabelecimento.idEstabelecimento},
+                                {
+                                    "$set": {"freeSystem.habilitado": false}
+                                }
+                            )
+                        } catch (err) {
+                            return registerLog.registerLog({text: "Error in the test system change routine", code: "500", description: "Ocorreu um erro ao executar a rotina do sistema, favor analisar o log e consultar qual estabelecimento foi parado"})
+                        }
+                    })
+                    Usuario.updateOne(
+                        {'_id': usuario._id},
+                        {'$set': {
+                            'freeSystem.habilitado': false
+                        }}
+                    ).then(() => {
+                        console.log('Acabou periodo teste')
+                    })
+                }
+            })
         }
 
-        estabelecimentos.forEach(async estabelecimento => {
-            await Estabelecimento.updateOne(
-                {"_id": estabelecimento._id},
-                {
-                    "$set": {
-                        'locacao.liberado': false,
-                        "statusAtivo": false
-                    }
-                }
-            )
-            await Usuario.updateMany(
-                {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento._id},
-                {
-                    "$pull": {
-                        "estabelecimentosSelecionados": {"idEstabelecimento": estabelecimento._id}
-                    }
-                }
-            )
-        })
-
     } catch (err) {
-        console.log(err)
-        registerLog.registerLog({text: "Error system routine", code: "500", description: err})
+        return registerLog.registerLog({text: "Error in the test system change routine", code: "500", description: "Ocorreu um erro ao executar a rotina do sistema, favor analisar o log e consultar qual estabelecimento foi parado"})
     }
 })
 
