@@ -287,7 +287,7 @@ app.get('/teste', async (req, res) => {
 
 // ---- Port -----------------------------------------------------------------------------------------------------------------------------------
 
-const PORT = 3000
+const PORT = process.env.APP_PORT
 app.listen(PORT, () => {
     console.log("Servidor rodando! ")
 })
