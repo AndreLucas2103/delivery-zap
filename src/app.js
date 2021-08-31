@@ -259,7 +259,6 @@ app.get('/teste', async (req, res) => {
         let array4 = pedido.length > 0 ? pedido.map(v => v) : 0
 
         let teste = uuidv4() + uuidv4() + uuidv4() + uuidv4()
-        console.log(array1 + array2 + array3 + array4)
         console.log(array1.length + array2.length + array3.length + array4.length)
 
     } catch (err) {
