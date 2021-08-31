@@ -258,7 +258,8 @@ app.get('/teste', async (req, res) => {
         let array3 = usuario.length > 0 ? usuario.map(v => v) : 0
         let array4 = pedido.length > 0 ? pedido.map(v => v) : 0
         let teste = uuidv4() + uuidv4() + uuidv4() + uuidv4()
-        
+
+        res.send({ ok: 200 })
     } catch (err) {
         console.log(err)
     }
