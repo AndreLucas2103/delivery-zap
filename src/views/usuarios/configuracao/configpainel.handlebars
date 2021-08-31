@@ -261,6 +261,21 @@ function copy_btt() {
     textArea.select();
     document.execCommand("Copy");
     textArea.remove();
+   $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: 'Link copiado',
+                position: 'top-right',
+                background: "#20853b",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
 }
 </script>
 
