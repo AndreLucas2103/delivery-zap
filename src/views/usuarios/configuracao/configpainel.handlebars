@@ -39,8 +39,8 @@
                                             <div>
                                                 <h6>Link para pedidos:</h6>
                                                 <a href="/estabelecimento/{{estabelecimento.url}}" target="_blank"
-                                                    id="url" name="url"
-                                                    style="color: #5A7FFF;">hotpedidos.com/estabelecimento/{{estabelecimento.url}}</a>
+                                                    style="color: #5A7FFF;"><span id="url">https://hotpedidos.com/estabelecimento/{{estabelecimento.url}}</span></a>
+                                                    <button type="button" class="btn btn-primary btn-sm ml-2" style="height: 30px;" onclick="copy_btn()"><i class="fas fa-copy"></i></button>
                                             </div>
                                         </div>
                                           </center>
@@ -235,6 +235,12 @@
     }
 </script>
 
+<script>
+function copy_btn() {
+document.getElementById("url").select();
+document.execCommand('copy');
+}
+</script>
 
 <script> //QRCODE
 $('.generate-qr-code').on('click', function(){
@@ -245,7 +251,7 @@ $('#qrcode').css({
 'height' : $('.qr-size').val()
 })
 
-$('#qrcode').qrcode({width: $('.qr-size').val(),height: $('.qr-size').val(),text: $('.qr-url').val()});
+$('#qrcode').qrcode({width: $('.qr-size').val(),height: $('.qr-size').val(),text:'https://'+ $('.qr-url').val()});
 
 });
 </script>
