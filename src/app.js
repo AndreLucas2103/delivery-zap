@@ -234,6 +234,9 @@ require("./models/Produto")
 const Produto = mongoose.model("produtos")
 require("./models/Pedido")
 const Pedido = mongoose.model("pedidos")
+require("./models/admin/Log")
+const Log = mongoose.model("logs")
+
 
 const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
@@ -260,7 +263,12 @@ app.get('/teste', async (req, res) => {
         let teste = uuidv4() + uuidv4() + uuidv4() + uuidv4()
 
         registerLog.registerLog({text: "TESTE", code: "200", description: `teste`})
-        
+
+        let opa = await Log.find({text: "TESTE"})
+        let skip = opa.length > 10 ? opa.length - 10 : 0
+
+        let opa2 = await Log.find({text: "TESTE"}).skip(skip)
+
         res.send({ ok: 200 })
     } catch (err) {
         console.log(err)
