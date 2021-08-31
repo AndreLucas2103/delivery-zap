@@ -259,6 +259,8 @@ app.get('/teste', async (req, res) => {
         let array4 = pedido.length > 0 ? pedido.map(v => v) : 0
         let teste = uuidv4() + uuidv4() + uuidv4() + uuidv4()
 
+        registerLog.registerLog({text: "TESTE", code: "200", description: `teste`})
+        
         res.send({ ok: 200 })
     } catch (err) {
         console.log(err)
