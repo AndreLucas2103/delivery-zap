@@ -51,27 +51,27 @@
                     <h5 class="mt-4">Endereço</h5>
                     <div class="row">
                         <div class="form-floating mb-3 col-sm-6">
-                            <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="-" value="{{estabelecimento.endereco.logradouro}}">
+                            <input type="text" class="form-control" id="logradouro" name="logradouro" placeholder="-" value="{{estabelecimento.endereco.logradouro}}" required>
                             <label for="logradouro" class="ml-2">Logradouro</label>
                         </div>
                         <div class="form-floating mb-3 col-sm-6">
-                            <input type="text" class="form-control" id="bairro" name="bairro" placeholder="-" value="{{estabelecimento.endereco.bairro}}">
+                            <input type="text" class="form-control" id="bairro" name="bairro" placeholder="-" value="{{estabelecimento.endereco.bairro}}" required>
                             <label for="bairro" class="ml-2">Bairro</label>
                         </div>
                         <div class="form-floating mb-3 col-sm-4">
-                            <input type="text" class="form-control" id="cidade" name="cidade" placeholder="-" value="{{estabelecimento.endereco.localidade}}">
+                            <input type="text" class="form-control" id="cidade" name="cidade" placeholder="-" value="{{estabelecimento.endereco.localidade}}" required>
                             <label for="cidade" class="ml-2">Cidade</label>
                         </div>
                         <div class="form-floating mb-3 col-sm-3">
-                            <input type="text" class="form-control" id="cep" name="cep" placeholder="-" value="{{estabelecimento.endereco.cep}}">
+                            <input type="text" class="form-control" id="cep" name="cep" placeholder="-" value="{{estabelecimento.endereco.cep}}" required>
                             <label for="cep" class="ml-2">CEP</label>
                         </div>
                         <div class="form-floating mb-3 col-sm-2">
-                            <input type="text" class="form-control" id="numero" name="numero" placeholder="-" value="{{estabelecimento.endereco.numero}}">
+                            <input type="text" class="form-control" id="numero" name="numero" placeholder="-" value="{{estabelecimento.endereco.numero}}" required>
                             <label for="numero" class="ml-2">Número</label>
                         </div>
                         <div class="col-sm-3 form-floating">
-                            <select class="form-select" name="uf" id="uf">
+                            <select class="form-select" name="uf" id="uf" required>
                                 <option value="AC">Acre</option>
                                 <option value="AL">Alagoas</option>
                                 <option value="AP">Amapá</option>
@@ -113,7 +113,7 @@
                             <label for="cnpj" class="ml-2">CNPJ</label>
                         </div>
                         <div class="form-floating mb-3 col-sm-4">
-                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-" value="{{estabelecimento.telefone}}">
+                            <input type="text" class="form-control" id="telefone" name="telefone" placeholder="-" value="{{estabelecimento.telefone}}" required>
                             <label for="telefone" class="ml-2">Telefone</label>
                         </div>
                     </div>
