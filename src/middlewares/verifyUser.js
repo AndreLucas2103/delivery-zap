@@ -5,7 +5,7 @@ module.exports = async (req, res, next) => {
 
     if(req.user.estabelecimentosSelecionados.length <= 0 ){
         req.flash('info_msg', 'Nenhum estabelecimento está selecionado')
-        return res.redirect("/fatura/faturas")
+        return res.redirect("/configuracao/estabelecimentos")
     }
 
     next();

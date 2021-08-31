@@ -23,29 +23,56 @@ schedule.scheduleJob('1 1 2 * * *' , async function(){ // executar as 05:01:01 t
         ]})
         
         if(usuariosMaster == [] || usuariosMaster == null || usuariosMaster.length == 0){
-            console.log('Nenhum usuário em teste')
+            registerLog.registerLog({text: "Rotina de encerramento periodo teste", code: "200", description: `Nenhum usuário para encerrar o període de teste`})
         }else{
             usuariosMaster.forEach(usuario => {
-                if(moment().diff(usuario.freeSystem.dataFim, 'days') < 0){
-                    console.log('Usuario ainda possui tempo de teste')
+                if(moment().diff(usuario.freeSystem.dataFim, 'days') <= 0){
+                    registerLog.registerLog({text: "Rotina de encerramento periodo teste", code: "200", description: `Usuario ${usuario._id} ainda possui período de teste`})
                 }else{
+                    usuario.estabelecimentosVinculados.forEach(async estabelecimento => {
+                        try {
+                            await Estabelecimento.updateOne(
+                                {'_id': estabelecimento.idEstabelecimento},
+                                {
+                                    "$set": {
+                                        "freeSystem.habilitado": false,
+                                        "statusAtivo": false,
+                                        'locacao.liberado': false,
+                                    }
+                                }
+                            )
+                            await Usuario.updateMany(
+                                {"estabelecimentosSelecionados.idEstabelecimento": estabelecimento.idEstabelecimento},
+                                {
+                                    "$pull": {
+                                        "estabelecimentosSelecionados": {"idEstabelecimento": estabelecimento.idEstabelecimento}
+                                    }
+                                }
+                            )
+
+                            registerLog.registerLog({text: "Rotina de encerramento periodo teste", code: "200", description: `Estabelecimento ${estabelecimento.idEstabelecimento} acabou o periodo de teste`})
+                        
+                        } catch (err) {
+                            return registerLog.registerLog({text: "Error in the test system change routine", code: "500", description: `Ocorreu um erro na rotina de encerramento do periodo de teste, err: ${err}`})
+                        }
+                    })
                     Usuario.updateOne(
                         {'_id': usuario._id},
                         {'$set': {
                             'freeSystem.habilitado': false
                         }}
                     ).then(() => {
-                        console.log('Usuario acabou e alterado o teste')
+                        console.log('Acabou periodo teste')
                     })
                 }
             })
         }
-
     } catch (err) {
         return registerLog.registerLog({text: "Error in the test system change routine", code: "500", description: "Ocorreu um erro ao executar a rotina do sistema, favor analisar o log e consultar qual estabelecimento foi parado"})
     }
 });
 
+// rotina para gerar a cobraça conforme a collection RotinaSistema
 schedule.scheduleJob('1 1 3 * * *', async function(){ // executar as 06:01:01 todos os dias
     try {
         let rotina = await RotinaSistema.find({
@@ -160,7 +187,6 @@ schedule.scheduleJob('1 1 4 * * *', async function(){ // executar as 07:01:01 to
         })
 
     } catch (err) {
-        console.log(err)
-        registerLog.registerLog({text: "Error system routine", code: "500", description: err})
+        registerLog.registerLog({text: "Erro na rotina de remoção dos estabelecimentos", code: "500", description: err})
     }
 });

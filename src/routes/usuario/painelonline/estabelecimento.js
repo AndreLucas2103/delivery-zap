@@ -5,7 +5,6 @@ const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 const { v4: uuidv4 } = require('uuid');
 const MercadoPago = require('mercadopago');
-    
 
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
@@ -494,7 +493,6 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
         console.log(err)
     }
 })
-
 
 router.post('/add-painel-carrinho-produto', async (req, res) => {
     try {

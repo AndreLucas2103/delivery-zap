@@ -29,6 +29,16 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
 
         let data = diff < 0 ? moment() : estabelecimento.locacao.dataLiberado
 
+        await Estabelecimento.updateMany(
+            {"_id": req.user.estabelecimentosVinculados.map(v => v.idEstabelecimento), "freeSystem.habilitado": true},
+            {
+                "$set": {
+                    "freeSystem.habilitado": false,
+                    "statusAtivo": false,
+                    'locacao.liberado': false,
+                }
+            }
+        )
         Estabelecimento.updateOne(
             {'_id': req.body.idEstabelecimento},
             {'$set': {
@@ -55,8 +65,17 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
                         }]
                     }]
                 },
+                "statusAtivo": true
             }}
-        ).then(() => {
+        ).then(async () => {
+            await Usuario.updateOne(
+                {'_id': req.user._id},
+                {
+                    '$set': {
+                        'freeSystem.habilitado': false
+                    }
+                }
+            )
             req.flash('success_msg', 'Aquisição realizada')
             res.redirect('back')
         }).catch(err => {
@@ -210,6 +229,13 @@ router.get('/estabelecimentos', /* eAdmin, */ async (req, res) => { // Listar to
 
 router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelecimento
     try {
+        let estabelecimento = await Estabelecimento.findOne({"url": req.body.url})
+
+        if(estabelecimento && estabelecimento._id != req.body.idEstabelecimento){
+            req.flash('error_msg', "Já existe um estabelecimento com essa URL")
+            return res.redirect('back')
+        }
+
         Estabelecimento.findById({ _id: req.body.idEstabelecimento }).then(estabelecimento => {
             if (estabelecimento) {
                 estabelecimento.nome = req.body.nome,
@@ -288,10 +314,16 @@ router.post('/edit-estabelecimento-integracao-mercado-pago', (req, res) => {
     }
 })
 
-router.post('/add-estabelecimento',  (req, res) => { // adicionar estabelecimento
-    console.log('iok')
+router.post('/add-estabelecimento', async (req, res) => { // adicionar estabelecimento
     let user = req.user
     if (user) {
+
+        let estabelecimento = await Estabelecimento.findOne({"url": req.body.url})
+        if(estabelecimento){
+            req.flash('error_msg', "Já existe um estabelecimento com essa URL")
+            return res.redirect('back')
+        }
+
         if (user.usuarioMaster == true) {
             if(user.freeSystem.habilitado == true) {
                 addEstabelecimento = {
@@ -314,6 +346,10 @@ router.post('/add-estabelecimento',  (req, res) => { // adicionar estabeleciment
                         habilitado: true,
                         dataFim: user.freeSystem.dataFim
                     },
+                    locacao: {
+                        dataLiberado: user.freeSystem.dataFim,
+                        liberado: true
+                    }
                 }
                 new Estabelecimento(addEstabelecimento).save().then((estabelecimento) => {
                     editUsuario = {
