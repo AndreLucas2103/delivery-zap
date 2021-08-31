@@ -588,6 +588,10 @@ router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria c
 
 router.post('/edit-ingredientes', async (req, res) => { // adiciono a categoria com todos os estabelecimentos
     try {
+        if (!req.body.idCategoriaProduto || !req.body.idEstabelecimento) {
+            req.flash('error_msg', 'Nenhuma categoria ou estabelecimento selecionado')
+            res.redirect('back')
+        } else {
         let ingredienteExist = await Ingrediente.findOne({ $and: [{ nome: { $regex: req.body.nome.trim(), $options: "i" } }, { 'idEstabelecimento': req.body.idEstabelecimento }] })
         if (ingredienteExist && req.body.idIngrediente != ingredienteExist._id) {
             req.flash('warning_msg', 'Ingrediente já existe para esse estabelecimento. Vincule o ingrediente a nova categoria também')
@@ -624,6 +628,7 @@ router.post('/edit-ingredientes', async (req, res) => { // adiciono a categoria 
                 console.log(err)
             })
         }
+    }
     } catch (err) {
         console.log(err)
     }
