@@ -276,7 +276,6 @@ app.get('/teste/:id', async (req, res) => {
     }
 })
 
-
 // Rotas para executar a rotina de forma fácil
 app.post("/start-rotina-validacao-tempo-teste", async (req, res) => {
     try {
