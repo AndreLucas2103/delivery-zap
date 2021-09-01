@@ -36,11 +36,11 @@
                 <form action="/configuracao/edit-estabelecimento" method="post">
                     <div class="row">
                         <div class="form-floating  col-6">
-                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" value="{{estabelecimento.nome}}">
+                            <input type="text" class="form-control" id="nome" name="nome" placeholder="-" value="{{estabelecimento.nome}}" required>
                             <label for="nome" class="ml-2">Nome</label>
                         </div>
                         <div class="form-floating  col-6">
-                            <input type="text" class="form-control" id="url" name="url" placeholder="-" value="{{estabelecimento.url}}">
+                            <input type="text" class="form-control" id="url" name="url" placeholder="-" value="{{estabelecimento.url}}" required>
                             <label for="url" class="ml-2">URL do site</label>
                             <span style="font-size: smaller;">* Deve ser escrito tudo junto, exemplo "hotpedidosentregas"</span>
                         </div>

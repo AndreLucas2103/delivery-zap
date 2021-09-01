@@ -263,11 +263,13 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             }
+        
         }).catch(err => {
             registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: err})
             req.flash('error_msg', 'Ocorreu um erro')
             res.redirect('back')
         })
+        
     } catch (err) {
         registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: err})
         req.flash('error_msg', 'Ocorreu um erro')
