@@ -4,11 +4,12 @@ const mongoose = require("mongoose")
 const { ObjectId } = require('bson')
 const { eAdmin } = require("../../../helpers/eAdmin")
 
-
 require("../../../models/Entregador")
 const Entregador = mongoose.model("entregadores")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
+
+const registerLog = require("../../../components/log")
 
 router.get('/entregadores',eAdmin, async (req, res) => {
     try {
@@ -21,16 +22,15 @@ router.get('/entregadores',eAdmin, async (req, res) => {
         res.render('usuarios/entregador/entregadores', {entregador: entregador, estabelecimentos: estabelecimentos})
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ENTREGADORES - /entregadores", code: "500", description: err})
     }
 })
 
 router.post("/add-entregador", (req, res) => {//Rota para cadastrar novo entregador.
-
     if(req.body.estabelecimentos){
         new Entregador({nome: req.body.nome, observacao: req.body.observacao, perfilAvatar: 'courier'}).save().then((entregador) => {
             let arrayEstabelecimentos = req.body.estabelecimentos
-    
+            
             arrayEstabelecimentos.forEach(element => {
                 Entregador.updateOne(
                     {_id: entregador._id},
@@ -40,18 +40,18 @@ router.post("/add-entregador", (req, res) => {//Rota para cadastrar novo entrega
                 ).then(() => {
                     
                 }).catch(err => {
-                    console.log(err)
+                    registerLog.registerLog({text: "Rota ENTREGADORES - /add-entregador", code: "500", description: err})
                 })
             })
-    
+
             req.flash('success_msg', 'Entregador adicionado')
             res.redirect('back')
         })
     }else{
+        registerLog.registerLog({text: "Rota ENTREGADORES - /add-entregador", code: "500", description: "tentou adicionar mas não passou ID do estabelcimento"})
         req.flash('warning_msg', 'Ao adicionar uma entregador ela deve possui pelo menos UM estabelecimento')
         res.redirect('back')
     }
-    
 })
 
 router.post("/edit-entregador", (req, res) => {//Rota editar novo usuário.
@@ -67,7 +67,6 @@ router.post("/edit-entregador", (req, res) => {//Rota editar novo usuário.
             {_id: req.body.idEntregador},
             { $set: 
                 {'estabelecimentos': [], 'nome': req.body.nome, 'observacao': req.body.observacao, 'statusAtivo': statusAtivo}
-                 
             }
         ).then(() => {
             arrayEstabelecimentos.forEach(element => {
@@ -79,7 +78,7 @@ router.post("/edit-entregador", (req, res) => {//Rota editar novo usuário.
                 ).then(() => {
                     
                 }).catch(err => {
-                    console.log(err)
+                    registerLog.registerLog({text: "Rota ENTREGADORES - /edit-entregador", code: "500", description: err})
                 })
             })
             setTimeout(() => {
@@ -87,16 +86,14 @@ router.post("/edit-entregador", (req, res) => {//Rota editar novo usuário.
                 res.redirect('back')
             }, 1000)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ENTREGADORES - /edit-entregador", code: "500", description: err})
         })
     }
 })
 
 router.post('/ajax-get-entregadores', (req, res) => { // consulto pela rota  "/produto/categoria-produtos" para poder pegar as informações e editar seus valores
     Entregador.findById({_id: req.body.idEntregador}).populate('estabelecimentos.idEstabelecimento').lean().then(entregador => {
-        console.log(entregador)
         res.json(entregador)
-        console.log(13)
     })
 })
 

@@ -35,6 +35,9 @@ const Carrinho = mongoose.model("carrinhos")
 
 const removeProductCartMiddleware = require("../../../middlewares/removeProductCartMiddleware")
 
+const registerLog = require("../../../components/log")
+
+
 // -----------  PRODUTOS ------------------------------------------------------------------------------------------
 router.get('/perfil', async (req, res) => {
     try {
@@ -57,7 +60,7 @@ router.get('/perfil', async (req, res) => {
             adicionais: adicionais
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -77,7 +80,7 @@ router.post('/add-produto-opcoes-individual', removeProductCartMiddleware, (req,
             ).then(() => {
 
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         })
 
@@ -96,7 +99,7 @@ router.post('/add-produto-opcoes-individual', removeProductCartMiddleware, (req,
             req.flash('success_msg', 'Opção adicionada')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }
 })
@@ -110,7 +113,7 @@ router.post('/delete-produto-opcoes/:vinculoProduto/:idOpcao', removeProductCart
         req.flash('success_msg', 'Opção removida')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -137,7 +140,7 @@ router.post('/add-produto-opcao', removeProductCartMiddleware, (req, res) => { /
         req.flash('success_msg', 'Opção criada')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -154,10 +157,10 @@ router.post('/add-produto-opcao-modelo-opcoes', removeProductCartMiddleware, (re
             req.flash('success_msg', 'Opção criada')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -172,10 +175,10 @@ router.post('/delete-produto-opcao', removeProductCartMiddleware, async (req, re
             req.flash('success_msg', 'Opção removida')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -214,7 +217,7 @@ router.post('/edit-produto-opcao', removeProductCartMiddleware, (req, res) => { 
         req.flash('success_msg', 'Opção editada')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -249,7 +252,7 @@ router.post('/delete-produto', async (req, res) => {
         res.redirect('/produto/produtos')
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -281,14 +284,14 @@ router.post('/add-produto-ingrediente', removeProductCartMiddleware,  (req, res)
                 ).then(() => {
 
                 }).catch(err => {
-                    console.log(err)
+                    registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
                 })
             })
 
             req.flash('success_msg', 'Ingrediente editado')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }
 })
@@ -309,7 +312,7 @@ router.post('/add-produto-adicional-individual', removeProductCartMiddleware,  (
             ).then(() => {
 
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         })
 
@@ -334,13 +337,13 @@ router.post('/add-produto-adicionais-modelo-adicionais', removeProductCartMiddle
             ).then(() => {
 
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         })
         req.flash('success_msg', 'Opção criada')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -356,56 +359,59 @@ router.post('/delete-produto-adicional', removeProductCartMiddleware,  (req, res
         req.flash('success_msg', 'Adicional removido')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
 
 router.get('/produtos', async (req, res) => { // listo todos os produtos
-    let userEstabelecimentos = [], idCategorias, nome, filtroExist
-    req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
+    try {
+        let userEstabelecimentos = [], idCategorias, nome, filtroExist
+        req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
-    if (req.query.idCategorias || req.query.nome) {
-        filtroExist = true
-    } else {
-        filtroExist = false
-    }
+        if (req.query.idCategorias || req.query.nome) {
+            filtroExist = true
+        } else {
+            filtroExist = false
+        }
 
-    let arrayIdCategorias = []
-    if (req.query.idCategorias) {
-        JSON.parse(req.query.idCategorias).forEach(element => {
-            arrayIdCategorias.push(element.idCategoria)
+        let arrayIdCategorias = []
+        if (req.query.idCategorias) {
+            JSON.parse(req.query.idCategorias).forEach(element => {
+                arrayIdCategorias.push(element.idCategoria)
+            })
+            idCategorias = { 'idCategoriaProduto': arrayIdCategorias }
+        } else {
+            idCategorias = {}
+        }
+
+        req.query.nome ? nome = { nome: { $regex: req.query.nome, $options: "i" } } : nome = {}
+
+        let produtos = await Produto.find({
+            $and: [
+                { idEstabelecimento: userEstabelecimentos }, nome, idCategorias
+            ]
         })
-        idCategorias = { 'idCategoriaProduto': arrayIdCategorias }
-    } else {
-        idCategorias = {}
+            .populate('idCategoriaProduto idEstabelecimento').sort({statusAtivo: -1 ,'nome': 1}).lean()
+
+        let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
+        let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
+        let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
+        res.render('usuarios/produto/produtos', {
+            produtos: produtos,
+            estabelecimentos: estabelecimentos,
+            categoriaAtiva : categoriaAtiva,
+            categoriasProdutos: JSON.stringify(categoriasProdutos),
+
+            //filter
+            nome: req.query.nome,
+            idCategorias: req.query.idCategorias,
+
+            filtroExist: filtroExist
+        })
+    } catch (err) {
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
-
-    req.query.nome ? nome = { nome: { $regex: req.query.nome, $options: "i" } } : nome = {}
-
-    let produtos = await Produto.find({
-        $and: [
-            { idEstabelecimento: userEstabelecimentos }, nome, idCategorias
-        ]
-    })
-        .populate('idCategoriaProduto idEstabelecimento').sort({statusAtivo: -1 ,'nome': 1}).lean()
-
-    let estabelecimentos = await Estabelecimento.find({ _id: userEstabelecimentos }).lean()
-    let categoriasProdutos = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).populate('idEstabelecimento').lean()
-    let categoriaAtiva = await CategoriaProduto.find({ $and: [{ idEstabelecimento: userEstabelecimentos }, { statusAtivo: true }] }).lean()
-    res.render('usuarios/produto/produtos', {
-        produtos: produtos,
-        estabelecimentos: estabelecimentos,
-        categoriaAtiva : categoriaAtiva,
-        categoriasProdutos: JSON.stringify(categoriasProdutos),
-
-        //filter
-        nome: req.query.nome,
-        idCategorias: req.query.idCategorias,
-
-        filtroExist: filtroExist
-    })
-
 })
 
 // Adicionar produto no geral mesmo
@@ -429,11 +435,11 @@ router.post('/edit-produto', removeProductCartMiddleware,  async (req, res) => {
                 req.flash('success_msg', 'Produto editado')
                 res.redirect('back')
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -467,7 +473,7 @@ router.post('/add-produto', async (req, res) => { // adicionar produto
                 req.flash('success_msg', 'Produto adicionado')
                 res.redirect('/produto/perfil?produto=' + produto._id)
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     }
@@ -482,10 +488,10 @@ router.post('/ajax-get-produto-adicioanais-categoria-adicionais', (req, res) => 
         Adicional.find(idCategoriaAdicional).populate('idCategoriaAdicional').lean().then(adicionais => {
             res.json(adicionais)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -494,10 +500,10 @@ router.post('/ajax-get-produto-produtos-opcoes-produtos', (req, res) => { // con
         Produto.find({ idEstabelecimento: produto.idEstabelecimento }).populate('idCategoriaProduto').lean().then(produtos => {
             res.json(produtos)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -507,10 +513,10 @@ router.post('/ajax-get-produto-modelos-opcoes', (req, res) => { // consulto os
             console.log(req.body)
             res.json(modelos)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -519,10 +525,10 @@ router.post('/ajax-get-produto-modelos-adicionais', (req, res) => { // consulto 
         ModeloAdicional.find({ idEstabelecimento: produto.idEstabelecimento }).lean().then(modelos => {
             res.json(modelos)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -546,7 +552,7 @@ router.get('/ingredientes', eAdmin, async (req, res) => { // listo todas as cate
         })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -573,7 +579,7 @@ router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria c
                         ).then(() => {
 
                         }).catch(err => {
-                            console.log(err)
+                            registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
                         })
                     })
                     req.flash('success_msg', 'Ingrediente adicionado')
@@ -582,7 +588,7 @@ router.post('/add-ingredientes', async (req, res) => { // adiciono a categoria c
             }
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -618,19 +624,19 @@ router.post('/edit-ingredientes', async (req, res) => { // adiciono a categoria 
                     ).then(() => {
 
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
                     })
                 })
 
                 req.flash('success_msg', 'Ingrediente editado')
                 res.redirect('back')
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -644,7 +650,7 @@ router.post('/ajax-get-ingredientes', async (req, res) => { // consulto pela rot
         })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -667,7 +673,7 @@ router.get('/adicionais', eAdmin, async (req, res) => { // listo todas as catego
         })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -690,7 +696,7 @@ router.post('/add-adicionais', async (req, res) => { // adiciono a categoria com
         }
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -714,11 +720,11 @@ router.post('/edit-adicionais', async (req, res) => { // adiciono a categoria co
                 req.flash('success_msg', 'Adicional editado')
                 res.redirect('back')
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -726,7 +732,7 @@ router.post('/ajax-get-adicionais', (req, res) => { // consulto pela rota  "/pro
     Adicional.findById({ _id: req.body.idAdicional }).populate('idEstabelecimento idCategoriaAdicional').then(adicional => {
         res.json(adicional)
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -743,7 +749,7 @@ router.get('/categoria-adicionais', eAdmin, async (req, res) => { // listo todas
 
         res.render('usuarios/produto/categoria-adicionais', { categorias: categorias })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -760,7 +766,7 @@ router.post('/add-categoria-adicionais', async (req, res) => {
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -784,11 +790,11 @@ router.post('/edit-categoria-adicionais', async (req, res) => { // rota para edi
                 req.flash('success_msg', 'Categoria editada')
                 res.redirect('back')
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -796,7 +802,7 @@ router.post('/ajax-get-categoria-adicionais', (req, res) => { // consulto pela r
     CategoriaAdicional.findById({ _id: req.body.idCategoriaAdicional }).populate('idEstabelecimento').then(produto => {
         res.json(produto)
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -813,7 +819,7 @@ router.get('/categoria-produtos', eAdmin, async (req, res) => { // listo todas a
 
         res.render('usuarios/produto/categoria-produtos', { categorias: categorias })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -830,7 +836,7 @@ router.post('/add-categoria-produtos', async (req, res) => { //
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -854,11 +860,11 @@ router.post('/edit-categoria-produtos', async (req, res) => { // rota para edita
                 req.flash('success_msg', 'Categoria editada')
                 res.redirect('back')
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
             })
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -866,7 +872,7 @@ router.post('/ajax-get-categoria-produtos', (req, res) => { // consulto pela rot
     CategoriaProduto.findById({ _id: req.body.idCategoriaProduto }).populate('idEstabelecimento').then(produto => {
         res.json(produto)
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -912,7 +918,9 @@ router.post("/upload-produto/:idProduto/:idEstabelecimento", (req, res) => {
                         req.flash('success_msg', 'Foto alterada')
                         res.redirect('back')
                     })
-                }).catch(response => {
+                }).catch(err => {
+                    registerLog.registerLog({text: `Rota PRODUTO - ${req.route.path}`, code: "500", description: err})
+
                     req.flash('error_msg', 'Ocorreu um erro')
                     res.redirect('back')
                 });

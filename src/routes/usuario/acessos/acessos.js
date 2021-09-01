@@ -16,6 +16,8 @@ const Usuarioadm = mongoose.model("admusuarios")
 require("../../../models/Plano")
 const Plano = mongoose.model("planos")
 
+const registerLog = require("../../../components/log")
+
 
 router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
 
@@ -129,6 +131,8 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                 }
             
         }).catch((err) => {
+            registerLog.registerLog({text: "Erro ao registrar no sistema", code: "500", description: err})
+
             req.flash("error_msg", "Houve um erro interno")
             res.redirect("/registro")
         })
@@ -208,13 +212,13 @@ router.post('/mail-senha', async (req, res) => {
                 console.log(token, now)
                 res.json({ responseid: 200 })
             }).catch(err => {
+                registerLog.registerLog({text: "Erro na rota ACESSOS mail-senha", code: "500", description: err})
                 console.log(err)
-
             })
         }
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Erro na rota ACESSOS mail-senha", code: "500", description: err})
         res.render('/404')
     }
 })
@@ -248,7 +252,7 @@ router.post('/reset-senha', async (req, res) => {
 
         }
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Erro na rota ACESSOS mail-senha", code: "500", description: err})
     }
 })
 
@@ -270,9 +274,9 @@ router.post('/trocar-senha', async (req, res) => { // rota para edicao do perfil
                     req.flash('success_msg', 'Dados editado com sucesso')
                     res.redirect('/usuarios/perfil/' + usuario._id)
                 }).catch(err => {
+                    registerLog.registerLog({text: "Erro na rota ACESSOS trocar senha", code: "500", description: err})
                     req.flash('error_msg', 'Error ao editar dados' + err)
                     res.redirect('/')
-                    console.log(err)
                 })
             })
         })

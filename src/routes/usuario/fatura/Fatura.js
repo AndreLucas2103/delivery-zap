@@ -18,7 +18,6 @@ const RotinaSistema = mongoose.model("rotinasSistemas")
 
 const registerLog = require('../../../components/log')
 
-
 router.get('/faturas', async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
         let userEstabelecimentos = []
@@ -103,7 +102,7 @@ router.get('/faturas', async (req, res) => { // Entrar no "perfil" do estabeleci
             },
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota FATURAS - faturas", code: "500", description: err})
     }
 })
 
@@ -112,6 +111,7 @@ router.post('/checkout', async (req, res) => {
         let userEstabelecimentos = []
         req.user.estabelecimentosVinculados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) }) 
 
+        // Busca pelas faturas
         let fatura = await Estabelecimento.aggregate([
             {'$match': {'_id': { $in:  userEstabelecimentos}} },
             { '$unwind': '$locacao.faturas' },
@@ -120,9 +120,11 @@ router.post('/checkout', async (req, res) => {
 
         let dados_fatura = fatura[0].locacao.faturas
 
+        // verifica se a fatura existe
         if(!dados_fatura)
             return res.redirect('back')
 
+        // gero os dados para pagamento
         let dados = {
             items:  [
                 {
@@ -154,7 +156,7 @@ router.post('/checkout', async (req, res) => {
         return res.redirect(pagameto.body.init_point)
         
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota FATURAS - faturas", code: "500", description: err})
         return res.redirect('back')
     }
 })
@@ -163,8 +165,6 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
     try {
         let id = req.query.id
         let topic = req.query.topic
-
-        console.log('Entrou aqui')
 
         MercadoPago.configure({
             access_token: process.env.MERCADO_PAGO_ACESS_TOKEN
@@ -179,7 +179,7 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 qs: fitro
             }).then(async dados => {
 
-                let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
+                let pagamento = dados.body.results.pop(); // pego o ultimo item da array
                 
                 console.log(dados)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
@@ -188,9 +188,10 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 console.log(pagamento)
                 console.log('- - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - - - - - - - - - - - - - - - - -  - -  - - - - - - ')
                 
-                registerLog.registerLog({text: 'IPN Mercado Pago Fatura', code: '200', obj: dados})
+                registerLog.registerLog({text: 'IPN DA FATURA', code: '200', obj: dados})
 
-                let queryFindPlano = pagamento.external_reference.split("#@#")
+                // realizo um split para pegar o ID do establecimento que passei na externalReference
+                let queryFindPlano = pagamento.external_reference.split("#@#") 
 
                 let estabelecimentoFind = await Estabelecimento.aggregate([
                     {'$match': {'_id': ObjectId(queryFindPlano[0])}},
@@ -226,7 +227,6 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                     ).then(async () => {
                         try {
                             registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} realizou o pagamento da fatura ${pagamento.external_reference}`})
-                            console.log('Pedido aprovado')
                             return await new RotinaSistema ({
                                 dataExecutar: moment(dataVencimento).subtract(15, 'days'),
                                 tipo: 'cobranca',
@@ -237,10 +237,10 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                                 }
                             }).save()
                         } catch (err) {
-                            console.log(err)
+                            registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
                         }
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
                     })
 
                 }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
@@ -259,10 +259,9 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                             }
                         }
                     ).then(() => {
-                        registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} teve fatura cancelada, fatura: ${pagamento.external_reference}`})
-                        console.log('Pedido cancelado')
+                        registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
                     })
 
                 }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
@@ -282,9 +281,8 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                         }
                     ).then(() => {
                         registerLog.registerLog({text: 'Pagamento de fatura IPN Mercado Pago', code: '200', description: `Estabelecimento ${estabelecimento._id} está com fatura aguardando, fatura: ${pagamento.external_reference}`})
-                        console.log('Pedido aguardando')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
                     })
 
                 }else{
@@ -293,13 +291,13 @@ router.post('/IPN-fatura-mercado-pago', async (req,res) => {
                 }
 
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
             })
         }, 20000)
 
         res.send('OK')
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        registerLog.registerLog({text: "Rota FATURA - IPN-fatura-mercado-pago", code: "500", description: err})
     }
 })
 

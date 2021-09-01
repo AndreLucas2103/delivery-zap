@@ -25,21 +25,20 @@ const Carrinho = mongoose.model("carrinhos")
 require("../../../models/Pedido")
 const Pedido = mongoose.model("pedidos")
 
+const registerLog = require("../../../components/log")
+
+
 router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
     try {
         let id = req.query.id
         let topic = req.query.topic
-
-        console.log(req.query)
 
         let estabelecimento = await Estabelecimento.findOne({$and: [
             {'integracao.mercadoPago.publickey': req.params.publickey},
             {'integracao.mercadoPago.testadoAtivo': true},
             {'integracao.mercadoPago.statusAtivo': true}
         ]})
-
-        console.log(estabelecimento)
-
+        
         if(!estabelecimento){
             return res.send('404') 
         } 
@@ -57,7 +56,15 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                 qs: fitro
             }).then(dados => {
                 let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
+
                 if(pagamento != undefined){
+                    registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", obj: {
+                        query: req.query,
+                        estabelecimento: estabelecimento._id,
+                        acessToken: estabelecimento.integracao.mercadoPago.acessToken,
+                        pagamento: pagamento,
+                        dados: dados
+                    }})
 
                     if(topic == "payment"){
                         if(pagamento.status == "approved"){
@@ -80,7 +87,7 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
         
                         }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
@@ -103,7 +110,7 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
                             
                         }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
@@ -125,7 +132,7 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
         
                         }else{
@@ -153,7 +160,7 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
         
                         }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
@@ -176,7 +183,7 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
                             
                         }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
@@ -198,36 +205,34 @@ router.post('/IPN-mercadoPago-hotPedidos/:publickey', async (req,res) => {
                             ).then(() => {
                                 console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
                             }).catch(err => {
-                                console.log(err)
+                                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
                             })
         
                         }else{
-                            console.log('OCorreu um erro eu acho né')
+                            registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: "Ocorreu algum erro"})
                         }
 
                     }else{
-                        console.log('Ocorreu algum problema nisso aqui, favor verificar!')
+                        registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: "Ocorreu algum erro"})
                     }
                     
                 }else{
-                    console.log('Pagamento não existe!')
+                    registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: "PAGAMENTO NÃO EXISTE"})
                 }
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
             })
         }, 20000)
 
         res.send('OK')
-    } catch (error) {
-        console.log(error)
+    } catch (err) {
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - IPN-mercadoPago-hotPedidos/:publickey", code: "500", description: err})
     }
 })
 
 router.post('/checkout/finalizar', async (req, res) => {
     try {
-        console.log(req.body)
         let {uuid4Client, idEstabelecimento, nomeCliente, pagamentoTipoSelecionado, formaPagamento, trocoPara, observacao, rua, bairro, cidade, cep, numero, telefone, entrega, retirarLocal} = req.body
-        console.log(req.body)
         let estabelecimento = await Estabelecimento.findById({_id: idEstabelecimento})
         let carrinho = await Carrinho.findById(req.body.idCarrinho)
 
@@ -312,11 +317,15 @@ router.post('/checkout/finalizar', async (req, res) => {
             }
         }
 
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /checkout/finalizar", code: "500", obj: addPedido})
+
         Pedido(addPedido).save().then(async(pedido) => {     
             try {
                 Carrinho.deleteOne({_id: req.body.idCarrinho}, function (err) {
-                    if (err)
-                    return console.error(err);
+                    if (err){
+                        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /checkout/finalizar", code: "500", description: err})
+                        return console.error(err);
+                    }
                 })                      
                 if(pagamentoTipoSelecionado == "pagarRecebimento"){                   
                     req.flash('success_msg', 'Pedido Finalizado')
@@ -327,7 +336,7 @@ router.post('/checkout/finalizar', async (req, res) => {
                     pedido.produtos.forEach(element => {
                         itensPedidos += `| ${element.nome} (Qtd: ${element.quantidade}) |`
                     })
-                    console.log(pedido)
+                
                     let dados = {
                         items:  [
                             {
@@ -356,31 +365,28 @@ router.post('/checkout/finalizar', async (req, res) => {
                     });
 
                     var pagameto = await MercadoPago.preferences.create(dados) // crio os dados para pagamento e coloco dentro da variavel
-                    console.log(pagameto)
                     return res.redirect(pagameto.body.init_point)
                 }
                 
             } catch (err) {
-                console.log(err)
+                registerLog.registerLog({text: "Rota ESTABELECIMENTO - /checkout/finalizar", code: "500", description: err})
             }
 
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTABELECIMENTO - /checkout/finalizar", code: "500", description: err})
         })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /checkout/finalizar", code: "500", description: err})
     }
 })
 
 router.get('/:urlPainel', async (req, res)=>{
-    
     if (req.query.nome) {
         filtroExist = true
     } else {
         filtroExist = false
     }
-
     req.query.nome ? nome = { nome: { $regex: req.query.nome.trim(), $options: "i" } } : nome = {}
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
@@ -394,7 +400,6 @@ router.get('/:urlPainel', async (req, res)=>{
                     
                 },
             },
-       
             {
                 $lookup:
                     {
@@ -403,7 +408,6 @@ router.get('/:urlPainel', async (req, res)=>{
                         foreignField: "_id",
                         as: "categoriaProdutos"
                     },
-                   
             },
             {$sort:{'categoriaProdutos': -1}},
             {$unwind: '$categoriaProdutos'}
@@ -417,7 +421,7 @@ router.get('/:urlPainel', async (req, res)=>{
             filtroExist: filtroExist
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel", code: "500", description: err})
     }
 })
 
@@ -431,7 +435,7 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
             carrinho: carrinho
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/carrinho", code: "500", description: err})
     }
 })
 
@@ -445,7 +449,7 @@ router.get('/:urlPainel/meuspedidos', async (req, res)=>{
            
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/meuspedidos", code: "500", description: err})
     }
 })
 
@@ -463,12 +467,11 @@ router.post('/:urlPainel/endereco/:idCarrinho', async (req, res)=>{
             carrinho: carrinho
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/endereco/:idCarrinho", code: "500", description: err})
     }
 })
 
 router.post('/:urlPainel/pagamento/:idCarrinho', async (req, res)=>{
-    
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
@@ -479,7 +482,7 @@ router.post('/:urlPainel/pagamento/:idCarrinho', async (req, res)=>{
             dados: req.body
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/pagamento/:idCarrinho", code: "500", description: err})
     }
 })
 
@@ -490,7 +493,7 @@ router.post('/ajax-get-painel-produto', async (req, res) => { // consulto os
 
         res.json(produto)
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /ajax-get-painel-produto", code: "500", description: err})
     }
 })
 
@@ -520,8 +523,6 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
                 }
             })
         }
-
-        console.log(opcoes)
         
         if(opcoes != []){
             var grupoOpcoes = [...opcoes.reduce((c, {nomeOpcao, nome, valor}) => {
@@ -530,8 +531,6 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
                 return c;
             }, new Map()).values()];
         }
-        console.log(grupoOpcoes)
-
 
         if(carrinho){
             let valorTotalCarrinho = carrinho.valorTotal + valorTotal*quantidade
@@ -560,7 +559,7 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
             ).then(() => {
                 res.json(200)
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota ESTABELECIMENTO - /add-painel-carrinho-produto", code: "500", description: err})
                 res.json(201)
             })
         }else{
@@ -587,12 +586,13 @@ router.post('/add-painel-carrinho-produto', async (req, res) => {
             new Carrinho(addCarrinho).save().then((newCarrinho) => {
                 res.json(200)
             }).catch(err => {
+                registerLog.registerLog({text: "Rota ESTABELECIMENTO - /add-painel-carrinho-produto", code: "500", description: err})
                 res.json(201)
             })
         }
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /add-painel-carrinho-produto", code: "500", description: err})
     }
 })
 
@@ -623,11 +623,11 @@ router.post('/delete-carrinho-painel', async (req, res) => {
             req.flash('success_msg', 'Produto removido')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTABELECIMENTO - /delete-carrinho-painel", code: "500", description: err})
         }) 
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /delete-carrinho-painel", code: "500", description: err})
     }
 })
 
@@ -649,6 +649,8 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
             let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
 
             if(pagamento != undefined){
+                registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: "Busca por algum recebimento", obj: pagamento})
+
                 if(pagamento.status == "approved"){
                     Pedido.updateOne(
                         {"identificacaoPedido": pagamento.external_reference},
@@ -669,7 +671,7 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: err})
                     })
 
                 }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
@@ -692,7 +694,7 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: err})
                     })
                     
                 }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
@@ -714,11 +716,11 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: err})
                     })
 
                 }else{
-                    console.log('OCorreu um erro eu acho né')
+                    registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: "Ocorreu um erro"})
                 }
 
                 res.redirect('back')
@@ -728,11 +730,11 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
             }
 
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: err})
         })
 
     } catch (err) {
-        console.log(err)    
+        registerLog.registerLog({text: "Rota ESTABELECIMENTO - /search-pedido-mercadoPago", code: "500", description: err})
     }
 })
 

@@ -17,6 +17,8 @@ const Estabelecimento = mongoose.model("estabelecimentos")
 require("../../../models/Plano")
 const Plano = mongoose.model("planos")
 
+const registerLog = require("../../../components/log")
+
 
 router.post('/add-plano-estabelecimento', async (req, res) => {
     try {
@@ -24,7 +26,6 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
 
         let estabelecimento = await Estabelecimento.findById({'_id': req.body.idEstabelecimento})
 
-        console.log(moment(estabelecimento.locacao.dataLiberado).diff(moment(), "days"))
         let diff = moment(estabelecimento.locacao.dataLiberado).diff(moment(), "days")
 
         let data = diff < 0 ? moment() : estabelecimento.locacao.dataLiberado
@@ -79,13 +80,12 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
             req.flash('success_msg', 'Aquisição realizada')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - add-plano-estabelecimento", code: "500", description: err})
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - add-plano-estabelecimento", code: "500", description: err})
     }
 })
-
 
 router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { // Entrar no "perfil" do estabelecimento
     try {
@@ -105,12 +105,11 @@ router.get('/estabelecimento/:idEstabelecimento', eAdmin, async (req, res) => { 
 
         res.render('usuarios/configuracao/estabelecimento', { estabelecimento: estabelecimento[0] })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - /estabelecimento/:idEstabelecimento", code: "500", description: err})
     }
 })
 
 router.post('/edit-estabelecimento-configPedido', (req, res) => {
-    
     if(req.body.statusAtivo == "true" && req.body.cepsDisponiveis == ""){
         req.flash('error_msg', 'Insira pelo menos 1 CEP')
         return res.redirect('back')
@@ -122,8 +121,7 @@ router.post('/edit-estabelecimento-configPedido', (req, res) => {
         
     }
     let arraymeioPagamento = JSON.parse(req.body.meioPagamento)
-    
- 
+
     Estabelecimento.updateOne(
         {_id: req.body.idEstabelecimento},
         {$set: {"configPedidos.meioPagamento": [], "configPedidos.controleCEP.cepsDisponiveis": [], 'configPedidos.controleCEP.statusAtivo': req.body.statusAtivo, 'configPedidos.taxaEntrega': req.body.taxaEntrega}}
@@ -138,7 +136,7 @@ router.post('/edit-estabelecimento-configPedido', (req, res) => {
                 }
                 
             ).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento-configPedido", code: "500", description: err})
             })
         })
         
@@ -153,7 +151,7 @@ router.post('/edit-estabelecimento-configPedido', (req, res) => {
                         }
                     }
                 ).catch(err => {
-                    console.log(err)
+                    registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento-configPedido", code: "500", description: err})
                 })
             })
         }
@@ -161,7 +159,7 @@ router.post('/edit-estabelecimento-configPedido', (req, res) => {
         req.flash('success_msg', 'Configuração Pedido editado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento-configPedido", code: "500", description: err})
     })
 
 })
@@ -185,10 +183,10 @@ router.post('/add-horario-estabelecimento', async (req, res) => { // adicionar o
             req.flash('success_msg', 'Horário adicionado')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - add-horario-estabelecimento", code: "500", description: err})
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - add-horario-estabelecimento", code: "500", description: err})
     }
 })
 
@@ -205,10 +203,10 @@ router.post('/delete-horarioFuncionamento', async (req, res) => { // deletar os 
             req.flash('success_msg', 'Horário removido')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - delete-horarioFuncionamento", code: "500", description: err})
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - delete-horarioFuncionamento", code: "500", description: err})
     }
 })
 
@@ -223,7 +221,7 @@ router.get('/estabelecimentos', /* eAdmin, */ async (req, res) => { // Listar to
 
         res.render('usuarios/configuracao/estabelecimentos', { estabelecimentos: estabelecimentos, planos: planos })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - estabelecimentos", code: "500", description: err})
     }
 })
 
@@ -256,19 +254,22 @@ router.post('/edit-estabelecimento', async (req, res) => { // Editar o estabelec
                     req.flash('success_msg', 'Estabelecimento editado')
                     res.redirect('back')
                 }).catch(err => {
+                    registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: err})
                     req.flash('error_msg', 'Ocorreu um erro')
                     res.redirect('back')
                 })
             } else {
+                registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: "Tentiva de editar um estabelecimento mas não passou nennhum ID"})
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             }
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: err})
             req.flash('error_msg', 'Ocorreu um erro')
             res.redirect('back')
         })
     } catch (err) {
+        registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-estabelecimento", code: "500", description: err})
         req.flash('error_msg', 'Ocorreu um erro')
         res.redirect('back')
     }
@@ -508,10 +509,12 @@ router.post('/edit-config-painel', (req, res) => { // adicionar estilo do estabe
                 req.flash('success_msg', 'Painel de vendas editado.')
                 res.redirect('back')
             }).catch(err => {
+                registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-config-painel", code: "500", description: err})
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             })
         } else {
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - edit-config-painel", code: "500", description: "Tentativa de editar, mas não localizou nada"})
             req.flash('error_msg', 'Ocorreu um erro')
             res.redirect('back')
         }
@@ -525,6 +528,7 @@ const s3 = new aws.S3();
 router.post("/upload/:idEstabelecimento", (req, res) => {
     upload(req, res, function (err) {
         if (err) {
+            registerLog.registerLog({text: "Rota ESTALECIMENTO - /upload/:idEstabelecimento", code: "500", description: err})
             let teste = "" + err; // pego o código do erro e exibo a mensagem para o usuário
             if(teste == 'Error: Invalid file type.'){
                 req.flash('error_msg', 'Formato de arquivo não suportado')
@@ -541,30 +545,29 @@ router.post("/upload/:idEstabelecimento", (req, res) => {
         Estabelecimento.findById({_id: req.params.idEstabelecimento}).then(photos => {
             if(req.body.tipo == "capa"){
         if(!photos.img.capa.key){
-        Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
-            $set = {
-                'img.capa' : {  name, size, key, url }
-            }
-              ).then(() => {
-                    req.flash('success_msg', 'Foto de Capa editada')
-                    res.redirect('back')
-                })
-            
-         }else{
+            Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
+                $set = {
+                    'img.capa' : {  name, size, key, url }
+                }
+            ).then(() => {
+                req.flash('success_msg', 'Foto de Capa editada')
+                res.redirect('back')
+            })
+        }else{
             return s3.deleteObject({
                 Bucket: process.env.BUCKET_NAME,
                 Key: photos.img.capa.key
             }).promise().then(response => {
                 Estabelecimento.updateOne({_id: req.params.idEstabelecimento},
-            $set = {
-                'img.capa' : {  name, size, key, url }
-            }
-
+                    $set = {
+                        'img.capa' : {  name, size, key, url }
+                    }
                 ).then(() => {
                     req.flash('success_msg', 'Foto de Capa editada')
                     res.redirect('back')
                 })
-            }).catch(response => {
+            }).catch(err => {
+                registerLog.registerLog({text: "Rota ESTALECIMENTO - /upload/:idEstabelecimento", code: "500", description: err})
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             });
@@ -596,7 +599,9 @@ router.post("/upload/:idEstabelecimento", (req, res) => {
                     req.flash('success_msg', 'Logo editada')
                     res.redirect('back')
                 })
-            }).catch(response => {
+            }).catch(err => {
+                registerLog.registerLog({text: "Rota ESTALECIMENTO - /upload/:idEstabelecimento", code: "500", description: err})
+
                 req.flash('error_msg', 'Ocorreu um erro')
                 res.redirect('back')
             });

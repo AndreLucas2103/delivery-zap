@@ -23,9 +23,10 @@ const Pedido = mongoose.model("pedidos")
 require("../../../models/Entregador")
 const Entregador = mongoose.model("entregadores")
 
+const registerLog = require("../../../components/log")
+
 router.get('/', async (req, res) => {
     try {
-
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
@@ -110,7 +111,7 @@ router.get('/', async (req, res) => {
             produtos_mais_vendidos: produtos_mais_vendidos
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota DASHBOARD - /", code: "500", description: err})
     }
 })
 
@@ -141,7 +142,7 @@ router.post('/chart-pedidos-cancelados-finalizados', async (req, res) => {
         res.status(200).json(result)
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota DASHBOARD - /chart-pedidos-cancelados-finalizados", code: "500", description: err})
     }
 })
 
@@ -173,7 +174,7 @@ router.post('/chart-pedidos-retiradosEstabelecimento-entregas', async (req, res)
         res.status(200).json(result)
         
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota DASHBOARD - /chart-pedidos-retiradosEstabelecimento-entregas", code: "500", description: err})
     }
 })
 
@@ -202,7 +203,7 @@ router.post('/chart-pedidos-meio-pagamento-pagarRecebimento', async (req, res) =
 
         res.status(200).json(meios)
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota DASHBOARD - /chart-pedidos-meio-pagamento-pagarRecebimento", code: "500", description: err})
     }
 })
 
@@ -230,7 +231,7 @@ router.post('/chart-pedidos-pedidos-ultimos-28-dias', async (req, res) => {
 
         res.status(200).json(pedidos)
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota DASHBOARD - /chart-pedidos-pedidos-ultimos-28-dias", code: "500", description: err})
     }
 })
 

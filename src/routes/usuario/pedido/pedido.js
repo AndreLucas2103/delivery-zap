@@ -26,6 +26,7 @@ const Pedido = mongoose.model("pedidos")
 require("../../../models/Entregador")
 const Entregador = mongoose.model("entregadores")
 
+const registerLog = require("../../../components/log")
 
 router.get('/comandas', async (req, res) => {
     res.render('usuarios/pedido/comandas')
@@ -123,7 +124,7 @@ router.get('/pedidos', async (req, res) => {
         })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -135,7 +136,7 @@ router.get('/pedido', async (req, res) => {
             pedido: pedido
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -168,7 +169,7 @@ router.post('/edit-pedido', (req, res) => {
         req.flash('success_msg', 'Pedido alterado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
     })
 
 })
@@ -193,7 +194,7 @@ router.post('/edit-pedidos-situacao', (req, res) => {
         req.flash('success_msg', 'Situação alterada')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -222,8 +223,9 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
             qs: filters
         }).then(dados => {
             let pagamento = dados.body.results.pop(); // passo somente um valor para a variavel
-
             if(pagamento != undefined){
+                registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: "Pedido", obj: pagamento})
+
                 if(pagamento.status == "approved"){
                     Pedido.updateOne(
                         {"identificacaoPedido": pagamento.external_reference},
@@ -244,7 +246,7 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"APROVADO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
                     })
 
                 }else if(pagamento.status == "charged_back" || pagamento.status == "rejected" || pagamento.status == "cancelled" || pagamento.status == "refunded"){
@@ -267,7 +269,7 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"CANCELADO/ESTORNADO/REJEITADO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
                     })
                     
                 }else if(pagamento.status == "pending" || pagamento.status == "authorized" || pagamento.status == "in_process" || pagamento.status == "in_mediation"){
@@ -289,26 +291,28 @@ router.post('/search-pedido-mercadoPago', async (req, res) => {
                     ).then(() => {
                         console.log('*\nPedido recebido e alterado {status:"AGUARDANDO/AUTORIZADO/EM PROCESSO - payment"} \n*')
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
                     })
 
                 }else{
-                    console.log('OCorreu um erro eu acho né')
+                    registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: "Ocorreu um erro eu acho"})
                 }
 
                 res.redirect('back')
 
             }else{
+                registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: "PAgamento não existe"})
+
                 req.flash('error_msg', 'Pagamento não existe')
                 res.redirect('back')
             }
 
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
         })
 
     } catch (err) {
-        console.log(err)    
+        registerLog.registerLog({text: `Rota PEDIDO - ${req.route.path}`, code: "500", description: err})
     }
 })
 

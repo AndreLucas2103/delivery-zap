@@ -23,6 +23,7 @@ const ModeloOpcao = mongoose.model("modeloOpcoes")
 require("../../../models/ModeloAdicional")
 const ModeloAdicional = mongoose.model("modeloAdicionais")
 
+const registerLog = require("../../../components/log")
 
 // -----------  MODELO OPCOES ------------------------------------------------------------------------------------------
 router.get('/modelo-opcoes', async(req, res) => {
@@ -35,7 +36,7 @@ router.get('/modelo-opcoes', async(req, res) => {
             modelosOpcoes: modelosOpcoes,
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota MODELO - /modelo-opcoes", code: "500", description: err})
     }
 })
 
@@ -57,7 +58,7 @@ router.post('/add-modelo-opcoes', (req, res) => {
         req.flash('success_msg', 'Modelo adicionado')
         res.redirect('back')
     }).catch(err=> {
-        console.log(err)
+        registerLog.registerLog({text: "Rota MODELO - /add-modelo-opcoes", code: "500", description: err})
     })
 })
 
@@ -96,7 +97,7 @@ router.post('/edit-modelo-opcoes', (req, res) => {
         req.flash('success_msg', 'Modelo opção editado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota MODELO - /edit-modelo-opcoes", code: "500", description: err})
     })
 })
 
@@ -113,7 +114,7 @@ router.post('/add-modelo-opcoes-opcao', (req, res) => {
             ).then(() => {
                 
             }).catch(err => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota MODELO - /add-modelo-opcoes-opcao", code: "500", description: err})
             })
         })
 
@@ -130,7 +131,7 @@ router.post('/add-modelo-opcoes-opcao', (req, res) => {
             req.flash('success_msg', 'Opção adicionada')
             res.redirect('back')
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota MODELO - /add-modelo-opcoes-opcao", code: "500", description: err})
         })
     }
 })
@@ -144,7 +145,7 @@ router.post('/delete-modelo-opcoes-opcoes/:vinculoProduto/:idOpcao', (req, res) 
         req.flash('success_msg', 'Opção removida')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -153,10 +154,10 @@ router.post('/ajax-get-produto-modelo-opcoes', (req, res) => { // consulto os
         Produto.find({idEstabelecimento: modeloOpcao.idEstabelecimento}).populate('idCategoriaProduto').lean().then(produtos => {
             res.json(produtos)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -167,7 +168,7 @@ router.post('/delete-modelo-opcao', async (req, res) => {
         req.flash('success_msg', "Modelo deletado")
         res.redirect('back')
     }catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -182,7 +183,7 @@ router.get('/modelo-adicionais', async(req, res) => {
             modelosAdicionais: modelosAdicionais
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -191,7 +192,7 @@ router.post('/add-modelo-adicionais', (req, res) => {
         req.flash('success_msg','Modelo adicionado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -207,7 +208,7 @@ router.post('/add-modelo-adicionais-adiocinal', (req, res) => {
         ).then(() => {
             
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
         })
     })
 
@@ -225,7 +226,7 @@ router.post('/delete-modelo-adicionais-adiocinal', (req, res) => {
         req.flash('success_msg', 'Adicional removido')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -237,7 +238,7 @@ router.post('/edit-modelo-adicional', (req, res) => {
         req.flash('success_msg','Modelo editado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -249,7 +250,7 @@ router.post('/ajax-get-modelo-adicionais-categorias-adicionais', async (req, res
 
         res.json(categorias)
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     }
 })
 
@@ -260,10 +261,10 @@ router.post('/ajax-get-modelo-adicionais-adicionais', (req, res) => {
         Adicional.find(idCategoriaAdicional).populate('idCategoriaAdicional').lean().then(adicionais => {
             res.json(adicionais)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
         })
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     })
 })
 
@@ -274,7 +275,7 @@ router.post('/delete-modelo-adicionais', async (req, res) => {
         req.flash('success_msg', "Modelo deletado")
         res.redirect('back')
     }catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: `Rota MODELO - ${req.route.path}`, code: "500", description: err})
     }
 })
 

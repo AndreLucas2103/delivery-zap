@@ -6,6 +6,8 @@ const { ObjectId } = require('bson')
 require("../../../models/Chamado")
 const Chamado = mongoose.model("chamados")
 
+const registerLog = require("../../../components/log")
+
 router.get('/', async (req, res) => {
     try {
         let userEstabelecimentos = [], idCategorias, nome, filtroExist
@@ -17,7 +19,7 @@ router.get('/', async (req, res) => {
         }) 
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota SUPORTE - /", code: "500", description: err})
     }
 })
 
@@ -35,13 +37,11 @@ router.post('/add-chamado', (req, res) => {
         }]
     }
 
-    console.log('tes')
-
     Chamado(addChamado).save().then(() => {
         req.flash('success_msg', "Chamado aberto")
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota SUPORTE - /add-chamado", code: "500", description: err})
     })
 })
 
@@ -54,7 +54,7 @@ router.post('/add-chamado-mensagem', (req, res) => {
         req.flash('success_msg', "Mensagem enviada")
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota SUPORTE - /add-chamado-mensagem", code: "500", description: err})
     })
 })
 
@@ -66,7 +66,7 @@ router.get('/chamado', async (req, res) => {
             chamado: chamado
         })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota SUPORTE - /chamado", code: "500", description: err})
     }
 })
 module.exports = router

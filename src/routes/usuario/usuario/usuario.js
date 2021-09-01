@@ -10,6 +10,7 @@ const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
 const Estabelecimento = mongoose.model("estabelecimentos")
 
+const registerLog = require("../../../components/log")
 
 router.get('/usuarios',eAdmin, async (req, res) => {
     try {
@@ -22,7 +23,7 @@ router.get('/usuarios',eAdmin, async (req, res) => {
         res.render('usuarios/usuario/usuarios', { usuarios: usuarios, estabelecimentos: estabelecimentos })
 
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota USUARIO - /usuarios", code: "500", description: err})
     }
 })
 
@@ -50,6 +51,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
 
         bcryptjs.hash(novoUsuario.senha, salt, (erro, hash) => {
             if (erro) {
+                registerLog.registerLog({text: "Rota USUARIO - /add-usuario", code: "500", description: erro})
                 res.json(402)
             }
 
@@ -68,14 +70,14 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
                     ).then(() => {
                         
                     }).catch(err => {
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota USUARIO - /add-usuario", code: "500", description: err})
                     })
                 })
 
                 req.flash("success_msg", "Usuario criado com sucesso!")
                 res.redirect("/usuario/usuarios")
             }).catch((err) => {
-                console.log(err)
+                registerLog.registerLog({text: "Rota USUARIO - /add-usuario", code: "500", description: err})
                 req.flash("error_msg", "Houve um erro ao criar o usuário")
                 res.redirect("/usuario/usuarios")
 
@@ -116,7 +118,7 @@ router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
                 ).then(() => {
                     
                 }).catch(err => {
-                    console.log(err)
+                    registerLog.registerLog({text: "Rota USUARIO - /edit-usuario", code: "500", description: err})
                 })
             })
             setTimeout(() => {
@@ -124,7 +126,7 @@ router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
                 res.redirect('back')
             }, 1000)
         }).catch(err => {
-            console.log(err)
+            registerLog.registerLog({text: "Rota USUARIO - /edit-usuario", code: "500", description: err})
         })
     }
 })
@@ -152,7 +154,7 @@ router.get('/perfil', async (req, res) => {//Acessar perfil do usuário
 
         res.render('usuarios/usuario/perfil', { usuario: usuario[0] })
     } catch (err) {
-        console.log(err)
+        registerLog.registerLog({text: "Rota USUARIO - /perfil", code: "500", description: err})
     }
 })
 
@@ -166,7 +168,7 @@ router.post('/alterar-avatar', (req, res) => {
         req.flash('success_msg', 'Avatar editado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota USUARIO - /alterar-avatar", code: "500", description: err})
     })
 })
 
@@ -186,7 +188,7 @@ router.post('/edit-perfil-infos-gerais', (req, res) => {
         req.flash('success_msg', 'Perfil editado')
         res.redirect('back')
     }).catch(err => {
-        console.log(err)
+        registerLog.registerLog({text: "Rota USUARIO - /edit-perfil-infos-gerais", code: "500", description: err})
     })
 })
 
@@ -206,6 +208,7 @@ router.post('/trocar-senha', async (req, res) => {
             bcryptjs.genSalt(10, (erro, salt) => {
                 bcryptjs.hash(usuario.senha, salt, (erro, hash) => {
                     if (erro) {
+                        registerLog.registerLog({text: "Rota USUARIO - /trocar-senha", code: "500", description: erro})
                         res.json(402)
                     }
 
@@ -218,7 +221,7 @@ router.post('/trocar-senha', async (req, res) => {
                     }).catch(err => {
                         req.flash('error_msg', 'Error ao editar dados' + err)
                         res.redirect('/')
-                        console.log(err)
+                        registerLog.registerLog({text: "Rota USUARIO - /trocar-senha", code: "500", description: err})
                     })
 
                 })
@@ -252,7 +255,7 @@ router.post('/edit-estabelecimentosSelecionados', (req, res) => {
                         )
                     }
                 } catch (err) {
-                    console.log(err)
+                    registerLog.registerLog({text: "Rota USUARIO - /edit-estabelecimentosSelecionados", code: "500", description: err})
                 }
             })
     
