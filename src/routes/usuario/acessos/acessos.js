@@ -19,7 +19,8 @@ const Plano = mongoose.model("planos")
 const registerLog = require("../../../components/log")
 
 
-router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
+router.post("/registro", async (req, res) => {//Rota para cadastro de uma nova conta.
+
 
     var error = []
 
@@ -38,7 +39,16 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
         res.redirect("/registro")
 
     } else {
+
+        let validurl = await Estabelecimento.findOne({"url": req.body.url})
+        
+        if(validurl){
+            req.flash('error_msg', "Já existe um estabelecimento com essa URL")
+            return res.redirect('back')
+
+        }else{
         Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
+
             if (usuario) {
                 req.flash("error_msg", "E-mail já cadastrado.")
                 res.redirect("/registro")
@@ -101,6 +111,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                         editUsuario = {
                                             idEstabelecimento: estabelecimento._id,
                                         }
+                                       
                                         Usuario.updateOne(
                                             { '_id': usuarioEdit._id },
                                             {
@@ -114,7 +125,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                                         }).catch(err => {
                                             console.log(err)
                                         })
-    
+                                    
                                     }).catch(err => {
                                         req.flash('error_msg', 'Ocorreu um erro')
                                         res.redirect('back')
@@ -130,6 +141,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
                     })
                 }
             
+            
         }).catch((err) => {
             registerLog.registerLog({text: "Erro ao registrar no sistema", code: "500", description: err})
 
@@ -138,6 +150,7 @@ router.post("/registro", (req, res) => {//Rota para cadastro de uma nova conta.
         })
 
     }
+}
 })
 
 router.post("/login", (req, res, next) => {

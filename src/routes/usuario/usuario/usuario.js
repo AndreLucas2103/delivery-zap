@@ -173,6 +173,13 @@ router.post('/alterar-avatar', (req, res) => {
 })
 
 router.post('/edit-perfil-infos-gerais', (req, res) => {
+
+    if(req.body.cpfResponseinput == "false"){
+
+    req.flash('error_msg', 'CPF Inválido')
+    res.redirect('back')
+
+    }else{
     Usuario.updateOne(
         { '_id': req.user._id },
         {
@@ -190,6 +197,7 @@ router.post('/edit-perfil-infos-gerais', (req, res) => {
     }).catch(err => {
         registerLog.registerLog({text: "Rota USUARIO - /edit-perfil-infos-gerais", code: "500", description: err})
     })
+}
 })
 
 router.post('/trocar-senha', async (req, res) => {
