@@ -176,6 +176,7 @@ app.get('/registro', (req, res) => {
 // ---- Rotas "routes" -----------------------------------------------------------------------------------------------------------------------------
 
 let verifyUser = require('./middlewares/verifyUser')
+let adminUser = require('./middlewares/adminUser')
 
 // Rotas para USUARIOS
 const acessoUsuario = require("./routes/usuario/acessos/acessos")
@@ -217,11 +218,11 @@ const adminChamado = require("./routes/admin/chamado/chamado")
 const adminUsuario = require("./routes/admin/usuario/usuario")
 const adminPlano = require("./routes/admin/plano/plano")
 
-    app.use('/admin', adminDashboard)
-    app.use('/admin/administrativo', adminEstabelecimento)
-    app.use('/admin/administrativo', adminChamado)
-    app.use('/admin/usuario', adminUsuario)
-    app.use('/admin/administrativo', adminPlano)
+    app.use('/admin',adminUser, adminDashboard)
+    app.use('/admin/administrativo',adminUser, adminEstabelecimento)
+    app.use('/admin/administrativo',adminUser, adminChamado)
+    app.use('/admin/usuario',adminUser, adminUsuario)
+    app.use('/admin/administrativo',adminUser, adminPlano)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
