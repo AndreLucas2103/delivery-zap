@@ -31,7 +31,7 @@ s0.parentNode.insertBefore(s1,s0);
                         <center>
                         <p style="color: white;font-size:25px;">Preencha suas informações:</p>
                         <br>
-                        </center>
+                        <div class="row g-2">
                         <div class="col-md-4">
                             <div class="form-floating">
                                 <input type="text" class="form-control" id="primeiroNome" name="primeiroNome"
@@ -46,15 +46,16 @@ s0.parentNode.insertBefore(s1,s0);
                                 <label for="nomeCompleto">Nome Completo*</label>
                             </div>
                         </div>
-                        <div class="row g-2">
-                            <div class="col-md">
+                        </div>
+                        <div class="row g-2 mt-2">
+                            <div class="col-md-7">
                                 <div class="form-floating">
                                     <input type="email" class="form-control" id="email" name="email" placeholder="0"
                                         required>
                                     <label for="email">E-mail*</label>
                                 </div>
                             </div>
-                            <div class="col-md-4">
+                            <div class="col-md">
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="cpf" name="cpf" onkeyup="cpfCheck(this)"
                                         maxlength="18" onkeydown="javascript: fMasc( this, mCPF );"
@@ -65,7 +66,8 @@ s0.parentNode.insertBefore(s1,s0);
                                 </div>
 
                             </div>
-                            <div class="row g-2">
+                            </div>
+                            <div class="row g-2 mt-2">
                                 <div class="col-md">
                                     <div class="form-floating">
                                         <input type="password" class="form-control" id="senha" name="senha"
@@ -83,6 +85,8 @@ s0.parentNode.insertBefore(s1,s0);
                             </div>
                         </div>
                     </div>
+                        </center>
+
                     <br>
                     <center>
                     <button type="submit" class="mb-4"  style="font-size:18px;color:white;margin-top:10px;border-radius:50px;
@@ -91,7 +95,7 @@ s0.parentNode.insertBefore(s1,s0);
                     </center>         
                 </div>
             </div> 
-            </div>
+           
     </container>     
    
 <container style="background:#FF5A00;;height:500px;margin-bottom:220px">
@@ -128,9 +132,9 @@ s0.parentNode.insertBefore(s1,s0);
                                     required>
                                 <label for="telefone">Celular*</label>
                             </div>
-
                         </div>
-                        <div class="row g-2">
+                        </div>
+                        <div class="row g-2 mt-2">
                             <div class="col-md-3">
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="cep" name="cep" placeholder="0"
@@ -153,7 +157,7 @@ s0.parentNode.insertBefore(s1,s0);
                                 </div>
                             </div>
                         </div>
-                        <div class="row g-2">
+                        <div class="row g-2 mt-2">
                             <div class="col-md-4">
                                 <div class="form-floating">
                                     <input type="text" class="form-control" id="bairro" name="bairro" placeholder="0"
@@ -185,7 +189,6 @@ s0.parentNode.insertBefore(s1,s0);
                     </center> 
                 </div>
             </div>
-    </div>
 </form>
 </container>
 <center><hr style="color: rgb(247, 0, 0);height:5px;margin-top:100px;" class="w-25"></center>
