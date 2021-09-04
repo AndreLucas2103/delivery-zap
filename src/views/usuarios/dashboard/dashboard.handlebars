@@ -32,9 +32,36 @@
     <div class="text-center mt-3">
     <a style="color: rgb(71, 124, 221);font-size:25px;" id="faceurl" target="_blank"  onclick="urlvalue()" href=""><i class="fab fa-facebook-f"></i></a>
     <a style="color: rgb(83, 155, 95);font-size:25px;" id="whatsurl" class="ml-4" target="_blank" onclick="urlvalue()" href=""><i class="fab fa-whatsapp"></i></a>
+    <a style="font-size:25px;" id="copybtn" class="ml-4"><i class="fas fa-copy"></i></a>
     <a style="font-size:25px;" id="acessurl" class="ml-4" target="_blank"  onclick="urlvalue()" href=""><i class="fas fa-external-link-alt"></i></a>
     </div>
       <script>
+ document.getElementById("copybtn").addEventListener("click", copy_btt);
+
+function copy_btt() {
+    var copyText = document.getElementById("urlselect");
+    var textArea = document.createElement("textarea");
+    textArea.value = copyText.value;
+    document.body.appendChild(textArea);
+    textArea.select();
+    document.execCommand("Copy");
+    textArea.remove();
+   $(document).ready(()=>{    
+            Swal.fire({
+                toast: true,
+                title: 'Copiado para área de transferência',
+                position: 'top-right',
+                background: "#20853b",
+                showConfirmButton: false,
+                showCloseButton: true,
+                timer: 5000,
+                timerProgressBar: true,
+                customClass: {
+                    title: 'font-title-notificacao',                              
+                }
+            })
+        })
+}
         function urlvalue(){
             let selecturl = $('#urlselect').val()
 
