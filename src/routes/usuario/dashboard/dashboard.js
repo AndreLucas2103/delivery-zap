@@ -30,6 +30,9 @@ router.get('/', async (req, res) => {
         let userEstabelecimentos = []
         req.user.estabelecimentosSelecionados.forEach(element => { userEstabelecimentos.push(element.idEstabelecimento) })
 
+        let estabelecimentourl = await Estabelecimento.find({_id: userEstabelecimentos}).lean()
+        
+
         let pedidos_aguardando = await Pedido.countDocuments({$and: [
             {"idEstabelecimento": userEstabelecimentos},
             {'dataCriacao': { '$gte': new Date(moment().subtract(7, 'days')), '$lte': new Date(moment())}},
@@ -101,8 +104,9 @@ router.get('/', async (req, res) => {
             {'$sort': {'count': -1}},
             {'$limit': 5}
         ])
-        
+     
         res.render('usuarios/dashboard/dashboard', {
+            estabelecimentourl: estabelecimentourl,
             pedidos_aguardando: pedidos_aguardando,
             pedidos_andamento: pedidos_andamento,
             pedidos_finalizado: pedidos_finalizado,

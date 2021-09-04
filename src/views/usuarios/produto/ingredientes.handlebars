@@ -93,8 +93,6 @@
 
                 </form>
             </div>
-            </div>
-        </div>
         {{else}}
         <div class="modal-header">
                 <h5 class="modal-title" id="modal-edit-ingredientesLabel">Cadastre ou ative as categorias.</h5>
@@ -108,6 +106,8 @@
             <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
             </div>
          {{/if}}
+          </div>
+        </div>
     </div>
     <!-- Modal edit ingredientes END -->
 
@@ -185,8 +185,7 @@
 
                 </form>
             </div>
-            </div>
-        </div>
+          
         {{else}}
         <div class="modal-header">
                 <h5 class="modal-title" id="modal-add-ingredientesLabel">Cadastre ou ative as categorias.</h5>
@@ -200,15 +199,15 @@
             <a href="/produto/categoria-produtos"><button type="button" class="btn btn-primary btn-sm mb-4">Adicionar categorias</button></a>
             </div>
          {{/if}}
+          </div>
     </div>
+</div>
     <!-- Modal add ingredientes END -->
 
     <script> // script para adicionar categorias
         var categoriasProdutos = {{{ categoriasProdutos }}}
         
-        if(categoriasProdutos.length == 0) {
-            $("#button-add-ingrediente").hide()
-        }else{
+      
             $("#not-categorias-produtos").hide()
             $('input[type=radio][name=idEstabelecimento]').change(function() {
                 $('#radio-add-ingrediente-categoria').empty()
@@ -223,7 +222,7 @@
                     }
                 })
             });
-        }
+        
         
         $(".valorFormatar").each(function(item) {
             let textFormat = $(this).text()

@@ -18,7 +18,32 @@
             </ol>
         </nav>
     </div>
+  <center>
+      <h4>Compartilhe seu link de vendas:</h4>
+    <select class="form-select text-center" style="width: 500px;" aria-label="Default select example" id="urlselect">    
+        {{#each estabelecimentourl}}      
+            <option value="https://hotpedidos.com/estabelecimento/{{url}}">hotpedidos.com/estabelecimento/{{url}}</option>
+            {{/each}}         
+    </select>
+    
+    </center>
+   
 
+    <div class="text-center mt-3">
+    <a style="color: rgb(71, 124, 221);font-size:25px;" id="faceurl" target="_blank"  onclick="urlvalue()" href=""><i class="fab fa-facebook-f"></i></a>
+    <a style="color: rgb(83, 155, 95);font-size:25px;" id="whatsurl" class="ml-4" target="_blank" onclick="urlvalue()" href=""><i class="fab fa-whatsapp"></i></a>
+    <a style="font-size:25px;" id="acessurl" class="ml-4" target="_blank"  onclick="urlvalue()" href=""><i class="fas fa-external-link-alt"></i></a>
+    </div>
+      <script>
+        function urlvalue(){
+            let selecturl = $('#urlselect').val()
+
+            $("#acessurl").attr("href", selecturl);
+           $("#faceurl").attr("href", "https://www.facebook.com/sharer.php?u="+selecturl);
+            $("#whatsurl").attr("href", "https://api.whatsapp.com/send?text="+selecturl);
+        }
+    </script>
+    <br>
     <div>
         <div class="row">
             <div class="col-12 col-sm-4 col-lx-4 mb-4">
