@@ -2001,6 +2001,9 @@ progress {
 }
 
 @media (min-width: 1200px) {
+    .urlselect{
+        width: 50%;
+    }
     .col-xl {
         flex: 1 0 0%;
     }
@@ -8082,6 +8085,9 @@ progress {
 }
 
 @media (min-width: 576px) {
+    .urlselect{
+        width: 50%;
+    }
     .card-group {
         display: flex;
         flex-flow: row wrap;
