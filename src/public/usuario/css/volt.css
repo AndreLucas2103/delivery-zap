@@ -44044,7 +44044,6 @@ article .h1, article .h2, article .h3, article .h4, article .h5, article .h6 {
 .logo-image-st {
     width: 100px;
     height: 100px;
-    background-image: url("/usuario/assets/img/favicon/logoApp.png");
     background-repeat: no-repeat;
     background-size: contain;
     position: relative;
