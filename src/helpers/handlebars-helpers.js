@@ -80,3 +80,15 @@ Handlebars.registerHelper('situacaoPedido', function(pedido) {
             return ('err')
     }
   })
+
+  
+  Handlebars.registerHelper('situacaoColor', function(pedido) {
+
+    switch (pedido) {
+        case 'waiting':
+            return ('style="background: rgb(228, 228, 147)"')
+            break;
+        default:
+            return ('err')
+    }
+  })
