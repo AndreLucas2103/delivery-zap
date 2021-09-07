@@ -412,6 +412,7 @@
                                 </div>
                             </div>
                             `)
+                                    
 
                                      if(pedido.pagamento.forma != "dinheiro"){  
                                     $(`#append-pagamento-${pedido._id}`).append(`
@@ -427,7 +428,9 @@
 
                                      }
                                 
-                                  
+                                  if(pedido.tipoEntrega == "retirarLocal"){
+                                       $(`.append-endereco-${pedido._id}`).empty()
+                                  }else{
 
                                     if(pedido.infoEntrega.endereco.rua != "" && pedido.infoEntrega.endereco.cep == ""){  
                                     $(`.append-endereco-${pedido._id}`).append(`
@@ -447,6 +450,7 @@
                                 `)
 
                                         } 
+                                        }
 
                                         pedido.produtos.forEach(produto => {
                                             $(`#pedido-produtos-${pedido._id}`).append(`
