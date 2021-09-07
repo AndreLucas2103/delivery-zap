@@ -263,6 +263,13 @@
     </div>
 </div>
 
+<script>
+          $(document).ready(()=>{
+            $('#col').addClass("@@if (context.page === 'overview') { active }");
+            $("#submenu-components").collapse('toggle');
+        })
+    </script>
+
 {{>usuario/_rodape}}
 
 {{>_msg}}

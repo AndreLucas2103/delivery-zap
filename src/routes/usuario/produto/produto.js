@@ -53,7 +53,13 @@ router.get('/perfil', async (req, res) => {
 
         let categoriasAdicional = await CategoriaAdicional.find({ $and: [{ 'idEstabelecimento': produto.idEstabelecimento }, { statusAtivo: true }] }).lean()
 
+        let modeloAdicional = await ModeloAdicional.find({ $and: [{ 'idEstabelecimento': produto.idEstabelecimento }, { statusAtivo: true }] }).lean()
+
+        let modeloOpcao = await ModeloOpcao.find({ $and: [{ 'idEstabelecimento': produto.idEstabelecimento }, { statusAtivo: true }] }).lean()
+
         res.render('usuarios/produto/produto', {
+            modeloOpcao: modeloOpcao,
+            modeloAdicional: modeloAdicional,
             produto: produto,
             ingredientes: ingredientes,
             categoriasAdicional: categoriasAdicional,

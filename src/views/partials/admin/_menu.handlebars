@@ -9,7 +9,7 @@
                 </div>
                 <div class="d-block">
                     <h2 class="h6">{{usuarioLogado.primeiroNome}}</h2>
-                    <a href="/usuario/pages/examples/sign-in.html" class="btn btn-secondary text-dark btn-xs"><span class="mr-2"><span class="fas fa-sign-out-alt"></span></span>Sair</a>
+                    <a href="/acessos/logout" class="btn btn-secondary text-dark btn-xs"><span class="mr-2"><span class="fas fa-sign-out-alt"></span></span>Sair</a>
                 </div>
             </div>
             <div class="collapse-close d-md-none">
@@ -71,13 +71,12 @@
                     data-toggle="collapse" data-target="#submenu-configs">
                     <span>
                         <span class="sidebar-icon"><span class="fas fa-cog"></span></span>
-                        Configuração
+                        Sistema
                     </span>
                     <span class="link-arrow"><span class="fas fa-chevron-right"></span></span>
                 </span>
                 <div class="multi-level collapse " role="list" id="submenu-configs" aria-expanded="false">
                     <ul class="flex-column nav">
-                        <li class="nav-item"><a class="nav-link" href="/configuracao/estabelecimentos"><span>Estabelecimentos</span></a></li>
                         <li class="nav-item"><a class="nav-link" href="/admin/configuracao/logs"><span>Logs</span></a></li>
                     </ul>
                 </div>
@@ -129,14 +128,8 @@
                     </a>
                     <div class="dropdown-menu dashboard-dropdown dropdown-menu-right mt-2">
                         <a class="dropdown-item font-weight-bold" href="/usuario/perfil"><span class="far fa-user-circle"></span>Meu Perfil</a>
-                        <a class="dropdown-item font-weight-bold" href="#"><span
-                                class="fas fa-cog"></span>Settings</a>
-                        <a class="dropdown-item font-weight-bold" href="#"><span
-                                class="fas fa-envelope-open-text"></span>Messages</a>
-                        <a class="dropdown-item font-weight-bold" href="#"><span
-                                class="fas fa-user-shield"></span>Support</a>
                         <div role="separator" class="dropdown-divider"></div>
-                        <a class="dropdown-item font-weight-bold" href="/logout"><span class="fas fa-sign-out-alt text-danger"></span>Sair</a>
+                        <a class="dropdown-item font-weight-bold" href="/acessos/logout"><span class="fas fa-sign-out-alt text-danger"></span>Sair</a>
                     </div>
                 </li>
             </ul>

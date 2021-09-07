@@ -292,6 +292,13 @@ if( idLogado != idUserMaster) {
     
 </script>
 
+<script>
+        $(document).ready(()=>{
+            $('#conf').addClass("@@if (context.page === 'overview') { active }");
+             $("#submenu-configs").collapse('toggle');
+        });
+    </script>
+
 {{>usuario/_rodape}}
 
 {{>_msg}}

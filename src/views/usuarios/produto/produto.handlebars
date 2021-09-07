@@ -258,8 +258,10 @@
                                 <form action="/produto/add-produto-opcao-modelo-opcoes"  method="post">
                                     <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
                                     <div class="row  ml-2" id="radio-add-opcoes-modelo-opcoes"></div>
-
+                                    {{#if modeloOpcao}}
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Criar</button>
+                                     {{else}}<p>Não existem modelos de opções cadastrados neste estabelecimento.</p>
+                                     <a href="/produto/modelo-opcoes" class="btn btn-primary btn-sm mt-2">Cadastrar</a>{{/if}}
                                 </form>
                             </div>
                             </div>
@@ -536,7 +538,9 @@
                                     <input  class='tagify--outside' name="idAdicional" id="add-adicional-individual">
 
                                     <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
+                                  
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                    
                                 </form>
                             </div>
                             </div>
@@ -586,8 +590,10 @@
                                 <form action="/produto/add-produto-adicionais-modelo-adicionais"  method="post">
                                     <input type="text" name="idProduto" value="{{produto._id}}" hidden readonly>
                                     <div class="row  ml-2" id="radio-add-adicionais-modelo-adicionais"></div>
-
+                                    {{#if modeloAdicional}}
                                     <button type="submit" class="btn btn-primary btn-sm mt-2">Adicionar</button>
+                                    {{else}}<p>Não existem modelos de adicionais cadastrados neste estabelecimento.</p>
+                                     <a href="/produto/modelo-adicionais" class="btn btn-primary btn-sm mt-2">Cadastrar</a>{{/if}}
                                 </form>
                             </div>
                             </div>
@@ -793,6 +799,13 @@
 </div>
 </div>
 </div>
+
+<script>
+         $(document).ready(()=>{
+            $('#prod').addClass("@@if (context.page === 'overview') { active }");
+               $("#submenu-pages").collapse('toggle');
+        });
+    </script>
 
 {{>usuario/_rodape}}
 
