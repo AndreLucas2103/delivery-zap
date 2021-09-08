@@ -429,7 +429,7 @@
                                      }
                                 
                                   if(pedido.tipoEntrega == "retirarLocal"){
-                                       $(`.append-endereco-${pedido._id}`).empty()
+                                       $(`.append-endereco-${pedido._id}`).remove()
                                   }else{
 
                                     if(pedido.infoEntrega.endereco.rua != "" && pedido.infoEntrega.endereco.cep == ""){  

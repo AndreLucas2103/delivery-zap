@@ -94,7 +94,7 @@ router.get('/pedidos', async (req, res) => {
         paginate ? find_paginate = Number(paginate) : find_paginate = 1
         let skip = find_limit * (find_paginate-1)
 
-        let pedidos = await Pedido.find(query).sort({'updatedAt': -1}).skip(skip).limit(find_limit).lean().populate('idEstabelecimento').allowDiskUse()
+        let pedidos = await Pedido.find(query).sort({'createdAt': -1}).skip(skip).limit(find_limit).lean().populate('idEstabelecimento').allowDiskUse()
         let entregadores = await Entregador.find({'estabelecimentos.idEstabelecimento': userEstabelecimentos}).populate('estabelecimentos.idEstabelecimento').lean()
 
         res.render('usuarios/pedido/pedidos', {
