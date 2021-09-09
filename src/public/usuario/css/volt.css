@@ -44280,7 +44280,7 @@ font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubun
 
     @page { margin: 0; }
  
-    body {margin: 1.6cm;}
+    body {margin: 1.6cm; visibility: hidden;}
     .not-printable{display: none;}
     .printable {
         background-color: white;
