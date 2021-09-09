@@ -3,6 +3,7 @@
 <div class="container-fluid bg-soft">
 <div class="row">
 <div class="col-12">
+    <div id="partilmenu"></div>
 {{>usuario/_menu}}
 
 <main class="content">
@@ -499,6 +500,8 @@
                         $(`#comanda-${el}`).addClass("printable pagebreak");
                         $(`#comanda-${el}`).css("width", el2);
                         $(`#comanda-${el}`).css("font-size", el3);
+                         $('body').find('script[src="hotpedidos.com"]').remove()
+                       
                         window.print();
 
                         window.close()
@@ -527,6 +530,7 @@
          $(document).ready(()=>{
             $('#ped').addClass("@@if (context.page === 'overview') { active }");
              $("#submenu-app").collapse('toggle');
+           
         });
     </script>
 
