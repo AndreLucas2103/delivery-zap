@@ -217,12 +217,14 @@ const adminEstabelecimento = require("./routes/admin/estabelecimento/estabelecim
 const adminChamado = require("./routes/admin/chamado/chamado")
 const adminUsuario = require("./routes/admin/usuario/usuario")
 const adminPlano = require("./routes/admin/plano/plano")
+const adminLogs = require("./routes/admin/configuracao/logs")
 
     app.use('/admin',adminUser, adminDashboard)
     app.use('/admin/administrativo',adminUser, adminEstabelecimento)
     app.use('/admin/administrativo',adminUser, adminChamado)
     app.use('/admin/usuario',adminUser, adminUsuario)
     app.use('/admin/administrativo',adminUser, adminPlano)
+    app.use('/admin/administrativo',adminUser, adminLogs)
 
 
 // ---- Rotas Para TESTES -----------------------------------------------------------------------------------------------------------------------------
