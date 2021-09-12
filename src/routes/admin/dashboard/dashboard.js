@@ -16,10 +16,17 @@ try {
         ]
     })
 
+    let estabelecimentos_inativos = await Estabelecimento.countDocuments({
+        $and: [
+            { 'locacao.liberado': 'false' }
+        ]
+    })
+
 
 
     res.render('admin/dashboard/dashboard', {
         estabelecimentos_ativos: estabelecimentos_ativos,
+        estabelecimentos_inativos: estabelecimentos_inativos
     })
 } catch (err) {
     console.log(err)

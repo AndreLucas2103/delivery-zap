@@ -66,22 +66,53 @@ router.get('/estabelecimentos', async (req, res) => {
 })
 
 router.post('/edit-plano-estabelecimento', (req, res) => {
-    Estabelecimento.updateOne(
-        {'_id': req.body.idEstabelecimento},
+    let status = req.body.locacaoLiberado
+    if(status == "true"){
+
+    Estabelecimento.updateOne(    
+        {'_id': req.body.idEstabelecimento},      
         {
+            
             '$set': {
+                
                 'locacao.liberado': req.body.locacaoLiberado,
                 'locacao.dataLiberado': req.body.locacaoLiberadoAte,
                 'locacao.diaVencimento': req.body.locacaoDiaVencimento,
                 'locacao.valor': req.body.valor,
+                'statusAtivo': true
             }
         }
+        
     ).then(() => {
         req.flash('success_msg', 'Estabelecimento editado')
         res.redirect('back')
     }).catch(err => {
         console.log(err)
     })
+}else{
+
+    Estabelecimento.updateOne(          
+        {'_id': req.body.idEstabelecimento},      
+        {
+            
+            '$set': {
+                
+                'locacao.liberado': req.body.locacaoLiberado,
+                'locacao.dataLiberado': req.body.locacaoLiberadoAte,
+                'locacao.diaVencimento': req.body.locacaoDiaVencimento,
+                'locacao.valor': req.body.valor,
+                'statusAtivo': false
+            }
+        }
+        
+    ).then(() => {
+        req.flash('success_msg', 'Estabelecimento editado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+
+}
 })
 
 router.post('/add-plano-fatura', async (req, res) => {
