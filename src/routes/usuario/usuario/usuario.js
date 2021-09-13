@@ -31,7 +31,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
     let eTipoAdmin
     req.body.eTipoAdmin == "true" ? eTipoAdmin = true : eTipoAdmin = false
     req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
-
+    
 
     const novoUsuario = new Usuario({
         primeiroNome: req.body.primeiroNome,
