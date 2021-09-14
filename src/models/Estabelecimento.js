@@ -110,11 +110,17 @@ const Estabelecimento = new Schema({
     ref: "usuarios",
   },
 
+  idRevendedor: {
+    type: Schema.Types.ObjectId,
+    ref: "revendedores",
+  },
+
   locacao: {
     idPlano: {
       type: Schema.Types.ObjectId,
       ref: "planos",
     },
+    
     liberado: Boolean,
     dataLiberado: Date,
 

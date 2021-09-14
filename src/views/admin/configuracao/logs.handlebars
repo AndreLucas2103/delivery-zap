@@ -56,7 +56,6 @@
                             <th class="border-0">Data</th>
                             <th class="border-0">Código</th>
                             <th class="border-0">Descrição</th>
-                            <th class="border-0">Obj</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -66,8 +65,7 @@
                             <td>{{text}}</td>
                             <td>{{dataFormatTimeZone "-03:00" date "DD/MM/YYYY HH:mm"}}</td>
                             <td>{{code}}</td>
-                            <td>{{description}}</td>
-                            <td>{{#if obj}} <button value="{{toJSON obj}}" class="btn btn-primary btn-sm d-block mt-2" onclick="alertbtn(this.value)">Visualizar</button>{{else}}#{{/if}}</td>
+                            <td>{{#if obj}}<button value="{{toJSON obj}}" class="btn btn-primary btn-sm d-block mt-2" onclick="alertbtn(this.value)">Visualizar</button>{{else}}{{description}}{{/if}}</td>
                         </tr>
                         {{/each}}
 

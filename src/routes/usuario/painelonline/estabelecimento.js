@@ -429,10 +429,11 @@ router.get('/:urlPainel/carrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let carrinho = await Carrinho.findOne({$and: [{idEstabelecimento: estabelecimento._id}, {uuid4Client: req.query.uuid4Client}]}).populate('produtos.idProduto').lean()
-
+        
         res.render('usuarios/pedido/painelcarrinho', {
             estabelecimento: estabelecimento,
-            carrinho: carrinho
+            carrinho: carrinho,
+            uuid: req.query.uuid4Client
         })
     } catch (err) {
         registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/carrinho", code: "500", description: err})
@@ -457,14 +458,17 @@ router.post('/:urlPainel/endereco/:idCarrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
-        
+        let pedido = await Pedido.findOne({uuid4Client: req.body.uuidpedido}).sort({'createdAt': -1}).lean()
+   
         res.render('usuarios/pedido/painelendereco', {
             estabelecimento: estabelecimento,
             controleCEP: JSON.stringify({
                 controleCEP: estabelecimento.configPedidos.controleCEP,
                 cepsDisponiveis: estabelecimento.configPedidos.cepsDisponiveis
             }),
-            carrinho: carrinho
+            pedido: pedido,
+            carrinho: carrinho,
+      
         })
     } catch (err) {
         registerLog.registerLog({text: "Rota ESTABELECIMENTO - /:urlPainel/endereco/:idCarrinho", code: "500", description: err})
@@ -475,7 +479,6 @@ router.post('/:urlPainel/pagamento/:idCarrinho', async (req, res)=>{
     try {
         let estabelecimento = await Estabelecimento.findOne({url: req.params.urlPainel}).lean()
         let carrinho = await Carrinho.findOne({_id: req.params.idCarrinho}).lean()
-        console.log(req.body)
         res.render('usuarios/pedido/painelpagamento', {
             estabelecimento: estabelecimento,
             carrinho: carrinho,

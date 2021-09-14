@@ -98,6 +98,7 @@
     </form>
      {{#if carrinho.produtos}}
      <form method="POST" action="/estabelecimento/{{estabelecimento.url}}/endereco/{{carrinho._id}}">
+      <input type="text" name="uuidpedido" value="{{uuid}}" hidden readonly>
      <button type="submit" class="proximo">Próximo »</button>
      </form>
      {{else}}

@@ -66,14 +66,14 @@
             <div class="row g-2" style="margin-top:50px;">
     <div class="col-md">
         <div class="form-floating center-block">
-            <input type="search" autocomplete="off" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+            <input type="search" autocomplete="off" class="form-control" id="nome" name="nome" value="{{pedido.infoEntrega.nomeCliente}}" maxlength="25" placeholder="0"
                  required>
             <label for="nome">Seu Nome *</label>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-floating center-block rb">
-            <input type="search" autocomplete="off" class="form-control" id="telefone" name="telefone" placeholder="0" 
+            <input type="search" autocomplete="off" class="form-control" id="telefone" value="{{pedido.infoEntrega.telefone}}" name="telefone" placeholder="0" 
                 required />
             <label for="telefone">Celular *</label>
         </div>
@@ -113,14 +113,14 @@
                  <div class="row g-2" style="margin-top:50px;">
       <div class="col-md">
         <div class="form-floating center-block">
-            <input type="search" autocomplete="off" class="form-control" id="nome" name="nome" maxlength="25" placeholder="0"
+            <input type="search" autocomplete="off" class="form-control" id="nome" name="nome" value="{{pedido.infoEntrega.nomeCliente}}" maxlength="25" placeholder="0"
                  required>
             <label for="nome">Seu Nome *</label>
         </div>
     </div>
     <div class="col-md-6">
         <div class="form-floating center-block rb">
-            <input type="search" autocomplete="off" class="form-control" id="telefone2" name="telefone" placeholder="0" 
+            <input type="search" autocomplete="off" class="form-control" id="telefone2" name="telefone" value="{{pedido.infoEntrega.telefone}}" placeholder="0" 
                 required />
             <label for="telefone">Celular *</label>
         </div>
@@ -130,7 +130,7 @@
     <div class="col-md-4">
         <div class="form-floating center-block ">
             {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-            <input  onchange="cepVarify(this)" onkeypress="cepVarify(this)" onkeyup="cepVarify(this)" type="search" autocomplete="off" class="form-control" id="cep" name="cep" placeholder="0"  required>
+            <input  onchange="cepVarify(this)" onkeypress="cepVarify(this)" onkeyup="cepVarify(this)" type="search" autocomplete="off" class="form-control" id="cep" name="cep" value="{{pedido.infoEntrega.endereco.cep}}" placeholder="0"  required>
             <label for="cep">CEP*</label>
             <span style="font-size: 13px" id="text-cep" class="text-danger"></span>
             {{else}} {{/if}}
@@ -140,14 +140,14 @@
 <div class="row g-2" style="margin-top:5px;">
     <div class="col-md">
         <div class="form-floating center-block">
-            <input type="search" autocomplete="off" class="form-control" id="endereco" name="endereco" placeholder="0" maxlength="55"
+            <input type="search" autocomplete="off" class="form-control" id="endereco" value="{{pedido.infoEntrega.endereco.rua}}" name="endereco" placeholder="0" maxlength="55"
                  required>
             <label for="endereco">Endereço*</label>
         </div>
     </div>
     <div class="col-md-3">
         <div class="form-floating center-block rb">
-            <input type="search" autocomplete="off" class="form-control" id="numero" name="numero" placeholder="0" maxlength="35"
+            <input type="search" autocomplete="off" class="form-control" id="numero" value="{{pedido.infoEntrega.endereco.numero}}" name="numero" placeholder="0" maxlength="35"
                  required>
             <label for="numero">Número*</label>
         </div>
@@ -156,7 +156,7 @@
     <div class="row g-2" style="margin-top:5px;">
         <div class="col-md center-block rb">
             <div class="form-floating">
-                <input type="search" autocomplete="off" class="form-control" id="bairro" name="bairro" placeholder="0" maxlength="45"
+                <input type="search" autocomplete="off" class="form-control" id="bairro" value="{{pedido.infoEntrega.endereco.bairro}}" name="bairro" placeholder="0" maxlength="45"
                     required>
                 <label for="bairro">Bairro*</label>
             </div>
@@ -164,7 +164,7 @@
         <div class="col-md center-block rb">
             <div class="form-floating">
                 {{#if estabelecimento.configPedidos.controleCEP.statusAtivo}}
-                <input type="text" autocomplete="off" class="form-control" id="cidade" name="cidade" placeholder="0" maxlength="45"
+                <input type="text" autocomplete="off" class="form-control" id="cidade" name="cidade" value="{{pedido.infoEntrega.endereco.cidade}}" placeholder="0" maxlength="45"
                     required>
                 <label for="cidade">Cidade*</label>
                 {{else}} {{/if}}
