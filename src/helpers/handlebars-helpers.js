@@ -66,7 +66,7 @@ Handlebars.registerHelper('situacaoPedido', function(pedido) {
             return ('<i class="fas fa-times-circle text-danger"></i> Cancelado')
             break;
         case 'waiting':
-            return ('<i class="fas fa-clock"></i> Pedido enviado')
+            return ('<i class="fas fa-clock"></i> Aguardando aprovação')
             break;
         case 'production':
             return ('<i class="fas fa-hamburger"></i> Preparando seu pedido')
