@@ -63,22 +63,22 @@ Handlebars.registerHelper('situacaoPedido', function(pedido) {
 
     switch (pedido) {
         case 'canceled':
-            return ('<i class="fas fa-times-circle text-danger">&nbpsCancelado</i>')
+            return ('<i class="fas fa-times-circle text-danger"> Cancelado</i>')
             break;
         case 'waiting':
             return ('<i class="fas fa-clock"></i> Aguardando aprovação')
             break;
         case 'production':
-            return ('<i class="fas fa-hamburger text-success">&nbpsPreparando seu pedido</i>')
+            return ('<i class="fas fa-hamburger text-success"> Preparando seu pedido</i>')
             break;
         case 'concluded':
-            return ('<i class="fas fa-check text-success">&nbpsConcluido</i>')
+            return ('<i class="fas fa-check text-success"> Concluido</i>')
             break;
         case 'delivery':
-            return ('<i class="fas fa-truck text-warning">&nbpsSaindo para entrega</i>')
+            return ('<i class="fas fa-truck text-warning"> Saindo para entrega</i>')
             break;
         case 'finished':
-            return ('<i class="fas fa-check-circle text-success">&nbpsFinalizado</i>')
+            return ('<i class="fas fa-check-circle text-success"> Finalizado</i>')
             break;
         default:
             return ('err')
