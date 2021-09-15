@@ -32,6 +32,13 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
     req.body.eTipoAdmin == "true" ? eTipoAdmin = true : eTipoAdmin = false
     req.user.usuarioMaster == true ? idUsuarioMaster = req.user._id : idUsuarioMaster = req.user.usuarioMaster
     
+    Usuario.findOne({ email: req.body.email }).lean().then((usuario) => {
+
+        if (usuario) {
+            req.flash("error_msg", "E-mail já cadastrado.")
+            res.redirect("back")
+
+            } else {
 
     const novoUsuario = new Usuario({
         primeiroNome: req.body.primeiroNome,
@@ -73,6 +80,7 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
                         registerLog.registerLog({text: "Rota USUARIO - /add-usuario", code: "500", description: err})
                     })
                 })
+                
 
                 req.flash("success_msg", "Usuario criado com sucesso!")
                 res.redirect("/usuario/usuarios")
@@ -82,10 +90,14 @@ router.post("/add-usuario", (req, res) => {//Rota para cadastrar novo usuário.
                 res.redirect("/usuario/usuarios")
 
             })
+            
         })
+        
     })
+}
 
 })
+    })
 
 router.post("/edit-usuario", (req, res) => {//Rota editar novo usuário.
     let eTipoAdmin
