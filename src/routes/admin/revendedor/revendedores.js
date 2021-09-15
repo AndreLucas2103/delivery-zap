@@ -7,6 +7,25 @@ const bcryptjs = require("bcryptjs")
 
 require("../../../models/admin/Revendedor")
 const Revendedor = mongoose.model("revendedores")
+require("../../../models/Estabelecimento")
+const Estabelecimento = mongoose.model("estabelecimentos")
+
+
+router.get('/revendedor', async (req, res) => {
+    try {
+      
+        let estabelecimentos = await Estabelecimento.find({'idRevendedor.identificacao': req.query.idRevendedor}).lean()
+        let revendedor = await Revendedor.findById({"_id" : req.query.idRevendedor}).lean()
+
+        res.render('admin/revendedor/revendedor', {
+            estabelecimentos: estabelecimentos,
+            revendedor: revendedor
+        })
+    } catch (err) {
+        console.log(err)
+    }
+})
+
 
 router.get('/revendedores', async (req, res) => {
         try {

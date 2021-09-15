@@ -7,6 +7,8 @@ const moment = require('moment')
 const { v4: uuidv4 } = require('uuid');
 
 
+require("../../../models/admin/Revendedor")
+const Revendedor = mongoose.model("revendedores")
 require("../../../models/Usuario")
 const Usuario = mongoose.model("usuarios")
 require("../../../models/Estabelecimento")
@@ -18,11 +20,13 @@ const Plano = mongoose.model("planos")
 router.get('/estabelecimento', async (req, res) => {
     try {
       
+        let revendedores = await Revendedor.find(query).lean()
         let estabelecimento = await Estabelecimento.findById({'_id': req.query.idEstabelecimento}).populate('idUsuarioMaster').lean()
         let usuarios = await Usuario.find({"estabelecimentosVinculados.idEstabelecimento" : req.query.idEstabelecimento }).populate('estabelecimentosVinculados.idEstabelecimento').lean()
-        console.log(usuarios)
+
 
         res.render('admin/estabelecimento/estabelecimento', {
+            revendedores: revendedores,
             estabelecimento: estabelecimento,
             usuarios: usuarios
         })
@@ -30,6 +34,30 @@ router.get('/estabelecimento', async (req, res) => {
         console.log(err)
     }
 })
+
+router.post('/edit-revendedor', (req, res) => {
+
+
+    Estabelecimento.updateOne(    
+        {'_id': req.body.idEstabelecimento},      
+        {
+            
+            '$set': {
+                
+                'idRevendedor.identificacao': req.body.addrevendedor
+
+            }
+        }
+        
+    ).then(() => {
+        req.flash('success_msg', 'Revendedor adicionado')
+        res.redirect('back')
+    }).catch(err => {
+        console.log(err)
+    })
+})
+
+
 
 router.get('/estabelecimentos', async (req, res) => {
     try {

@@ -1,0 +1,108 @@
+{{>admin/_top-css}}
+
+<div class="container-fluid bg-soft">
+    <div class="row">
+        <div class="col-12">
+            {{>admin/_menu}}
+
+
+
+            <main class="content mb-4">
+
+                <div class="">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-dark breadcrumb-transparent">
+                            <li class="breadcrumb-item"><a href="/dashboard"><span class="fas fa-home"></span></a></li>
+                            <li class="breadcrumb-item"><a>Administrativo</a></li>
+                        </ol>
+                    </nav>
+                </div>
+
+                <div class="row">
+                    <!-- infos a esquerda START -->
+                    <div class="col-12 col-xl-4">
+                        <div class="card border-light text-center p-0">
+                            <div class="profile-cover rounded-top" style="background-color: rgb(201, 201, 201);"></div>
+                            <div class="card-body pb-5">
+                              <img src="/img/perfil-avatar/svg/businessman.svg"
+                                    class="user-avatar large-avatar rounded-circle mx-auto mt-n7 mb-4">
+                                <h4>{{revendedor.nomeCompleto}}</h4>   
+                                <hr>
+                                <span class="d-block">E-mail: {{revendedor.email}}</span>
+                                <span class="d-block">CPF: {{revendedor.cpf}}</span>   
+                                   <hr>
+                                <span class="d-block">Logradouro: {{revendedor.endereco.logradouro}}</span>
+                                <span class="d-block">Bairro: {{revendedor.endereco.bairro}}</span>
+                                <span class="d-block">Localidade: {{revendedor.endereco.localidade}}</span>
+                                <span class="d-block">CEP: {{revendedor.endereco.cep}}</span>
+                                <span class="d-block">Número: {{revendedor.endereco.numero}}</span>
+                                <span class="d-block">UF: {{revendedor.endereco.uf}}</span>  
+                                <hr>
+                                <span class="d-block">Ativo: {{{formatTrueFalse revendedor.statusAtivo}}}</span>                  
+                            </div>
+                        </div>
+
+                    </div>
+                    <!-- infos a esquerda END -->
+
+
+
+                    <!-- infos a direita START -->
+                    <div class="col-12 col-xl-8">
+                        <div class="tab-content">
+                            <!-- Faturas START -->
+                            <div class="tab-pane fade show active" id="nav-faturas">
+                                <div class="card">
+                                    <div class="card-body">
+                                        <h5>Estabelecimentos</h5>
+                                        <br>
+                                            <div class="table-responsive">
+                                                <table class="table table-centered table-nowrap mb-0 rounded">
+                                                    <thead class="thead-light">
+                                                        <tr>
+                                                            <th class="border-0">#</th>
+                                                            <th class="border-0">Nome</th>
+                                                            <th class="border-0">Status</th>
+                                                            <th class="border-0">Criado em</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        {{#each estabelecimentos}}
+                                                        <tr>
+                                                            <td><a href="/admin/administrativo/estabelecimento?idEstabelecimento={{_id}}"><i class="fas fa-external-link-square-alt"></i></a></td>
+                                                            <td>{{nome}}</td>
+                                                            <td>{{{formatTrueFalse statusAtivo}}}</td>
+                                                            <td>{{dataFormatTimeZone "-03:00" createdAt "DD/MM/YYYY
+                                                                HH:mm"}}</td>
+                                                        </tr>
+                                                        {{/each}}
+
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
+                                </div> 
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Faturas END -->
+
+                    </div>
+
+                    <script> // script para adicionar categorias
+                        $(".valorFormatar").each(function (item) {
+                            let textFormat = $(this).text()
+                            $(this).html(new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(textFormat));
+                        })
+
+                    </script>
+
+            </main>
+
+        </div>
+    </div>
+</div>
+
+{{>admin/_rodape}}
+
+{{>_msg}}

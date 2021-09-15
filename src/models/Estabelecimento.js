@@ -111,8 +111,7 @@ const Estabelecimento = new Schema({
   },
 
   idRevendedor: {
-    type: Schema.Types.ObjectId,
-    ref: "revendedores",
+    identificacao: String,
   },
 
   locacao: {

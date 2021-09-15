@@ -49,8 +49,22 @@
                                         href="/admin/administrativo/usuario?idUsuario={{estabelecimento.url}}">{{estabelecimento.idUsuarioMaster.primeiroNome}}</a></span>
                                 <hr>
                                 <span class="d-block">Ativo: {{{formatTrueFalse estabelecimento.statusAtivo}}}</span>
-
-                            </div>
+                                <br>
+                                <h5 class="text-center">Revendedor:</h5>
+                                <form method="POST" action="/admin/administrativo/edit-revendedor"> 
+                               <select class="form-select form-select-sm "name="addrevendedor" id="edit-revendedor">
+                                   <option value="">---</option>
+                                {{#each revendedores}}
+                                <option value="{{_id}}">{{nomeCompleto}}</option>
+                                {{/each}}
+                                </select>
+                                <input type="text" name="idEstabelecimento" value="{{estabelecimento._id}}" readonly hidden>    
+                                <button type="submit" class="btn btn-primary btn-sm mb-4 mt-4">Salvar</button>
+                                </form>
+                                 <script>
+                                 $('#edit-revendedor option[value="{{estabelecimento.idRevendedor.identificacao}}"]').attr("selected", "selected");
+                                 </script>
+                            </div>                                                             
                         </div>
 
                     </div>
