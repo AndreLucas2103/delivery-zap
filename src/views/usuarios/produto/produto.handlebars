@@ -204,6 +204,7 @@
                         var tagAddOpcoesProduto = document.querySelector('input[id=add-opcoes-produtos]')
                         var tagifyAddOpcoesProduto = new Tagify(tagAddOpcoesProduto, {
                             editTags: false,
+                            enforceWhitelist: true,
                             dropdown: {
                                 position: "input",
                                 maxItems: Infinity,
@@ -550,7 +551,7 @@
                             var tagAddAdicional = document.querySelector('input[id=add-adicional-individual]')
                             var tagifyAddAdicional = new Tagify(tagAddAdicional, {
                                 whitelist: [ {{#each adicionais}} {'idAdicional': '{{_id}}', value: '{{nome}} - {{idCategoriaAdicional.nome}}', idCategoriaAdicional: '{{idCategoriaAdicional._id}}' },  {{/each}} ],
-                                editTags: false,
+                                enforceWhitelist: true,
                                 dropdown: {
                                     position: "input",
                                     maxItems: Infinity,
@@ -671,6 +672,7 @@
                             var tagifyAddIngrediente = new Tagify(tagAddIngrediente, {
                                 whitelist: [ {{#each ingredientes}} {'idIngrediente': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
                                 editTags: false,
+                                enforceWhitelist: true,
                                 dropdown: {
                                     position: "input",
                                     maxItems: Infinity,

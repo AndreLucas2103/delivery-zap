@@ -46,7 +46,7 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
                 locacao: {
                     idPlano: plano._id,
                     plano: plano.nome,
-                    liberado: true,
+                    liberado: false,
                     dataLiberado: moment(data),
                     valor: plano.valor,
                     faturas: [{
@@ -66,7 +66,7 @@ router.post('/add-plano-estabelecimento', async (req, res) => {
                         }]
                     }]
                 },
-                "statusAtivo": true
+                "statusAtivo": false
             }}
         ).then(async () => {
             await Usuario.updateOne(

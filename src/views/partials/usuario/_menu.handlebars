@@ -219,6 +219,7 @@
                         var tagestabelecimentosSelecionados = document.querySelector('input[id=estabelecimentosSelecionados]')
                         var tagifyestabelecimentosSelecionados = new Tagify(tagestabelecimentosSelecionados, {
                             whitelist: [ {{#each usuarioLogado.estabelecimentosVinculados}} {'idEstabelecimento': '{{_id}}', value: '{{nome}}' },  {{/each}} ],
+                            enforceWhitelist: true,
                             editTags: false,
                             dropdown: {
                                 position: "input",

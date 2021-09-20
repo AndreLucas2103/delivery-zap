@@ -288,12 +288,32 @@
                 response.opcao.length == 0 ? $('#add-opcoes').hide() : $('#add-opcoes').show()
                 $('#add-opcoes').empty()
                 response.opcao.forEach(element => {
-
+                    console.log(element)
                     if (element.vinculoProduto == true) {
                         var opcoes_opcoes = ""
 
                         element.opcoesProduto.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input class="calc-valor-total"  onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" type="checkbox" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor / element.dividendo}}' data-bs-idOpcao="${element._id}" data-bs-dividendo="${element.dividendo}" data-bs-nome="${element.nome}"/> ${opcoes.idProduto.nome}</label> </td><td  class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor / element.dividendo)}</td> </tr>`
+                            opcoes_opcoes += `
+                            <tr> 
+                                <td> 
+                                    <label>
+                                        <input 
+                                            class="calc-valor-total" 
+                                            onclick="inputCheckBoxOption('${element._id}', ${element.dividendo})" 
+                                            type="checkbox" name="opcao-${element._id}" 
+                                            value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.idProduto.nome}", "valor": ${opcoes.idProduto.valor / element.dividendo}}' 
+                                            data-bs-idOpcao="${element._id}" 
+                                            data-bs-dividendo="${element.dividendo}" 
+                                            data-bs-nome="${element.nome}"
+                                        /> 
+                                            ${opcoes.idProduto.nome}
+                                    </label> 
+                                </td>
+                                <td class="w-25">
+                                    ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.idProduto.valor / element.dividendo)}
+                                </td> 
+                            </tr>
+                            `
                         })
 
                         $('#add-opcoes').append(`
@@ -318,7 +338,29 @@
                         element.multiplaEscolha == false ? multiplaEscolha = `onclick="inputCheckBoxOption('${element._id}', 1)"` : multiplaEscolha = `onclick="calcValorClick()"`
                         var opcoes_opcoes = ""
                         element.opcoes.forEach(opcoes => {
-                            opcoes_opcoes += `<tr> <td> <label><input type="checkbox" ${multiplaEscolha}  class="calc-valor-total" name="opcao-${element._id}" value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.nome}", "valor": ${opcoes.valor}}'> ${opcoes.nome}</input></label> </td><td class="w-25">${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}</td> </tr>`
+                            opcoes_opcoes += `
+                            <tr> 
+                                <td> 
+                                    <label>
+                                    <input 
+                                        type="checkbox" 
+                                        required="true" 
+                                        ${multiplaEscolha}  
+                                        class="calc-valor-total" 
+                                        name="opcao-${element._id}" 
+                                        data-bs-nome="${element.nome}"
+                                        data-bs-idOpcao="${element._id}" 
+                                        data-bs-obrigatorio="${element.obrigatorio}"
+                                        value='{"tipo": "opcao", "nomeOpcao": "${element.nome}", "nome": "${opcoes.nome}", "valor": ${opcoes.valor}}'> ${opcoes.nome}
+                                    </input>
+                                    </label> 
+                                </td>
+                                <td 
+                                    class="w-25">
+                                    ${new Intl.NumberFormat('pt-br', { style: 'currency', currency: 'BRL' }).format(opcoes.valor)}
+                                </td> 
+                            </tr>
+                            `
                         })
 
                         $('#add-opcoes').append(`
@@ -378,10 +420,26 @@
         event.preventDefault()
 
         $("input:checkbox").each(function (i, elementDiv) {
-            if (elementDiv.getAttribute('onclick') && $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length != Number(elementDiv.getAttribute('data-bs-dividendo'))) {
+            console.log($(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length)
+            console.log(elementDiv.getAttribute('data-bs-dividendo'))
+
+            if( elementDiv.getAttribute('onclick') && 
+                $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length != Number(elementDiv.getAttribute('data-bs-dividendo')) && 
+                elementDiv.getAttribute('data-bs-dividendo')
+            ) {
                 Swal.fire(
                     'Esqueceu de algo?',
                     `Selecione ${elementDiv.getAttribute('data-bs-dividendo')} opcões em ${elementDiv.getAttribute('data-bs-nome')}`,
+                    'warning'
+                )
+                spinngLoading(false)
+                return false
+            }
+
+            if(elementDiv.getAttribute('data-bs-obrigatorio') == "true" && $(`input[name="opcao-${elementDiv.getAttribute('data-bs-idOpcao')}"]:checked`).length <= 0){
+                Swal.fire(
+                    'Esqueceu de algo?',
+                    `Selecione pelo menos 1 opcão em ${elementDiv.getAttribute('data-bs-nome')}`,
                     'warning'
                 )
                 spinngLoading(false)
